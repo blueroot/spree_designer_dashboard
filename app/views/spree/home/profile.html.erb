@@ -1,0 +1,41 @@
+<div class="container">
+	<aside id="sidebar" class="columns four" data-hook="">  
+		<div data-hook="dashboard_sidebar_navigation">
+		<nav id="taxonomies" class="sidebar-item" data-hook="">
+			<h6 class="taxonomy-root">Designer Dashboard</h6>
+			<ul class="taxons-list">
+				<li><a href="/dashboard">Dashboard Home</a></li>
+				<li><a href="/my_boards">My Boards</a></li>
+				<li><a href="/my_profile">My Profile</a></li></ul>
+		</nav>
+		</div>
+	</aside>
+	<div id="content" class="columns twelve" data-hook="">
+		<div class="page-header clearfix">
+			<h1>Edit Your Profile</h1>
+			<%= form_for [@board] do |f| %>
+			<div class="row">
+			  <div class="alpha ten columns">
+			    <%= f.field_container :name do %>
+			      <%= f.label :name %>
+			      <%= f.text_field :name, :class => 'title input-xxlarge' %>
+			      <%= f.error_message_on :name %>
+			    <% end %>
+
+			    <%= f.field_container :body do %>
+			      <%= f.label :description, "Brief Description" %>
+			      <%= f.text_area :description, {:class => 'input-xxlarge', :rows => 4} %>
+			      <%= f.error_message_on :description %>
+			    <% end %>
+			  </div>
+			</div>
+				<p><%= submit_tag("Save Changes")%></p>
+			
+				<% end %>
+
+			
+		</div>
+		
+  		
+	</div>
+</div>

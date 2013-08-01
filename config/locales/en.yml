@@ -1,0 +1,40 @@
+---
+en:
+  spree:
+    activerecord:
+      attributes:
+        spree/board: &board_labels
+          title: Title
+          slug: Slug
+          body: Body
+          foreign_link: Foreign link (URL)
+          show_in_sidebar: Show in sidebar
+          show_in_header: Show in header
+          show_in_footer: Show in footer
+          position: Position
+          visible: Visible
+          meta_keywords: Meta Keywords
+          meta_description: Meta Description
+          meta_title: Meta Title
+          layout: Layout
+      models:
+        board:
+          one: Board
+          many: Boards
+
+    helpers:
+      label:
+        board:
+          <<: *board_labels
+
+    board: Board
+    boards: Boards
+    designer_board:
+      boards_title: Designer Boards
+      boads_desc: View and edit designer boards.
+      new_board: New board
+      editing_board: Editing board
+      confirm_delete: Are you sure ?
+      link: Link
+      meta_title: Meta Title
+      board_navigation_title: "Boards"

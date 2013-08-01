@@ -1,0 +1,16 @@
+<% content_for :page_title do %>
+   <%= Spree.t("designer_board.boards_title") %> <i class="icon-arrow-right"></i> <%= Spree.t("designer_board.editing_board") %> "<%= @board.name%>"
+<% end %>
+
+<% content_for :page_actions do %>
+  <li><%= button_link_to Spree.t(:back_to_boards_list), spree.admin_boards_url, :icon => 'icon-arrow-left' %></li>
+<% end %>
+
+<%= render "spree/shared/error_messages", :target => @board %>
+
+<%= form_for [:admin, @board] do |f| %>
+  <fieldset class="no-border-top">
+    <%= render :partial => 'form', :locals => { :f => f } %>
+    <%= render :partial => 'spree/admin/shared/edit_resource_links' %>
+  </fieldset>
+<% end %>

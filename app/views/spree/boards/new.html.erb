@@ -1,0 +1,11 @@
+<div class="container">
+	<div class="page-header clearfix">
+		<h1>Add a New Board</h1>
+		<p>Step 1 of 2: Board Details</p>
+	</div>
+	
+	<%= form_for [@board] do |f| %>
+		<%= render :partial => 'form', :locals => { :f => f } %>
+		<p><%= submit_tag("Create Board")%></p>
+	<% end %>
+</div>
