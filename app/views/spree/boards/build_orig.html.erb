@@ -1,0 +1,158 @@
+<div class="container">
+	<div class="page-header clearfix">
+		<h1>Add a New Board</h1>
+		<p>Step 2 of 2: Build Your Board</p>
+	</div>
+	
+	<%= form_for [@board] do |f| %>
+		<label>Select and Drag Products</label>
+		<div id="board-container">
+		<div class="select-products-box" style="border: 1px solid #aaa; height: 150px; width: 920px; margin-bottom: 20px; padding: 10px 0; overflow:hidden;">
+			
+				<% unless @products.blank? %>
+					<% @products.each do |product| %>
+					<div class="board-product-select" style="float:left; margin-left: 10px; width: 170px; height: 170px;">
+						<div class="board-product-select-image" style="margin-bottom: 5px; text-align:center; border: 1px solid #eee; padding: 5px;">
+							<div class="board-lightbox-product">
+							<%= small_image(product, :itemprop => 'image', :class => "board-lightbox-product-img") %>
+							</div>
+					        <%#= link_to raw("<span class=\"helper\"></span>#{small_image(product, :itemprop => 'image', :class => "board-lightbox-product")}"), product, :itemprop => 'url' %>
+						</div>
+						<div style="text-align: left;">      
+						<%= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => product.name %>
+						      <div class="price selling" itemprop="price"><%= display_price(product) %></div>
+						</div>
+					</div>
+					<% end %>
+				<% end %>
+		</div>
+		
+		<label>Your Canvas</label>
+		<div id="board-canvas" style="height: 400px; width: 920px; background-color: #ecf0f1; border: 1px dashed #bdc3c7;"></div>
+		</div>
+		
+		<p><%= submit_tag("Save Changes")%></p>
+	<% end %>
+</div>
+
+
+<script>
+
+//$(document).ready(function () {
+//    $('#bus #seat').live('dblclick', function (event) {
+//        $(this).remove();
+//    });
+//});
+//
+$(function () {
+    var i = 0;
+    var element;
+    $('.board-lightbox-product').draggable({
+        containment: '.main',
+        cursor: 'move',
+        helper: 'clone',
+        revert: 'invalid',
+		start: function(event, ui) {
+	        isDraggingMedia = true;
+	    },
+	    stop: function(event, ui) {
+	        isDraggingMedia = false;
+	        // blah
+	    }
+        //snap: '#droppable'
+    });
+
+    $('#board-canvas').droppable({
+        accept: function(element) {
+		  var cn = element.className;
+
+		  return cn == 'board-lightbox-product' || 'board-lightbox-product-cloned'
+		},
+        drop: handleDropEvent
+    });
+
+
+
+    function handleDropEvent(event, ui) {
+        //i++;
+        //element = ui.helper.attr('id') + i;
+		//element = ui.draggable.html()
+        var offsetXPos = parseInt(ui.offset.left);
+        var offsetYPos = parseInt(ui.offset.top);
+        //alert('Drag Stopped!\n\nOffset:(' + offsetXPos + "'" + offsetYPos + ')\n' + element);
+        $(this).find('#board-canvas').remove();
+		cloned = $(ui.helper).clone();
+        //clone.find('img')[0].resizable({
+		//	aspectRatio: ui.helper.width() / ui.helper.height()
+		//});
+		//cloned.find('img')[0].resizable({
+		//	aspectRatio: cloned.width() / cloned.height()
+		//});
+		$(this).append(cloned.removeClass('board-lightbox-product').addClass('board-lightbox-product-cloned').draggable({
+            containment: '#board-canvas',
+            cursor: 'move',
+            snap: '#board-canvas',
+            stop: function (event, ui) {
+                //alert(element);
+            }
+        })
+		
+		);
+		
+    }
+});
+</script>
+
+<% if false %>
+<script>
+
+
+
+
+
+
+	function rebindDraggable(item){
+		//alert('hey')
+		item.draggable({
+			helper: 'clone'
+		}); 
+	}
+
+	$(function() {
+		$( ".board-lightbox-product" ).draggable({
+			helper: 'clone',cursor: 'hand'
+		});
+		
+	    $('#board-canvas').droppable({drop: function(event, ui){
+	        if (ui.draggable.hasClass('board-lightbox-product')){
+
+				new_item = ui.draggable.html().clone();
+				//$.ui.ddmanager.current.cancelHelperRemoval = true;
+				new_item.removeClass('board-lightbox-product');
+				new_item.addClass('board-lightbox-product-added');
+				
+				new_item.css('top', ui.position.top);
+				new_item.css('left', ui.position.left);
+				new_item.css('position', 'absolute');
+				new_item.draggable();
+				new_item.resizable({
+					aspectRatio: new_item.width() / new_item.height()
+				});
+				$(this).append(new_item); 
+				
+				
+				
+				//new_item.draggable();
+				//new_item.draggable('destroy');
+				
+			}else{
+				//alert('yo')
+			}
+	    }});
+		
+	  });
+
+	
+</script>
+
+<% end %>
