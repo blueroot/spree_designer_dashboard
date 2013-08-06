@@ -6,10 +6,14 @@ Spree::Core::Engine.routes.prepend do
   get "/my_boards" => "boards#my_boards"
   
   match '/boards/build/:id' => "boards#build", :as => :build_board
-  resources :boards
+  resources :boards do 
+    resources :board_products
+  end
+  resources :board_products
   
   
   namespace :admin do
     resources :boards
+    resources :board_products
   end
 end

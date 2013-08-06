@@ -1,0 +1,10 @@
+$('#board-canvas').html('<%= escape_javascript(raw render(:partial => "products", :locals => {:board_products => @board_products})) %>')
+
+
+$('.board-lightbox-product-cloned').each(function() {
+	//alert(this)
+	handleDragAfterDrop($(this));
+	handleResizable($(this));
+	handleSelectable($(this));
+	handleRemoveFromCanvas($(this));
+});

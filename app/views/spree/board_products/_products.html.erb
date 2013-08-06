@@ -1,0 +1,9 @@
+<% unless board_products.blank? %>
+	<% board_products.each do |board_product| %>
+		<div class="board-lightbox-product-cloned" style="position: absolute; top: <%= board_product.top_left_y%>px; left: <%= board_product.top_left_x%>px; z-index: <%= board_product.z_index%>; width: <%= board_product.width %>px; height: <%= board_product.height%>px;" data-product-id="<%= board_product.product.id %>" id="<%= board_product.product.id %>">
+				<a href="javascript:void(0);" class="button-remove-product" style="font-family: helvetica; font-size: 12px; line-height: 12px; font-weight: bold; background-color: #fff; padding: 4px 7px; border-width: 0 0 1px 1px; border-style: solid; border-color: #ccc; right: 0px; top: 0; position: absolute; display: none;">x</a>
+				<%=small_image(board_product.product, :itemprop => 'image', :style => "width: #{board_product.width}px", :class => "board-lightbox-product-img") %>
+		</div>	
+	<% end %>
+<% end %>
+

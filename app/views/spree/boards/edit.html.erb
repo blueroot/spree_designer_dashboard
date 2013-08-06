@@ -1,0 +1,10 @@
+<div class="container">
+	<div class="page-header clearfix">
+		<h1>Edit Board</h1>
+	</div>
+	
+	<%= form_for [@board] do |f| %>
+		<%= render :partial => 'form', :locals => { :f => f } %>
+		<p><%= submit_tag("Save Changes")%></p>
+	<% end %>
+</div>

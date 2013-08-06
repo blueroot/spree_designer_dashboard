@@ -1,1 +1,17 @@
-<%= @boards %>
+<div class="container">
+	<div class="page-header clearfix">
+		<h1>Boards</h1>
+	</div>
+	<div class="boards-list-main">
+		<% @boards.each do |board| %>
+			<div class="board">
+				<h3><%= link_to board.name, board %></h3>
+				<p><%= board.description %></p>
+				<p><%= link_to image_tag("/boards/#{board.id}.jpg", :style => "border: 1px solid #ccc"), board%></p>
+				
+			</div>
+		<% end %>
+		
+	</div>
+	
+</div>

@@ -1,0 +1,30 @@
+<div class="container">
+	<div class="page-header clearfix">
+		<h1><%= @board.name %></h1>
+		<p><%= @board.description %></p>
+		<p><%= image_tag("/boards/#{@board.id}.jpg", :style => "border: 1px solid #ccc")%></p>
+		
+	</div>
+	
+	<div class="board-products">
+		<h3>Products on this board</h3>
+		
+		<% if @board.board_products.any? %>
+		<ul id="products" class="inline product-listing" data-hook>
+		  <% @board.products.each do |product| %>
+		    <li id="product_<%= product.id %>" class="columns three <%= cycle("alpha", "secondary", "", "omega secondary", :name => "classes") %>" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
+		      <div class="product-image">
+		        <%= link_to raw("<span class=\"helper\"></span>#{small_image(product, :itemprop => 'image')}"), product, :itemprop => 'url' %>
+		      </div>
+		      <%= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => product.name %>
+		      <span class="price selling" itemprop="price"><%= display_price(product) %></span>
+		    </li>
+		  <% end %>
+		  <% reset_cycle("classes") %>
+		</ul>
+		<% end %>
+		
+		
+	</div>
+	
+</div>

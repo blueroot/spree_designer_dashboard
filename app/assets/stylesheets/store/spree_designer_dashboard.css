@@ -1,3 +1,42 @@
 /*
 
 */
+
+.boards-list-main h3{
+	margin: 0;
+	padding: 0;
+}
+
+.boards-list-main p{
+	margin: 0;
+	padding: 0;
+}
+
+
+/* dashboard styles */
+
+.dashboard-boards table{ 
+	padding: 0;
+	margin: 0;
+}
+
+.dashboard-boards table td{ 
+	padding: 0 10px 0 0;
+	margin: 0;
+}
+
+.dashboard-boards ul{
+	list-style-type: none;
+}
+
+.dashboard-boards h3{
+	margin: 0 0 10px 0;
+	padding: 0;
+	line-height: 20px;
+}
+
+.dashboard-boards p{
+	margin: 0;
+	padding: 0;
+}
+/* end dashboard styles */

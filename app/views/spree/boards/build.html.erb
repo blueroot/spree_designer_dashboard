@@ -1,18 +1,80 @@
-<div class="drag" style="left: 64px; top: 195px;"></div>
-<div class="drag" style="left:100px;"></div>
-<div class="drag" style="left:180px;"></div>
-<style type="text/css">
-.drag {
-	position: absolute;
-	border: 1px solid #89B;
-	background: #BCE;
-	height: 58px;
-	width: 58px;
-	top: 120px;
-	cursor: move;
+<div class="container">
+	<div class="page-header clearfix">
+		<h1>Add Products to your Board</h1>
+
+	</div>
+	
+	<%= form_for [@board] do |f| %>
+		<label>Select and Drag Products</label>
+		<div id="board-container">
+		<div class="select-products-box" style="border: 1px solid #aaa; height: 150px; width: 920px; margin-bottom: 20px; padding: 10px 0; overflow:hidden;">
+			
+				<% unless @products.blank? %>
+					<% @products.each do |product| %>
+					<div class="board-product-select" style="float:left; margin-left: 10px; width: 170px; height: 170px;">
+						<div class="board-product-select-image" style="margin-bottom: 5px; text-align:center; border: 1px solid #eee; padding: 5px;">
+							<div class="board-lightbox-product" data-product-id="<%= product.id %>" id="<%= product.id %>">
+								<div style="position: relative;">
+									<a href="javascript:void(0);" class="button-remove-product" style="font-family: helvetica; font-size: 12px; line-height: 12px; font-weight: bold; background-color: #fff; padding: 4px 7px; border-width: 0 0 1px 1px; border-style: solid; border-color: #ccc; right: 0px; top: 0; position: absolute; display: none;">x</a>
+									<%= small_image(product, :itemprop => 'image', :class => "board-lightbox-product-img") %>
+								</div>
+							</div>
+						</div>
+						<div style="text-align: left;">      
+						<%= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => product.name %>
+						      <div class="price selling" itemprop="price"><%= display_price(product) %></div>
+						</div>
+					</div>
+					<% end %>
+				<% end %>
+		</div>
+		
+		<label>Your Canvas</label>
+		<div id="board-canvas" data-board-id="<%= @board.id %>" style="height: 400px; width: 720px; background-color: #fff; border: 1px dashed #bdc3c7; position: relative; z-index: 1;"></div>
+		</div>
+		
+		<p><%= submit_tag("Save Changes")%></p>
+	<% end %>
+</div>
+<style>
+	.board-product-selected{
+		border: 2px solid #aaa;
+		margin: -2px 0 0 -2px;
 	}
-.active {
-	background-color: #BEE;
-	border-color: #8BB;
+	.light-box-product-unavailable{
+		border: 1px solid red;
 	}
 </style>
+
+<script>
+
+
+$(function () {
+    var element;
+    $('.board-lightbox-product').draggable({
+        containment: '.main',
+        cursor: 'move',
+        helper: 'clone',
+		appendTo: '#board-canvas',
+        revert: 'invalid',
+		start: function(event, ui) {
+	        isDraggingMedia = true;
+	    },
+	    stop: function(event, ui) {
+	        isDraggingMedia = false;
+	    }
+    });
+    $('#board-canvas').droppable({
+        accept: function(element) {
+		  var cn = element.className;
+		  return cn == 'board-lightbox-product' || 'board-lightbox-product-cloned'
+		},
+        drop: handleDropEvent
+    });
+	getSavedProducts($('#board-canvas').data('boardId'));
+	
+	
+	
+	
+});
+</script>

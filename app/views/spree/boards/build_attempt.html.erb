@@ -1,0 +1,70 @@
+<div class="container">
+	<div class="page-header clearfix">
+		<h1>Add a New Board</h1>
+		<p>Step 2 of 2: Build Your Board</p>
+	</div>
+	
+	<%= form_for [@board] do |f| %>
+		<label>Select and Drag Products</label>
+		<div id="board-container">
+		<div class="select-products-box" style="border: 1px solid #aaa; height: 150px; width: 920px; margin-bottom: 20px; padding: 10px 0; overflow:hidden;">
+			
+				<% unless @products.blank? %>
+					<% @products.each do |product| %>
+					<div class="board-product-select" style="float:left; margin-left: 10px; width: 170px; height: 170px;">
+						<div class="board-product-select-image" style="margin-bottom: 5px; text-align:center; border: 1px solid #eee; padding: 5px;">
+							<div class="board-lightbox-product">
+							<%= small_image(product, :itemprop => 'image', :class => "board-lightbox-product-img") %>
+							</div>
+					        <%#= link_to raw("<span class=\"helper\"></span>#{small_image(product, :itemprop => 'image', :class => "board-lightbox-product")}"), product, :itemprop => 'url' %>
+						</div>
+						<div style="text-align: left;">      
+						<%= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => product.name %>
+						      <div class="price selling" itemprop="price"><%= display_price(product) %></div>
+						</div>
+					</div>
+					<% end %>
+				<% end %>
+		</div>
+		
+		<label>Your Canvas</label>
+		<div id="board-canvas" style="height: 400px; position: relative; width: 920px; background-color: #ecf0f1; border: 1px dashed #bdc3c7;">
+			
+			<script type="text/javascript">
+			jQuery(function($){
+			   $('.drag').drag(function( ev, dd ){
+			      $( this ).css({
+			         top: dd.offsetY - parent.top,
+			         left: dd.offsetX - parent.left
+			      });
+			   });
+			});
+			</script>
+			
+			<h1>Basic Drag Demo</h1>
+			<p>Drag the boxes around the screen.</p>
+			<div class="drag" style="left:20px;"></div>
+			<div class="drag" style="left:100px;"></div>
+			<div class="drag" style="left:180px;"></div>
+			
+
+			<style type="text/css">
+			.drag {
+			   position: absolute;
+			   border: 1px solid #89B;
+			   background: #BCE;
+			   height: 58px;
+			   width: 58px;
+			   cursor: move;
+			   top: 120px;
+			   }
+			</style>​
+			
+			
+			
+		</div>
+		</div>
+		
+		<p><%= submit_tag("Save Changes")%></p>
+	<% end %>
+</div>

@@ -17,16 +17,23 @@
 		</div>
 		
   		<% unless @boards.blank? %>
-		<div data-hook="dashboard_boards">
-			<ul id="boards" class="inline product-listing" data-hook="">
-			    <li id="product_1" class="columns three alpha" data-hook="products_list_item" itemscope="" itemtype="http://schema.org/Product">
-			      <div class="product-image">
-			        <a href="/products/flask-table-lamp" itemprop="url"><span class="helper"></span><img alt="Flask Table Lamp" itemprop="image" src="https://s3.amazonaws.com/scoutdev/products/2/small/DSC_0006.jpg?1373317604"></a>
-			      </div>
-			      <a href="/products/flask-table-lamp" class="info" itemprop="name" title="Flask Table Lamp">Flask Table Lamp</a>
-			      <span class="price selling" itemprop="price">$199.00</span>
-			    </li>
-			</ul>	
+		<div class="dashboard-boards" data-hook="dashboard_boards">
+			<table class="table" cellspacing="0" border="0">
+			<% @boards.each do |board|%>
+				<tr>
+					<td style="vertical-align: top;"><%= image_tag("/boards/#{board.id}.jpg", :style => "border: 1px solid #ccc; width: 250px;")%>
+					</td>
+					<td style="vertical-align: top;">
+						<h3><%= board.name %></h3>
+						<ul>
+							<li><%= link_to "Edit Board Details", edit_board_path(board)%></li>
+							<li><%= link_to "Edit Board Products", build_board_path(board)%></li>
+							<li><%= link_to "View Public Board Page", board%></li>
+						</ul>
+					</td>
+				</tr>
+			<% end%>
+			</table>
   		</div>
 		<% else %>
 		<div class="empty-state">You have not created any boards yet.</div>
