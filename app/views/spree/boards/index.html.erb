@@ -1,17 +1,25 @@
-<div class="container">
+<div class="columns sixteen alpha">
 	<div class="page-header clearfix">
 		<h1>Boards</h1>
 	</div>
+</div>
+<div class="columns four alpha">
+	<h3>Search Boards</h3>
+</div>
+
+<div class="columns twelve omega">
+	
 	<div class="boards-list-main">
+		<div class="columns six alpha">
 		<% @boards.each do |board| %>
 			<div class="board">
 				<h3><%= link_to board.name, board %></h3>
-				<p><%= board.description %></p>
-				<p><%= link_to image_tag("/boards/#{board.id}.jpg", :style => "border: 1px solid #ccc"), board%></p>
+				<div class="board-byline">by <%= board.designer.full_name%></div>
+				<p><%= link_to image_tag("/boards/#{board.id}.jpg"), board%></p>
 				
 			</div>
 		<% end %>
+		</div>
 		
 	</div>
-	
 </div>

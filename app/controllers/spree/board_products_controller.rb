@@ -40,7 +40,7 @@ class Spree::BoardProductsController < Spree::StoreController
     
     if @board_product.save
       
-      white_canvas = Image.new(720,400){ self.background_color = "white" }
+      white_canvas = Image.new(700,400){ self.background_color = "white" }
       @board_product.board.board_products.reload
       @board_product.board.board_products.each do |bp|
       	product_image = ImageList.new(bp.product.images.first.attachment.url(:product))

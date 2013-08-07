@@ -5,7 +5,7 @@ module Spree
     end
     
     def profile
-      @board = Spree::Board.new
+      @user = spree_current_user
     end
   end
 end

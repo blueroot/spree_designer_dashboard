@@ -1,5 +1,5 @@
 <div class="container">
-	<aside id="sidebar" class="columns four" data-hook="">  
+	<aside id="sidebar" class="columns four alpha" data-hook="">  
 		<div data-hook="dashboard_sidebar_navigation">
 		<nav id="taxonomies" class="sidebar-item" data-hook="">
 			<h6 class="taxonomy-root">Designer Dashboard</h6>
@@ -10,32 +10,48 @@
 		</nav>
 		</div>
 	</aside>
-	<div id="content" class="columns twelve" data-hook="">
+	<div id="content" class="columns twelve omega" data-hook="">
 		<div class="page-header clearfix">
 			<h1>Edit Your Profile</h1>
-			<%= form_for [@board] do |f| %>
-			<div class="row">
-			  <div class="alpha ten columns">
-			    <%= f.field_container :name do %>
-			      <%= f.label :name %>
-			      <%= f.text_field :name, :class => 'title input-xxlarge' %>
-			      <%= f.error_message_on :name %>
-			    <% end %>
-
-			    <%= f.field_container :body do %>
-			      <%= f.label :description, "Brief Description" %>
-			      <%= f.text_area :description, {:class => 'input-xxlarge', :rows => 4} %>
-			      <%= f.error_message_on :description %>
-			    <% end %>
-			  </div>
-			</div>
-				<p><%= submit_tag("Save Changes")%></p>
-			
-				<% end %>
-
-			
 		</div>
+		<%= form_for [@user] do |f| %>
+		<div class="row">
+		  <div class="alpha ten columns">
+		    <%= f.field_container :first_name do %>
+		      <%= f.label :first_name %>
+		      <%= f.text_field :first_name, :class => 'title input-large' %>
+		      <%= f.error_message_on :first_name %>
+		    <% end %>
+			<%= f.field_container :last_name do %>
+		      <%= f.label :last_name %>
+		      <%= f.text_field :last_name, :class => 'title input-large' %>
+		      <%= f.error_message_on :last_name %>
+		    <% end %>
+		    <%= f.field_container :description do %>
+		      <%= f.label :description, "Tell us a little about yourself" %>
+		      <%= f.text_area :description, {:class => 'input-xxlarge', :rows => 4} %>
+		      <%= f.error_message_on :description %>
+		    <% end %>
+			<%= f.field_container :company_name do %>
+		      <%= f.label :company_name %>
+		      <%= f.text_field :company_name, :class => 'title input-large' %>
+		      <%= f.error_message_on :company_name %>
+		    <% end %>
+			<%= f.field_container :website_url do %>
+		      <%= f.label :website_url %>
+		      <%= f.text_field :website_url, :class => 'title input-large' %>
+		      <%= f.error_message_on :website_url %>
+		    <% end %>
+			<%= f.field_container :location do %>
+		      <%= f.label :location, "Where are you located?" %>
+		      <%= f.text_field :location, :class => 'title input-large' %>
+		      <%= f.error_message_on :location %>
+		    <% end %>
+		  </div>
+		</div>
+			<p><%= submit_tag("Save Changes")%></p>
 		
+			<% end %>
   		
 	</div>
 </div>

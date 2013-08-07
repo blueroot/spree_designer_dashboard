@@ -1,40 +1,34 @@
 <div class="container">
 	<div class="page-header clearfix">
-		<h1>Add Products to your Board</h1>
-
+		<h1>Find Products and add them to your Board</h1>
 	</div>
-	
-	<%= form_for [@board] do |f| %>
-		<label>Select and Drag Products</label>
+		<div class="board-product-search">
+			<%= form_tag("/boards/product_search", method: "get", :id => "product_search_form") do %>
+				<table cellspacing="0" cellpadding="0" border="0">
+					<tr>
+						<th>Search by name</th>
+						<th colspan="3">Filter</th>
+					</tr>
+					<tr>
+						<td><input type="text" id="product_keywords" name="product_keywords"></td>
+						<td><%= select_tag "taxon", options_from_collection_for_select(@department_taxons, "id", "name"), :include_blank => true %></td>
+						<td><%= submit_tag("Search")%></td>
+						<td class="pagination"><div id="select-products-pagination"></div></td>
+					</tr>
+				</table>
+			<% end %>
+		</div>
 		<div id="board-container">
-		<div class="select-products-box" style="border: 1px solid #aaa; height: 150px; width: 920px; margin-bottom: 20px; padding: 10px 0; overflow:hidden;">
+		<div id="select-products-box" class="select-products-box" style="border: 1px solid #aaa; height: 220px; width: 920px; margin-bottom: 20px; padding: 10px 0; overflow-y:hidden; overflow-x: scroll;">
 			
-				<% unless @products.blank? %>
-					<% @products.each do |product| %>
-					<div class="board-product-select" style="float:left; margin-left: 10px; width: 170px; height: 170px;">
-						<div class="board-product-select-image" style="margin-bottom: 5px; text-align:center; border: 1px solid #eee; padding: 5px;">
-							<div class="board-lightbox-product" data-product-id="<%= product.id %>" id="<%= product.id %>">
-								<div style="position: relative;">
-									<a href="javascript:void(0);" class="button-remove-product" style="font-family: helvetica; font-size: 12px; line-height: 12px; font-weight: bold; background-color: #fff; padding: 4px 7px; border-width: 0 0 1px 1px; border-style: solid; border-color: #ccc; right: 0px; top: 0; position: absolute; display: none;">x</a>
-									<%= small_image(product, :itemprop => 'image', :class => "board-lightbox-product-img") %>
-								</div>
-							</div>
-						</div>
-						<div style="text-align: left;">      
-						<%= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => product.name %>
-						      <div class="price selling" itemprop="price"><%= display_price(product) %></div>
-						</div>
-					</div>
-					<% end %>
-				<% end %>
+				
 		</div>
 		
 		<label>Your Canvas</label>
-		<div id="board-canvas" data-board-id="<%= @board.id %>" style="height: 400px; width: 720px; background-color: #fff; border: 1px dashed #bdc3c7; position: relative; z-index: 1;"></div>
+		<div id="board-canvas" data-board-id="<%= @board.id %>" style="height: 400px; width: 700px; background-color: #fff; border: 1px dashed #bdc3c7; position: relative; z-index: 1; margin-bottom: 30px;"></div>
 		</div>
 		
-		<p><%= submit_tag("Save Changes")%></p>
-	<% end %>
+	
 </div>
 <style>
 	.board-product-selected{
@@ -51,19 +45,7 @@
 
 $(function () {
     var element;
-    $('.board-lightbox-product').draggable({
-        containment: '.main',
-        cursor: 'move',
-        helper: 'clone',
-		appendTo: '#board-canvas',
-        revert: 'invalid',
-		start: function(event, ui) {
-	        isDraggingMedia = true;
-	    },
-	    stop: function(event, ui) {
-	        isDraggingMedia = false;
-	    }
-    });
+    
     $('#board-canvas').droppable({
         accept: function(element) {
 		  var cn = element.className;
@@ -74,7 +56,28 @@ $(function () {
 	getSavedProducts($('#board-canvas').data('boardId'));
 	
 	
-	
+	/* attach a submit handler to the form */
+	$("#product_search_form").submit(function(event) {
+
+		/* stop form from submitting normally */
+		event.preventDefault();
+
+		/* get some values from elements on the page: */
+		var $form = $( this ),
+		term = $form.find( 'input[name="product_keywords"]' ).val(),
+		taxon = $form.find( 'select[name="taxon"]' ).val(),
+		url = $form.attr( 'action' );
+		
+		//alert(taxon);
+		/* Send the data using post */
+		var posting = $.post( url, { keywords: term, taxon_id: taxon } );
+
+		/* Put the results in a div */
+		posting.done(function( data ) {
+			//var content = $( data ).find( '#content' );
+			//$( "#result" ).empty().append( content );
+		});
+	});
 	
 });
 </script>

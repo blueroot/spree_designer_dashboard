@@ -21,6 +21,23 @@ class Spree::BoardsController < Spree::StoreController
     @board = Spree::Board.new
   end
   
+  def product_search
+    params.merge(:per_page => "500")
+    unless params[:taxon_id].blank?
+      @taxon = Spree::Taxon.find(params[:taxon_id]) 
+      @searcher = build_searcher(params.merge(:taxon => @taxon.id))
+    else
+      @searcher = build_searcher(params)
+    end
+    @products = @searcher.retrieve_products
+    #@products = Spree::Product.all()
+    respond_to do |format|
+      format.js   {render :layout => false}
+      #format.html { redirect_to([:admin, @booking], :notice => 'Booking was successfully created.') }
+      #format.xml  { render :xml => @booking, :status => :created, :location => @booking }
+    end
+  end
+  
   def create
     @board = Spree::Board.new(params[:board])
     @board.designer = spree_current_user
@@ -41,6 +58,7 @@ class Spree::BoardsController < Spree::StoreController
   def build
     @board = Spree::Board.find(params[:id])
     @products = Spree::Product.all()
+    @department_taxons = Spree::Taxonomy.where(:name => 'Department').first().root.children
   end
   
   

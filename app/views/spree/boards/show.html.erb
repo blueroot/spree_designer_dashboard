@@ -1,14 +1,19 @@
-<div class="container">
+<div class="columns sixteen alpha">
 	<div class="page-header clearfix">
 		<h1><%= @board.name %></h1>
-		<p><%= @board.description %></p>
-		<p><%= image_tag("/boards/#{@board.id}.jpg", :style => "border: 1px solid #ccc")%></p>
-		
+		<div class="page-header-byline">
+			by <%= @board.designer.full_name%>
+		</div>
 	</div>
-	
+</div>
+<div class="columns twelve alpha">
+	<div class="board-details">
+		<%= image_tag("/boards/#{@board.id}.jpg", :style => "border: 1px solid #ccc")%>
+		<p><%= @board.description %></p>
+	</div>
 	<div class="board-products">
 		<h3>Products on this board</h3>
-		
+	
 		<% if @board.board_products.any? %>
 		<ul id="products" class="inline product-listing" data-hook>
 		  <% @board.products.each do |product| %>
@@ -23,8 +28,17 @@
 		  <% reset_cycle("classes") %>
 		</ul>
 		<% end %>
-		
-		
 	</div>
-	
 </div>
+<div class="columns four omega">
+	<div class="board-designer-column">
+		<h3><%= @board.designer.full_name%></h3>
+		<p><%= @board.designer.description%></p>
+		<p><%= link_to @board.designer.website_url, @board.designer.website_url %></p>
+		<p><%= @board.designer.location%></p>
+	</div>
+	<div class="board-sidebar-section">
+		<h3>Similar Boards</h3>
+	</div>
+</div>
+

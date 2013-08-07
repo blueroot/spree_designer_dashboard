@@ -2,10 +2,10 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_designer_dashboard'
-  s.version     = '1.2.1'
+  s.version     = '1.2.2'
   s.summary     = 'Designer Dashboard Functionality for Scout & Nimble'
   s.description = ''
-  s.required_ruby_version = '>= 1.8.7'
+  s.required_ruby_version = '>= 1.9.3'
 
   s.author    = 'Jamie Stephens'
   s.email     = 'jamie@blueroot.com'
