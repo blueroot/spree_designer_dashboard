@@ -15,8 +15,7 @@
 			<div class="board">
 				<h3><%= link_to board.name, board %></h3>
 				<div class="board-byline">by <%= board.designer.full_name%></div>
-				<p><%= link_to image_tag("/boards/#{board.id}.jpg"), board%></p>
-				
+				<p><%= link_to image_tag(board.board_image.attachment("primary")), board%></p>
 			</div>
 		<% end %>
 		</div>

@@ -48,8 +48,14 @@ class Spree::BoardProductsController < Spree::StoreController
       	white_canvas.composite!(product_image, NorthWestGravity, bp.top_left_x, bp.top_left_y, Magick::OverCompositeOp)
       end
       white_canvas.format = 'jpeg'
-      white_canvas.write("#{Rails.root}/public/boards/#{@board_product.board.id}.jpg")
+      #white_canvas.write("#{Rails.root}/tmp/boards/#{@board_product.board.id}.jpg")
       
+      #picture = imageList.flatten_images
+      file = Tempfile.new("board_#{@board_product.board.id}.jpg")
+      white_canvas.write(file.path)
+      @board_product.board.build_board_image if @board_product.board.board_image.blank?
+      @board_product.board.board_image.attachment = file      
+      @board_product.board.save
       respond_to do |format|
       
         format.js   { render :action => "show" }

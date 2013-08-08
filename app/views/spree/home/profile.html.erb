@@ -16,37 +16,93 @@
 		</div>
 		<%= form_for [@user] do |f| %>
 		<div class="row">
-		  <div class="alpha ten columns">
-		    <%= f.field_container :first_name do %>
-		      <%= f.label :first_name %>
-		      <%= f.text_field :first_name, :class => 'title input-large' %>
-		      <%= f.error_message_on :first_name %>
-		    <% end %>
+			<div class="alpha ten columns">
+			<%= f.field_container :first_name do %>
+				<%= f.label :first_name %>
+				<%= f.text_field :first_name, :class => 'title input-large' %>
+				<%= f.error_message_on :first_name %>
+			<% end %>
 			<%= f.field_container :last_name do %>
-		      <%= f.label :last_name %>
-		      <%= f.text_field :last_name, :class => 'title input-large' %>
-		      <%= f.error_message_on :last_name %>
-		    <% end %>
-		    <%= f.field_container :description do %>
-		      <%= f.label :description, "Tell us a little about yourself" %>
-		      <%= f.text_area :description, {:class => 'input-xxlarge', :rows => 4} %>
-		      <%= f.error_message_on :description %>
+				<%= f.label :last_name %>
+				<%= f.text_field :last_name, :class => 'title input-large' %>
+				<%= f.error_message_on :last_name %>
+			<% end %>
+			<%= f.field_container :description do %>
+				<%= f.label :description, "Tell us a little about yourself" %>
+				<%= f.text_area :description, {:class => 'input-xxlarge', :rows => 4} %>
+				<%= f.error_message_on :description %>
 		    <% end %>
 			<%= f.field_container :company_name do %>
-		      <%= f.label :company_name %>
-		      <%= f.text_field :company_name, :class => 'title input-large' %>
-		      <%= f.error_message_on :company_name %>
-		    <% end %>
+				<%= f.label :company_name %>
+				<%= f.text_field :company_name, :class => 'title input-large' %>
+				<%= f.error_message_on :company_name %>
+			<% end %>
 			<%= f.field_container :website_url do %>
-		      <%= f.label :website_url %>
-		      <%= f.text_field :website_url, :class => 'title input-large' %>
-		      <%= f.error_message_on :website_url %>
-		    <% end %>
+				<%= f.label :website_url %>
+				<%= f.text_field :website_url, :class => 'title input-large' %>
+				<%= f.error_message_on :website_url %>
+			<% end %>
+			<%= f.field_container :blog_url do %>
+				<%= f.label :blog_url %>
+				<%= f.text_field :blog_url, :class => 'title input-large' %>
+				<%= f.error_message_on :blog_url %>
+			<% end %>
 			<%= f.field_container :location do %>
-		      <%= f.label :location, "Where are you located?" %>
-		      <%= f.text_field :location, :class => 'title input-large' %>
-		      <%= f.error_message_on :location %>
-		    <% end %>
+				<%= f.label :location, "Where are you located?" %>
+				<%= f.text_field :location, :class => 'title input-large' %>
+				<%= f.error_message_on :location %>
+			<% end %>
+		
+			<%= f.field_container :user_image do %>
+				<%= f.fields_for :user_images do |user_image|%>
+					
+						<table class="form-image-table">
+							<tr>
+								<% unless @user.user_images.first.new_record? %>
+								<td><%= image_tag(@user.user_images.first.attachment(:small)) %></td>
+								<% end %>
+								<td>
+									<% unless @user.user_images.first.new_record? %>
+										<%= user_image.label :attachment, "Change Profile Image" %>
+									<% else %>
+										<%= user_image.label :attachment, "Profile Image" %>
+									<% end%>
+									<div id="user_image_file" class="choose-file-button">Choose a file</div>
+									<%= user_image.file_field :attachment %>	
+								</td>
+							</tr>
+						</table>
+		      
+				<% end %>
+			<% end %>
+			
+			<%= f.field_container :logo_image do %>
+				<%= f.fields_for :logo_image do |logo_image|%>
+					<table class="form-image-table">
+						<tr>
+							<% unless @user.logo_image.new_record? %>
+							<td><%= image_tag(@user.logo_image.attachment(:small)) %></td>
+							<% end %>
+							<td>
+								<% unless @user.logo_image.new_record? %>
+									<%= logo_image.label :attachment, "Change Your Logo" %>
+								<% else %>
+									<%= logo_image.label :attachment, "Your Logo" %>
+								<% end %>
+								<div id="logo_file" class="choose-file-button">Choose a file</div>
+								<%= logo_image.file_field :attachment %>	
+							</td>
+						</tr>
+					</table>
+				<% end %>
+			<% end %>
+
+		
+
+			      
+		
+		
+		
 		  </div>
 		</div>
 			<p><%= submit_tag("Save Changes")%></p>
@@ -55,3 +111,26 @@
   		
 	</div>
 </div>
+
+<script>
+var wrapper = $('<div/>').css({height:0,width:0,'overflow':'hidden'});
+var userImageFileInput = $('#user_user_images_attributes_0_attachment').wrap(wrapper);
+var logoFileInput = $('#user_logo_image_attributes_attachment').wrap(wrapper);
+
+userImageFileInput.change(function(){
+    $this = $(this);
+	$('#user_image_file').text($this.val());
+})
+logoFileInput.change(function(){
+    $this = $(this);
+	$('#logo_file').text($this.val());
+})
+
+
+$('#user_image_file').click(function(){
+    userImageFileInput.click();
+}).show();
+$('#logo_file').click(function(){
+    logoFileInput.click();
+}).show();
+</script>

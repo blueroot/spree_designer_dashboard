@@ -8,7 +8,7 @@
 </div>
 <div class="columns twelve alpha">
 	<div class="board-details">
-		<%= image_tag("/boards/#{@board.id}.jpg", :style => "border: 1px solid #ccc")%>
+		<%= image_tag(@board.board_image.attachment(:large), :style => "border: 1px solid #ccc")%>
 		<p><%= @board.description %></p>
 	</div>
 	<div class="board-products">

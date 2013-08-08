@@ -1,10 +1,24 @@
-<div class="container">
+<div class="columns sixteen alpha">
 	<div class="page-header clearfix">
-		<h1>Edit Board</h1>
+		<h1><%= @board.name %></h1>
 	</div>
-	
-	<%= form_for [@board] do |f| %>
-		<%= render :partial => 'form', :locals => { :f => f } %>
-		<p><%= submit_tag("Save Changes")%></p>
-	<% end %>
 </div>
+
+<div class="columns sixteen alpha omega">
+	<ul class="nav nav-tabs">
+	  <li class="active"><%= link_to "Details", edit_board_path(@board)%></li>
+	  <li><%= link_to "Design", build_board_path(@board)%></li>
+	</ul>
+	<div class="board-content-container">
+		<div class="board-content-header">
+			<h4>Edit board details.</h4>
+		</div>
+		<div class="board-content-body">
+			<%= form_for [@board] do |f| %>
+				<%= render :partial => 'form', :locals => { :f => f } %>
+				<p><%= submit_tag("Save Changes")%></p>
+			<% end %>
+		</div>
+	</div>
+</div>
+

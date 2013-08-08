@@ -22,13 +22,24 @@ class Spree::BoardsController < Spree::StoreController
   end
   
   def product_search
-    params.merge(:per_page => "500")
-    unless params[:taxon_id].blank?
-      @taxon = Spree::Taxon.find(params[:taxon_id]) 
-      @searcher = build_searcher(params.merge(:taxon => @taxon.id))
+    params.merge(:per_page => 100)
+    taxons = []
+    unless params[:wholesaler_taxon_id].blank?
+      taxon = Spree::Taxon.find(params[:wholesaler_taxon_id])
+      taxons << taxon.id
+    end
+    
+    unless params[:department_taxon_id].blank?
+      taxon = Spree::Taxon.find(params[:department_taxon_id])
+      taxons << taxon.id
+    end
+    
+    unless taxons.empty? 
+      @searcher = build_searcher(params.merge(:taxon => taxons))
     else
       @searcher = build_searcher(params)
     end
+    
     @products = @searcher.retrieve_products
     #@products = Spree::Product.all()
     respond_to do |format|
@@ -59,6 +70,7 @@ class Spree::BoardsController < Spree::StoreController
     @board = Spree::Board.find(params[:id])
     @products = Spree::Product.all()
     @department_taxons = Spree::Taxonomy.where(:name => 'Department').first().root.children
+    @wholesaler_taxons = Spree::Taxonomy.where(:name => 'Wholesaler').first().root.children
   end
   
   

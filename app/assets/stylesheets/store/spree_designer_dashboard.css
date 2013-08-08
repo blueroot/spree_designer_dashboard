@@ -67,6 +67,30 @@
 
 /* dashboard styles */
 
+.board-content-container{
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-width: 0 1px 1px 1px;
+	padding: 0;
+	margin-bottom: 20px;
+}
+
+.board-content-container .board-content-header{
+	background-color: #fff;
+	border-bottom: 1px solid #ddd;
+	padding: 20px 15px;
+}
+.board-content-container .board-content-body{
+	background-color: #eee;
+	padding: 15px
+}
+
+.board-content-container h4{
+	font-size: 14px;
+	margin: 0 0 0px 0;
+	padding: 0 0 0 0;
+}
+
 .board-product-search table{
 	margin-bottom: 10px;
 	width: 100%;
@@ -87,6 +111,7 @@
 	text-align: right;
 	width: 50%;
 	padding-right: 40px;
+	margin: 0;
 }
 
 .board-product-search table tr{
@@ -99,6 +124,18 @@
 }
 #select-products-pagination{
 	text-align: right;
+}
+.pagination{
+	margin: 0;
+}
+.select-products-box{
+	border: 1px solid #ccc; 
+	height: 220px; 
+	margin-bottom: 20px; 
+	padding: 10px 0; 
+	overflow-y:hidden; 
+	overflow-x: scroll;
+	background-color: #fff;
 }
 
 p.empty-search-state{
@@ -124,10 +161,34 @@ p.empty-search-state{
 	margin: 0 0 10px 0;
 	padding: 0;
 	line-height: 20px;
+	
 }
 
 .dashboard-boards p{
 	margin: 0;
 	padding: 0;
 }
+/* Profile Styles */
+table.form-image-table tr{
+	border: 0;
+}
+table.form-image-table tr td{
+	padding: 0 20px 0 0;
+	margin: 0;
+	vertical-align: top;
+}
+#logo_file, #user_image_file {
+    display:none;
+}
+.choose-file-button{
+	font-weight: bold;
+	border: 1px solid #ccc;
+	background-color: #eee;
+	padding: 5px;
+	text-align: center;
+	width: 100px;
+	cursor: pointer;
+}
+
+/* End Profile Styles */	
 /* end dashboard styles */

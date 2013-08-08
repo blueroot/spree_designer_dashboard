@@ -9,6 +9,10 @@ class Spree::Board < ActiveRecord::Base
 	has_many :colors, :through => :color_matches
 	
 	attr_accessible :name, :description
+	
+	has_one :board_image, as: :viewable, order: :position, dependent: :destroy, class_name: "Spree::BoardImage"
+  attr_accessible :board_image_attributes
+  accepts_nested_attributes_for :board_image
   
 
   #def render_board
