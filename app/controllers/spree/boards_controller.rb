@@ -1,8 +1,44 @@
 class Spree::BoardsController < Spree::StoreController
- 
+  helper 'spree/taxons'
+  helper 'spree/products'
   
+  before_filter :prep_search_collections, :only => [:index, :search, :edit, :new]
+  
+
   def index
     @boards = Spree::Board.all()
+  end
+  
+  def search
+    
+    @boards_scope = Spree::Board.active
+    
+    if params[:color] and not params[:color].blank?
+      @color = Spree::Color.find(params[:color])
+      @boards_scope = @boards_scope.by_color(@color)
+    end
+    
+    unless params[:room_id].blank?
+      @boards_scope = @boards_scope.by_room(params[:room_id])
+    end
+    
+    unless params[:style_id].blank?
+      @boards_scope = @boards_scope.by_room(params[:style_id])
+    end
+    
+    unless params[:style_id].blank?
+      @boards_scope = @boards_scope.by_designer(params[:designer_id])
+    end
+    
+    #unless params[:price_low].blank?
+    #  @boards_scope = @boards_scope.by_lower_bound_price(params[:price_low])
+    #end
+    #
+    #unless params[:price_high].blank?
+    #  @boards_scope = @boards_scope.by_upper_bound_price(params[:price_low])
+    #end
+    
+    @boards = @boards_scope
   end
   
   def my_boards
@@ -15,10 +51,20 @@ class Spree::BoardsController < Spree::StoreController
   
   def edit
     @board = Spree::Board.find(params[:id])
+    @colors = Spree::Color.order(:position).where("position > 144 and position < 1000")
+    num_colors = @board.colors.size + 1
+    num_colors.upto(5) do |n|
+      @board.colors.build
+    end
   end
   
   def new
     @board = Spree::Board.new
+    @colors = Spree::Color.order(:position).where("position > 144 and position < 1000")
+
+    1.upto(5) do |n|
+      @board.colors.build
+    end
   end
   
   def product_search
@@ -73,7 +119,13 @@ class Spree::BoardsController < Spree::StoreController
     @wholesaler_taxons = Spree::Taxonomy.where(:name => 'Wholesaler').first().root.children
   end
   
-  
+  private
+    def prep_search_collections
+      @room_taxons = Spree::Taxonomy.where(:name => 'Rooms').first().root.children
+      @style_taxons = Spree::Taxonomy.where(:name => 'Styles').first().root.children
+      @colors = Spree::Color.order(:position)
+      @designers = Spree::User.is_active_designer()
+    end
   # redirect to the edit action after create
   #create.response do |wants|
   #  show.html { redirect_to edit_admin_fancy_thing_url( @fancy_thing ) }
@@ -85,3 +137,6 @@ class Spree::BoardsController < Spree::StoreController
   #end
  
 end
+
+
+

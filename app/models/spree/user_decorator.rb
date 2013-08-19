@@ -4,4 +4,7 @@ Spree::User.class_eval do
   has_one :logo_image, as: :viewable, order: :position, dependent: :destroy, class_name: "Spree::LogoImage"
   attr_accessible :user_images_attributes, :logo_image_attributes
   accepts_nested_attributes_for :user_images, :logo_image
+  def self.is_active_designer
+    where(:is_designer => 1)
+  end
 end

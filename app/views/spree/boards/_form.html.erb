@@ -4,8 +4,51 @@
       <%= f.error_message_on :name %>
     <% end %>
 
-    <%= f.field_container :body do %>
+    <%= f.field_container :description do %>
       <%= f.label :description %>
       <%= f.text_area :description, {:class => 'input-xxlarge', :rows => 4} %>
       <%= f.error_message_on :description %>
     <% end %>
+
+	<div class="control-group">
+	    <label class="control-label" for="inputEmail">Room</label>
+	    <div class="controls">
+			<%= f.select "room_id", options_from_collection_for_select(@room_taxons, "id", "name"), :include_blank => true %>
+		</div>
+	</div>
+	<div class="control-group">
+	    <label class="control-label" for="inputEmail">Style</label>
+	    <div class="controls">
+			<%= f.select "style_id", options_from_collection_for_select(@style_taxons, "id", "name"), :include_blank => true %>
+		</div>
+	</div>
+
+	<%= f.field_container :colors do %>
+	
+      <%= f.label :colors %>
+		<ul class="board-color-swatches unstyled" >
+		<% @board.colors.each do |match|%>
+			<li style="display: inline-block; margin-right: 10px;"><input class='simple_color' value="#ffffff"/></li>
+		<% end %>
+		</ul>
+    <% end %>
+<script>
+	$(document).ready(function(){
+	  
+		colors = <%=raw @colors.collect{|color| "##{color.hex_val}"}%>
+
+	  $('.simple_color').simpleColor({
+	    cellWidth: 12,
+	    cellHeight: 12,
+		cellMargin: 0,
+		columns:50,
+	    border: '1px solid #fff',
+	    buttonClass: 'button',
+	    displayColorCode: false,
+	    livePreview: false,
+		colors: colors
+	    
+	  });
+
+	});
+	</script>

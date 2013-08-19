@@ -8,4 +8,8 @@ Spree::Product.class_eval do
     joins(:taxons).where(spree_taxons: { id: taxons }).group(id).having(id.count.eq(taxons.size))
     #taxons.first ? prepare_taxon_conditions(taxons) : scoped
   end
+  
+  def other_board_products
+    self.boards.first().products
+  end
 end

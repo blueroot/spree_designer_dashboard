@@ -1,0 +1,48 @@
+<div class="columns sixteen alpha">
+	<div class="page-header clearfix">
+		<h1><%= @designer.full_name %></h1>
+		<div class="page-header-byline">
+			<%= @designer.location%>
+		</div>
+	</div>
+</div>
+<div class="columns four alpha">
+	<div class="board-designer-column">
+		<p><%= render :partial => "designer_thumb", :locals => {:designer => @designer}%></p>
+		<p><%= @designer.description%></p>
+		<p><%= link_to @designer.website_url, @designer.website_url %></p>
+		<p><%= @designer.location%></p>
+	</div>
+	
+</div>
+
+<div class="columns twelve omega">
+	<div class="board-details">
+		
+		
+	</div>
+	<div class="board-products">
+		<h3><%= "#{@designer.first_name}'s"%> Boards</h3>
+		<% unless @designer.boards.blank? %>
+		
+			<% @designer.boards.in_groups_of((@designer.boards.size/2).to_i, false) do |row_boards| %>
+				
+				<% for board in row_boards %>
+					<div class="columns six <%= " alpha" if board == row_boards.first %><%= " omega" if board == row_boards.last %>">
+						<%= link_to image_tag(board.board_image.attachment(:primary), :style => " width: 320px; border: 1px solid #ccc"), board%>
+						<h4 style="margin-bottom: 20px;"><%= link_to board.name, board %></h4>
+					</div>
+			    <% end %>
+			<% end %>
+		
+		<% else %>
+		<div class="empty-state">
+			This designer doesn't have any active boards at this time.
+		</div>
+		<% end%>
+		
+		
+		
+	</div>
+</div>
+

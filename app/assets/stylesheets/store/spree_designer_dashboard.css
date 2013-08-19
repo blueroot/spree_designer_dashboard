@@ -2,6 +2,10 @@
 
 */
 
+.page-container{
+	margin-bottom: 30px;
+}
+
 .boards-list-main h3{
 	margin: 0;
 	padding: 0;
@@ -64,6 +68,49 @@
 	padding: 0;
 }
 
+
+/* board search styles */
+
+.board-search{
+	background-color: #f1f1f1;
+	padding: 15px;
+}
+.board-search label{
+	font-size: 12px;
+	color: #666;
+	font-weight: normal;
+	text-transform: uppercase;
+	margin: 0 0 4px 0;
+}
+.board-search .control-group{
+	margin-bottom: 10px;
+}
+
+.board-search input, .board-search select{
+	font-size: 12px;
+}
+
+.board-search input[type="text"]{
+	width:180px;
+}
+
+.board-search select {
+	width: 180px;
+	border: 1px solid #bdc3c7;
+	background-color: #fff;
+	height: 24px;
+	margin-top: 0px;
+	padding-top: 3px;
+}
+
+.board-search form{
+	margin-bottom: 0;
+}
+.price-range select{
+	width: auto;
+}
+
+/* end board search styles */
 
 /* dashboard styles */
 
@@ -168,6 +215,15 @@ p.empty-search-state{
 	margin: 0;
 	padding: 0;
 }
+
+.board-color-swatches{
+	
+}
+.board-color-swatches input{
+	width: 30px;
+	height: 30px;
+}
+
 /* Profile Styles */
 table.form-image-table tr{
 	border: 0;

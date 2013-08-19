@@ -10,8 +10,16 @@
 	  <li class="active"><%= link_to "Design", build_board_path(@board)%></li>
 	</ul>
 	<div class="board-content-container">
-		<div class="board-content-header">
-			<h4>Find Products and add them to your Board.</h4>
+		<div class="board-content-header clearfix">
+
+			<div style="float:left; width: 600px;">
+			
+				<h4>Find Products and add them to your Board.</h4>
+			</div>
+			<div style="float: right; width: 200px; text-align: right;">
+			<%= link_to "Save Changes", edit_board_path(@board), :class=> "button"%>
+			</div>
+
 		</div>
 		<div class="board-content-body">
 			<div class="board-product-search">

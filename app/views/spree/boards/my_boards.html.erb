@@ -21,7 +21,7 @@
 			<table class="table" cellspacing="0" border="0">
 			<% @boards.each do |board|%>
 				<tr>
-					<td style="vertical-align: top;"><%= image_tag("/boards/#{board.id}.jpg", :style => "border: 1px solid #ccc; width: 250px;")%>
+					<td style="vertical-align: top;"><%= image_tag(board.board_image.attachment("primary"))%>
 					</td>
 					<td style="vertical-align: top;">
 						<h3><%= board.name %></h3>

@@ -1,7 +1,4 @@
 class Spree::ColorCollection < ActiveRecord::Base
-  validates_presence_of :name
-  
-  has_many :colors
-  
-  attr_accessible :name
+  attr_accessible :vendor_name, :name, :description
+  has_many :colors, :order => :position
 end

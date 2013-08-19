@@ -1,0 +1,34 @@
+<div class="columns sixteen alpha">
+	<div class="page-header clearfix">
+		<h1>Designers</h1>
+	</div>
+</div>
+
+
+<ul id="products" class="inline product-listing" data-hook>
+  <% @designers.each do |designer| %>
+    <li class="columns three <%= cycle("alpha", "secondary", "", "omega secondary", :name => "classes") %>" data-hook="designers_list_item" itemscope>
+      <div class="product-image">
+        <%= render :partial => "designer_thumb", :locals => {:designer => designer}%>
+      </div>
+      	<%= link_to designer.full_name, designer_path(designer), :class => 'info' %>
+		<%#= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => product.name %>
+      
+    </li>
+  <% end %>
+  <% reset_cycle("classes") %>
+</ul>
+
+
+<% if false %>
+<% @designers.in_groups_of((@designers.size/3).to_i, false) do |row_designers| %>
+	<div class="row">
+	<% for designer in row_designers %>
+		<div class="col-3">
+			<%= render :partial => "designer_thumb", :locals => {:designer => designer}%>
+			<h4><%= link_to designer.full_name, designer_path(designer) %></h4>
+		</div>
+    <% end %>
+	</div>
+<% end %>
+<% end %>

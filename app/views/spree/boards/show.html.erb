@@ -32,13 +32,23 @@
 </div>
 <div class="columns four omega">
 	<div class="board-designer-column">
+		<p>
+			
+			<% unless @board.designer.user_images.blank? %>
+				<%= link_to image_tag(@board.designer.user_images.first.attachment(:primary), :style => "width: 100%;"), designer_path(@board.designer) %>
+			<% else %>
+				<%= link_to image_tag("/assets/store/profile_default_primary.jpg", :style => "width: 100%;"), designer_path(@board.designer) %>
+			<% end %>
+		</p>
 		<h3><%= @board.designer.full_name%></h3>
 		<p><%= @board.designer.description%></p>
 		<p><%= link_to @board.designer.website_url, @board.designer.website_url %></p>
 		<p><%= @board.designer.location%></p>
 	</div>
+	<% if false %>
 	<div class="board-sidebar-section">
 		<h3>Similar Boards</h3>
 	</div>
+	<% end %>
 </div>
 

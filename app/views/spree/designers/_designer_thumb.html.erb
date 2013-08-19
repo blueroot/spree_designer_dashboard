@@ -1,0 +1,5 @@
+<% unless designer.user_images.blank? %>
+	<%= link_to image_tag(designer.user_images.first.attachment(:primary), :style => "width: 100%;"), designer_path(designer) %>
+<% else %>
+	<%= link_to image_tag("/assets/store/profile_default_primary.jpg", :style => "width: 100%;"), designer_path(designer) %>
+<% end %>
