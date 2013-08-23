@@ -1,12 +1,17 @@
-<div class="columns sixteen alpha">
-	<div class="page-header clearfix">
-		<h1><%= @board.name %></h1>
-		<div class="page-header-byline">
-			by <%= @board.designer.full_name%>
+<div class="row">
+	<div class="col-md-12">
+		<div class="page-header clearfix">
+			<h1><%= @board.name %></h1>
+			<div class="page-header-byline">
+				by <%= @board.designer.full_name%>
+			</div>
 		</div>
 	</div>
 </div>
-<div class="columns twelve alpha">
+
+<div class="row">
+	<div class="col-md-9">
+		
 	<div class="board-details">
 		<%= image_tag(@board.board_image.attachment(:large), :style => "border: 1px solid #ccc")%>
 		<p><%= @board.description %></p>
@@ -15,40 +20,50 @@
 		<h3>Products on this board</h3>
 	
 		<% if @board.board_products.any? %>
-		<ul id="products" class="inline product-listing" data-hook>
-		  <% @board.products.each do |product| %>
-		    <li id="product_<%= product.id %>" class="columns three <%= cycle("alpha", "secondary", "", "omega secondary", :name => "classes") %>" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
-		      <div class="product-image">
-		        <%= link_to raw("<span class=\"helper\"></span>#{small_image(product, :itemprop => 'image')}"), product, :itemprop => 'url' %>
-		      </div>
-		      <%= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => product.name %>
-		      <span class="price selling" itemprop="price"><%= display_price(product) %></span>
-		    </li>
-		  <% end %>
-		  <% reset_cycle("classes") %>
-		</ul>
+			<% @board.products.in_groups_of(4, false) do |row_products| %>
+			<div id="products" class="row">
+				<% for product in row_products %>
+				<div class="col-md-3">
+					<div class="product-listing">
+						<div class="product-image" style="min-height">
+				        	<%= link_to raw("<span class=\"helper\"></span>#{small_image(product, :itemprop => 'image')}"), product, :itemprop => 'url' %>
+				      	</div>
+				      	<%= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => product.name %>
+				      	<span class="price selling" itemprop="price"><%= display_price(product) %></span>
+						<div><a href="javascript:void(0);" class="add-to-cart-button" data-product-name="<%=product.name%>" data-product-price="<%= display_price(product) %>" data-product-image-url="<%=product.images.first.attachment.url(:mini)%>" data-product-id="<%= product.id %>" data-variant-number="1">Add to Cart</a></div>
+					</div>
+				</div>
+				<% end %>
+			</div>
+			<% end %>
 		<% end %>
 	</div>
 </div>
-<div class="columns four omega">
+<div class="col-md-3">
 	<div class="board-designer-column">
-		<p>
+		<div class="panel">
+			<div class="panel-heading">
+				<% unless @board.designer.user_images.blank? %>
+					<%= link_to image_tag(@board.designer.user_images.first.attachment(:primary), :style => "width: 100%;"), designer_path(@board.designer) %>
+				<% else %>
+					<%= link_to image_tag("/assets/store/profile_default_primary.jpg", :style => "width: 100%;"), designer_path(@board.designer) %>
+				<% end %>
+				<h3><%= @board.designer.full_name%></h3>
+				<p><%= @board.designer.description%></p>
+				<p><%= link_to @board.designer.website_url, @board.designer.website_url %></p>
+				<p><%= @board.designer.location%></p>
+			</div>
 			
-			<% unless @board.designer.user_images.blank? %>
-				<%= link_to image_tag(@board.designer.user_images.first.attachment(:primary), :style => "width: 100%;"), designer_path(@board.designer) %>
-			<% else %>
-				<%= link_to image_tag("/assets/store/profile_default_primary.jpg", :style => "width: 100%;"), designer_path(@board.designer) %>
-			<% end %>
-		</p>
-		<h3><%= @board.designer.full_name%></h3>
-		<p><%= @board.designer.description%></p>
-		<p><%= link_to @board.designer.website_url, @board.designer.website_url %></p>
-		<p><%= @board.designer.location%></p>
-	</div>
 	<% if false %>
 	<div class="board-sidebar-section">
 		<h3>Similar Boards</h3>
 	</div>
 	<% end %>
+		</div>
+	</div>
 </div>
+</div>
+
+<%= render :partial => "spree/shared/add_to_cart_modal" %>
+
 

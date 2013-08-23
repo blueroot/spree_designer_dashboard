@@ -1,9 +1,13 @@
-<div class="columns sixteen alpha">
-	<div class="page-header clearfix">
-		<h1>Designers</h1>
+<div class="row">
+	<div class="col-md-12">
+		<div class="page-header clearfix">
+			<h1>Designers</h1>
+			
+		</div>
 	</div>
 </div>
 
+<% if false %>
 
 <ul id="products" class="inline product-listing" data-hook>
   <% @designers.each do |designer| %>
@@ -18,17 +22,15 @@
   <% end %>
   <% reset_cycle("classes") %>
 </ul>
+<% end %>
 
-
-<% if false %>
-<% @designers.in_groups_of((@designers.size/3).to_i, false) do |row_designers| %>
+<% @designers.in_groups_of(4,false) do |row_designers| %>
 	<div class="row">
 	<% for designer in row_designers %>
-		<div class="col-3">
+		<div class="col-md-3">
 			<%= render :partial => "designer_thumb", :locals => {:designer => designer}%>
 			<h4><%= link_to designer.full_name, designer_path(designer) %></h4>
 		</div>
     <% end %>
 	</div>
-<% end %>
 <% end %>

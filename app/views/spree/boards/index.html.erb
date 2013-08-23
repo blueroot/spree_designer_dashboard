@@ -1,28 +1,75 @@
-<% if false %>
-<div class="columns sixteen alpha">
-	<div class="page-header clearfix">
-		<h1>Boards</h1>
-		
+<div class="row">
+	<div class="col-md-3">
+		<%= render :partial => "search_form"%>
 	</div>
-</div>
-<% end %>
-
-<div class="columns four alpha">
-	<%= render :partial => "search_form"%>
-</div>
-
-<div class="columns twelve omega">
-	
-	<div class="boards-list-main">
-		<div class="columns six alpha">
-		<% @boards.each do |board| %>
-			<div class="board">
-				<h3><%= link_to board.name, board %></h3>
-				<div class="board-byline">by <%= board.designer.full_name%></div>
-				<p><%= link_to image_tag(board.board_image.attachment("primary")), board%></p>
-			</div>
-		<% end %>
+	<div class="col-md-9">
+		<div class="slider-wrapper">
+		    <div id="slider" class="nivoSlider">
+		        <img src="/assets/store/nimble.jpg" alt="" />
+				<img src="/assets/store/nimble2.jpg" alt="" />
+		    </div>
 		</div>
 		
+		<h2>Featured Boards</h2>
+		<div class="boards-list-main">
+		
+					<% @boards.in_groups_of(2, false) do |row_boards| %>
+					<div class="row">
+
+						<% for board in row_boards %>
+						<div class="col-md-6">
+							<div class="board-listing">
+								<%= link_to image_tag(board.board_image.attachment("primary")), board%>
+								<div class="board-meta">
+									<div class="board-meta-img">
+										<% unless board.designer.user_images.blank? %>
+											<%= link_to image_tag(board.designer.user_images.first.attachment(:mini)), designer_path(board.designer) %>
+										<% else %>
+											<%= link_to image_tag("/assets/store/profile_default_primary.jpg", :style => "width: 48px;"), designer_path(board.designer) %>
+										<% end %>
+									</div>
+									<h3><%= link_to board.name, board %></h3>
+									<div class="board-byline">by <%= board.designer.full_name%></div>
+									
+								</div>
+							</div>
+						</div>
+						<% end %>
+					</div>
+					<% end %>
+				
+			
+			
+		</div>
 	</div>
 </div>
+
+
+
+
+<script type="text/javascript">
+$(window).load(function() {
+    $('#slider').nivoSlider({
+	        effect: 'fade', // Specify sets like: 'fold,fade,sliceDown'
+	        slices: 15, // For slice animations
+	        boxCols: 8, // For box animations
+	        boxRows: 4, // For box animations
+	        animSpeed: 500, // Slide transition speed
+	        pauseTime: 5000, // How long each slide will show
+	        startSlide: 0, // Set starting Slide (0 index)
+	        directionNav: true, // Next & Prev navigation
+	        controlNav: false, // 1,2,3... navigation
+	        controlNavThumbs: false, // Use thumbnails for Control Nav
+	        pauseOnHover: true, // Stop animation while hovering
+	        manualAdvance: false, // Force manual transitions
+	        prevText: '', // Prev directionNav text
+	        nextText: '', // Next directionNav text
+	        randomStart: false, // Start on a random slide
+	        beforeChange: function(){}, // Triggers before a slide transition
+	        afterChange: function(){}, // Triggers after a slide transition
+	        slideshowEnd: function(){}, // Triggers after all slides have been shown
+	        lastSlide: function(){}, // Triggers when last slide is shown
+	        afterLoad: function(){} // Triggers when slider has loaded
+	    });
+});
+</script>

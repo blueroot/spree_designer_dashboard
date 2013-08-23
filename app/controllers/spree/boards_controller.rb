@@ -30,13 +30,13 @@ class Spree::BoardsController < Spree::StoreController
       @boards_scope = @boards_scope.by_designer(params[:designer_id])
     end
     
-    #unless params[:price_low].blank?
-    #  @boards_scope = @boards_scope.by_lower_bound_price(params[:price_low])
-    #end
-    #
-    #unless params[:price_high].blank?
-    #  @boards_scope = @boards_scope.by_upper_bound_price(params[:price_low])
-    #end
+    unless params[:price_low].blank?
+      @boards_scope = @boards_scope.by_lower_bound_price(params[:price_low])
+    end
+    
+    unless params[:price_high].blank?
+      @boards_scope = @boards_scope.by_upper_bound_price(params[:price_low])
+    end
     
     @boards = @boards_scope
   end
@@ -124,7 +124,7 @@ class Spree::BoardsController < Spree::StoreController
       @room_taxons = Spree::Taxonomy.where(:name => 'Rooms').first().root.children
       @style_taxons = Spree::Taxonomy.where(:name => 'Styles').first().root.children
       @colors = Spree::Color.order(:position)
-      @designers = Spree::User.is_active_designer()
+      @designers = Spree::User.is_active_designer
     end
   # redirect to the edit action after create
   #create.response do |wants|

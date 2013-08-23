@@ -6,7 +6,7 @@ module Spree
     attr_accessible :alt, :attachment, :position, :viewable_type, :viewable_id
 
     has_attached_file :attachment,
-                      styles: { mini: '88x50>', small: '175x100>', primary: '350x200>', large: '700x400>' },
+                      styles: { mini: '88x50>', small: '175x100>', primary: '350x200>', large: '800x450>' },
                       default_style: :primary,
                       url: '/spree/board_image/:id/:style/:basename.:extension',
                       path: ':rails_root/public/spree/board_image/:id/:style/:basename.:extension',

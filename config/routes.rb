@@ -2,6 +2,7 @@ Spree::Core::Engine.routes.prepend do
   # Add your extension routes here
   
   get "/dashboard" => "home#dashboard"
+  post "/orders/add_to_cart" => "orders#add_to_cart"
   get "/my_profile" => "home#profile"
   get "/my_boards" => "boards#my_boards"
   match "/designers" => "designers#index", :as => :designers
@@ -20,4 +21,5 @@ Spree::Core::Engine.routes.prepend do
     resources :boards
     resources :board_products
   end
+
 end
