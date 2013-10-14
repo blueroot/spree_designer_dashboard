@@ -1,13 +1,14 @@
 <% unless products.blank? %>
-
+<table>
+	<tr style="border:0">
 	<% products.each do |product| %>
-	<div class="board-product-select" style="float:left; margin-right: 20px; width: 170px; height: 250px;">
+	<td style="border:0">
+	<div class="board-product-select" style="float:left; margin-left: 10px; width: 170px; height: 200px;">
 		<div class="board-product-select-image" style="margin-bottom: 5px; text-align:center; border: 1px solid #eee; padding: 5px;">
 			<div class="board-lightbox-product" data-product-id="<%= product.id %>" id="<%= product.id %>">
 				<div style="position: relative;">
 					<a href="javascript:void(0);" class="button-remove-product" style="font-family: helvetica; font-size: 12px; line-height: 12px; font-weight: bold; background-color: #fff; padding: 4px 7px; border-width: 0 0 1px 1px; border-style: solid; border-color: #ccc; right: 0px; top: 0; position: absolute; display: none;">x</a>
-					<a href="javascript:void(0);" class="add-to-board-link">
-					<%= small_image(product, :itemprop => 'image', :class => "board-lightbox-product-img") %></a>
+					<%= small_image(product, :itemprop => 'image', :class => "board-lightbox-product-img") %>
 				</div>
 			</div>
 		</div>
@@ -16,8 +17,10 @@
 		      <div class="price selling" itemprop="price"><%= display_price(product) %></div>
 		</div>
 	</div>
+	</td>
 	<% end %>
-
+	</tr>
+</table>
 <% else %>
-	<p class="empty-search-state">We couldn't find any products for that search.</p>
+<p class="empty-search-state">We couldn't find any products for that search.</p>
 <% end %>

@@ -1,9 +1,30 @@
 <% unless board_products.blank? %>
 	<% board_products.each do |board_product| %>
 		<div class="board-lightbox-product-cloned" style="position: absolute; top: <%= board_product.top_left_y%>px; left: <%= board_product.top_left_x%>px; z-index: <%= board_product.z_index%>; width: <%= board_product.width %>px; height: <%= board_product.height%>px;" data-product-id="<%= board_product.product.id %>" id="<%= board_product.product.id %>">
-				<a href="javascript:void(0);" class="button-remove-product" style="font-family: helvetica; font-size: 12px; line-height: 12px; font-weight: bold; background-color: #fff; padding: 4px 7px; border-width: 0 0 1px 1px; border-style: solid; border-color: #ccc; right: 0px; top: 0; position: absolute; display: none;">x</a>
+				<a href="javascript:void(0);" class="button-remove-product" style="font-family: helvetica; font-size: 12px; line-height: 12px; font-weight: bold; background-color: #fff; padding: 2px 0px; border-width: 0 0 1px 1px; border-style: solid; border-color: #ccc; right: 0px; top: 0; text-align: center; width: 30px; height: 30px; position: absolute; display: none;"><span class="glyphicon glyphicon-remove-circle" style="font-size: 20px;"></span></a>
+				<a href="javascript:void(0);" data-trigger="click" data-original-title="<%=board_product.product.name%>" data-popover-container="popover-content-<%=board_product.id%>" rel="popover" data-html="true" class="button-product-info" style="font-family: helvetica; font-size: 12px; line-height: 12px; font-weight: bold; background-color: #fff; text-align: center; padding: 2px 0px; border-width: 0 0 1px 1px; border-style: solid; border-color: #ccc; right: 0px; top: 30px; width: 30px; height: 30px; position: absolute; display: none;"><span class="glyphicon glyphicon-info-sign" style="font-size: 20px;"></span></a>
 				<%=small_image(board_product.product, :itemprop => 'image', :style => "width: #{board_product.width}px", :class => "board-lightbox-product-img") %>
 		</div>	
+		<div style="display: none; width: 400px;" id="popover-content-<%=board_product.id%>">
+			<div class="row">
+				<div class="col-md-12">
+					<div>
+			            <span class="price selling" itemprop="price">
+			              <%= display_price(board_product.product.master) %>
+			            </span>
+			            <span itemprop="priceCurrency" content="<%= board_product.product.currency %>"></span>
+			          </div>
+					<div itemprop="description" data-hook="description">
+						
+			          <%= product_description(board_product.product) rescue Spree.t(:product_has_no_description) %>
+			        </div>
+
+					
+				</div>
+				
+			</div>
+		
+		</div>
 	<% end %>
 <% end %>
 

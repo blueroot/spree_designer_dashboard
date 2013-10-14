@@ -2,7 +2,7 @@ class Spree::BoardsController < Spree::StoreController
   helper 'spree/taxons'
   helper 'spree/products'
   
-  before_filter :prep_search_collections, :only => [:index, :search, :edit, :new]
+  before_filter :prep_search_collections, :only => [:index, :search, :edit, :new, :design]
   
 
   def index
@@ -59,12 +59,16 @@ class Spree::BoardsController < Spree::StoreController
   end
   
   def new
-    @board = Spree::Board.new
-    @colors = Spree::Color.order(:position).where("position > 144 and position < 1000")
+    @board = Spree::Board.new(:name => "Untitled Board")
+    @board.designer = spree_current_user
+    @board.save!
+    redirect_to design_board_path(@board)
+    
+    #@colors = Spree::Color.order(:position).where("position > 144 and position < 1000")
 
-    1.upto(5) do |n|
-      @board.colors.build
-    end
+    #1.upto(5) do |n|
+    #  @board.colors.build
+    #end
   end
   
   def product_search
@@ -107,12 +111,19 @@ class Spree::BoardsController < Spree::StoreController
   def update
     @board = Spree::Board.find(params[:id])
     if @board.update_attributes(params[:board])
-      redirect_to "/my_boards"
+      redirect_to design_board_path(@board)
     else
     end
   end
   
   def build
+    @board = Spree::Board.find(params[:id])
+    @products = Spree::Product.all()
+    @department_taxons = Spree::Taxonomy.where(:name => 'Department').first().root.children
+    @wholesaler_taxons = Spree::Taxonomy.where(:name => 'Wholesaler').first().root.children
+  end
+  
+  def design
     @board = Spree::Board.find(params[:id])
     @products = Spree::Product.all()
     @department_taxons = Spree::Taxonomy.where(:name => 'Department').first().root.children

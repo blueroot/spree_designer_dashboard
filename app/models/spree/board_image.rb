@@ -9,7 +9,7 @@ module Spree
                       styles: { mini: '88x50>', small: '175x100>', primary: '350x200>', large: '800x450>' },
                       default_style: :primary,
                       url: '/spree/board_image/:id/:style/:basename.:extension',
-                      path: ':rails_root/public/spree/board_image/:id/:style/:basename.:extension',
+                      path: 'board_image/:id/:style/:basename.:extension',
                       convert_options: { all: '-strip -auto-orient -colorspace RGB' }
 
     # save the w,h of the original image (from which others can be calculated)

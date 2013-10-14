@@ -65,11 +65,39 @@ function handleRemoveFromCanvas(el){
 		$.post(url, {_method:'delete'}, null, "script");
 	});
 }
+
+function handleProductPopover(el){		
+	
+	$('a.button-product-info').popover({ 
+	    html : true,
+	    content: function() {
+				$('.button-product-info').popover('hide');
+	      return $('#'+$(this).data('popoverContainer')).html();
+	    }
+	  });
+	//el.find('a.button-product-info').click(function() {
+	//	//$(this).popover('show')
+	//	$('.button-product-info').popover('hide');
+	//	
+	//	selector = '#'+$(this).data('popoverContainer')
+	//	//alert($(selector).html())
+	//	$(this).popover({ 
+	//	    html : true,
+	//	    content: function() {
+	//		
+	//	      return $(selector).html();
+	//	    }
+	//	  });
+	//});
+}
+
 function selectItem(el){
 	$('.board-lightbox-product-cloned').find('img').removeClass('board-product-selected');
 	$('.board-lightbox-product-cloned').find('a.button-remove-product').hide();
+	$('.board-lightbox-product-cloned').find('a.button-product-info').hide();
 	el.find('img').addClass('board-product-selected')
 	el.find('a.button-remove-product').show();
+	el.find('a.button-product-info').show();
 }
 
 
@@ -93,4 +121,32 @@ function handleDropEvent(event, ui) {
 	handleSelectable(cloned);
 	handleRemoveFromCanvas(cloned);
 	saveProductToBoard($('#board-canvas').data('boardId'),cloned.data('productId'), cloned.position().left, cloned.position().top, cloned.css('z-index'), cloned.width(), cloned.height());		
-  }
+}
+
+function handleCloneAndAddEvent(item) {
+	var offsetXPos = 20;
+	var offsetYPos = 20;
+	cloned = item.clone(true);
+	cloned.appendTo( "#board-canvas" );
+	if (cloned.hasClass('board-lightbox-product')){
+		cloned.removeClass('board-lightbox-product').addClass('board-lightbox-product-cloned')
+		
+	}
+	else{
+		cloned.removeClass('board-lightbox-product').addClass('board-lightbox-product-cloned')
+	}		
+	
+	cloned.width(item.width());
+	cloned.height(item.height());
+	//cloned.offset({ top: 20, left: 20})
+	
+	selectItem(cloned);
+	
+	handleDragAfterDrop(cloned);
+	handleResizable(cloned);
+	handleSelectable(cloned);
+	handleRemoveFromCanvas(cloned);
+	saveProductToBoard($('#board-canvas').data('boardId'),cloned.data('productId'), cloned.position().left, cloned.position().top, cloned.css('z-index'), cloned.width(), cloned.height());		
+}
+
+

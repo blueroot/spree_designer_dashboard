@@ -13,7 +13,7 @@
 	<div class="col-md-9">
 		
 	<div class="board-details">
-		<%= image_tag(@board.board_image.attachment(:large), :style => "border: 1px solid #ccc")%>
+		<%= board_image(@board,"large")%>
 		<p><%= @board.description %></p>
 	</div>
 	<div class="board-products">
@@ -44,7 +44,7 @@
 		<div class="panel">
 			<div class="panel-heading">
 				<% unless @board.designer.user_images.blank? %>
-					<%= link_to image_tag(@board.designer.user_images.first.attachment(:primary), :style => "width: 100%;"), designer_path(@board.designer) %>
+					<%= link_to image_tag(@board.designer.user_images.first.attachment(:primary), :style => "width: 100%;"), @board.designer %>
 				<% else %>
 					<%= link_to image_tag("/assets/store/profile_default_primary.jpg", :style => "width: 100%;"), designer_path(@board.designer) %>
 				<% end %>

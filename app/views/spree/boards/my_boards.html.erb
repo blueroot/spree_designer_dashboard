@@ -1,16 +1,15 @@
-<div class="container">
-	<aside id="sidebar" class="columns four" data-hook="">  
-		<div data-hook="dashboard_sidebar_navigation">
-		<nav id="taxonomies" class="sidebar-item" data-hook="">
-			<h6 class="taxonomy-root">Designer Dashboard</h6>
-			<ul class="taxons-list">
-				<li><a href="/dashboard">Dashboard Home</a></li>
-				<li><a href="/my_boards">My Boards</a></li>
-				<li><a href="/my_profile">My Profile</a></li></ul>
-		</nav>
-		</div>
-	</aside>
-	<div id="content" class="columns twelve" data-hook="">
+<div class="row">
+	<div class="col-md-3">
+		<h4>Designer Dashboard</h4>
+		<ul class="nav nav-stacked">
+			<li><a href="/dashboard">Dashboard Home</a></li>
+			<li><a href="/my_boards">My Boards</a></li>
+			<li><a href="/my_profile">My Profile</a></li>
+		</ul>
+
+	</div>
+
+	<div class="col-md-9">
 		<div class="page-header clearfix">
 			<h1>Boards</h1>
 			<%= link_to "Add a Board", new_board_path %>
@@ -21,13 +20,17 @@
 			<table class="table" cellspacing="0" border="0">
 			<% @boards.each do |board|%>
 				<tr>
-					<td style="vertical-align: top;"><%= image_tag(board.board_image.attachment("primary"))%>
+					<td style="vertical-align: top;">
+						<% if board.board_image %>
+					<%= image_tag(board.board_image.attachment("primary"))%>
+						<% else %>
+						<% end %>
 					</td>
 					<td style="vertical-align: top;">
 						<h3><%= board.name %></h3>
 						<ul>
-							<li><%= link_to "Edit Board Details", edit_board_path(board)%></li>
-							<li><%= link_to "Edit Board Products", build_board_path(board)%></li>
+							<li><%= link_to "Edit Board Details", design_board_path(board)%></li>
+							<li><%#= link_to "Edit Board Products", build_board_path(board)%></li>
 							<li><%= link_to "View Public Board Page", board%></li>
 						</ul>
 					</td>

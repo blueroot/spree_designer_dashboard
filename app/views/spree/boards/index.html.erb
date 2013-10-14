@@ -17,15 +17,19 @@
 					<div class="row">
 
 						<% for board in row_boards %>
+
 						<div class="col-md-6">
 							<div class="board-listing">
-								<%= link_to image_tag(board.board_image.attachment("primary")), board%>
+
+								
+								<%= link_to board_image(board,"primary"), board%>
+
 								<div class="board-meta">
 									<div class="board-meta-img">
 										<% unless board.designer.user_images.blank? %>
-											<%= link_to image_tag(board.designer.user_images.first.attachment(:mini)), designer_path(board.designer) %>
+											<%#= link_to image_tag(board.designer.user_images.first.attachment(:mini)), designer_path(board.designer) %>
 										<% else %>
-											<%= link_to image_tag("/assets/store/profile_default_primary.jpg", :style => "width: 48px;"), designer_path(board.designer) %>
+											<%#= link_to image_tag("/assets/store/profile_default_primary.jpg", :style => "width: 48px;"), designer_path(board.designer) %>
 										<% end %>
 									</div>
 									<h3><%= link_to board.name, board %></h3>

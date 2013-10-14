@@ -1,0 +1,258 @@
+<div class="row">
+	<div class="col-md-12">
+		<div class="page-header clearfix">
+			<h1><%= @board.name %></h1>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-9">
+		<div class="board-content-body">
+			<div id="board-container">
+			
+	
+			<div id="board-canvas" data-board-id="<%= @board.id %>" style="height: 400px; width: 700px; background-color: #fff; border: 1px dashed #bdc3c7; position: relative; z-index: 1; "></div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<ul class="nav nav-stacked">
+			<li><a href="javascript:void(0);" id="add-products-button">Add Products</a></li>
+			<li><a href="javascript:void(0);" id="add-colors-button">Add Color Swatches</a></li>
+			<li><a href="javascript:void(0);" id="edit-board-button">Edit Details</a></li>
+		</ul>
+		<%#= link_to "Save Changes", edit_board_path(@board), :class=> "button"%>
+	</div>
+</div>
+
+
+<div id="product-modal" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        
+		<% if false %><h4 class="modal-title">Search and Add Products to Your Board</h4><% end %>
+		<div class="board-product-search">
+			<%= form_tag("/boards/product_search", method: "get", :id => "product_search_form") do %>
+				<table cellspacing="0" cellpadding="0" border="0">
+					<tr>
+						<th>Search by keyword</th>
+						<th>Wholesaler</th>
+						<th colspan="3">Department</th>
+					</tr>
+					<tr>
+						<td><input type="text" id="product_keywords" name="product_keywords"></td>
+						<td><%= select_tag "wholesaler_taxon", options_from_collection_for_select(@wholesaler_taxons, "id", "name"), :include_blank => true %></td>
+						<td><%= select_tag "department_taxon", options_from_collection_for_select(@department_taxons, "id", "name"), :include_blank => true %></td>
+						<td><%= submit_tag("Search")%></td>
+						<td class="pagination" style="width: 250px;"><div id="select-products-pagination"></div></td>
+					</tr>
+				</table>
+			<% end %>
+		</div>
+		<div id="select-products-pagination"></div>
+      </div>
+		
+      <div class="modal-body">
+				
+				<div id="select-products-box" class="select-products-box"></div>
+      </div>
+      
+	
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="colors-modal" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        
+		<h4 class="modal-title">Choose Color Swatches for Your Board</h4>
+		<div class="board-product-search">
+			<%= form_tag("/boards/product_search", method: "get", :id => "product_search_form") do %>
+				
+			<% end %>
+		</div>
+      </div>
+		
+      <div class="modal-body">
+		
+		<h4>Red</h4>
+		<ul class="color-swatches">
+			<% Spree::Color.red.each do |color| %>
+				<li><span class="swatch" style="background-color: #<%=color.hex_val%>">&nbsp;</span></li>
+			<% end %>
+
+		</ul>
+		
+		<h4>Yellow</h4>
+		<ul class="color-swatches">
+			<% Spree::Color.yellow.each do |color| %>
+				<li><span class="swatch" style="background-color: #<%=color.hex_val%>">&nbsp;</span></li>
+			<% end %>
+			
+		</ul>
+		
+		<h4>Cool Neutral</h4>
+		<ul class="color-swatches">
+			<% Spree::Color.cool_neutral.each do |color| %>
+				<li><span class="swatch" style="background-color: #<%=color.hex_val%>">&nbsp;</span></li>
+			<% end %>
+			
+		</ul>
+		
+		<h4>Green</h4>
+		<ul class="color-swatches">
+			<% Spree::Color.green.each do |color| %>
+				<li><span class="swatch" style="background-color: #<%=color.hex_val%>">&nbsp;</span></li>
+			<% end %>
+			
+		</ul>
+		
+		<h4>Blue</h4>
+		<ul class="color-swatches">
+			<% Spree::Color.blue.each do |color| %>
+				<li><span class="swatch" style="background-color: #<%=color.hex_val%>">&nbsp;</span></li>
+			<% end %>
+			
+		</ul>
+		
+		<h4>Violet</h4>
+		<ul class="color-swatches">
+			<% Spree::Color.violet.each do |color| %>
+				<li><span class="swatch" style="background-color: #<%=color.hex_val%>">&nbsp;</span></li>
+			<% end %>
+			
+		</ul>
+
+		<h4>Warm Neutral</h4>
+		<ul class="color-swatches">
+			<% Spree::Color.warm_neutral.each do |color| %>
+				<li><span class="swatch" style="background-color: #<%=color.hex_val%>">&nbsp;</span></li>
+			<% end %>
+			
+		</ul>
+
+
+		<h4>White</h4>
+		<ul class="color-swatches">
+			<% Spree::Color.white.each do |color| %>
+				<li><span class="swatch" style="background-color: #<%=color.hex_val%>">&nbsp;</span></li>
+			<% end %>
+			
+		</ul>
+
+		
+		<h4>Orange</h4>
+		<ul class="color-swatches">
+			<% Spree::Color.orange.each do |color| %>
+				<li><span class="swatch" style="background-color: #<%=color.hex_val%>">&nbsp;</span></li>
+			<% end %>
+			
+		</ul>
+      </div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		<button type="button" class="btn btn-primary">Save changes</button>
+	</div>
+      
+	
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div id="board-modal" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+	<%= form_for [@board] do |f| %>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        
+		<h4 class="modal-title">Edit Board Details</h4>
+		
+      </div>
+		
+      <div class="modal-body">
+				<%= render :partial => 'form', :locals => { :f => f } %>
+      </div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		<%= submit_tag("Save Changes", :class => "btn btn-primary")%>
+	</div>
+	<% end %>
+      
+	
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+	
+<style>
+	.board-product-selected{
+		border: 2px solid #aaa;
+		margin: -2px 0 0 -2px;
+	}
+	.light-box-product-unavailable{
+		border: 1px solid red;
+	}
+	
+	
+</style>
+
+<script>
+$( "#add-products-button" ).click(function() {
+  $('#product-modal').modal()
+});
+
+$( "#add-colors-button" ).click(function() {
+  $('#colors-modal').modal()
+});
+
+$( "#edit-board-button" ).click(function() {
+  $('#board-modal').modal()
+});
+
+$(function () {
+    var element;
+    
+    $('#board-canvas').droppable({
+        accept: function(element) {
+		  var cn = element.className;
+		  return cn == 'board-lightbox-product' || 'board-lightbox-product-cloned'
+		},
+        drop: handleDropEvent
+    });
+	getSavedProducts($('#board-canvas').data('boardId'));
+	
+	
+	/* attach a submit handler to the form */
+	$("#product_search_form").submit(function(event) {
+
+		/* stop form from submitting normally */
+		event.preventDefault();
+
+		/* get some values from elements on the page: */
+		var $form = $( this ),
+		term = $form.find( 'input[name="product_keywords"]' ).val(),
+		wholesaler_taxon = $form.find( 'select[name="wholesaler_taxon"]' ).val(),
+		department_taxon = $form.find( 'select[name="department_taxon"]' ).val(),
+		url = $form.attr( 'action' );
+		
+		//alert(taxon);
+		/* Send the data using post */
+		var posting = $.post( url, { keywords: term, department_taxon_id: department_taxon, wholesaler_taxon_id: wholesaler_taxon, per_page: 100 } );
+
+		/* Put the results in a div */
+		posting.done(function( data ) {
+			//var content = $( data ).find( '#content' );
+			//$( "#result" ).empty().append( content );
+		});
+	});
+	
+});
+</script>

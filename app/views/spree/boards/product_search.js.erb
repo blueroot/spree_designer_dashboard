@@ -3,16 +3,25 @@ $('#select-products-pagination').html('<%= escape_javascript(raw render(:partial
 //$('#select-products-box').html('hh')
 
 
-$('.board-lightbox-product').draggable({
-	containment: '.main',
-	cursor: 'move',
-	helper: 'clone',
-	appendTo: '#board-canvas',
-	revert: 'invalid',
-	start: function(event, ui) {
-		isDraggingMedia = true;
-	},
-	stop: function(event, ui) {
-		isDraggingMedia = false;
-	}
+//$('.board-lightbox-product').draggable({
+//	containment: '.main',
+//	cursor: 'move',
+//	helper: 'clone',
+//	appendTo: '#board-canvas',
+//	revert: 'invalid',
+//	start: function(event, ui) {
+//		isDraggingMedia = true;
+//	},
+//	stop: function(event, ui) {
+//		isDraggingMedia = false;
+//	}
+//});
+
+$('.board-lightbox-product').click(function() {
+	//alert($(this).data('productId'))
+	//alert($(this).width())
+	//clone = $(this).clone(true)
+	//alert(clone.width())
+	handleCloneAndAddEvent($(this))
+	
 });

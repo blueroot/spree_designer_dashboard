@@ -1,0 +1,21 @@
+<table border="0" cellspacing="5" cellpadding="5">
+	<thead>
+		<tr>
+			<th>&nbsp;</th>
+			<th>Name</th>
+			<th>Swatch</th>
+			<th>Hex</th>
+		</tr>
+	</thead>
+	
+	<tbody>
+		<% @colors.each do |color|%>
+		<tr>
+			<td style="height: 30px; width: 30px; background-color: #<%= color.hex_val%>">&nbsp;</td>
+			<td><%= color.name%></td>
+			<td><%= color.swatch_val%></td>
+			<td><%= color.hex_val%></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
