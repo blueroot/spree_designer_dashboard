@@ -1,15 +1,15 @@
 Spree::Core::Engine.routes.draw do
   # Add your extension routes here
   
-  
-  
-  
-  
-  
-  
   resources :boards do 
     resources :board_products
   end
+  resources :designer_registrations
+  
+  get "/designers/thanks" => "designer_registrations#thanks", :as => :designer_registration_thanks
+  
+  get "/designers/signup" => "designer_registrations#new", :as => :designer_signup
+  #post "/designers/signup" => "designers#signup", :as => :create_designer_registration
   
   get "/dashboard" => "home#dashboard", :as => :designer_dashboard
   post "/orders/add_to_cart" => "orders#add_to_cart", :as => :orders_add_to_cart
@@ -32,6 +32,7 @@ Spree::Core::Engine.routes.draw do
   namespace :admin do
     resources :boards
     resources :board_products
+    resources :designer_registrations
   end
 
 end

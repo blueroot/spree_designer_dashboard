@@ -7,18 +7,44 @@ class Spree::Board < ActiveRecord::Base
 	belongs_to :designer, :class_name => "User", :foreign_key => "designer_id"
 	has_many :color_matches
 	has_many :colors, :through => :color_matches
+	has_many :messages
 	
 	belongs_to :room, :foreign_key => "room_id", :class_name => "Spree::Taxon"
 	belongs_to :style, :foreign_key => "style_id", :class_name => "Spree::Taxon"
 	
-	attr_accessible :name, :description, :style_id, :room_id
+	attr_accessible :name, :description, :style_id, :room_id, :status, :message
 	
 	has_one :board_image, as: :viewable, order: :position, dependent: :destroy, class_name: "Spree::BoardImage"
-  attr_accessible :board_image_attributes
-  accepts_nested_attributes_for :board_image
+  attr_accessible :board_image_attributes, :messages_attributes
+  accepts_nested_attributes_for :board_image, :messages
   
   def self.active
     where(:status => 'active')
+  end
+  
+  def display_status
+    case self.status
+      
+      when "new"
+        "Draft - Not Published"
+      when "submitted_for_publication"
+        "Pending - Submitted for Publication"
+      when "published"
+        "Published"
+      when "suspended"
+        "Suspended"
+      when "deleted"
+        "Deleted"
+      when "unpublished"
+        "Unpublished"
+      when "retired"
+        "Retired"  
+      when "needs_revision"
+        "Pending - Revisions Requested"
+      else
+        self.status
+    end
+      
   end
   
   def self.by_style(style_id)

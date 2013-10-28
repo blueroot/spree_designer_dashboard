@@ -1,0 +1,28 @@
+<li><span data-toggle="popover" data-color-popover-container="color-popover-<%=color.id%>" data-html="true" data-trigger="hover" data-placement="top" data-animation="false" class="swatch" data-color="<%=color.hex_val%>" data-color-hsv-h="<%=color.hsv_h%>" data-color-hsv-s="<%=color.hsv_s%>" data-color-hsv-v="<%=color.hsv_v%>" data-color-name="<%=color.name%>" data-color-swatch-val="<%=color.swatch_val%>" style="background-color: #<%=color.hex_val%>">&nbsp;</span></li>
+<div id="color-popover-<%=color.id%>" class="hide">
+<div class="row">
+	<div class="col-md-5">
+		<div style="height: 100px; width: 100px; background-color: #<%=color.hex_val%>"></div>
+	</div>
+	<div class="col-md-7 swatch-popover-info">
+		<h4><%=color.name%></h4>
+		<table class="table table-condensed swatch-table">
+			
+			<tr>
+				<td><strong>Swatch #</strong></td>
+				<td><%=color.swatch_val%></td>
+			</tr>
+			<tr>
+				<td><strong>Hex</strong></td>
+				<td>#<%=color.hex_val%></td>
+			</tr>
+			<tr>
+				<td><strong>HSV</strong></td>
+				<td>H: <%=color.hsv_h%><br />
+					S: <%=color.hsv_s%><br />
+					V: <%=color.hsv_v%></td>
+			</tr>	
+		</table>
+	</div>
+</div>
+</div>

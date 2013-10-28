@@ -1,0 +1,26 @@
+<div class="page-header">
+	<h1>Scout & Nimble Designer Registration</h1>
+</div>
+<div class="row">
+	<div class="col-md-6">
+		<h3>What to be a Scout & Nimble Designer?</h3>
+		<p>Actually Schlitz DIY adipisicing, raw denim keffiyeh Terry Richardson Tonx 3 wolf moon deep v pour-over cred plaid. Vegan chia direct trade flannel. McSweeney's vinyl irony Marfa. Accusamus fugiat selvage, Etsy 8-bit brunch disrupt. Literally Thundercats quis, reprehenderit blog yr quinoa irure. Voluptate vinyl aliquip chillwave delectus id, Banksy non aesthetic placeat ullamco forage cillum Etsy 90's. Hoodie Pitchfork messenger bag eu ethical, VHS quinoa lo-fi.</p>
+		
+		<h3>Benefits of the Designer Program </h3>
+		<p>Actually Schlitz DIY adipisicing, raw denim keffiyeh Terry Richardson Tonx 3 wolf moon deep v pour-over cred plaid. Vegan chia direct trade flannel. McSweeney's vinyl irony Marfa. Accusamus fugiat selvage, Etsy 8-bit brunch disrupt. Literally Thundercats quis, reprehenderit blog yr quinoa irure. Voluptate vinyl aliquip chillwave delectus id, Banksy non aesthetic placeat ullamco forage cillum Etsy 90's. Hoodie Pitchfork messenger bag eu ethical, VHS quinoa lo-fi.</p>
+		
+	</div>
+	<div class="col-md-6">
+		<div class="registration-box">
+		<h3>Designer Registration Form</h3>
+		<% if spree_current_user %>
+			<%= render :partial => "form" %>
+		<% else %>
+		<p>To submit a registration, <%= link_to "please login with your Scout & Nimble user account", new_spree_user_session_url %>.  If you don't have a user account yet, <%= link_to "please create one real quick", new_spree_user_registration_url %>.  </p>
+		<% end %>
+		
+		</div>
+		
+	</div>
+	
+</div>

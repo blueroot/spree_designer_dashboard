@@ -1,0 +1,94 @@
+<div id="colors-modal" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        
+		<h4 class="modal-title">Choose Color Swatches for Your Board</h4>
+		
+      </div>
+		
+      <div class="modal-body">
+		
+		<h4>Red</h4>
+		<ul class="color-swatches">
+			<% Spree::Color.red.each do |color| %>
+				<%= render :partial => "color_swatch", :locals => {:color => color}%>
+			<% end %>
+
+		</ul>
+		
+		<h4>Yellow</h4>
+		<ul class="color-swatches">
+			<% Spree::Color.yellow.each do |color| %>
+				<%= render :partial => "color_swatch", :locals => {:color => color}%>
+			<% end %>
+			
+		</ul>
+		
+		<h4>Cool Neutral</h4>
+		<ul class="color-swatches">
+			<% Spree::Color.cool_neutral.each do |color| %>
+				<%= render :partial => "color_swatch", :locals => {:color => color}%>
+			<% end %>
+			
+		</ul>
+		
+		<h4>Green</h4>
+		<ul class="color-swatches">
+			<% Spree::Color.green.each do |color| %>
+				<%= render :partial => "color_swatch", :locals => {:color => color}%>
+			<% end %>
+			
+		</ul>
+		
+		<h4>Blue</h4>
+		<ul class="color-swatches">
+			<% Spree::Color.blue.each do |color| %>
+				<%= render :partial => "color_swatch", :locals => {:color => color}%>
+			<% end %>
+			
+		</ul>
+		
+		<h4>Violet</h4>
+		<ul class="color-swatches">
+			<% Spree::Color.violet.each do |color| %>
+				<%= render :partial => "color_swatch", :locals => {:color => color}%>
+			<% end %>
+			
+		</ul>
+
+		<h4>Warm Neutral</h4>
+		<ul class="color-swatches">
+			<% Spree::Color.warm_neutral.each do |color| %>
+				<%= render :partial => "color_swatch", :locals => {:color => color}%>
+			<% end %>
+			
+		</ul>
+
+
+		<h4>White</h4>
+		<ul class="color-swatches">
+			<% Spree::Color.white.each do |color| %>
+				<%= render :partial => "color_swatch", :locals => {:color => color}%>
+			<% end %>
+			
+		</ul>
+
+		
+		<h4>Orange</h4>
+		<ul class="color-swatches">
+			<% Spree::Color.orange.each do |color| %>
+				<%= render :partial => "color_swatch", :locals => {:color => color}%>
+			<% end %>
+			
+		</ul>
+      </div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	</div>
+      
+	
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

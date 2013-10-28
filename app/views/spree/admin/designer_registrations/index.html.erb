@@ -1,0 +1,39 @@
+<% content_for :designer_registration_actions do %>  
+  <li><%= button_link_to Spree.t("designer_registration.new_designer_registration"), new_object_url, :icon => 'icon-plus' %></li>
+<% end %>
+
+<% content_for :board_title do %>
+	<%= Spree.t("designer_registration.designer_registration.user.email") %>
+<% end %>
+
+<table class="index">
+  <colgroup>
+    <col style="width: 40%" />
+    <col style="width: 40%" />
+    <col style="width: 10%" />
+    <col style="width: 10%" />
+  </colgroup>
+  <thead>
+    <tr>
+      <th>Designer</th>
+	<th>Status</th>
+      <th class="actions"></th>
+    </tr>
+  </thead>
+  
+  <tbody>
+    <% @designer_registrations.each do |registration| %>
+      <tr class="<%= cycle('odd', 'even') %>" id="<%= dom_id registration %>">
+        <td>
+          <%= registration.company_name %>
+        </td>
+		<td><%= registration.status %></td>
+        
+        <td  class="actions">
+          <%= link_to_edit registration, :no_text => true %>
+          <%= link_to_delete registration, :no_text => true %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

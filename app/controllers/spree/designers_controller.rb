@@ -1,5 +1,5 @@
 class Spree::DesignersController < Spree::StoreController
-  
+  #before_filter :require_authentication,  :only => [:signup]
 
   
 
@@ -8,6 +8,10 @@ class Spree::DesignersController < Spree::StoreController
     
   end
   
+  
+  def signup
+    @designer = Spree::User.new
+  end
 
   
   def show

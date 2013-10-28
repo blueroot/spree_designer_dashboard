@@ -43,7 +43,13 @@ class Spree::BoardProductsController < Spree::StoreController
       white_canvas = Image.new(800,450){ self.background_color = "white" }
       @board_product.board.board_products.reload
       @board_product.board.board_products.each do |bp|
-      	product_image = ImageList.new(bp.product.images.first.attachment.url(:product))
+        
+        
+        if bp.product.images.first
+      	  product_image = ImageList.new(bp.product.images.first.attachment.url(:product))
+      	else
+      	  product_image = ImageList.new(bp.product.variants.first.images.first.attachment.url(:product))
+      	end  
       	product_image.scale!(bp.width, bp.height)
       	white_canvas.composite!(product_image, NorthWestGravity, bp.top_left_x, bp.top_left_y, Magick::OverCompositeOp)
       end

@@ -16,7 +16,8 @@
   <thead>
     <tr>
       <th><%= Spree::Board.human_attribute_name(:name) %></th>
-      <th class="actions"></th>
+      <th>status</th>
+	<th class="actions"></th>
     </tr>
   </thead>
   
@@ -26,7 +27,9 @@
         <td>
           <%= board.name %>
         </td>
-        
+        <td>
+          <%= board.status %>
+        </td>
         <td  class="actions">
           <%= link_to_edit board, :no_text => true %>
           <%= link_to_delete board, :no_text => true %>

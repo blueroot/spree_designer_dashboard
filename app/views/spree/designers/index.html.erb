@@ -13,11 +13,10 @@
   <% @designers.each do |designer| %>
     <li class="columns three <%= cycle("alpha", "secondary", "", "omega secondary", :name => "classes") %>" data-hook="designers_list_item" itemscope>
       <div class="product-image">
-        <%= render :partial => "designer_thumb", :locals => {:designer => designer}%>
+		<%= render :partial => "designer_thumb", :locals => {:designer => designer}%>
       </div>
       	<%= link_to designer.full_name, designer_path(designer), :class => 'info' %>
 		<%#= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => product.name %>
-      
     </li>
   <% end %>
   <% reset_cycle("classes") %>

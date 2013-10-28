@@ -5,49 +5,15 @@
 </div>
 <div class="form-group">
 	<%= f.label :description %>
-	<%= f.text_area :description, {:class => 'form-control', :rows => 4} %>
+	<%= f.text_area :description, {:class => 'form-control', :rows => 5} %>
 	<%= f.error_message_on :description %>
 </div>
-<div class="form-group">
-	<%= f.label :room_id, "Room" %>
-	<%= f.select "room_id", options_from_collection_for_select(@room_taxons, "id", "name"), {:include_blank => true}, {:class => 'form-control'} %>
-
+<div class="row">
+	<div class="col-lg-6">
+		<%= f.label :room_id, "Room" %>
+		<%= f.collection_select :room_id, @room_taxons, :id, :name, {:include_blank => true}, {:class => 'form-control', :style => ""} %>	</div>
+	<div class="col-lg-6">
+		<%= f.label :style_id, "Style" %>
+		<%= f.collection_select :style_id, @style_taxons, :id, :name, {:include_blank => true}, {:class => 'form-control', :style => ""} %>
+	</div>
 </div>
-<div class="form-group">
-	<%= f.label :style_id, "Style" %>
-	<%= f.select "style_id", options_from_collection_for_select(@style_taxons, "id", "name"), {:include_blank => true}, {:class => 'form-control'} %>
-</div>
-
-
-
-	<% if false %>
-	<%= f.field_container :colors do %>
-	
-      <%= f.label :colors %>
-		<ul class="board-color-swatches unstyled" >
-		<% @board.colors.each do |match|%>
-			<li style="display: inline-block; margin-right: 10px;"><input class='simple_color' value="#ffffff"/></li>
-		<% end %>
-		</ul>
-    <% end %>
-<% end %>
-<script>
-	$(document).ready(function(){
-	  
-		colors = <%=raw @colors.collect{|color| "##{color.hex_val}"}%>
-
-	  $('.simple_color').simpleColor({
-	    cellWidth: 12,
-	    cellHeight: 12,
-		cellMargin: 0,
-		columns:50,
-	    border: '1px solid #fff',
-	    buttonClass: 'button',
-	    displayColorCode: false,
-	    livePreview: false,
-		colors: colors
-	    
-	  });
-
-	});
-	</script>

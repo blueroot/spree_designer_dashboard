@@ -1,0 +1,37 @@
+<div id="product-modal" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        
+		<% if false %><h4 class="modal-title">Search and Add Products to Your Board</h4><% end %>
+		<div class="board-product-search">
+			<%= form_tag("/boards/product_search", method: "get", :id => "product_search_form") do %>
+				<table cellspacing="0" cellpadding="0" border="0">
+					<tr>
+						<th>Search by keyword</th>
+						<th>Wholesaler</th>
+						<th colspan="3">Department</th>
+					</tr>
+					<tr>
+						<td><input type="text" id="product_keywords" name="product_keywords"></td>
+						<td><%= select_tag "wholesaler_taxon", options_from_collection_for_select(@wholesaler_taxons, "id", "name"), :include_blank => true %></td>
+						<td><%= select_tag "department_taxon", options_from_collection_for_select(@department_taxons, "id", "name"), :include_blank => true %></td>
+						<td><%= submit_tag("Search")%></td>
+						<td class="pagination" style="width: 250px;"><div id="select-products-pagination"></div></td>
+					</tr>
+				</table>
+			<% end %>
+		</div>
+		<div id="select-products-pagination"></div>
+      </div>
+		
+      <div class="modal-body">
+				
+				<div id="select-products-box" class="select-products-box"></div>
+      </div>
+      
+	
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
