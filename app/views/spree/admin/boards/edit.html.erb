@@ -7,10 +7,49 @@
 <% end %>
 
 <%= render "spree/shared/error_messages", :target => @board %>
-
+<div class="row">
+	<div class="alpha ten columns">
 <%= form_for [:admin, @board] do |f| %>
   <fieldset class="no-border-top">
     <%= render :partial => 'form', :locals => { :f => f } %>
     <%= render :partial => 'spree/admin/shared/edit_resource_links' %>
   </fieldset>
+<% end %>
+
+</div>
+<div class="omega 6 columns">
+	<% if false%>
+	<%= f.field_container :messages do %>
+		<%= f.fields_for :messages do |message| %>
+			<% if message.object.new_record? %>
+				<div class="form-group">
+					<%= f.label :body, "Would you like to send a message back to the designer?" %><br />
+					<%= message.text_area :body, {:class => 'fullwidth', :rows => 5} %>
+					<%= message.hidden_field :sender_id %>
+					<%= message.hidden_field :recipient_id %>
+					<%= message.hidden_field :subject %>
+					<%= f.error_message_on :description %>
+				</div>
+			<% end %>
+		<% end %>
+	<% end %>
+	<% end %>
+	
+</div>
+
+</div>
+
+
+<h4>Products on This Board</h4>
+<% if @board.board_products.any? %>
+<table>
+	<% @board.products.each do |product| %>
+	<tr>
+		<td><%= link_to raw("<span class=\"helper\"></span>#{mini_image(product, :itemprop => 'image')}"), product, :itemprop => 'url' %></td>
+		<td><%= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => product.name %></td>
+	</tr>
+	<% end %>
+</table>	
+<% else %>
+	There are no products on this board.
 <% end %>

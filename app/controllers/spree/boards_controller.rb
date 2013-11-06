@@ -3,19 +3,19 @@ class Spree::BoardsController < Spree::StoreController
   helper 'spree/products'
   
   before_filter :prep_search_collections, :only => [:index, :search, :edit, :new, :design]
-  
+  impressionist :actions=>[:show]
 
   def index
-    @boards = Spree::Board.all()
+    @boards = Spree::Board.featured()
   end
   
   def search
     
     @boards_scope = Spree::Board.active
     
-    if params[:color] and not params[:color].blank?
-      @color = Spree::Color.find(params[:color])
-      @boards_scope = @boards_scope.by_color(@color)
+    unless params[:color_family].blank?
+      #@related_colors = Spree::Color.by_color_family(params[:color_family])
+      @boards_scope = @boards_scope.by_color_family(params[:color_family])
     end
     
     unless params[:room_id].blank?
@@ -23,20 +23,30 @@ class Spree::BoardsController < Spree::StoreController
     end
     
     unless params[:style_id].blank?
-      @boards_scope = @boards_scope.by_room(params[:style_id])
+      @boards_scope = @boards_scope.by_style(params[:style_id])
     end
     
-    unless params[:style_id].blank?
+    unless params[:designer_id].blank?
       @boards_scope = @boards_scope.by_designer(params[:designer_id])
+    end
+    
+    unless params[:price_high].blank?
+      @boards_scope = @boards_scope.by_upper_bound_price(params[:price_high])
     end
     
     unless params[:price_low].blank?
       @boards_scope = @boards_scope.by_lower_bound_price(params[:price_low])
     end
     
-    unless params[:price_high].blank?
-      @boards_scope = @boards_scope.by_upper_bound_price(params[:price_low])
-    end
+    
+    
+    @selected_color_family = params[:color_family] || ""
+    @selected_room = params[:room_id] || ""
+    @selected_style = params[:style_id] || ""
+    @selected_designer = params[:designer_id] || ""
+    @selected_price_low = params[:price_low] || ""
+    @selected_price_high = params[:price_high] || ""
+    
     
     @boards = @boards_scope
   end

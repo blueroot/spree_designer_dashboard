@@ -1,10 +1,67 @@
-<% content_for :board_actions do %>  
-  <li><%= button_link_to Spree.t("designer_board.new_board"), new_object_url, :icon => 'icon-plus' %></li>
+<% content_for :page_title do %>
+  <%= Spree.t(:listing_boards) %>
 <% end %>
 
-<% content_for :board_title do %>
-	<%= Spree.t("designer_board.boards_title") %>
+
+
+<% content_for :table_filter_title do %>
+  <%= Spree.t(:filter) %>
 <% end %>
+
+<% content_for :table_filter do %>
+  <div data-hook="admin_boards_index_filter">
+    <%= search_form_for [:admin, @search] do |f| %>
+      <div class="field-block alpha six columns">
+        
+        <div class="field">
+          <%= label_tag nil, Spree.t(:status) %><br />
+          <%= f.select :status_eq, Spree::Board.status_options, {:include_blank => true}, :class => 'select2' %>
+        </div>
+		<div class="field checkbox">
+          <label>
+            <%= f.check_box :featured_not_false, {:checked => @show_only_featured}, '1', '' %>
+            <%= Spree.t(:show_only_featured_boards) %>
+          </label>
+        </div>
+      </div>
+
+     
+
+      
+		<div class="omega six columns">
+			<div class="field">
+	          <%= label_tag nil, Spree.t(:designer) %><br />
+	          <%= f.select :designer_id_eq, Spree::User.all().is_active_designer.collect{|designer| [designer.full_name, designer.id]}, {:include_blank => true}, :class => 'select2' %>
+	        </div>
+	        <div class="date-range-filter field">
+	          <%= label_tag nil, Spree.t(:date_range) %>
+	          <div class="date-range-fields">
+	            <%= f.text_field :created_at_gt, :class => 'datepicker datepicker-from', :value => params[:q][:created_at_gt], :placeholder => Spree.t(:start) %>
+
+	            <span class="range-divider">
+	              <i class="icon-arrow-right"></i>
+	            </span>
+
+	            <%= f.text_field :created_at_lt, :class => 'datepicker datepicker-to', :value => params[:q][:created_at_lt], :placeholder => Spree.t(:stop) %>
+	          </div>
+	        </div>
+
+	      </div>
+		
+
+		
+
+      <div class="clearfix"></div>
+
+      <div class="actions filter-actions">
+        <div data-hook="admin_orders_index_search_buttons">
+          <%= button Spree.t(:filter_results), 'icon-search' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
 
 <table class="index">
   <colgroup>
@@ -28,7 +85,7 @@
           <%= board.name %>
         </td>
         <td>
-          <%= board.status %>
+          <%= board.display_status %>
         </td>
         <td  class="actions">
           <%= link_to_edit board, :no_text => true %>
@@ -38,3 +95,5 @@
     <% end %>
   </tbody>
 </table>
+
+<%= paginate @boards %>

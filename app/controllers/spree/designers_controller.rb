@@ -1,7 +1,7 @@
 class Spree::DesignersController < Spree::StoreController
   #before_filter :require_authentication,  :only => [:signup]
 
-  
+  impressionist :actions=>[:show]
 
   def index
     @designers = Spree::User.is_active_designer()

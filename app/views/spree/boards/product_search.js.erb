@@ -18,10 +18,14 @@ $('#select-products-pagination').html('<%= escape_javascript(raw render(:partial
 //});
 
 $('.board-lightbox-product').click(function() {
-	//alert($(this).data('productId'))
-	//alert($(this).width())
-	//clone = $(this).clone(true)
-	//alert(clone.width())
-	handleCloneAndAddEvent($(this))
+	
+	showProductDetails($(this))
+	//handleCloneAndAddEvent($(this))
+	
+});
+setHeight();
+// Re-initialize the results pane on resize
+$(window).resize(function() {		
+	setHeight();
 	
 });

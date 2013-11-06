@@ -20,6 +20,17 @@ function getSavedProducts(board_id){
 	  });	
 }
 
+function getProductDetails(product_id){
+	var url = '/products/'+product_id
+	var request = $.get( url );
+
+	  /* Put the results in a div */
+	  request.done(function( data ) {
+	    //var content = $( data ).find( '#content' );
+	    //$( "#result" ).empty().append( content );
+	  });	
+}
+
 function handleDragAfterDrop(el) {
 	//alert('dude this is it')
       el.draggable({
@@ -149,4 +160,13 @@ function handleCloneAndAddEvent(item) {
 	saveProductToBoard($('#board-canvas').data('boardId'),cloned.data('productId'), cloned.position().left, cloned.position().top, cloned.css('z-index'), cloned.width(), cloned.height());		
 }
 
-
+function showProductDetails(item){
+	$('#product-details-pane').html('Loading product details...')
+	getProductDetails(item.data('productPermalink'))
+}
+function setHeight(){
+	var modalHeight =  $('#product-modal').height();
+	$('.select-products-box').height(modalHeight-200);
+	$('.product-preview-box').height(modalHeight-200);
+	
+}

@@ -1,7 +1,7 @@
 module Spree
   HomeController.class_eval do
     def dashboard
-      
+      @boards = spree_current_user.boards
     end
     
     def profile

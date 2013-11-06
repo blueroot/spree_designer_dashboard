@@ -3,7 +3,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
 	<%= form_for [@board] do |f| %>
-	<%= f.hidden_field :status, :value => "Submitted for Publication"%>
+	<%= f.hidden_field :status, :value => "submitted_for_publication"%>
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         
@@ -14,6 +14,7 @@
       <div class="modal-body">
 		<p>When you submit your board to be published, it goes to the Scout & Nimble staff to review it for product availability.  As we offer thousands of product, we want to make sure the board you are publishing has sufficient inventory for customers who want to purchase an item.  We might make suggestions for substitutions if we find an item does not have sufficient inventory.</p>
 		<%= f.fields_for :messages do |message| %>
+		<% if message.object.new_record? %>
 		<div class="form-group">
 			
 			<%= f.label :body, "Would you like to include any questions or comments about this board?" %>
@@ -24,9 +25,10 @@
 			<%= f.error_message_on :description %>
 		</div>
 		<% end %>
+		<% end %>
       </div>
 	<div class="modal-footer">
-		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 		<%= submit_tag("Submit to Publish", :class => "btn btn-primary")%>
 	</div>
 	

@@ -12,14 +12,26 @@ class Spree::Board < ActiveRecord::Base
 	belongs_to :room, :foreign_key => "room_id", :class_name => "Spree::Taxon"
 	belongs_to :style, :foreign_key => "style_id", :class_name => "Spree::Taxon"
 	
-	attr_accessible :name, :description, :style_id, :room_id, :status, :message
+	attr_accessible :name, :description, :style_id, :room_id, :status, :message, :featured
 	
 	has_one :board_image, as: :viewable, order: :position, dependent: :destroy, class_name: "Spree::BoardImage"
   attr_accessible :board_image_attributes, :messages_attributes
   accepts_nested_attributes_for :board_image, :messages
+  is_impressionable
   
   def self.active
-    where(:status => 'active')
+    where(:status => 'published')
+  end
+  
+  def self.featured
+    where(:featured => 1)
+  end
+  
+  def room_and_style
+    rs = []
+    rs << self.room.name if self.room
+    rs << self.style.name if self.style
+    rs.join(", ")
   end
   
   def display_status
@@ -42,7 +54,7 @@ class Spree::Board < ActiveRecord::Base
       when "needs_revision"
         "Pending - Revisions Requested"
       else
-        self.status
+        "status not available"
     end
       
   end
@@ -55,20 +67,40 @@ class Spree::Board < ActiveRecord::Base
     where(:room_id => room_id)
   end
   
+  def self.by_color_family(color_family)
+    related_colors = Spree::Color.by_color_family(color_family)
+    
+    includes(:colors).where('spree_colors.id' => related_colors.collect{|color| color.id})
+  end
+  
+  def self.status_options
+    [["Draft - Not Published", "new"], ["Pending - Submitted for Publication","submitted_for_publication"], ["Published","published"], ["Suspended","suspended"], ["Deleted","deleted"], ["Unpublished","unpublished"], ["Retired","retired"], ["Pending - Revisions Requested","needs_revision"]]
+  end
+  
+  def self.color_categories
+    ["Blue", "Cool Neutral", "Green", "Orange", "Red", "Violet", "Warm Neutral", "White", "Yellow"]
+  end
+  
   scope :by_color, (lambda do |color|
     joins(:color_matches).where('spree_color_matches.color_id = ?', color.id) unless color.nil?
   end)
   
   def self.by_designer(designer_id)
-    where(:designer_id => designer.id)
+    where(:designer_id => designer_id)
   end
-  scope :by_lower_bound_price, (lambda do |price|
+  
+  def self.by_lower_bound_price(price)
+    includes(:products).where('spree_products.id' => Spree::Product.master_price_gte(price).collect{|color| color.id})
+    #includes(:products).where('spree_products.master_price > ?', price)
     #joins(:products).merge(Spree::Product.master_price_gte(price))
-  end)
-  #
-  #scope :by_upper_bound_price, (lambda do |price|
-  #  joins(:products).where('spree_products.price < ?', price) unless price.nil?
-  #end)
+  end
+  
+  def self.by_upper_bound_price(price)
+    includes(:products).where('spree_products.id' => Spree::Product.master_price_lte(price).collect{|color| color.id})
+    #includes(:products).where('spree_products.master_price < ?', price)
+    #joins(:products).merge(Spree::Product.master_price_lte(price))
+  end
+  
   
   
   #def render_board

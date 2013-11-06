@@ -1,78 +1,56 @@
 
-<div class="row">
-	<div class="col-md-3">
-		<nav id="taxonomies" class="sidebar-item" data-hook="">
-		    <h6 class="taxonomy-root">Designers</h6>
-		    <ul class="taxons-list">
-				<% @designers.each do |designer| %>
-					<li><%= link_to designer.full_name, designer%></li>
-				<% end %>
-			</ul>
-		</nav>
-		
-		
+<div class="designer-header">
+	<% if @designer.logo_image %>
+		<div class="designer-logo">
+			<%= image_tag(@designer.logo_image.attachment(:small)) %>
+		</div>
+	<% end %>
+	<div class="designer-info">
+		<h1><%= @designer.full_name %></h1>
+		<p><%= @designer.company_name %></p>
 	</div>
-	<div class="col-md-9">
-		<div class="board-products">
-			
-			<div class="designer-card-large">
-				<div class="row">
-					<div class="col-md-4">	
-						<%= render :partial => "designer_thumb", :locals => {:designer => @designer}%>
-					</div>
-					<div class="col-md-8">	
-						<h3><%= @designer.full_name %></h3>
-						
-						<p><%= @designer.description%></p>
-						<p><%= link_to @designer.website_url, @designer.website_url %></p>
-						<p><%= @designer.location%></p>
-					</div>
-				</div>
-				
-			</div>
-			<h3><%= "#{@designer.first_name}'s"%> Boards</h3>
-			
-			
-			<div class="boards-list-main">
-						<% unless @designer.boards.blank? %>
-							<% @designer.boards.in_groups_of(2, false) do |row_boards| %>
-							<div class="row">
+	
+</div>
+<div id="designer-banner"></div>
 
-								<% for board in row_boards %>
-								<div class="col-md-6">
-									<div class="board-listing">
-										<%= link_to image_tag(board.board_image.attachment("primary")), board%>
-										<div class="board-meta">
-											<div class="board-meta-img">
-												<% unless board.designer.user_images.blank? %>
-													<%= link_to image_tag(board.designer.user_images.first.attachment(:mini)), designer_path(board.designer) %>
-												<% else %>
-													<%= link_to image_tag("/assets/store/profile_default_primary.jpg", :style => "width: 48px;"), designer_path(board.designer) %>
-												<% end %>
-											</div>
-											<h3><%= link_to board.name, board %></h3>
-											<div class="board-byline">by <%= board.designer.full_name%></div>
-										</div>
-									</div>
-								</div>
-								<% end %>
-							</div>
-							<% end %>
-						<% else %>
-						<div class="empty-state">
-							This designer doesn't have any boards at this time.
-						</div>
-						<% end%>
-
-
-			</div>
-			
-			
-		
-
-
-
+<div class="designer-description">
+	<div class="row">
+		<div class="col-md-12">
+			<%= @designer.description %>
 		</div>
 	</div>
-</div>		
-	
+</div>
+<div class="designer-boards">
+	<% unless @designer.boards.blank? %>
+		<% @designer.boards.in_groups_of(3, false) do |row_boards| %>
+		<div class="row">
+
+			<% for board in row_boards %>
+			<div class="col-md-4">
+				<div class="board-listing">
+					<div class="board-image">
+					<%= link_to board_image(board, :primary), board%>
+					</div>
+					<div class="board-meta">
+						<h3><%= link_to board.name, board %></h3>
+						<div class=""><%= board.room_and_style%></div>
+					</div>
+				</div>
+			</div>
+			<% end %>
+		</div>
+		<% end %>
+	<% else %>
+	<div class="empty-state">
+		This designer doesn't have any boards at this time.
+	</div>
+	<% end%>
+</div>
+
+<script>
+	<% if !@designer.user_images.blank? and @designer.user_images.first%>
+	$(document).ready(function() {	    
+		$("#designer-banner").backstretch("<%=@designer.user_images.first.attachment(:banner)%>");
+	});
+	<% end %>
+</script>

@@ -1,57 +1,59 @@
-<div class="container">
-	<aside id="sidebar" class="columns four alpha" data-hook="">  
-		<div data-hook="dashboard_sidebar_navigation">
-		<nav id="taxonomies" class="sidebar-item" data-hook="">
-			<h6 class="taxonomy-root">Designer Dashboard</h6>
-			<ul class="taxons-list">
-				<li><a href="/dashboard">Dashboard Home</a></li>
-				<li><a href="/my_boards">My Boards</a></li>
-				<li><a href="/my_profile">My Profile</a></li></ul>
-		</nav>
+<div class="row">
+	<div class="col-md-3">
+		<h4>Designer Dashboard</h4>
+		<ul class="nav nav-stacked">
+			<li class="active"><a href="/dashboard">Dashboard Home</a></li>
+			<li><a href="/my_boards">My Boards</a></li>
+			<li><a href="/my_profile">My Profile</a></li>
+		</ul>
+
+	</div>
+
+	<div class="col-md-9">
+
+		
+		<div class="page-header">
+			<h1>Your Profile</h1>
 		</div>
-	</aside>
-	<div id="content" class="columns twelve omega" data-hook="">
-		<div class="page-header clearfix">
-			<h1>Edit Your Profile</h1>
-		</div>
-		<%= form_for [@user] do |f| %>
+
+
 		<div class="row">
-			<div class="alpha ten columns">
-			<%= f.field_container :first_name do %>
-				<%= f.label :first_name %>
-				<%= f.text_field :first_name, :class => 'title input-large' %>
-				<%= f.error_message_on :first_name %>
-			<% end %>
-			<%= f.field_container :last_name do %>
-				<%= f.label :last_name %>
-				<%= f.text_field :last_name, :class => 'title input-large' %>
-				<%= f.error_message_on :last_name %>
-			<% end %>
-			<%= f.field_container :description do %>
-				<%= f.label :description, "Tell us a little about yourself" %>
-				<%= f.text_area :description, {:class => 'input-xxlarge', :rows => 4} %>
-				<%= f.error_message_on :description %>
-		    <% end %>
-			<%= f.field_container :company_name do %>
-				<%= f.label :company_name %>
-				<%= f.text_field :company_name, :class => 'title input-large' %>
-				<%= f.error_message_on :company_name %>
-			<% end %>
-			<%= f.field_container :website_url do %>
-				<%= f.label :website_url %>
-				<%= f.text_field :website_url, :class => 'title input-large' %>
-				<%= f.error_message_on :website_url %>
-			<% end %>
-			<%= f.field_container :blog_url do %>
-				<%= f.label :blog_url %>
-				<%= f.text_field :blog_url, :class => 'title input-large' %>
-				<%= f.error_message_on :blog_url %>
-			<% end %>
-			<%= f.field_container :location do %>
-				<%= f.label :location, "Where are you located?" %>
-				<%= f.text_field :location, :class => 'title input-large' %>
-				<%= f.error_message_on :location %>
-			<% end %>
+			<div class="col-md-4">
+			
+		<%= form_for [@user], :html => {:multipart => true} do |f| %>
+			<div class="form-group">
+				<%= f.label :first_name, Spree.t(:first_name) %>
+				<%= f.text_field :first_name, :class => 'form-control' %>
+			</div>
+			<div class="form-group">
+				<%= f.label :last_name, Spree.t(:last_name) %>
+				<%= f.text_field :last_name, :class => 'form-control' %>
+			</div>
+			<div class="form-group">
+				<%= f.label :description, Spree.t("Tell us a little about yourself") %>
+				<%= f.text_area :description, :class => 'form-control', :rows => 4 %>
+			</div>
+			<div class="form-group">
+				<%= f.label :company_name, Spree.t(:company_name) %>
+				<%= f.text_field :company_name, :class => 'form-control' %>
+			</div>
+			<div class="form-group">
+				<%= f.label :website_url, Spree.t(:website_url) %>
+				<%= f.text_field :website_url, :class => 'form-control' %>
+			</div>
+			
+			<div class="form-group">
+				<%= f.label :blog_url, Spree.t(:blog_url) %>
+				<%= f.text_field :blog_url, :class => 'form-control' %>
+			</div>
+			
+			<div class="form-group">
+				<%= f.label :location, Spree.t(:location) %>
+				<%= f.text_field :location, :class => 'form-control' %>
+			</div>
+			
+		
+			
 		
 			<%= f.field_container :user_image do %>
 				<%= f.fields_for :user_images do |user_image|%>
@@ -103,12 +105,12 @@
 		
 		
 		
-		  </div>
-		</div>
-			<p><%= submit_tag("Save Changes")%></p>
+		 
+			<p><%= submit_tag("Save Changes", :class => "btn btn-primary")%></p>
 		
 			<% end %>
-  		
+  		</div>
+	</div>
 	</div>
 </div>
 

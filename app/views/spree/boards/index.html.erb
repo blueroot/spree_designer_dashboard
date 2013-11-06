@@ -12,36 +12,12 @@
 		
 		<h2>Featured Boards</h2>
 		<div class="boards-list-main">
-		
-					<% @boards.in_groups_of(2, false) do |row_boards| %>
-					<div class="row">
-
-						<% for board in row_boards %>
-
-						<div class="col-md-6">
-							<div class="board-listing">
-
-								
-								<%= link_to board_image(board,"primary"), board%>
-
-								<div class="board-meta">
-									<div class="board-meta-img">
-										<% unless board.designer.user_images.blank? %>
-											<%#= link_to image_tag(board.designer.user_images.first.attachment(:mini)), designer_path(board.designer) %>
-										<% else %>
-											<%#= link_to image_tag("/assets/store/profile_default_primary.jpg", :style => "width: 48px;"), designer_path(board.designer) %>
-										<% end %>
-									</div>
-									<h3><%= link_to board.name, board %></h3>
-									<div class="board-byline">by <%= board.designer.full_name%></div>
-									
-								</div>
-							</div>
-						</div>
-						<% end %>
-					</div>
-					<% end %>
-				
+			<% unless @boards.blank? %>
+				<%= render :partial => "boards_list", :locals => {:boards => @boards}%>
+			<% else %>
+				<div class="empty-state">There aren't any featured boards at this time.</div>
+			
+			<% end %>
 			
 			
 		</div>

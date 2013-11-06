@@ -1,75 +1,47 @@
-<div class="row">
-	<div class="col-md-12">
-		<div class="page-header clearfix">
-			<ol class="breadcrumb">
-			  <li><%= link_to "Dashboard", designer_dashboard_path%></li>
-			  <li><%= link_to "My Boards", my_boards_path%></li>
-			  <li class="active"><%= @board.name %></li>
-			</ol>
-			<h1><%= @board.name %></h1>
-			
-		</div>
-	</div>
+<div class="page-header clearfix">
+	<ol class="breadcrumb">
+	  <li><%= link_to "Dashboard", designer_dashboard_path%></li>
+	  <li><%= link_to "My Boards", my_boards_path%></li>
+	  <li class="active"><%= @board.name %></li>
+	</ol>
+	<h1><%= @board.name %></h1>
 </div>
-<div class="row">
-	<div class="col-md-12">
-		<a href="javascript:void(0);" id="add-products-button" class="btn btn-default">Add Products</a>
-		<% if false %><li><a href="javascript:void(0);" id="add-colors-button">Add Color Swatches</a></li><% end %>
-		<a href="javascript:void(0);" id="edit-board-button" class="btn btn-default">Edit Details</a>
-	</div>
+<div class="top-page-actions">
+	<a href="javascript:void(0);" id="add-products-button" class="btn btn-default">Add Products</a>
+	<a href="javascript:void(0);" id="edit-board-button" class="btn btn-default">Edit Details</a>
 </div>
 <div class="row">
 	<div class="col-md-9">
 		
 		<div class="board-content-body">
 			<div id="board-container">
-			
-	
-			<div id="board-canvas" data-board-id="<%= @board.id %>" style="height: 450px; width: 800px; background-color: #fff; border: 1px dashed #bdc3c7; position: relative; z-index: 1; "></div>
-			
-			
-			
+				<div id="board-canvas" data-board-id="<%= @board.id %>" style="height: 450px; width: 800px; background-color: #fff; border: 1px solid #bdc3c7; position: relative; z-index: 1; "></div>
 			</div>
 			<div class="board-colors-container">
+				<h3>Choose Sherwin Williams paint swatches for your board</h3>
+				<% unless @board.colors.blank? %>
+					<% @board.colors.each_with_index do |color,index| %>
+						<div class="board-swatch color-match-link" id="add-colors-link-<%=index%>" data-match-id="1">
+							<div class="board-swatch-color" id="board-swatch-color-<%=index%>" style="background-color: #<%= color.hex_val%>"></div>
+							<div class="board-swatch-content" id="board-swatch-content-<%=index%>">
+								<h4><%= color.name %></h4>
+								<%= color.swatch_val%>
+							</div>
+						</div>
+					<% end %>
+				<% end %>
+				<% start = @board.colors.size + 1 %>
+				<% start.upto(5) do |num| %>
 				
-				<h4>Choose Sherwin Williams paint swatches for your board</h4>
-				
-				
-				<div class="board-swatch color-match-link board-swatch-default" id="add-colors-link-1" data-match-id="1">
-					<div class="board-swatch-color" id="board-swatch-color-1"></div>
-					<div class="board-swatch-content" id="board-swatch-content-1"></div>
-				</div>
-				
-				<div class="board-swatch color-match-link board-swatch-default" id="add-colors-link-2" data-match-id="2">
-					<div class="board-swatch-color" id="board-swatch-color-2"></div>
-					<div class="board-swatch-content" id="board-swatch-content-2"></div>
-				</div>
-				
-				<div class="board-swatch color-match-link board-swatch-default" id="add-colors-link-3" data-match-id="3">
-					<div class="board-swatch-color" id="board-swatch-color-3"></div>
-					<div class="board-swatch-content" id="board-swatch-content-3"></div>
-				</div>
-				
-				<div class="board-swatch color-match-link board-swatch-default" id="add-colors-link-4" data-match-id="4">
-					<div class="board-swatch-color" id="board-swatch-color-4"></div>
-					<div class="board-swatch-content" id="board-swatch-content-4"></div>
-				</div>
-				
-				<div class="board-swatch color-match-link board-swatch-default" id="add-colors-link-5" data-match-id="5">
-					<div class="board-swatch-color" id="board-swatch-color-5"></div>
-					<div class="board-swatch-content" id="board-swatch-content-5"></div>
-				</div>
-					
-					
-				
-				
+				<div class="board-swatch color-match-link board-swatch-default" id="add-colors-link-<%=num%>" data-match-id="1">
+					<div class="board-swatch-color" id="board-swatch-color-<%=num%>"></div>
+					<div class="board-swatch-content" id="board-swatch-content-<%=num%>"></div>
+				</div>				
+				<% end %>
 			</div>
 		</div>
-		
 	</div>
 	<div class="col-md-3">
-		
-		
 		<div class="panel panel-info">
 		  <div class="panel-heading">
 		    <h3 class="panel-title">Status</h3>
@@ -97,18 +69,19 @@
 		    <h3 class="panel-title">History & Notes</h3>
 		  </div>
 		  <div class="panel-body">
-		    <ul class="unstyled board-history">
+		    <div class="board-history">
 			<% unless @board.messages.blank? %>
 				<% @board.messages.each do |message| %>
 					<%unless message.new_record?%>
-					<li><strong><%= message.subject %></strong>
-					<p><%= message.body %></p></li>
+					<div class="history-item"><strong><%= message.subject %></strong>
+					<br /><%= message.created_at.strftime("%B %e, %Y at %l:%M %P")%>
+					<p><%= message.body %></p></div>
 					<% end %>
 					
 				<% end %>
 			<% end %>
-				<li>Created on <%= @board.created_at.strftime("%B %e, %Y at %l:%M %P")%></li>
-			</ul>
+				<div class="history-item">Created on <%= @board.created_at.strftime("%B %e, %Y at %l:%M %P")%></div>
+			</div>
 			
 			
 		  </div>
@@ -121,7 +94,9 @@
 <%= render :partial => "edit_board_colors_modal"%>
 <%= render :partial => "edit_board_modal"%>	
 <%= render :partial => "submit_for_publication_modal"%>	
+
 <%= render :partial => "add_products_modal"%>	
+<%= render :partial => "add_products_locked_modal"%>	
 
 <style>
 	.board-product-selected{
@@ -136,43 +111,69 @@
 <script>
 
 
-$('.swatch').popover({ 
-    html : true,
-    content: function() {
-		//$('.button-product-info').popover('hide');
-      return $('#'+$(this).data('colorPopoverContainer')).html();
-    }
-  });
 
-$( "#add-products-button" ).click(function() {
-  $('#product-modal').modal()
-});
+$(document).ready(function() {
+	$('.swatch').popover({ 
+	    html : true,
+	    content: function() {
+			//$('.button-product-info').popover('hide');
+	      return $('#'+$(this).data('colorPopoverContainer')).html();
+	    }
+	  });
 
-$( ".color-match-link" ).click(function() {
-  	$( ".color-match-link" ).removeClass('active')
-	$(this).addClass('active')
-	$('#colors-modal').modal()
-});
+	<% if @board.status == "submitted_for_publication" %>
+		$( "#add-products-button" ).click(function() {
+		  $('#product-locked-modal').modal()
+		});
+	<% else %>
+		$( "#add-products-button" ).click(function() {
+		  $('#product-modal').modal()
+		});
+	<% end %>
 
-$( ".swatch" ).click(function() {
-  	$( "div.board-colors-container > .active > .board-swatch-color" ).css("background-color", '#'+$(this).data('color'))
-	$( "div.board-colors-container > .active" ).removeClass('board-swatch-default')
-	
-	swatch_table = '<table class="table table-condensed swatch-table"><tr><td><strong>Swatch #</strong></td><td>'+$(this).data('colorSwatchVal')+'</td></tr><tr><td><strong>Hex</strong></td><td>#'+$(this).data('color')+'</td></tr><tr><td><strong>HSV</strong></td><td>H: '+$(this).data('colorHsvH')+'<br />S: '+$(this).data('colorHsvS')+'<br />V: '+$(this).data('colorHsvV')+'</td></tr></table>'
-	
-	$( "div.board-colors-container > .active > .board-swatch-content" ).html('<h4>'+$(this).data('colorName')+'</h4>'+$(this).data('colorSwatchVal'))
-	
-	
-	
-	$('#colors-modal').modal('hide')
-});
 
-$( "#edit-board-button" ).click(function() {
-  $('#board-modal').modal()
-});
+	$( ".color-match-link" ).click(function() {
+	  	$( ".color-match-link" ).removeClass('active')
+		$(this).addClass('active')
+		$('#colors-modal').modal()
+	});
 
-$( "#publish-board-button" ).click(function() {
-  $('#publish-board-modal').modal()
+	$( ".swatch" ).click(function() {
+	  	$( "div.board-colors-container > .active > .board-swatch-color" ).css("background-color", '#'+$(this).data('color'))
+		$( "div.board-colors-container > .active" ).removeClass('board-swatch-default')
+	
+		swatch_table = '<table class="table table-condensed swatch-table"><tr><td><strong>Swatch #</strong></td><td>'+$(this).data('colorSwatchVal')+'</td></tr><tr><td><strong>Hex</strong></td><td>#'+$(this).data('color')+'</td></tr><tr><td><strong>HSV</strong></td><td>H: '+$(this).data('colorHsvH')+'<br />S: '+$(this).data('colorHsvS')+'<br />V: '+$(this).data('colorHsvV')+'</td></tr></table>'
+	
+		$( "div.board-colors-container > .active > .board-swatch-content" ).html('<h4>'+$(this).data('colorName')+'</h4>'+$(this).data('colorSwatchVal'))
+	
+	
+	
+		$('#colors-modal').modal('hide')
+		
+		url = '<%=board_color_matches_path(@board.id)%>'
+		
+		//alert(taxon);
+		/* Send the data using post */
+		var posting = $.post( url, { color_id: $(this).data('colorId') } );
+
+		/* Put the results in a div */
+		posting.done(function( data ) {
+			//var content = $( data ).find( '#content' );
+			//$( "#result" ).empty().append( content );
+		});
+		
+		
+		
+	});
+
+	$( "#edit-board-button" ).click(function() {
+	  $('#board-modal').modal()
+	});
+
+	$( "#publish-board-button" ).click(function() {
+	  $('#publish-board-modal').modal()
+	});
+
 });
 
 $(function () {
@@ -213,4 +214,17 @@ $(function () {
 	});
 	
 });
+
+
+
+
+$(document).ready(function() {
+	var isResizingEvent = false;
+	
+});
+
+
+
+
+
 </script>

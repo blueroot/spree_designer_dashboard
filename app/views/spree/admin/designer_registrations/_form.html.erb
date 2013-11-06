@@ -92,7 +92,7 @@
 	<div class="alpha ten columns">
 		<%= f.field_container :status do %>
 		<%= f.label :status, "Status" %>
-		<%= f.select :status, ["Pending Review", "Accepted - Designer", "Accepted - Affiliate Only", "Declined"], :class => 'field' %>
+		<%= f.select :status, Spree::DesignerRegistration.status_options, :class => 'field' %>
 		<% end %>
 	</div>
 </div>

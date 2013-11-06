@@ -1,12 +1,6 @@
-<div class="row">
-	<div class="col-md-12">
-		<div class="page-header clearfix">
-			<h1>Designers</h1>
-			
-		</div>
-	</div>
+<div class="page-header clearfix">
+	<h1>Select a Designer</h1>
 </div>
-
 <% if false %>
 
 <ul id="products" class="inline product-listing" data-hook>
@@ -27,8 +21,10 @@
 	<div class="row">
 	<% for designer in row_designers %>
 		<div class="col-md-3">
-			<%= render :partial => "designer_thumb", :locals => {:designer => designer}%>
-			<h4><%= link_to designer.full_name, designer_path(designer) %></h4>
+			<div class="designer-listing">
+				<%= render :partial => "designer_thumb", :locals => {:designer => designer}%>
+				<h4><%= link_to designer.full_name, designer_path(designer) %></h4>
+			</div>
 		</div>
     <% end %>
 	</div>
