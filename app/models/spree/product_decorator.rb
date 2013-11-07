@@ -9,6 +9,10 @@ Spree::Product.class_eval do
     #taxons.first ? prepare_taxon_conditions(taxons) : scoped
   end
   
+  add_search_scope :available_through_boards do
+    includes(:boards).where('spree_boards.id' => Spree::Board.active.collect{|board| board.id})
+  end
+  
   def other_board_products
     self.boards.first().products
   end
