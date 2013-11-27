@@ -9,6 +9,11 @@ function saveProductToBoard(board_id, product_id, x, y, z, w, h){
 	  });
 }
 
+function showProductAddedState(){
+	$('#product-preview-details').addClass('hidden');
+	$('#product-preview-added').removeClass('hidden');
+}
+
 function getSavedProducts(board_id){
 	var url = '/boards/'+board_id+'/board_products'
 	var request = $.get( url );
@@ -30,6 +35,8 @@ function getProductDetails(product_id){
 	    //$( "#result" ).empty().append( content );
 	  });	
 }
+
+
 
 function handleDragAfterDrop(el) {
 	//alert('dude this is it')

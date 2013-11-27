@@ -1,4 +1,3 @@
-
 class Spree::ColorMatchesController < Spree::StoreController
   require 'RMagick'
   include Magick 
@@ -19,8 +18,13 @@ class Spree::ColorMatchesController < Spree::StoreController
   
   def create
     @board = Spree::Board.find(params[:board_id])
-    unless @board.color_matches.find_by_color_id_and_board_id(params[:color_id], params[:board_id])
-      @color_match = @board.color_matches.new(:color_id => params[:color_id], :board_id => params[:board_id])
+
+    if params[:id] and @color_match = @board.color_matches.find(params[:id])
+      
+    else  
+      unless @color_match = @board.color_matches.find_by_color_id(params[:color_id])
+        @color_match = @board.color_matches.new(:color_id => params[:color_id], :board_id => params[:board_id])
+      end
     end
     
     if @color_match.save
@@ -36,12 +40,14 @@ class Spree::ColorMatchesController < Spree::StoreController
 
   
   def destroy
-    if @board_product = Spree::BoardProduct.find_by_product_id_and_board_id(params[:id], params[:board_id])
-      @board_product.destroy
+    @board = Spree::Board.find(params[:board_id])
+
+    if params[:id] and @color_match = @board.color_matches.find(params[:id])
+      @color_match.destroy
       
     end
     respond_to do |format|
-      format.js   { render :text => "Deleted" }
+      format.js   { render :action => "show" }
       #format.html { redirect_to([:admin, @booking], :notice => 'Booking was successfully created.') }
       #format.xml  { render :xml => @booking, :status => :created, :location => @booking }
     end

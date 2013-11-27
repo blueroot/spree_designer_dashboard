@@ -1,0 +1,114 @@
+<h3>Choose Sherwin Williams paint swatches for your board</h3>
+<% unless board.color_matches.blank? %>
+	<% board.color_matches.each_with_index do |color_match,index| %>
+		<div class="board-swatch color-match-link" id="add-colors-link-<%=index%>" data-match-id="1" data-color-match-id="<%=color_match.id%>">
+			<div class="board-swatch-color" id="board-swatch-color-<%=index%>" style="background-color: #<%= color_match.color.hex_val%>"></div>
+			<div class="board-swatch-content" id="board-swatch-content-<%=index%>">
+				<h4><%= color_match.color.name %></h4>
+				<%= color_match.color.swatch_val%>
+				<a href="javascript:void(0);" class="color-match-delete-link" data-color-match-id="<%=color_match.id%>">delete</a>
+			</div>
+		</div>
+	<% end %>
+<% end %>
+<% start = board.colors.size + 1 %>
+<% start.upto(5) do |num| %>
+
+<div class="board-swatch color-match-link board-swatch-default" id="add-colors-link-<%=num%>" data-match-id="1" data-color-match-id="0">
+	<div class="board-swatch-color" id="board-swatch-color-<%=num%>"></div>
+	<div class="board-swatch-content" id="board-swatch-content-<%=num%>"></div>
+</div>				
+<% end %>
+
+
+<%= render :partial => "/spree/boards/edit_board_colors_modal"%>
+
+
+
+<script>
+
+
+
+$(document).ready(function() {
+	$('.swatch').popover({ 
+	    html : true,
+	    content: function() {
+			//$('.button-product-info').popover('hide');
+	      return $('#'+$(this).data('colorPopoverContainer')).html();
+	    }
+	  });
+
+
+	$( ".color-match-link" ).click(function() {
+	  	$( ".color-match-link" ).removeClass('active')
+		$(this).addClass('active')
+		$('#colors-modal').modal()
+	});
+	
+	$( ".color-match-delete-link" ).click(function(event) {
+		//stop the color popup modal from firing
+		event.stopPropagation();
+		url = '<%=board_color_matches_path(@board.id)%>'+'/'+$(this).data('colorMatchId')
+		//alert($(this).data('colorMatchId'))
+
+		/* Send the data using post */
+		var posting = $.post( url, { _method:'delete' }, null, "script" );
+		
+		/* Put the results in a div */
+		posting.done(function( data ) {
+		});
+	});
+
+	$( ".swatch" ).click(function() {
+		
+		active_swatch_element = $( "div.board-colors-container > .active" )
+	  	$( "div.board-colors-container > .active > .board-swatch-color" ).css("background-color", '#'+$(this).data('color'))
+		//$( "div.board-colors-container > .active" ).removeClass('board-swatch-default')
+		active_swatch_element.removeClass('board-swatch-default')
+	
+		swatch_table = '<table class="table table-condensed swatch-table"><tr><td><strong>Swatch #</strong></td><td>'+$(this).data('colorSwatchVal')+'</td></tr><tr><td><strong>Hex</strong></td><td>#'+$(this).data('color')+'</td></tr><tr><td><strong>HSV</strong></td><td>H: '+$(this).data('colorHsvH')+'<br />S: '+$(this).data('colorHsvS')+'<br />V: '+$(this).data('colorHsvV')+'</td></tr></table>'
+	
+		$( "div.board-colors-container > .active > .board-swatch-content" ).html('<h4>'+$(this).data('colorName')+'</h4>'+$(this).data('colorSwatchVal'))
+	
+		$('#colors-modal').modal('hide')
+		
+		
+		if (active_swatch_element.data('colorMatchId') > 0){
+			url = '<%=board_color_matches_path(@board.id)%>'
+
+			//alert(taxon);
+			/* Send the data using post */
+			var posting = $.post( url, { color_id: $(this).data('colorId'), id: active_swatch_element.data('colorMatchId') } );
+
+			/* Put the results in a div */
+			posting.done(function( data ) {
+				//var content = $( data ).find( '#content' );
+				//$( "#result" ).empty().append( content );
+			});
+		}
+		
+		else{
+			url = '<%=board_color_matches_path(@board.id)%>'
+
+			//alert(taxon);
+			/* Send the data using post */
+			var posting = $.post( url, { color_id: $(this).data('colorId') } );
+
+			/* Put the results in a div */
+			posting.done(function( data ) {
+				//var content = $( data ).find( '#content' );
+				//$( "#result" ).empty().append( content );
+			});
+		}
+		
+		
+		
+		
+		
+	});
+
+
+
+});
+
+</script>

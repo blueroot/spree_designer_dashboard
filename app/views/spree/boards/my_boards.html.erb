@@ -11,8 +11,14 @@
 
 	<div class="col-md-9">
 		<div class="page-header clearfix">
-			<h1>Boards</h1>
-			<%= link_to "Add a Board", new_board_path %>
+			<div class="row">
+				<div class="col-md-9">
+					<h1>Boards</h1>
+				</div>
+				<div class="col-md-3 header-actions">
+					<%= link_to "Add a Board", new_board_path, :class => "btn btn-primary" %>
+				</div>
+			</div>
 		</div>
 		
   		<% unless @boards.blank? %>

@@ -17,27 +17,9 @@
 			<div id="board-container">
 				<div id="board-canvas" data-board-id="<%= @board.id %>" style="height: 450px; width: 800px; background-color: #fff; border: 1px solid #bdc3c7; position: relative; z-index: 1; "></div>
 			</div>
-			<div class="board-colors-container">
-				<h3>Choose Sherwin Williams paint swatches for your board</h3>
-				<% unless @board.colors.blank? %>
-					<% @board.colors.each_with_index do |color,index| %>
-						<div class="board-swatch color-match-link" id="add-colors-link-<%=index%>" data-match-id="1">
-							<div class="board-swatch-color" id="board-swatch-color-<%=index%>" style="background-color: #<%= color.hex_val%>"></div>
-							<div class="board-swatch-content" id="board-swatch-content-<%=index%>">
-								<h4><%= color.name %></h4>
-								<%= color.swatch_val%>
-							</div>
-						</div>
-					<% end %>
-				<% end %>
-				<% start = @board.colors.size + 1 %>
-				<% start.upto(5) do |num| %>
+			<div id="board-colors-container" class="board-colors-container">
+				<%= render :partial => "board_swatches", :locals => {:board => @board} %>
 				
-				<div class="board-swatch color-match-link board-swatch-default" id="add-colors-link-<%=num%>" data-match-id="1">
-					<div class="board-swatch-color" id="board-swatch-color-<%=num%>"></div>
-					<div class="board-swatch-content" id="board-swatch-content-<%=num%>"></div>
-				</div>				
-				<% end %>
 			</div>
 		</div>
 	</div>
@@ -91,7 +73,7 @@
 	</div>
 </div>
 
-<%= render :partial => "edit_board_colors_modal"%>
+
 <%= render :partial => "edit_board_modal"%>	
 <%= render :partial => "submit_for_publication_modal"%>	
 
@@ -130,41 +112,6 @@ $(document).ready(function() {
 		  $('#product-modal').modal()
 		});
 	<% end %>
-
-
-	$( ".color-match-link" ).click(function() {
-	  	$( ".color-match-link" ).removeClass('active')
-		$(this).addClass('active')
-		$('#colors-modal').modal()
-	});
-
-	$( ".swatch" ).click(function() {
-	  	$( "div.board-colors-container > .active > .board-swatch-color" ).css("background-color", '#'+$(this).data('color'))
-		$( "div.board-colors-container > .active" ).removeClass('board-swatch-default')
-	
-		swatch_table = '<table class="table table-condensed swatch-table"><tr><td><strong>Swatch #</strong></td><td>'+$(this).data('colorSwatchVal')+'</td></tr><tr><td><strong>Hex</strong></td><td>#'+$(this).data('color')+'</td></tr><tr><td><strong>HSV</strong></td><td>H: '+$(this).data('colorHsvH')+'<br />S: '+$(this).data('colorHsvS')+'<br />V: '+$(this).data('colorHsvV')+'</td></tr></table>'
-	
-		$( "div.board-colors-container > .active > .board-swatch-content" ).html('<h4>'+$(this).data('colorName')+'</h4>'+$(this).data('colorSwatchVal'))
-	
-	
-	
-		$('#colors-modal').modal('hide')
-		
-		url = '<%=board_color_matches_path(@board.id)%>'
-		
-		//alert(taxon);
-		/* Send the data using post */
-		var posting = $.post( url, { color_id: $(this).data('colorId') } );
-
-		/* Put the results in a div */
-		posting.done(function( data ) {
-			//var content = $( data ).find( '#content' );
-			//$( "#result" ).empty().append( content );
-		});
-		
-		
-		
-	});
 
 	$( "#edit-board-button" ).click(function() {
 	  $('#board-modal').modal()
