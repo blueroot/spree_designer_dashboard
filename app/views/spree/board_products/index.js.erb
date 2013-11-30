@@ -2,7 +2,6 @@ $('#board-canvas').html('<%= escape_javascript(raw render(:partial => "products"
 
 
 $('.board-lightbox-product-cloned').each(function() {
-	//alert(this)
 	handleDragAfterDrop($(this));
 	handleResizable($(this));
 	handleSelectable($(this));

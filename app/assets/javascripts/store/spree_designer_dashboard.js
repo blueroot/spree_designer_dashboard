@@ -4,8 +4,10 @@ function saveProductToBoard(board_id, product_id, x, y, z, w, h){
 
 	  /* Put the results in a div */
 	  posting.done(function( data ) {
-	    var content = $( data ).find( '#content' );
-	    $( "#result" ).empty().append( content );
+		//alert('saved!')
+		getSavedProducts(board_id);
+	    //var content = $( data ).find( '#content' );
+	    //$( "#result" ).empty().append( content );
 	  });
 }
 
@@ -141,30 +143,57 @@ function handleDropEvent(event, ui) {
 	saveProductToBoard($('#board-canvas').data('boardId'),cloned.data('productId'), cloned.position().left, cloned.position().top, cloned.css('z-index'), cloned.width(), cloned.height());		
 }
 
+function getImageWidth(url){
+	var img = new Image();
+	img.onload = function() {
+	  //return "w"
+	}
+	img.src = url
+	return img.width
+}
+
+function getImageHeight(url){
+	var img = new Image();
+	img.onload = function() {
+	  //return "h"
+	}
+	img.src = url
+	return img.height
+}
+
 function handleCloneAndAddEvent(item) {
 	var offsetXPos = 20;
 	var offsetYPos = 20;
+	
 	cloned = item.clone(true);
+	//alert(cloned.data('imgUrl'))
+	
 	cloned.appendTo( "#board-canvas" );
 	if (cloned.hasClass('board-lightbox-product')){
 		cloned.removeClass('board-lightbox-product').addClass('board-lightbox-product-cloned')
-		
 	}
 	else{
 		cloned.removeClass('board-lightbox-product').addClass('board-lightbox-product-cloned')
 	}		
 	
-	cloned.width(item.width());
-	cloned.height(item.height());
+	cloned.width(getImageWidth(cloned.data('imgUrl')));
+	cloned.height(getImageHeight(cloned.data('imgUrl')));
+	cloned.children('img.board-lightbox-product-img').css('width', getImageWidth(cloned.data('imgUrl')))
+	cloned.children('img.board-lightbox-product-img').css('height', getImageHeight(cloned.data('imgUrl')))
+	cloned.css('width', getImageWidth(cloned.data('imgUrl')))
+	cloned.css('height', getImageHeight(cloned.data('imgUrl')))
 	//cloned.offset({ top: 20, left: 20})
 	
 	selectItem(cloned);
 	
-	handleDragAfterDrop(cloned);
-	handleResizable(cloned);
-	handleSelectable(cloned);
-	handleRemoveFromCanvas(cloned);
+	//handleDragAfterDrop(cloned);
+	//handleResizable(cloned);
+	//handleSelectable(cloned);
+	//handleRemoveFromCanvas(cloned);
+	//handleProductPopover(cloned);
+	//
 	saveProductToBoard($('#board-canvas').data('boardId'),cloned.data('productId'), cloned.position().left, cloned.position().top, cloned.css('z-index'), cloned.width(), cloned.height());		
+	
 }
 
 function showProductDetails(item){

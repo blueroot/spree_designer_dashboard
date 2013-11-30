@@ -3,7 +3,7 @@
 	<% products.each do |product| %>
 	<div class="board-product-select" style="float:left; margin-right: 20px; width: 170px; height: 250px;">
 		<div class="board-product-select-image" style="margin-bottom: 5px; text-align:center; border: 1px solid #eee; padding: 5px;">
-			<div class="board-lightbox-product" id="board-product-<%= product.id %>" data-product-id="<%= product.id %>" id="<%= product.id %>" data-product-permalink="<%=product.permalink%>">
+			<div class="board-lightbox-product" id="board-product-<%= product.id %>" data-product-id="<%= product.id %>" id="<%= product.id %>" data-img-url="<%=product_board_image_url(product, "small")%>" data-product-permalink="<%=product.permalink%>">
 				<div style="position: relative;">
 					<a href="javascript:void(0);" class="button-remove-product" style="font-family: helvetica; font-size: 12px; line-height: 12px; font-weight: bold; background-color: #fff; padding: 4px 7px; border-width: 0 0 1px 1px; border-style: solid; border-color: #ccc; right: 0px; top: 0; position: absolute; display: none;">x</a>
 					<a href="javascript:void(0);" class="add-to-board-link">

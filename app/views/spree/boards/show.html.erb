@@ -26,12 +26,46 @@
 			<div class="board-section board-swatch-section">
 				<h3>Suggested Paint Colors</h3>
 				<% @board.colors.each_with_index do |color,index| %>
+					
+					
 					<div class="board-swatch color-match-link" id="add-colors-link-<%=index%>" data-match-id="1">
+						<span data-toggle="popover" data-color-id="<%=color.id%>" data-color-popover-container="color-popover-<%=color.id%>" data-html="true" data-trigger="hover" data-placement="top" data-animation="false" class="swatch-wrapper" data-color="<%=color.hex_val%>" data-color-hsv-h="<%=color.hsv_h%>" data-color-hsv-s="<%=color.hsv_s%>" data-color-hsv-v="<%=color.hsv_v%>" data-color-name="<%=color.name%>" data-color-swatch-val="<%=color.swatch_val%>">
 						<div class="board-swatch-color" id="board-swatch-color-<%=index%>" style="background-color: #<%= color.hex_val%>"></div>
 						<div class="board-swatch-content" id="board-swatch-content-<%=index%>">
 							<h4><%= color.name %></h4>
-							<%= color.swatch_val%>
 						</div>
+						</span>
+					</div>
+					
+					
+					
+					<div id="color-popover-<%=color.id%>" class="hide">
+					<div class="row">
+						<div class="col-md-5">
+							<div style="height: 100px; width: 100px; background-color: #<%=color.hex_val%>"></div>
+						</div>
+						<div class="col-md-7 swatch-popover-info">
+							<h4><%=color.name%></h4>
+							<p>by Sherwin Williams</p>
+							<table class="table table-condensed swatch-table">
+
+								<tr>
+									<td><strong>Swatch #</strong></td>
+									<td><%=color.swatch_val%></td>
+								</tr>
+								<tr>
+									<td><strong>Hex</strong></td>
+									<td>#<%=color.hex_val%></td>
+								</tr>
+								<tr>
+									<td><strong>HSV</strong></td>
+									<td>H: <%=color.hsv_h%><br />
+										S: <%=color.hsv_s%><br />
+										V: <%=color.hsv_v%></td>
+								</tr>	
+							</table>
+						</div>
+					</div>
 					</div>
 				<% end %>
 			</div>
@@ -40,11 +74,6 @@
 			
 			</div>
 		</div>
-		
-		
-		
-	
-	
 	<div class="col-md-4">
 		<div class="board-about-column">
 			<h1><%= @board.name %></h1>
@@ -123,3 +152,16 @@
 <%= render :partial => "spree/shared/add_to_cart_modal" %>
 
 
+<script>
+$(document).ready(function() {
+	$('.swatch-wrapper').popover({ 
+	    html : true,
+	    content: function() {
+			//$('.button-product-info').popover('hide');
+	      return $('#'+$(this).data('colorPopoverContainer')).html();
+	    }
+	  });
+
+
+});
+</script>
