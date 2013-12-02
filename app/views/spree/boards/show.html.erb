@@ -151,7 +151,12 @@
 
 <%= render :partial => "spree/shared/add_to_cart_modal" %>
 
-
+<h3>Related Boards</h3>
+<% if !@board.related_boards.blank? %>
+	<%= render :partial => "boards_list", :locals => {:boards => @board.related_boards}%>
+<% else %>
+	<div class="empty-state">There are no related boards at this time.</div>
+<% end%>
 <script>
 $(document).ready(function() {
 	$('.swatch-wrapper').popover({ 

@@ -12,7 +12,7 @@ class Spree::Board < ActiveRecord::Base
 	belongs_to :room, :foreign_key => "room_id", :class_name => "Spree::Taxon"
 	belongs_to :style, :foreign_key => "style_id", :class_name => "Spree::Taxon"
 	
-	attr_accessible :name, :description, :style_id, :room_id, :status, :message, :featured
+	attr_accessible :name, :description, :style_id, :room_id, :status, :message, :featured, :featured_starts_at, :featured_expires_at
 	
 	has_one :board_image, as: :viewable, order: :position, dependent: :destroy, class_name: "Spree::BoardImage"
   attr_accessible :board_image_attributes, :messages_attributes
@@ -24,7 +24,8 @@ class Spree::Board < ActiveRecord::Base
   end
   
   def self.featured
-    where(:featured => 1)
+    #where(:featured => 1)
+    where("featured_starts_at <= ? and featured_expires_at >= ?", Date.today, Date.today)
   end
   
   def room_and_style
@@ -61,6 +62,10 @@ class Spree::Board < ActiveRecord::Base
   
   def self.by_style(style_id)
     where(:style_id => style_id)
+  end
+  
+  def self.exclude_self(board_id)
+    where("id <> #{board_id}")
   end
   
   def self.by_room(room_id)
@@ -101,6 +106,26 @@ class Spree::Board < ActiveRecord::Base
     #joins(:products).merge(Spree::Product.master_price_lte(price))
   end
   
+  def related_boards
+    
+    boards_scope = Spree::Board.active
+    boards_scope = boards_scope.exclude_self(self.id)
+    
+    #unless self.color_family.blank?
+    #  #@boards_scope = @boards_scope.by_color_family(self.color_family)
+    #end
+    
+    unless self.room_id.blank?
+      boards_scope = boards_scope.by_room(self.room_id)
+    end
+    
+    unless self.style_id.blank?
+      boards_scope = boards_scope.by_style(self.style_id)
+    end
+    
+    boards_scope
+    
+  end
   
   
   #def render_board
