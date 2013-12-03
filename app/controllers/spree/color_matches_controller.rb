@@ -30,8 +30,6 @@ class Spree::ColorMatchesController < Spree::StoreController
     if @color_match.save
       respond_to do |format|
         format.js   { render :action => "show" }
-        #format.html { redirect_to([:admin, @booking], :notice => 'Booking was successfully created.') }
-        #format.xml  { render :xml => @booking, :status => :created, :location => @booking }
       end
     else
     end
@@ -48,8 +46,6 @@ class Spree::ColorMatchesController < Spree::StoreController
     end
     respond_to do |format|
       format.js   { render :action => "show" }
-      #format.html { redirect_to([:admin, @booking], :notice => 'Booking was successfully created.') }
-      #format.xml  { render :xml => @booking, :status => :created, :location => @booking }
     end
   end
     

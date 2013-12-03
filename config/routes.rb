@@ -19,6 +19,7 @@ Spree::Core::Engine.routes.draw do
   get "/dashboard" => "home#dashboard", :as => :designer_dashboard
   post "/orders/add_to_cart" => "orders#add_to_cart", :as => :orders_add_to_cart
   get "/my_profile" => "home#profile", :as => :my_profile
+  patch "/designers" => "designers#update", :as => :update_designer
   get "/my_boards" => "boards#my_boards", :as => :my_boards
 
   get "/designers" => "designers#index", :as => :designers
