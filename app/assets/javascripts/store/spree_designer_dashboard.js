@@ -94,7 +94,10 @@ function handleProductPopover(el){
 				$('.button-product-info').popover('hide');
 	      return $('#'+$(this).data('popoverContainer')).html();
 	    }
-	  });
+	});
+		
+		
+		
 	//el.find('a.button-product-info').click(function() {
 	//	//$(this).popover('show')
 	//	$('.button-product-info').popover('hide');

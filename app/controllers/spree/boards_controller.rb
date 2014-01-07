@@ -7,6 +7,7 @@ class Spree::BoardsController < Spree::StoreController
 
   def index
     @boards = Spree::Board.featured()
+    @products = Spree::Product.featured()
   end
   
   def search
@@ -121,7 +122,7 @@ class Spree::BoardsController < Spree::StoreController
   def update
     @board = Spree::Board.find(params[:id])
     if @board.update_attributes(params[:board])
-      redirect_to design_board_path(@board)
+      redirect_to designer_dashboard_path(@board, :notice => 'Your board was updated.')
     else
     end
   end

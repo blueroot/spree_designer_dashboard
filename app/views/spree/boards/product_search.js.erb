@@ -1,31 +1,36 @@
+
+//$('#board_search_panel').hide()
+//$('#board_search_panel').addClass('hidden')
+//$('#board_search_panel').hide();
 $('#select-products-box').html('<%= escape_javascript(raw render(:partial => "product_results", :locals => {:products => @products})) %>')
+//$('.select-products-box').addClass('animated fadeInUp')
 $('#select-products-pagination').html('<%= escape_javascript(raw render(:partial => "product_results_pagination", :locals => {:products => @products})) %>')
 //$('#select-products-box').html('hh')
 
 
-//$('.board-lightbox-product').draggable({
-//	containment: '.main',
-//	cursor: 'move',
-//	helper: 'clone',
-//	appendTo: '#board-canvas',
-//	revert: 'invalid',
-//	start: function(event, ui) {
-//		isDraggingMedia = true;
-//	},
-//	stop: function(event, ui) {
-//		isDraggingMedia = false;
-//	}
-//});
+$('.board-lightbox-product').draggable({
+	containment: '.main',
+	cursor: 'move',
+	helper: 'clone',
+	appendTo: '#board-canvas',
+	revert: 'invalid',
+	start: function(event, ui) {
+		isDraggingMedia = true;
+	},
+	stop: function(event, ui) {
+		isDraggingMedia = false;
+	}
+});
 
-$('.board-lightbox-product').click(function() {
-	
-	showProductDetails($(this))
-	//handleCloneAndAddEvent($(this))
-	
-});
-setHeight();
-// Re-initialize the results pane on resize
-$(window).resize(function() {		
-	setHeight();
-	
-});
+//$('.board-lightbox-product').click(function() {
+//	
+//	showProductDetails($(this))
+//	//handleCloneAndAddEvent($(this))
+//	
+//});
+//setHeight();
+//// Re-initialize the results pane on resize
+//$(window).resize(function() {		
+//	setHeight();
+//	
+//});

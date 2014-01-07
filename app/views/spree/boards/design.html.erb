@@ -1,84 +1,91 @@
-<div class="page-header clearfix">
-	<ol class="breadcrumb">
-	  <li><%= link_to "Dashboard", designer_dashboard_path%></li>
-	  <li><%= link_to "My Boards", my_boards_path%></li>
-	  <li class="active"><%= @board.name %></li>
-	</ol>
-	<h1><%= @board.name %></h1>
-</div>
-<div class="top-page-actions">
-	<a href="javascript:void(0);" id="add-products-button" class="btn btn-default">Add Products</a>
-	<a href="javascript:void(0);" id="edit-board-button" class="btn btn-default">Edit Details</a>
-</div>
-<div class="row">
-	<div class="col-md-9">
-		
-		<div class="board-content-body">
-			<div id="board-container">
-				<div id="board-canvas" data-board-id="<%= @board.id %>" style="height: 410px; width: 720px; background-color: #fff; border: 1px solid #bdc3c7; position: relative; z-index: 1; "></div>
+
+	<div class="manage-container">
+		<div class="board-design-section board-design-section-canvas">
+			<div class="board-design-section-title">
+				<span class="board-design-step">1</span> Design your board
 			</div>
-			<div id="board-colors-container" class="board-colors-container">
-				<%= render :partial => "board_swatches", :locals => {:board => @board} %>
-				
-			</div>
-		</div>
-	</div>
-	<div class="col-md-3">
-		<div class="panel panel-info">
-		  <div class="panel-heading">
-		    <h3 class="panel-title">Status</h3>
-		  </div>
-		  <div class="panel-body">
-		    <p><label>Status:</label> <%= @board.display_status%></p>
-		
-			<% if @board.status == "new" %>
-				<a href="javascript:void(0);" id="publish-board-button" class="btn btn-primary btn-sm">Publish Board</a>
-			<% elsif @board.status == "published" %>
-				<a href="javascript:void(0);" id="unpublish-board-button" class="btn btn-primary btn-sm">Publish Board</a>
-			<% elsif @board.status == "needs_revision" %>
-				<a href="javascript:void(0);" id="unpublish-board-button" class="btn btn-primary btn-sm">Publish Board</a>
+			<div class="row">
+				<div class="col-md-7">
+					<div class="board-content-body">
+						<div id="board-container">
+							<div id="board-canvas" data-board-id="<%= @board.id %>" style="height: 410px; width: 630px; background-color: #fff; border: 1px solid #bdc3c7; position: relative; z-index: 1; "></div>
+						</div>
 			
-			<% elsif @board.status == "suspended" %>
-			
-			<% end %>
-			
-			
-			
-		  </div>
-		</div>
-		<div class="panel panel-default">
-		  <div class="panel-heading">
-		    <h3 class="panel-title">History & Notes</h3>
-		  </div>
-		  <div class="panel-body">
-		    <div class="board-history">
-			<% unless @board.messages.blank? %>
-				<% @board.messages.each do |message| %>
-					<%unless message.new_record?%>
-					<div class="history-item"><strong><%= message.subject %></strong>
-					<br /><%= message.created_at.strftime("%B %e, %Y at %l:%M %P")%>
-					<p><%= message.body %></p></div>
-					<% end %>
+					</div>		
+				</div>
+				<div class="col-md-5">
 					
-				<% end %>
-			<% end %>
-				<div class="history-item">Created on <%= @board.created_at.strftime("%B %e, %Y at %l:%M %P")%></div>
-			</div>
-			
-			
-		  </div>
-		</div>
+					<div id="design" class="tab-pane active board-manage-panel">
+						<div id="board_search_panel" class="">
+							<div class="board-products-search-fields">
+								<%= form_tag("/boards/product_search", method: "get", :id => "product_search_form") do %>
+									<div class="row">
+										<div class="col-md-3">
+											<%= select_tag "wholesaler_taxon", options_from_collection_for_select(@wholesaler_taxons, "id", "name"), :include_blank => false, :class => "form-control input-sm", :prompt => "Wholesaler" %>
+										</div>
+										<div class="col-md-3">
+											<%= select_tag "department_taxon", options_from_collection_for_select(@department_taxons, "id", "name"), :include_blank => false, :class => "form-control input-sm", :prompt => "Department" %>
+										</div>
+										<div class="col-md-3">
+
+											<input type="text" id="product_keywords" name="product_keywords" class="form-control input-sm">
+										</div>
+										<div class="col-md-3">
+											<%= submit_tag("Search", :class => "btn btn-primary btn-sm")%>
+										</div>
+									</div>
+								<% end %>
+							</div>
+							<div id="select-products-pagination" class="select-products-pagination"></div>
+
+							<div id="select-products-box" class="select-products-box">
+							
+								<div class="board-search-empty-state">Search for products above and drag them onto your board.</div>
+							
+							</div>
+						</div>
+					</div>
 		
-		<%#= link_to "Save Changes", edit_board_path(@board), :class=> "button"%>
+
+					<%#= link_to "Save Changes", edit_board_path(@board), :class=> "button"%>
+				</div>
+			</div>
+		</div>
+	
+		<div class="board-design-section">
+			<div class="board-design-section-title">
+				<span class="board-design-step">
+					2
+				</span> Add color swatches
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div id="board-colors-container" class="board-colors-container">
+						<%= render :partial => "board_swatches", :locals => {:board => @board} %>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+		<div class="board-design-section board-design-section-last">
+			<div class="board-design-section-title">
+				<span class="board-design-step">
+					3
+				</span> Board Details
+			</div>
+			<%= form_for(@board, {:html => {:id => "edit_board_form", :"parsley-validate" => ""}}) do |f| %>
+			<%= render :partial => 'form', :locals => { :f => f } %>
+			<% end %>
+		</div>
 	</div>
-</div>
+	<div class="manage-board-footer">
+		<%= link_to "Cancel", designer_dashboard_path, :class => "btn btn-default" %>
+		<%= link_to "Save Changes", "javascript:void(0);", :class => "btn btn-primary", :id => "submit_board_button" %>
+		<%= link_to "Save and Publish", "javascript:void(0);", :class => "btn btn-primary", :id => "submit_and_publish_board_button" %>
+		<%#= button_tag("Save Changes", :class => "btn btn-primary")%>
+	</div>
 
-
-<%= render :partial => "edit_board_modal"%>	
 <%= render :partial => "submit_for_publication_modal"%>	
-
-<%= render :partial => "add_products_modal"%>	
-<%= render :partial => "add_products_locked_modal"%>	
 
 <style>
 	.board-product-selected{
@@ -95,6 +102,29 @@
 
 
 $(document).ready(function() {
+	
+
+	$("#submit_board_button").click(function() {
+		
+		if ($('#edit_board_form').parsley( 'isValid' )){
+			$(this).html('Saving...')
+			$("#edit_board_form").submit();
+		}else{
+			$('#edit_board_form').parsley( 'validate' )
+		}
+		
+	});
+	
+	$("#submit_and_publish_board_button").click(function() {
+		
+		if ($('#edit_board_form').parsley( 'isValid' )){
+			$('#publish-board-modal').modal()
+		}else{
+			$('#edit_board_form').parsley( 'validate' )
+		}
+		
+	});
+	
 	$('.swatch').popover({ 
 	    html : true,
 	    content: function() {
@@ -117,9 +147,6 @@ $(document).ready(function() {
 	  $('#board-modal').modal()
 	});
 
-	$( "#publish-board-button" ).click(function() {
-	  $('#publish-board-modal').modal()
-	});
 
 });
 
@@ -175,3 +202,55 @@ $(document).ready(function() {
 
 
 </script>
+
+
+
+
+<% if false %>
+
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <h3 class="panel-title">Status</h3>
+  </div>
+  <div class="panel-body">
+    <p><label>Status:</label> <%= @board.display_status%></p>
+
+	<% if @board.status == "new" %>
+		<a href="javascript:void(0);" id="publish-board-button" class="btn btn-primary btn-sm">Publish Board</a>
+	<% elsif @board.status == "published" %>
+		<a href="javascript:void(0);" id="unpublish-board-button" class="btn btn-primary btn-sm">Publish Board</a>
+	<% elsif @board.status == "needs_revision" %>
+		<a href="javascript:void(0);" id="unpublish-board-button" class="btn btn-primary btn-sm">Publish Board</a>
+	
+	<% elsif @board.status == "suspended" %>
+	
+	<% end %>
+	
+	
+	
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">History & Notes</h3>
+  </div>
+  <div class="panel-body">
+    <div class="board-history">
+	<% unless @board.messages.blank? %>
+		<% @board.messages.each do |message| %>
+			<%unless message.new_record?%>
+			<div class="history-item"><strong><%= message.subject %></strong>
+			<br /><%= message.created_at.strftime("%B %e, %Y at %l:%M %P")%>
+			<p><%= message.body %></p></div>
+			<% end %>
+			
+		<% end %>
+	<% end %>
+		<div class="history-item">Created on <%= @board.created_at.strftime("%B %e, %Y at %l:%M %P")%></div>
+	</div>
+	
+	
+  </div>
+</div>
+<% end %>

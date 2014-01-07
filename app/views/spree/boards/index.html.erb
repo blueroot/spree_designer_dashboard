@@ -3,53 +3,26 @@
 		<%= render :partial => "search_form"%>
 	</div>
 	<div class="col-md-9">
-		<div class="slider-wrapper">
-		    <div id="slider" class="nivoSlider">
-		        <img src="/assets/store/nimble.jpg" alt="" />
-				<img src="/assets/store/nimble2.jpg" alt="" />
-		    </div>
-		</div>
+	
 		
-		<h2>Featured Boards</h2>
+		<h2>Featured Rooms</h2>
 		<div class="boards-list-main">
 			<% unless @boards.blank? %>
 				<%= render :partial => "boards_list", :locals => {:boards => @boards}%>
 			<% else %>
 				<div class="empty-state">There aren't any featured boards at this time.</div>
-			
 			<% end %>
-			
-			
+		</div>
+		
+		<h2>Featured Products</h2>
+		<div class="boards-list-main">
+			<% unless @products.blank? %>
+				<%#= render :partial => "products_list", :locals => {:proucts => @products}%>
+			<% else %>
+				<div class="empty-state">There aren't any featured products at this time.</div>
+			<% end %>
 		</div>
 	</div>
 </div>
 
 
-
-
-<script type="text/javascript">
-$(window).load(function() {
-    $('#slider').nivoSlider({
-	        effect: 'fade', // Specify sets like: 'fold,fade,sliceDown'
-	        slices: 15, // For slice animations
-	        boxCols: 8, // For box animations
-	        boxRows: 4, // For box animations
-	        animSpeed: 500, // Slide transition speed
-	        pauseTime: 5000, // How long each slide will show
-	        startSlide: 0, // Set starting Slide (0 index)
-	        directionNav: true, // Next & Prev navigation
-	        controlNav: false, // 1,2,3... navigation
-	        controlNavThumbs: false, // Use thumbnails for Control Nav
-	        pauseOnHover: true, // Stop animation while hovering
-	        manualAdvance: false, // Force manual transitions
-	        prevText: '', // Prev directionNav text
-	        nextText: '', // Next directionNav text
-	        randomStart: false, // Start on a random slide
-	        beforeChange: function(){}, // Triggers before a slide transition
-	        afterChange: function(){}, // Triggers after a slide transition
-	        slideshowEnd: function(){}, // Triggers after all slides have been shown
-	        lastSlide: function(){}, // Triggers when last slide is shown
-	        afterLoad: function(){} // Triggers when slider has loaded
-	    });
-});
-</script>

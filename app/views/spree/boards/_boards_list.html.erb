@@ -1,21 +1,26 @@
+
 <% boards.in_groups_of(2, false) do |row_boards| %>
 	<div class="row">
 	<% for board in row_boards %>
 		<div class="col-md-6">
 			<div class="board-listing">
 				<div class="board-image">
-					<%= link_to board_image(board,"primary"), board%>
+					<%= link_to board_image(board,"large"), board%>
 				</div>
 				<div class="board-meta">
-					<div>
-						<% unless board.designer.user_images.blank? %>
-							<%#= link_to image_tag(board.designer.user_images.first.attachment(:mini)), designer_path(board.designer) %>
-						<% else %>
-							<%#= link_to image_tag("/assets/store/profile_default_primary.jpg", :style => "width: 48px;"), designer_path(board.designer) %>
-						<% end %>
+					<div class="row">
+						<div class="col-md-2 board-designer-avatar">
+								<% unless board.designer.user_images.blank? %>
+									<%= link_to image_tag(board.designer.user_images.first.attachment(:mini)), designer_path(board.designer) %>
+								<% else %>
+									<%= link_to image_tag("/assets/store/profile_default_primary.jpg", :style => "width: 48px;"), designer_path(board.designer) %>
+								<% end %>
+						</div>
+						<div class="col-md-10">
+							<h3><%= link_to board.name, board %></h3>
+							<div class="board-byline">by <%= board.designer.full_name%></div>				
+						</div>
 					</div>
-					<h3><%= link_to board.name, board %></h3>
-					<div class="board-byline">by <%= board.designer.full_name%></div>				
 				</div>
 			</div>
 		</div>

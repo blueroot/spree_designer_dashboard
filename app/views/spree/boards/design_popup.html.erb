@@ -1,0 +1,177 @@
+<div class="page-header clearfix">
+	<ol class="breadcrumb">
+	  <li><%= link_to "Dashboard", designer_dashboard_path%></li>
+	  <li><%= link_to "My Boards", my_boards_path%></li>
+	  <li class="active"><%= @board.name %></li>
+	</ol>
+	<h1><%= @board.name %></h1>
+</div>
+<div class="top-page-actions">
+	<a href="javascript:void(0);" id="add-products-button" class="btn btn-default">Add Products</a>
+	<a href="javascript:void(0);" id="edit-board-button" class="btn btn-default">Edit Details</a>
+</div>
+<div class="row">
+	<div class="col-md-9">
+		
+		<div class="board-content-body">
+			<div id="board-container">
+				<div id="board-canvas" data-board-id="<%= @board.id %>" style="height: 410px; width: 720px; background-color: #fff; border: 1px solid #bdc3c7; position: relative; z-index: 1; "></div>
+			</div>
+			<div id="board-colors-container" class="board-colors-container">
+				<%= render :partial => "board_swatches", :locals => {:board => @board} %>
+				
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="panel panel-info">
+		  <div class="panel-heading">
+		    <h3 class="panel-title">Status</h3>
+		  </div>
+		  <div class="panel-body">
+		    <p><label>Status:</label> <%= @board.display_status%></p>
+		
+			<% if @board.status == "new" %>
+				<a href="javascript:void(0);" id="publish-board-button" class="btn btn-primary btn-sm">Publish Board</a>
+			<% elsif @board.status == "published" %>
+				<a href="javascript:void(0);" id="unpublish-board-button" class="btn btn-primary btn-sm">Publish Board</a>
+			<% elsif @board.status == "needs_revision" %>
+				<a href="javascript:void(0);" id="unpublish-board-button" class="btn btn-primary btn-sm">Publish Board</a>
+			
+			<% elsif @board.status == "suspended" %>
+			
+			<% end %>
+			
+			
+			
+		  </div>
+		</div>
+		<div class="panel panel-default">
+		  <div class="panel-heading">
+		    <h3 class="panel-title">History & Notes</h3>
+		  </div>
+		  <div class="panel-body">
+		    <div class="board-history">
+			<% unless @board.messages.blank? %>
+				<% @board.messages.each do |message| %>
+					<%unless message.new_record?%>
+					<div class="history-item"><strong><%= message.subject %></strong>
+					<br /><%= message.created_at.strftime("%B %e, %Y at %l:%M %P")%>
+					<p><%= message.body %></p></div>
+					<% end %>
+					
+				<% end %>
+			<% end %>
+				<div class="history-item">Created on <%= @board.created_at.strftime("%B %e, %Y at %l:%M %P")%></div>
+			</div>
+			
+			
+		  </div>
+		</div>
+		
+		<%#= link_to "Save Changes", edit_board_path(@board), :class=> "button"%>
+	</div>
+</div>
+
+
+<%= render :partial => "edit_board_modal"%>	
+<%= render :partial => "submit_for_publication_modal"%>	
+
+<%= render :partial => "add_products_modal"%>	
+<%= render :partial => "add_products_locked_modal"%>	
+
+<style>
+	.board-product-selected{
+		border: 2px solid #aaa;
+		margin: -2px 0 0 -2px;
+	}
+	.light-box-product-unavailable{
+		border: 1px solid red;
+	}
+</style>
+
+<script>
+
+
+
+$(document).ready(function() {
+	$('.swatch').popover({ 
+	    html : true,
+	    content: function() {
+			//$('.button-product-info').popover('hide');
+	      return $('#'+$(this).data('colorPopoverContainer')).html();
+	    }
+	  });
+
+	<% if @board.status == "submitted_for_publication" %>
+		$( "#add-products-button" ).click(function() {
+		  $('#product-locked-modal').modal()
+		});
+	<% else %>
+		$( "#add-products-button" ).click(function() {
+		  $('#product-modal').modal()
+		});
+	<% end %>
+
+	$( "#edit-board-button" ).click(function() {
+	  $('#board-modal').modal()
+	});
+
+	$( "#publish-board-button" ).click(function() {
+	  $('#publish-board-modal').modal()
+	});
+
+});
+
+$(function () {
+    var element;
+    
+    $('#board-canvas').droppable({
+        accept: function(element) {
+		  var cn = element.className;
+		  return cn == 'board-lightbox-product' || 'board-lightbox-product-cloned'
+		},
+        drop: handleDropEvent
+    });
+	getSavedProducts($('#board-canvas').data('boardId'));
+	
+	
+	/* attach a submit handler to the form */
+	$("#product_search_form").submit(function(event) {
+
+		/* stop form from submitting normally */
+		event.preventDefault();
+
+		/* get some values from elements on the page: */
+		var $form = $( this ),
+		term = $form.find( 'input[name="product_keywords"]' ).val(),
+		wholesaler_taxon = $form.find( 'select[name="wholesaler_taxon"]' ).val(),
+		department_taxon = $form.find( 'select[name="department_taxon"]' ).val(),
+		url = $form.attr( 'action' );
+		
+		//alert(taxon);
+		/* Send the data using post */
+		var posting = $.post( url, { keywords: term, department_taxon_id: department_taxon, wholesaler_taxon_id: wholesaler_taxon, per_page: 100 } );
+
+		/* Put the results in a div */
+		posting.done(function( data ) {
+			//var content = $( data ).find( '#content' );
+			//$( "#result" ).empty().append( content );
+		});
+	});
+	
+});
+
+
+
+
+$(document).ready(function() {
+	var isResizingEvent = false;
+	
+});
+
+
+
+
+
+</script>

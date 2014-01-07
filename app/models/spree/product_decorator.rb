@@ -10,10 +10,16 @@ Spree::Product.class_eval do
   end
   
   add_search_scope :available_through_boards do
-    includes(:boards).where('spree_boards.id' => Spree::Board.active.collect{|board| board.id})
+    includes(:boards).whi ere('spree_boards.id' => Spree::Board.active.collect{|board| board.id})
   end
   
   def other_board_products
     self.boards.first().products
   end
+  
+  def self.featured
+    #where(:featured => 1)
+    where("spree_boards.featured_starts_at <= ? and spree_boards.featured_expires_at >= ?", Date.today, Date.today).includes(:boards, :board_products).references(:boards, :board_products)
+  end
+  
 end
