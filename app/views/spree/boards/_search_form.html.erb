@@ -1,4 +1,4 @@
-<div class="board-search panel">
+<div class="board-search panel panel-default">
 	<div class="panel-heading">
 		<h3 class="panel-title">Scout Rooms</h3>
 	</div>
@@ -39,7 +39,7 @@
 				<%= select_tag "price_low", options_for_select([["$10","10"], ["$50","50"], ["$100","100"], ["$200","200"], ["$500","500"], ["$1000","1000"], ["$5000","5000"]], @selected_price_low), :include_blank => true %> to <%= select_tag "price_high", options_for_select([["$50","50"], ["$100","100"], ["$200","200"], ["$500","500"], ["$1,000","1000"], ["$5,000","5000"], ["$10,000","10000"]], @selected_price_high), :include_blank => true %>
 			</div>
 		</div>
-		<p><%= submit_tag("Search Boards", :class => "btn btn-primary")%></p>
+		<p><%= submit_tag("Search Rooms", :class => "btn btn-primary")%></p>
 	</fieldset>
 	<% end %>
 	</div>

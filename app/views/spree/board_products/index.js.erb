@@ -7,11 +7,12 @@ $('.board-lightbox-product-cloned').each(function() {
 	handleSelectable($(this));
 	handleRemoveFromCanvas($(this));
 	handleProductPopover($(this));
+	handleProductHoverable($(this));
 });
 
 
 $('body').on('click', function (e) {
-    $('a.button-product-info').each(function () {
+    $('.board-lightbox-product-cloned').each(function () {
         //the 'is' for buttons that trigger popups
         //the 'has' for icons within a button that triggers a popup
         if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {

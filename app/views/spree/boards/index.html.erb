@@ -3,8 +3,22 @@
 		<%= render :partial => "search_form"%>
 	</div>
 	<div class="col-md-9">
-	
+		<% if false %>
+		<div class="prime">
+			<div class="tagline">
+				<h1>Removing the guesswork from home design.</h1>
+				<p>Browse room designs from the industry's top designers for a room you'll love.</p>
+			</div>
+			<div class="room-highlights">
+				<div class="row">
+					<div class="col-md-3">1</div>
+					<div class="col-md-3">2</div>
+					<div class="col-md-3">3</div>
+				</div>
+			</div>
+		</div>	
 		
+		<% end %>
 		<h2>Featured Rooms</h2>
 		<div class="boards-list-main">
 			<% unless @boards.blank? %>
@@ -14,10 +28,10 @@
 			<% end %>
 		</div>
 		
-		<h2>Featured Products</h2>
+		
 		<div class="boards-list-main">
 			<% unless @products.blank? %>
-				<%#= render :partial => "products_list", :locals => {:proucts => @products}%>
+				<%#= render :partial => "products_list", :locals => {:products => @products}%>
 			<% else %>
 				<div class="empty-state">There aren't any featured products at this time.</div>
 			<% end %>

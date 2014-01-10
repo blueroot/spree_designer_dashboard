@@ -50,8 +50,10 @@ function handleDragAfterDrop(el) {
         revert: 'invalid',
 		start: function(event, ui) {
 	        isDraggingMedia = true;
+					$('.board-lightbox-product-cloned').popover('hide');
 	    },
 	    stop: function(event, ui) {
+					$('.board-lightbox-product-cloned').popover('hide');
 	        isDraggingMedia = false;
 	        // blah
 	    }
@@ -67,11 +69,23 @@ function handleResizable(el){
 			el.find('img').css('width', el.width())
 			selectItem(el);
 			saveProductToBoard($('#board-canvas').data('boardId'),el.data('productId'), el.position().left, el.position().top, el.css('z-index'), el.width(), el.height());
+			$('.board-lightbox-product-cloned').popover('hide');
 		}
 	});
 }
+
+function handleProductHoverable(el){
+	$(el).hover(
+	  function() {
+	    el.find('a.button-remove-product').show();
+	  }, function() {
+	    el.find('a.button-remove-product').hide();
+	  }
+	);
+}
+
 function handleSelectable(el){		
-	el.mousedown(function() {
+	el.mouseup(function() {
 		selectItem(el);
 	});
 }
@@ -83,44 +97,60 @@ function handleRemoveFromCanvas(el){
 		var board_id = $('#board-canvas').data('boardId')
 		var url = '/boards/'+board_id+'/board_products/'+product_id
 		$.post(url, {_method:'delete'}, null, "script");
+		$('.board-lightbox-product-cloned').popover('hide');
 	});
+	
 }
 
 function handleProductPopover(el){		
 	
-	$('a.button-product-info').popover({ 
+	$('.board-lightbox-product-cloned').popover({ 
 	    html : true,
+			trigger: 'manual',
 	    content: function() {
-				$('.button-product-info').popover('hide');
+				//$('.board-lightbox-product-cloned').popover('hide');
 	      return $('#'+$(this).data('popoverContainer')).html();
 	    }
 	});
-		
-		
-		
-	//el.find('a.button-product-info').click(function() {
-	//	//$(this).popover('show')
-	//	$('.button-product-info').popover('hide');
-	//	
-	//	selector = '#'+$(this).data('popoverContainer')
-	//	//alert($(selector).html())
-	//	$(this).popover({ 
-	//	    html : true,
-	//	    content: function() {
-	//		
-	//	      return $(selector).html();
-	//	    }
-	//	  });
+	
+	//$('a.button-product-info').popover({ 
+	//    html : true,
+	//    content: function() {
+	//			$('.button-product-info').popover('hide');
+	//      return $('#'+$(this).data('popoverContainer')).html();
+	//    }
 	//});
+		
+		
+
+}
+
+function showRemoveButton(el){
+	//$('.board-lightbox-product-cloned').find('img').removeClass('board-product-selected');
+	//$('.board-lightbox-product-cloned').find('a.button-remove-product').hide();
+	//$('.board-lightbox-product-cloned').find('a.button-product-info').hide();
+	//el.find('img').addClass('board-product-selected')
+	//el.find('a.button-remove-product').show();
+	//el.find('a.button-product-info').show();
 }
 
 function selectItem(el){
-	$('.board-lightbox-product-cloned').find('img').removeClass('board-product-selected');
-	$('.board-lightbox-product-cloned').find('a.button-remove-product').hide();
-	$('.board-lightbox-product-cloned').find('a.button-product-info').hide();
-	el.find('img').addClass('board-product-selected')
-	el.find('a.button-remove-product').show();
-	el.find('a.button-product-info').show();
+
+	// hide all the other popovers except for the one chosen.
+	// there was a race condition if you just hid all of them without excluding the current one
+	$('.board-lightbox-product-cloned').each(function(i, obj) {
+			if ($(obj).data('popoverContainer') != $(el).data('popoverContainer')){
+				$(obj).popover('hide');
+			}
+	});
+	$(el).popover('show')
+	
+	//$('.board-lightbox-product-cloned').find('img').removeClass('board-product-selected');
+	//$('.board-lightbox-product-cloned').find('a.button-remove-product').hide();
+	//$('.board-lightbox-product-cloned').find('a.button-product-info').hide();
+	//el.find('img').addClass('board-product-selected')
+	//el.find('a.button-remove-product').show();
+	//el.find('a.button-product-info').show();
 }
 
 
