@@ -2,7 +2,7 @@ Spree::Core::Engine.routes.draw do
   # Add your extension routes here
   
   
-  
+  match "/boards/product_search" => "boards#product_search", :as => :board_product_search, :via =>[:get, :post]
   
   get "/boards/search" => "boards#search", :as => :board_search
   resources :boards do 
@@ -27,8 +27,9 @@ Spree::Core::Engine.routes.draw do
 
   get '/boards/build/:id' => "boards#build", :as => :build_board
   get '/boards/:id/design' => "boards#design", :as => :design_board
-  post "/boards/product_search" => "boards#product_search", :as => :board_product_search
   
+  
+  #get "/boards/product_search" => "boards#product_search", :as => :board_product_search
   
   
   
