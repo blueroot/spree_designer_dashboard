@@ -101,7 +101,8 @@ class Spree::BoardsController < Spree::StoreController
       @searcher = build_searcher(params)
     end
     
-    @products = @searcher.retrieve_products
+    @all_products = @searcher.retrieve_products
+    @products = @all_products.select { |product| !product.is_on_board? }
     #@products = Spree::Product.all()
     respond_to do |format|
       format.js   {render :layout => false}

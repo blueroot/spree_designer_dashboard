@@ -16,10 +16,12 @@
 								</div>
 							</div>
 						</div>
+						<% if false %>
 						<div style="text-align: left;">      
 						<%= truncate(product.name, :length => 50) %>
 						      <div class="price selling" itemprop="price"><%= display_price(product) %></div>
 						</div>
+						<% end %>
 					</div>
 				</div>
 			<% end %>

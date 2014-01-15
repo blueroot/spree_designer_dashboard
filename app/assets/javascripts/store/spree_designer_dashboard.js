@@ -161,6 +161,8 @@ function handleDropEvent(event, ui) {
 	if (ui.helper.hasClass('board-lightbox-product')){
 		cloned = $(ui.helper).clone();
 		$(this).append(cloned.removeClass('board-lightbox-product').addClass('board-lightbox-product-cloned'));
+		selector = '#board-product-' + cloned.data('productId')
+		$(selector).hide();
 	}
 	else{
 		cloned = $(ui.helper)
@@ -172,8 +174,9 @@ function handleDropEvent(event, ui) {
 	handleDragAfterDrop(cloned);
 	handleResizable(cloned);
 	handleSelectable(cloned);
-	handleRemoveFromCanvas(cloned);
-	saveProductToBoard($('#board-canvas').data('boardId'),cloned.data('productId'), cloned.position().left, cloned.position().top, cloned.css('z-index'), cloned.width(), cloned.height());		
+	handleRemoveFromCanvas(cloned);	
+	saveProductToBoard($('#board-canvas').data('boardId'),cloned.data('productId'), cloned.position().left, cloned.position().top, cloned.css('z-index'), cloned.width(), cloned.height());
+
 }
 
 function getImageWidth(url){
