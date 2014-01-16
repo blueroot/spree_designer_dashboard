@@ -3,17 +3,32 @@
 		<%= render :partial => "search_form"%>
 	</div>
 	<div class="col-md-9">
-		<% if false %>
+		<% if true %>
 		<div class="prime">
 			<div class="tagline">
-				<h1>Removing the guesswork from home design.</h1>
-				<p>Browse room designs from the industry's top designers for a room you'll love.</p>
+				<h1 class="home-header">Removing the guesswork from home design.</h1>
+				<p class="home-subheader">Browse room designs from the industry's top designers for a room you'll love.</p>
 			</div>
 			<div class="room-highlights">
 				<div class="row">
-					<div class="col-md-3">1</div>
-					<div class="col-md-3">2</div>
-					<div class="col-md-3">3</div>
+					<div class="col-md-4">
+						<div class="home-product">
+							<%= image_tag("/images/home/table.png")%>
+							<p><%= link_to "Browse Dining Rooms", "http://store.scoutandnimble.com/boards/search?utf8=%E2%9C%93&room_id=278&style_id=&color_family=&designer_id=&price_low=&price_high=&commit=Search+Rooms", :class => "btn btn-default"%></p>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="home-product">
+						<%= image_tag("/images/home/sofa.png")%>
+						<p><%= link_to "Browse Living Rooms", "http://store.scoutandnimble.com/boards/search?utf8=%E2%9C%93&room_id=277&style_id=&color_family=&designer_id=&price_low=&price_high=&commit=Search+Rooms", :class => "btn btn-default"%></p>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="home-product">
+						<%= image_tag("/images/home/bed.png")%>
+						<p><%= link_to "Browse Bedrooms", "http://store.scoutandnimble.com/boards/search?utf8=%E2%9C%93&room_id=279&style_id=&color_family=&designer_id=&price_low=&price_high=&commit=Search+Rooms", :class => "btn btn-default"%></p>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>	
