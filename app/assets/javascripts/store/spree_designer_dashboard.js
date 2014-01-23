@@ -134,23 +134,25 @@ function showRemoveButton(el){
 	//el.find('a.button-product-info').show();
 }
 
+
+
 function selectItem(el){
 
 	// hide all the other popovers except for the one chosen.
 	// there was a race condition if you just hid all of them without excluding the current one
-	$('.board-lightbox-product-cloned').each(function(i, obj) {
-			if ($(obj).data('popoverContainer') != $(el).data('popoverContainer')){
-				$(obj).popover('hide');
-			}
-	});
-	$(el).popover('show')
+	  $('.board-lightbox-product-cloned').each(function(i, obj) {
+	  		if ($(obj).data('popoverContainer') != $(el).data('popoverContainer')){
+	  			$(obj).popover('hide');
+	  		}
+	  });
+	  $(el).popover('show')
 	
-	//$('.board-lightbox-product-cloned').find('img').removeClass('board-product-selected');
-	//$('.board-lightbox-product-cloned').find('a.button-remove-product').hide();
-	//$('.board-lightbox-product-cloned').find('a.button-product-info').hide();
-	//el.find('img').addClass('board-product-selected')
-	//el.find('a.button-remove-product').show();
-	//el.find('a.button-product-info').show();
+//	$('.board-lightbox-product-cloned').find('img').removeClass('board-product-selected');
+//	//$('.board-lightbox-product-cloned').find('a.button-remove-product').hide();
+//	//$('.board-lightbox-product-cloned').find('a.button-product-info').hide();
+//	el.find('img').addClass('board-product-selected')
+//	//el.find('a.button-remove-product').show();
+//	//el.find('a.button-product-info').show();
 }
 
 

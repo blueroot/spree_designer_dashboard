@@ -4,7 +4,7 @@
 //$('#board_search_panel').hide();
 $('#select-products-box').html('<%= escape_javascript(raw render(:partial => "product_results", :locals => {:products => @products})) %>')
 //$('.select-products-box').addClass('animated fadeInUp')
-$('#select-products-pagination').html('<%= escape_javascript(raw render(:partial => "product_results_pagination", :locals => {:products => @products})) %>')
+$('#select-products-pagination').html('<%= escape_javascript(raw render(:partial => "product_results_pagination", :locals => {:products => @all_products})) %>')
 //$('#select-products-box').html('hh')
 
 

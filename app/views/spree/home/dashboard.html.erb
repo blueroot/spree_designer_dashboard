@@ -4,7 +4,7 @@
 		<h4>Designer Dashboard</h4>
 		<ul class="nav nav-stacked">
 			<li class="active"><a href="/dashboard">Dashboard Home</a></li>
-			<li><a href="/my_boards">My Boards</a></li>
+			<li><a href="/my_boards">My Rooms</a></li>
 			<li><a href="/my_profile">My Profile</a></li>
 		</ul>
 
@@ -14,10 +14,10 @@
 		<div class="page-header clearfix">
 			<div class="row">
 				<div class="col-md-9">
-					<h1>Your Boards</h1>
+					<h1>Your Rooms</h1>
 				</div>
 				<div class="col-md-3 header-actions">
-					<%= link_to "Add a Board", new_board_path, :class => "btn btn-primary" %>
+					<%= link_to "Add a Room", new_board_path, :class => "btn btn-primary" %>
 				</div>
 			</div>
 		</div>
@@ -28,7 +28,7 @@
 			<thead>
 				<tr>
 					<th>Preview</th>
-					<th>Board Name</th>
+					<th>Room Name</th>
 					<th class="align-center"># Products</th>
 					<th class="align-center"># Views</th>
 					<th class="status">Status</th>
@@ -52,7 +52,7 @@
 			</tbody>
 			</table>
 		<% else %>
-		<div class="empty-state">You have not created any boards yet.</div>
+		<div class="empty-state">You have not created any rooms yet.</div>
 		<% end %>
 	</div>
 </div>

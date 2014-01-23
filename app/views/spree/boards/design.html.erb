@@ -2,12 +2,25 @@
 	<div class="manage-container">
 		<div class="board-design-section board-design-section-canvas">
 			<div class="board-design-section-title">
-				<span class="board-design-step">1</span> Design your board
+				<span class="board-design-step">1</span> Design Your Room
 			</div>
 			<div class="row">
 				<div class="col-md-7">
 					<div class="board-content-body">
 						<div id="board-container">
+							<% if false %>
+							<div id="board-toolbar" class="board-toolbar">
+
+								<div class="btn-group btn-group-sm">
+									<button type="button" class="btn btn-default" id="bp-rotate-left"><span class="fa fa-repeat" style="font-size: 12px;"></span> Rotate</button>
+									<button type="button" class="btn btn-default" id="bp-forward"><span class="fa fa-angle-up" style="font-size: 12px;"></span> Forward</button>
+									<button type="button" class="btn btn-default" id="bp-backward"><span class="fa fa-angle-down" style="font-size: 12px;"></span> Backward</button>
+									<button type="button" class="btn btn-default" id="bp-front"><span class="fa fa-angle-double-up" style="font-size: 12px;"></span> Front</button>
+									<button type="button" class="btn btn-default" id="bp-back"><span class="fa fa-angle-double-down" style="font-size: 12px;"></span> Back</button>
+								</div>
+							</div>
+							<% end %>
+							
 							<div id="board-canvas" data-board-id="<%= @board.id %>" style="height: 410px; width: 630px; background-color: #fff; border: 1px solid #bdc3c7; position: relative; z-index: 1; "></div>
 						</div>
 			
@@ -103,6 +116,9 @@
 
 $(document).ready(function() {
 	
+
+	
+
 
 	$("#submit_board_button").click(function() {
 		
