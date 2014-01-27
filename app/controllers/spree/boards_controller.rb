@@ -52,7 +52,7 @@ class Spree::BoardsController < Spree::StoreController
     @boards = @boards_scope
   end
   
-  def my_boards
+  def my_rooms
     @boards = spree_current_user.boards
   end
   

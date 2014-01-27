@@ -51,7 +51,7 @@ $(document).ready(function() {
 	$( ".color-match-delete-link" ).click(function(event) {
 		//stop the color popup modal from firing
 		event.stopPropagation();
-		url = '<%=board_color_matches_path(@board.id)%>'+'/'+$(this).data('colorMatchId')
+		url = '<%=room_color_matches_path(@board.id)%>'+'/'+$(this).data('colorMatchId')
 		//alert($(this).data('colorMatchId'))
 
 		/* Send the data using post */
@@ -77,7 +77,7 @@ $(document).ready(function() {
 		
 		
 		if (active_swatch_element.data('colorMatchId') > 0){
-			url = '<%=board_color_matches_path(@board.id)%>'
+			url = '<%=room_color_matches_path(@board.id)%>'
 
 			//alert(taxon);
 			/* Send the data using post */
@@ -91,7 +91,7 @@ $(document).ready(function() {
 		}
 		
 		else{
-			url = '<%=board_color_matches_path(@board.id)%>'
+			url = '<%=room_color_matches_path(@board.id)%>'
 
 			//alert(taxon);
 			/* Send the data using post */

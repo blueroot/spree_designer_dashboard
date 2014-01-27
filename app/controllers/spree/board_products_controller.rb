@@ -4,7 +4,7 @@ class Spree::BoardProductsController < Spree::StoreController
   include Magick 
   
   def index
-    if params[:board_id] and @board = Spree::Board.find(params[:board_id])
+    if params[:room_id] and @board = Spree::Board.find(params[:room_id])
       
       @board_products = @board.board_products(:include => :master_images)
       

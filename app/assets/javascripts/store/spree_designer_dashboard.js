@@ -17,7 +17,7 @@ function showProductAddedState(){
 }
 
 function getSavedProducts(board_id){
-	var url = '/boards/'+board_id+'/board_products'
+	var url = '/rooms/'+board_id+'/board_products'
 	var request = $.get( url );
 
 	  /* Put the results in a div */
@@ -95,7 +95,7 @@ function handleRemoveFromCanvas(el){
 		el.hide();
 		var product_id = el.data('productId')
 		var board_id = $('#board-canvas').data('boardId')
-		var url = '/boards/'+board_id+'/board_products/'+product_id
+		var url = '/rooms/'+board_id+'/board_products/'+product_id
 		$.post(url, {_method:'delete'}, null, "script");
 		$('.board-lightbox-product-cloned').popover('hide');
 	});

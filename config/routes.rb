@@ -2,7 +2,7 @@ Spree::Core::Engine.routes.draw do
   # Add your extension routes here
   
   
-  match "/boards/product_search" => "boards#product_search", :as => :board_product_search, :via =>[:get, :post]
+  match "/rooms/product_search" => "boards#product_search", :as => :board_product_search, :via =>[:get, :post]
   
   get "/rooms/search" => "boards#search", :as => :board_search
   resources :rooms, controller: 'boards'  do 
@@ -20,7 +20,7 @@ Spree::Core::Engine.routes.draw do
   post "/orders/add_to_cart" => "orders#add_to_cart", :as => :orders_add_to_cart
   get "/my_profile" => "home#profile", :as => :my_profile
   patch "/designers" => "designers#update", :as => :update_designer
-  get "/my_boards" => "boards#my_boards", :as => :my_boards
+  get "/my_rooms" => "boards#my_rooms", :as => :my_rooms
 
   get "/designers" => "designers#index", :as => :designers
   get "/designer/:id" => "designers#show", :as => :designer

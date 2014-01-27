@@ -2,7 +2,7 @@
 <div id="publish-board-modal" class="modal">
   <div class="modal-dialog">
     <div class="modal-content">
-	<%= form_for [@board] do |f| %>
+	<%= form_for @board, {:url => room_path(@board)} do |f| %>
 	<%= f.hidden_field :status, :value => "submitted_for_publication"%>
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

@@ -5,7 +5,7 @@
 		<div class="col-md-6">
 			<div class="board-listing">
 				<div class="board-image">
-					<%= link_to board_image(board,"large"), board%>
+					<%= link_to board_image(board,"large"), room_path(board)%>
 				</div>
 				<div class="board-meta">
 					<div class="row">
@@ -17,7 +17,7 @@
 								<% end %>
 						</div>
 						<div class="col-md-10">
-							<h3><%= link_to board.name, board %></h3>
+							<h3><%= link_to board.name, room_path(board) %></h3>
 							<div class="board-byline">by <%= board.designer.full_name%></div>				
 						</div>
 					</div>

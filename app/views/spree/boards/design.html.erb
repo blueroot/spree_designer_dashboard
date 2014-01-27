@@ -31,7 +31,7 @@
 					<div id="design" class="tab-pane active board-manage-panel">
 						<div id="board_search_panel" class="">
 							<div class="board-products-search-fields">
-								<%= form_tag("/boards/product_search", method: "get", :id => "product_search_form") do %>
+								<%= form_tag("/rooms/product_search", method: "get", :id => "product_search_form") do %>
 									<div class="row">
 										<div class="col-md-3">
 											<%= select_tag "wholesaler_taxon", options_from_collection_for_select(@wholesaler_taxons, "id", "name"), :include_blank => false, :class => "form-control input-sm", :prompt => "Wholesaler" %>
@@ -84,9 +84,9 @@
 			<div class="board-design-section-title">
 				<span class="board-design-step">
 					3
-				</span> Board Details
+				</span> Room Details
 			</div>
-			<%= form_for(@board, {:html => {:id => "edit_board_form", :"parsley-validate" => ""}}) do |f| %>
+			<%= form_for(@board, {:url => room_path(@board),:html => {:id => "edit_board_form", :"parsley-validate" => ""}}) do |f| %>
 			<%= render :partial => 'form', :locals => { :f => f } %>
 			<% end %>
 		</div>

@@ -29,10 +29,10 @@
 			<div class="col-md-4">
 				<div class="board-listing">
 					<div class="board-image">
-					<%= link_to board_image(board, :primary), board%>
+					<%= link_to board_image(board, :primary), room_path(board)%>
 					</div>
 					<div class="board-meta">
-						<h3><%= link_to board.name, board %></h3>
+						<h3><%= link_to board.name, room_path(board) %></h3>
 						<div class=""><%= board.room_and_style%></div>
 					</div>
 				</div>

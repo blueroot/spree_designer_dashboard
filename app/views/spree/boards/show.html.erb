@@ -88,7 +88,7 @@
 				<span class='st_googleplus' displayText=''></span>
 				<span class='st_email' displayText=''></span>
 			</div>
-			<h4>Board By</h4>
+			<h4>Room By</h4>
 			<div class="board-designer-header">
 				<div class="board-designer-logo">
 					<%= link_to logo_image(@board.designer.logo_image, :mini), designer_path(@board.designer)%>
@@ -106,7 +106,7 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="board-section board-products-section">
-			<h3>Buy Products on this Board</h3>
+			<h3>Buy Products from this Room</h3>
 			<% if false and @board.board_products.any? %>
 				<div id="board-products">
 					<% for product in @board.products %>
@@ -151,7 +151,7 @@
 
 <%= render :partial => "spree/shared/add_to_cart_modal" %>
 
-<h3>Related Boards</h3>
+<h3>Related Rooms</h3>
 <% if !@board.related_boards.blank? %>
 	<%= render :partial => "boards_list", :locals => {:boards => @board.related_boards}%>
 <% else %>
