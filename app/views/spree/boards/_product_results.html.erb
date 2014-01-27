@@ -1,4 +1,5 @@
 <% unless products.blank? %>
+	<div class="select-products-box-inner">
 		<% products.in_groups_of(3, false) do |row_products| %>
 			<div class="row">
 			<% for product in row_products %>
@@ -29,7 +30,7 @@
 		<% end%>
 		
 	
-
+	</div>
 <% else %>
 	<p class="empty-search-state">We couldn't find any products for that search.</p>
 <% end %>

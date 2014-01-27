@@ -70,7 +70,7 @@ class Spree::BoardsController < Spree::StoreController
   end
   
   def new
-    @board = Spree::Board.new(:name => "Untitled Board")
+    @board = Spree::Board.new(:name => "Untitled Room")
     @board.designer = spree_current_user
     @board.save!
     redirect_to design_board_path(@board)
@@ -146,7 +146,7 @@ class Spree::BoardsController < Spree::StoreController
   
   private
     def prep_search_collections
-      @room_taxons = Spree::Taxonomy.where(:name => 'Rooms').first().root.children
+      @room_taxons = Spree::Taxonomy.where(:name => 'Rooms').first().root.children.select{|child| Spree::Board.available_room_taxons.include?(child.name) }
       @style_taxons = Spree::Taxonomy.where(:name => 'Styles').first().root.children
       @colors = Spree::Color.order(:position)
       @designers = Spree::User.is_active_designer

@@ -4,17 +4,17 @@
 	</div>
 	<div class="col-md-9">
 		<div class="page-header">
-			<h1>Search Boards</h1>
+			<h1>Search Rooms</h1>
 		</div>
 		<div class="boards-list-main">
 			<% unless @boards.blank? %>
 				<div class="search-summary">
-					We found <%= pluralize(@boards.size, "board") %> that matched your search.  
+					We found <%= pluralize(@boards.size, "room") %> that matched your search.  
 				</div>
 				<%= render :partial => "boards_list", :locals => {:boards => @boards}%>
 			<% else %>
 				<div class="empty-results">
-					We couldn't find any boards for that search.
+					We couldn't find any rooms for that search.
 				</div>
 			<% end %>
 		</div>

@@ -12,31 +12,31 @@
 		<div class="control-group">
 		    <label class="control-label" for="inputEmail">Room Type</label>
 		    <div class="controls">
-				<%= select_tag :room_id, options_from_collection_for_select(@room_taxons, "id", "name", @selected_room), :include_blank => true %>
+				<%= select_tag :room_id, options_from_collection_for_select(@room_taxons, "id", "name", @selected_room), :prompt => "All Rooms" %>
 			</div>
 		</div>
 		<div class="control-group">
 		    <label class="control-label" for="inputEmail">Style</label>
 		    <div class="controls">
-				<%= select_tag :style_id, options_from_collection_for_select(@style_taxons, "id", "name", @selected_style), :include_blank => true %>
+				<%= select_tag :style_id, options_from_collection_for_select(@style_taxons, "id", "name", @selected_style), :prompt => "All Styles" %>
 			</div>
 		</div>
 		<div class="control-group">
 		    <label class="control-label" for="inputEmail">Color</label>
 		    <div class="controls">
-				<%= select_tag "color_family", options_for_select(Spree::Board.color_categories, @selected_color_family), :include_blank => true %>
+				<%= select_tag "color_family", options_for_select(Spree::Board.color_categories, @selected_color_family), :prompt => "All Colors" %>
 			</div>
 		</div>
 		<div class="control-group">
 		    <label class="control-label" for="inputEmail">Designer</label>
 		    <div class="controls">
-				<%= select_tag "designer_id", options_from_collection_for_select(@designers, "id", "full_name", @selected_designer), :include_blank => true %>
+				<%= select_tag "designer_id", options_from_collection_for_select(@designers, "id", "full_name", @selected_designer), :prompt => "All Designers" %>
 			</div>
 		</div>
 		<div class="control-group">
 		    <label class="control-label" for="inputEmail">Price</label>
 		    <div class="controls price-range">
-				<%= select_tag "price_low", options_for_select([["$10","10"], ["$50","50"], ["$100","100"], ["$200","200"], ["$500","500"], ["$1000","1000"], ["$5000","5000"]], @selected_price_low), :include_blank => true %> to <%= select_tag "price_high", options_for_select([["$50","50"], ["$100","100"], ["$200","200"], ["$500","500"], ["$1,000","1000"], ["$5,000","5000"], ["$10,000","10000"]], @selected_price_high), :include_blank => true %>
+				<%= select_tag "price_low", options_for_select([["$10","10"], ["$50","50"], ["$100","100"], ["$200","200"], ["$500","500"], ["$1000","1000"], ["$5000","5000"]], @selected_price_low), :prompt => "$0" %> to <%= select_tag "price_high", options_for_select([["$50","50"], ["$100","100"], ["$200","200"], ["$500","500"], ["$1,000","1000"], ["$5,000","5000"], ["$10,000","10000"]], @selected_price_high), :prompt => "Any" %>
 			</div>
 		</div>
 		<p><%= submit_tag("Search Rooms", :class => "btn btn-primary")%></p>

@@ -60,6 +60,10 @@ class Spree::Board < ActiveRecord::Base
       
   end
   
+  def self.available_room_taxons
+    ["Living Room", "Dining Room", "Bedroom"]
+  end
+  
   def self.by_style(style_id)
     where(:style_id => style_id)
   end
