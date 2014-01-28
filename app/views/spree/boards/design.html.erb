@@ -8,7 +8,7 @@
 				<div class="col-md-7">
 					<div class="board-content-body">
 						<div id="board-container">
-							<% if false %>
+							<% if true %>
 							<div id="board-toolbar" class="board-toolbar">
 
 								<div class="btn-group btn-group-sm">
@@ -21,7 +21,7 @@
 							</div>
 							<% end %>
 							
-							<div id="board-canvas" data-board-id="<%= @board.id %>" style="height: 410px; width: 630px; background-color: #fff; border: 1px solid #bdc3c7; position: relative; z-index: 1; "></div>
+							<div id="board-canvas" data-board-id="<%= @board.id %>" style="height: 360px; width: 630px; background-color: #fff; border: 1px solid #bdc3c7; position: relative; z-index: 1; overflow: hidden;"></div>
 						</div>
 			
 					</div>		

@@ -1,13 +1,8 @@
-function saveProductToBoard(board_id, product_id, x, y, z, w, h){
+function saveProductToBoard(board_id, product_id, x, y, z, w, h, r){
 	var url = '/board_products'
-	var posting = $.post( url, {board_product: {product_id: product_id, board_id: board_id, top_left_x: x, top_left_y: y, z_index: z, width: w, height: h}} );
-
-	  /* Put the results in a div */
+	var posting = $.post( url, {board_product: {product_id: product_id, board_id: board_id, top_left_x: x, top_left_y: y, z_index: z, width: w, height: h, rotation_offset: r}} );
 	  posting.done(function( data ) {
-		//alert('saved!')
-		getSavedProducts(board_id);
-	    //var content = $( data ).find( '#content' );
-	    //$( "#result" ).empty().append( content );
+			//getSavedProducts(board_id);
 	  });
 }
 
@@ -55,7 +50,6 @@ function handleDragAfterDrop(el) {
 	    stop: function(event, ui) {
 					$('.board-lightbox-product-cloned').popover('hide');
 	        isDraggingMedia = false;
-	        // blah
 	    }
         //snap: '#droppable'
     });
@@ -68,7 +62,7 @@ function handleResizable(el){
 		stop: function( event, ui ) {
 			el.find('img').css('width', el.width())
 			selectItem(el);
-			saveProductToBoard($('#board-canvas').data('boardId'),el.data('productId'), el.position().left, el.position().top, el.css('z-index'), el.width(), el.height());
+			saveProductToBoard($('#board-canvas').data('boardId'),el.data('productId'), el.position().left, el.position().top, el.css('z-index'), el.width(), el.height(),el.data('rotationOffset'));
 			$('.board-lightbox-product-cloned').popover('hide');
 		}
 	});
@@ -89,6 +83,21 @@ function handleSelectable(el){
 		selectItem(el);
 	});
 }
+
+function handleRotatable(el){		
+	$("#bp-rotate-left").click(function() {
+		el = $('.board-product-selected').first();
+		var offset_val = el.data('rotationOffset');
+		var new_offset_val = el.data('rotationOffset') + 90;
+		el.rotate({ animateTo:new_offset_val,callback: function(){   
+			alert(1);
+			saveProductToBoard($('#board-canvas').data('boardId'),el.data('productId'), el.position().left, el.position().top, el.css('z-index'), el.width(), el.height(), el.data('rotationOffset'));
+		}});
+		el.data('rotationOffset',new_offset_val);
+	
+	});
+}
+
 
 function handleRemoveFromCanvas(el){		
 	el.find('a.button-remove-product').click(function() {
@@ -140,19 +149,19 @@ function selectItem(el){
 
 	// hide all the other popovers except for the one chosen.
 	// there was a race condition if you just hid all of them without excluding the current one
-	  $('.board-lightbox-product-cloned').each(function(i, obj) {
-	  		if ($(obj).data('popoverContainer') != $(el).data('popoverContainer')){
-	  			$(obj).popover('hide');
-	  		}
-	  });
-	  $(el).popover('show')
+	  //$('.board-lightbox-product-cloned').each(function(i, obj) {
+	  //		if ($(obj).data('popoverContainer') != $(el).data('popoverContainer')){
+	  //			$(obj).popover('hide');
+	  //		}
+	  //});
+	  //$(el).popover('show')
 	
-//	$('.board-lightbox-product-cloned').find('img').removeClass('board-product-selected');
-//	//$('.board-lightbox-product-cloned').find('a.button-remove-product').hide();
-//	//$('.board-lightbox-product-cloned').find('a.button-product-info').hide();
-//	el.find('img').addClass('board-product-selected')
-//	//el.find('a.button-remove-product').show();
-//	//el.find('a.button-product-info').show();
+	$('.board-lightbox-product-cloned').find('img').removeClass('board-product-selected');
+	//$('.board-lightbox-product-cloned').find('a.button-remove-product').hide();
+	//$('.board-lightbox-product-cloned').find('a.button-product-info').hide();
+	el.find('img').addClass('board-product-selected')
+	//el.find('a.button-remove-product').show();
+	//el.find('a.button-product-info').show();
 }
 
 
@@ -177,7 +186,7 @@ function handleDropEvent(event, ui) {
 	handleResizable(cloned);
 	handleSelectable(cloned);
 	handleRemoveFromCanvas(cloned);	
-	saveProductToBoard($('#board-canvas').data('boardId'),cloned.data('productId'), cloned.position().left, cloned.position().top, cloned.css('z-index'), cloned.width(), cloned.height());
+	saveProductToBoard($('#board-canvas').data('boardId'),cloned.data('productId'), cloned.position().left, cloned.position().top, cloned.css('z-index'), cloned.width(), cloned.height(), cloned.data('rotationOffset'));
 
 }
 
@@ -230,7 +239,7 @@ function handleCloneAndAddEvent(item) {
 	//handleRemoveFromCanvas(cloned);
 	//handleProductPopover(cloned);
 	//
-	saveProductToBoard($('#board-canvas').data('boardId'),cloned.data('productId'), cloned.position().left, cloned.position().top, cloned.css('z-index'), cloned.width(), cloned.height());		
+	saveProductToBoard($('#board-canvas').data('boardId'),cloned.data('productId'), cloned.position().left, cloned.position().top, cloned.css('z-index'), cloned.width(), cloned.height(), cloned.data('rotationOffset'));		
 	
 }
 

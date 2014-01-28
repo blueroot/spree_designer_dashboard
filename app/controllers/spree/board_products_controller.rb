@@ -39,31 +39,8 @@ class Spree::BoardProductsController < Spree::StoreController
     end
     
     if @board_product.save
-      
-      white_canvas = Image.new(800,450){ self.background_color = "white" }
-      @board_product.board.board_products.reload
-      @board_product.board.board_products.each do |bp|
-        
-        
-        if bp.product.images.first
-      	  product_image = ImageList.new(bp.product.images.first.attachment.url(:product))
-      	else
-      	  product_image = ImageList.new(bp.product.variants.first.images.first.attachment.url(:product))
-      	end  
-      	product_image.scale!(bp.width, bp.height)
-      	white_canvas.composite!(product_image, NorthWestGravity, bp.top_left_x, bp.top_left_y, Magick::OverCompositeOp)
-      end
-      white_canvas.format = 'jpeg'
-      #white_canvas.write("#{Rails.root}/tmp/boards/#{@board_product.board.id}.jpg")
-      
-      #picture = imageList.flatten_images
-      file = Tempfile.new("board_#{@board_product.board.id}.jpg")
-      white_canvas.write(file.path)
-      @board_product.board.build_board_image if @board_product.board.board_image.blank?
-      @board_product.board.board_image.attachment = file      
-      @board_product.board.save
+      @board_product.board.queue_image_generation
       respond_to do |format|
-      
         format.js   { render :action => "show" }
         #format.html { redirect_to([:admin, @booking], :notice => 'Booking was successfully created.') }
         #format.xml  { render :xml => @booking, :status => :created, :location => @booking }

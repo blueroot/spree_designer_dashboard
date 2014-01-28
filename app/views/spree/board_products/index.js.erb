@@ -5,19 +5,12 @@ $('.board-lightbox-product-cloned').each(function() {
 	handleDragAfterDrop($(this));
 	handleResizable($(this));
 	handleSelectable($(this));
+	handleRotatable($(this));
 	handleRemoveFromCanvas($(this));
 	handleProductPopover($(this));
 	handleProductHoverable($(this));
 });
 
-$("#bp-rotate-left").click(function() {
-	el = $('.board-product-selected').first();
-	var offset_val = el.data('rotationOffset');
-	var new_offset_val = el.data('rotationOffset') + 90;
-	el.rotate({ animateTo:new_offset_val,callback: function(){   alert(1)  }});
-	el.data('rotationOffset',new_offset_val);
-	
-});
 
 
 $('body').on('click', function (e) {

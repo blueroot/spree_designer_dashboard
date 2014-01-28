@@ -60,6 +60,10 @@ class Spree::Board < ActiveRecord::Base
       
   end
   
+  def is_dirty?
+    self.is_dirty
+  end
+  
   def self.available_room_taxons
     ["Living Room", "Dining Room", "Bedroom"]
   end
@@ -131,16 +135,37 @@ class Spree::Board < ActiveRecord::Base
     
   end
   
+  def queue_image_generation
+    
+    # the board is marked as dirty whenever it is added to the delayed job queue.  That way we don't have to make countless updates but instead can just queue them all up
+    # so skip this if it is already dirty...that means it has already been added to the queue
+    unless self.is_dirty?
+      self.update_attribute("is_dirty",1)
+      self.delay(run_at: 10.seconds.from_now).generate_image
+    end
+  end
   
-  #def render_board
-  #  white_canvas = Image.new(720,400){ self.background_color = "white" }
-  #  self.board_products.reload
-  #  self.board_products.each do |bp|
-  #  	product_image = ImageList.new(bp.product.images.first.attachment.url(:product))
-  #  	product_image.scale!(bp.width, bp.height)
-  #  	white_canvas.composite!(product_image, NorthWestGravity, bp.top_left_x, bp.top_left_y, Magick::OverCompositeOp)
-  #  end
-  #  white_canvas.format = 'jpeg'
-  #  white_canvas.write("#{Rails.root}/boards/#{b.id}.jpg")
-  #end
+  def generate_image
+    white_canvas = Magick::Image.new(630,360){ self.background_color = "blue" }
+    self.board_products.reload
+    self.board_products.each do |bp|
+      if bp.product.images.first
+    	  product_image = Magick::ImageList.new(bp.product.images.first.attachment.url(:product))
+    	else
+    	  product_image = Magick::ImageList.new(bp.product.variants.first.images.first.attachment.url(:product))
+    	end  
+    	product_image.scale!(bp.width, bp.height)
+    	white_canvas.composite!(product_image, Magick::NorthWestGravity, bp.top_left_x, bp.top_left_y, Magick::OverCompositeOp)
+    end
+    white_canvas.format = 'jpeg'
+    file = Tempfile.new("room_#{self.id}.jpg")
+    white_canvas.write(file.path)
+    self.build_board_image if self.board_image.blank?
+    self.board_image.attachment = file      
+    
+    # set it to be clean again 
+    self.is_dirty = 0
+    self.save
+  end
+
 end
