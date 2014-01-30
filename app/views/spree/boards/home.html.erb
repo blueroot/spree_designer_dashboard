@@ -1,0 +1,105 @@
+<div class="row">
+	<div class="col-md-12">
+		<div class="container">					
+		<% if true %>
+		<div class="prime">
+			<div class="tagline">
+				<h1 class="home-header">Removing the guesswork from home design.</h1>
+				<p class="home-subheader">Browse room designs from the industry's top designers for a room you'll love.</p>
+			</div>	
+			<% if true %>
+			
+			
+			<div class="room-highlights">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="home-product">
+							<div style="height: 200px; background-color: #eee"></div>
+							<h4>Passionate Designers</h4>
+							<p></p>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="home-product">
+						<div style="height: 200px; background-color: #eee"></div>
+						<h4>Savvy Customers</h4>
+						<p></p>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="home-product">
+						<div style="height: 200px; background-color: #eee"></div>
+						<h4>Shop Beautiful Rooms</h4>
+						<p></p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<% end %>
+		</div>	
+		
+		<% end %>
+		</div>
+		<div class="container">
+			<h2>Featured Living Rooms</h2>
+			<div class="boards-list-main">
+				<% unless @boards.blank? %>
+					<%= render :partial => "home_boards_list", :locals => {:boards => @boards}%>
+				<% else %>
+					<div class="empty-state">There aren't any featured living rooms at this time.</div>
+				<% end %>
+			</div>
+		</div>
+		<div class="container">
+		
+			<h2>Featured Dining Rooms</h2>
+			<div class="boards-list-main">
+				<% unless @boards.blank? %>
+					<%= render :partial => "home_boards_list", :locals => {:boards => @boards}%>
+				<% else %>
+					<div class="empty-state">There aren't any featured dining rooms at this time.</div>
+				<% end %>
+			</div>
+		</div>
+		<div class="container">
+		
+		
+		
+			<div class="boards-list-main">
+				<% unless @products.blank? %>
+					<%#= render :partial => "products_list", :locals => {:products => @products}%>
+				<% else %>
+					<div class="empty-state">There aren't any featured products at this time.</div>
+				<% end %>
+			</div>
+		</div>
+		
+		
+		
+		
+		
+	</div>
+</div>
+
+
+<div style="padding: 60px; background-color: #eee">
+	<div class="container">
+		<h2 style="margin: 0 0 20px 0; padding: 0">Meet some of our designers</h2>
+		<div class="row">
+	
+			<div class="col-md-3">
+				<%= image_tag("/images/home/model-002.jpg", :style => "width: 100%")%>
+			</div>	
+			<div class="col-md-3">
+				<%= image_tag("/images/home/model-003.jpg", :style => "width: 100%")%>
+			</div>	
+			<div class="col-md-3">
+				<%= image_tag("/images/home/model-004.jpg", :style => "width: 100%")%>
+			</div>	
+			<div class="col-md-3">
+				<%= image_tag("/images/home/model-005.jpg", :style => "width: 100%")%>
+			</div>	
+	
+		</div>
+	</div>
+</div>

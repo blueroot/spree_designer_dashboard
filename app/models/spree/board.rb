@@ -65,7 +65,7 @@ class Spree::Board < ActiveRecord::Base
   end
   
   def self.available_room_taxons
-    ["Living Room", "Dining Room", "Bedroom"]
+    ["Living Room", "Dining Room", "Bedroom", "Outdoor Living"]
   end
   
   def self.by_style(style_id)
@@ -142,11 +142,12 @@ class Spree::Board < ActiveRecord::Base
     unless self.is_dirty?
       self.update_attribute("is_dirty",1)
       self.delay(run_at: 10.seconds.from_now).generate_image
+      #self.generate_image
     end
   end
   
   def generate_image
-    white_canvas = Magick::Image.new(630,360){ self.background_color = "blue" }
+    white_canvas = Magick::Image.new(630,360){ self.background_color = "white" }
     self.board_products.reload
     self.board_products.each do |bp|
       if bp.product.images.first

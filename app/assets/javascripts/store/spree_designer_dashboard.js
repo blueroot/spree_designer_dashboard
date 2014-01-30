@@ -84,16 +84,60 @@ function handleSelectable(el){
 	});
 }
 
-function handleRotatable(el){		
+
+
+function handleRotatable(){		
 	$("#bp-rotate-left").click(function() {
 		el = $('.board-product-selected').first();
-		var offset_val = el.data('rotationOffset');
-		var new_offset_val = el.data('rotationOffset') + 90;
-		el.rotate({ animateTo:new_offset_val,callback: function(){   
-			alert(1);
-			saveProductToBoard($('#board-canvas').data('boardId'),el.data('productId'), el.position().left, el.position().top, el.css('z-index'), el.width(), el.height(), el.data('rotationOffset'));
-		}});
-		el.data('rotationOffset',new_offset_val);
+		var offset_val = el.parent().data('rotationOffset');
+		var new_offset_val = (el.parent().data('rotationOffset') + 90);
+		var saved_offset_val = new_offset_val % 360;
+		var rotate_command = 'rotate('+new_offset_val+'deg)'
+		
+		//have to get the position of the enclosing div because that is what is absolutely positioned within the canvas
+		orig_x = el.parent().position().left
+		orig_y = el.parent().position().top
+		
+		orig_width = el.width()
+		orig_height = el.height()
+		
+		//get the center
+		center_x = orig_x + orig_width/2
+		center_y = orig_y + orig_height/2
+		
+		//swap the height and width for every 90 degree turn
+		var saved_width = orig_height
+		var saved_height = orig_width
+		
+		new_x = center_x - saved_width/2
+		new_y = center_y - saved_height/2
+		
+		//alert('\ncenter: ' + center_x + '/' + center_y + '\norig_position: ' + orig_x + '/' + orig_y + '\norig_dimensions: ' + orig_width + '/' + orig_height + '\nsaved_dimensions: ' + saved_width + '/' + saved_height + '\nnew_position: ' + new_x + '/' + new_y )
+		
+		//rotate it
+		el.css('transform', rotate_command);
+				
+		saveProductToBoard($('#board-canvas').data('boardId'),el.parent().data('productId'), new_x, new_y, el.css('z-index'), orig_width, orig_height, saved_offset_val);	
+		//$(this).find('img').css('width', $(this).data('productWidth'))
+		//$(this).find('img').css('height', $(this).data('productHeight'))
+
+		el.parent().css('width', orig_height)
+		el.parent().css('height', orig_width)
+		
+		
+		//el.rotate({ animateTo:new_offset_val,callback: function(){   
+		//	//alert(1);
+		//	//alert(new_offset_val)
+		//	//alert(new_offset_val % 360)
+		//	//alert('left: '+ el.offset().left + ' top: ' +el.offset().top)
+		//	//saveProductToBoard($('#board-canvas').data('boardId'),el.parent().data('productId'), el.offset().left, el.offset().top, el.css('z-index'), saved_width, saved_height, saved_offset_val);
+		//}});
+		
+		//set the height and width of the enclosing div
+		el.parent().width(saved_width)
+		el.parent().height(saved_height)
+		//save the new offset
+		el.parent().data('rotationOffset',new_offset_val);
 	
 	});
 }
