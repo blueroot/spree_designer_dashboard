@@ -35,6 +35,31 @@ class Spree::Board < ActiveRecord::Base
     rs.join(", ")
   end
   
+  def display_short_status
+    case self.status
+      
+      when "new"
+        "Draft"
+      when "submitted_for_publication"
+        "Pending"
+      when "published"
+        "Published"
+      when "suspended"
+        "Suspended"
+      when "deleted"
+        "Deleted"
+      when "unpublished"
+        "Unpublished"
+      when "retired"
+        "Retired"  
+      when "needs_revision"
+        "Pending"
+      else
+        "N/A"
+    end
+      
+  end
+  
   def display_status
     case self.status
       

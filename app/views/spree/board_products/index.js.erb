@@ -1,14 +1,33 @@
 $('#board-canvas').html('<%= escape_javascript(raw render(:partial => "products", :locals => {:board_products => @board_products})) %>')
 
 
-$('.board-lightbox-product-cloned').each(function() {
-	handleDragAfterDrop($(this));
-	handleResizable($(this));
-	handleSelectable($(this));
-	handleRemoveFromCanvas($(this));
-	handleProductPopover($(this));
-	handleProductHoverable($(this));
+
+
+
+
+$(document).ready(function() {
+
+	$('.board-lightbox-product-cloned').each(function() {
+		handleDragAfterDrop($(this));
+		handleResizable($(this));
+		handleSelectable($(this));
+		handleRemoveFromCanvas($(this));
+		handleProductPopover($(this));
+		handleProductHoverable($(this));
+	});
+	
+	
+	
+	
+	layerProducts();
+	
+	
+	
+	
+	
 });
+
+
 
 handleRotatable();
 handleStackable();

@@ -70,6 +70,11 @@ class Spree::BoardsController < Spree::StoreController
     @board = Spree::Board.find(params[:id])
   end
   
+  def preview
+    @board = Spree::Board.find(params[:id])
+    render :action => "show"
+  end
+  
   def edit
     @board = Spree::Board.find(params[:id])
     @colors = Spree::Color.order(:position).where("position > 144 and position < 1000")

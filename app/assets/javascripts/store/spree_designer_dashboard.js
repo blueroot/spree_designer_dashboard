@@ -84,6 +84,30 @@ function handleSelectable(el){
 	});
 }
 
+function handleStackable(){		
+	el = $('.board-product-selected').first().parent();
+	id = el.parent().data('boardProductId')
+	arr = getBoardProductsArray();
+	$("#bp-move-forward").click(function() {
+		
+	});
+	$("#bp-move-backward").click(function() {
+		
+	});
+	$("#bp-move-front").click(function() {
+		
+	});
+	$("#bp-move-back").click(function() {
+		$.map( arr, function( value, index ) {
+		   if (value.id == id){
+			
+		}
+		
+		});
+		
+	});
+}
+
 
 
 function handleRotatable(){		
@@ -213,25 +237,32 @@ function handleDropEvent(event, ui) {
 	//var offsetXPos = parseInt(ui.offset.left);
 	var offsetYPos = parseInt(ui.offset.top);
 	$(this).find('#board-canvas').remove();
+
+	// this handles drops both from search results being dragged onto the board and from products already on the board
+	
+	// if it is being dragged from the search results
 	if (ui.helper.hasClass('board-lightbox-product')){
 		cloned = $(ui.helper).clone();
 		$(this).append(cloned.removeClass('board-lightbox-product').addClass('board-lightbox-product-cloned'));
 		selector = '#board-product-' + cloned.data('productId')
 		$(selector).hide();
+		zindex = $('.board-lightbox-product-cloned').size() + 1
+		alert('search z: ' + zindex)
 	}
 	else{
 		cloned = $(ui.helper)
 		$(this).append(cloned.removeClass('board-lightbox-product').addClass('board-lightbox-product-cloned'));
+		zindex = cloned.css('z-index')
+		alert('existing z: ' + zindex)
 	}		
 	
 	selectItem(cloned);
-	
 	handleDragAfterDrop(cloned);
 	handleResizable(cloned);
 	handleSelectable(cloned);
 	handleRemoveFromCanvas(cloned);	
-	saveProductToBoard($('#board-canvas').data('boardId'),cloned.data('productId'), cloned.position().left, cloned.position().top, cloned.css('z-index'), cloned.width(), cloned.height(), cloned.data('rotationOffset'));
-
+	saveProductToBoard($('#board-canvas').data('boardId'),cloned.data('productId'), cloned.position().left, cloned.position().top, zindex, cloned.width(), cloned.height(), cloned.data('rotationOffset'));
+	
 }
 
 function getImageWidth(url){
@@ -296,4 +327,35 @@ function setHeight(){
 	$('.select-products-box').height(modalHeight-200);
 	$('.product-preview-box').height(modalHeight-200);
 	
+}
+
+function getBoardProductsArray(){
+	var arr = []
+	$('.board-lightbox-product-cloned').each(function() {
+		arr.push({id: $(this).data('boardProductId'), zindex: $(this).data('productZindex')})
+	});
+	return arr;
+}
+
+function layerProducts(){
+	arr = getBoardProductsArray();
+	
+	// sort the boards according to the zindex
+	arr.sort(function (a, b) {
+	    if (a.zindex > b.zindex)
+	      return 1;
+	    if (a.zindex < b.zindex)
+	      return -1;
+	    // a must be equal to b
+	    return 0;
+	});
+	
+	// set the css zindex of each product on the board
+	$.map( arr, function( value, index ) {
+	    //alert(value.id);
+			selector = "#bp"+value.id
+			$(selector).css('z-index',value.zindex)
+	});
+	
+	return arr;
 }
