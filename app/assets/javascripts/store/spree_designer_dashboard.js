@@ -99,9 +99,10 @@ function handleStackable(){
 	});
 	$("#bp-move-back").click(function() {
 		$.map( arr, function( value, index ) {
-		   if (value.id == id){
-			
-		}
+			if (value.id == id){
+				arr.splice(arr.indexOf(value), 1);
+			}
+			arr.
 		
 		});
 		
@@ -247,13 +248,13 @@ function handleDropEvent(event, ui) {
 		selector = '#board-product-' + cloned.data('productId')
 		$(selector).hide();
 		zindex = $('.board-lightbox-product-cloned').size() + 1
-		alert('search z: ' + zindex)
+		//alert('search z: ' + zindex)
 	}
 	else{
 		cloned = $(ui.helper)
 		$(this).append(cloned.removeClass('board-lightbox-product').addClass('board-lightbox-product-cloned'));
 		zindex = cloned.css('z-index')
-		alert('existing z: ' + zindex)
+		//alert('existing z: ' + zindex)
 	}		
 	
 	selectItem(cloned);
@@ -329,18 +330,13 @@ function setHeight(){
 	
 }
 
-function getBoardProductsArray(){
+function getSortedBoardProductsArray(){
 	var arr = []
 	$('.board-lightbox-product-cloned').each(function() {
 		arr.push({id: $(this).data('boardProductId'), zindex: $(this).data('productZindex')})
+		//arr.push($(this).data('boardProductId'))
 	});
-	return arr;
-}
-
-function layerProducts(){
-	arr = getBoardProductsArray();
-	
-	// sort the boards according to the zindex
+	// sort the products according to the zindex
 	arr.sort(function (a, b) {
 	    if (a.zindex > b.zindex)
 	      return 1;
@@ -350,6 +346,19 @@ function layerProducts(){
 	    return 0;
 	});
 	
+	//create a new array of just the ids
+	newarr = []
+	// set the css zindex of each product on the board
+	$.map( arr, function( value, index ) {
+	    newarr.push(value.id)
+	});
+	
+	return newarr;
+}
+
+function layerProducts(){
+	arr = getSortedBoardProductsArray();
+
 	// set the css zindex of each product on the board
 	$.map( arr, function( value, index ) {
 	    //alert(value.id);
