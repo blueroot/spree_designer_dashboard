@@ -85,28 +85,22 @@ function handleSelectable(el){
 }
 
 function handleStackable(){		
-	el = $('.board-product-selected').first().parent();
-	id = el.parent().data('boardProductId')
-	arr = getBoardProductsArray();
-	$("#bp-move-forward").click(function() {
-		
-	});
-	$("#bp-move-backward").click(function() {
-		
-	});
-	$("#bp-move-front").click(function() {
-		
-	});
-	$("#bp-move-back").click(function() {
-		$.map( arr, function( value, index ) {
-			if (value.id == id){
-				arr.splice(arr.indexOf(value), 1);
-			}
-			arr.
-		
-		});
-		
-	});
+	//el = $('.board-product-selected').first().parent();
+	//id = el.parent().data('boardProductId')
+	//arr = getBoardProductsArray();
+	//$("#bp-move-forward").click(function() {
+	//	
+	//});
+	//$("#bp-move-backward").click(function() {
+	//	
+	//});
+	//$("#bp-move-front").click(function() {
+	//	
+	//});
+	//$("#bp-move-back").click(function() {
+	//	
+	//	
+	//});
 }
 
 
