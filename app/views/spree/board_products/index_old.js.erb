@@ -1,0 +1,70 @@
+$('#board-canvas').html('<%= escape_javascript(raw render(:partial => "products", :locals => {:board_products => @board_products})) %>')
+
+
+
+
+
+
+$(document).ready(function() {
+
+	$('.board-lightbox-product-cloned').each(function() {
+		handleDragAfterDrop($(this));
+		handleResizable($(this));
+		handleSelectable($(this));
+		handleRemoveFromCanvas($(this));
+		handleProductPopover($(this));
+		handleProductHoverable($(this));
+	});
+	
+	
+	
+	
+	//layerProducts();
+	
+	
+	
+	
+	
+});
+
+
+
+handleRotatable();
+handleStackable();
+
+$('.board-lightbox-product-cloned').each(function() {
+  //alert($(this).data('rotationOffset'))
+	//$(this).find('img').rotate($(this).data('rotationOffset'))
+	
+	var rotate_command = 'rotate('+$(this).data('rotationOffset')+'deg)'	
+	$(this).find('img').css('transform', rotate_command);
+	
+	//$(this).find('img').css('width', $(this).data('productWidth'))
+	//$(this).find('img').css('height', $(this).data('productHeight'))
+	//
+	//$(this).css('left', $(this).data('productLeft'))
+	//$(this).css('top', $(this).data('productTop'))
+	//$(this).find('img').css('left', $(this).data('productLeft'))
+	//$(this).find('img').css('top', $(this).data('productTop'))
+	
+	if ($(this).data('rotationOffset') == 90 || $(this).data('rotationOffset') == 270){
+		$(this).css('height', $(this).data('productWidth'))
+		$(this).css('width', $(this).data('productHeight'))
+	}else{
+		$(this).css('width', $(this).data('productWidth'))
+		$(this).css('height', $(this).data('productHeight'))
+	}
+	
+	
+});
+
+
+$('body').on('click', function (e) {
+    $('.board-lightbox-product-cloned').each(function () {
+        //the 'is' for buttons that trigger popups
+        //the 'has' for icons within a button that triggers a popup
+        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+            $(this).popover('hide');
+        }
+    });
+});

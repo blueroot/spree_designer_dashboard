@@ -21,7 +21,7 @@
 							</div>
 							<% end %>
 							
-							<div id="board-canvas" data-board-id="<%= @board.id %>" style="position: relative; border: 1px solid #eee"></div>
+							<div id="board-canvas" data-board-id="<%= @board.id %>" style="height: 360px; width: 630px; background-color: #fff; border: 1px solid #bdc3c7; position: relative; z-index: 1;"></div>
 						</div>
 			
 					</div>		
@@ -50,11 +50,17 @@
 								<% end %>
 							</div>
 							<div id="select-products-pagination" class="select-products-pagination"></div>
-							<div id="select-products-box" class="select-products-box">							
+
+							<div id="select-products-box" class="select-products-box">
+							
 								<div class="board-search-empty-state">Search for products above and drag them onto your board.</div>
+							
 							</div>
 						</div>
 					</div>
+		
+
+					<%#= link_to "Save Changes", edit_board_path(@board), :class=> "button"%>
 				</div>
 			</div>
 		</div>
@@ -104,12 +110,6 @@
 	}
 </style>
 
-
-<script defer="defer">
-      
-    </script>
-
-
 <script>
 
 
@@ -118,7 +118,28 @@ $(document).ready(function() {
 	
 
 	
-	initializeBoardManagement();
+
+
+	$("#submit_board_button").click(function() {
+		
+		if ($('#edit_board_form').parsley( 'isValid' )){
+			$(this).html('Saving...')
+			$("#edit_board_form").submit();
+		}else{
+			$('#edit_board_form').parsley( 'validate' )
+		}
+		
+	});
+	
+	$("#submit_and_publish_board_button").click(function() {
+		
+		if ($('#edit_board_form').parsley( 'isValid' )){
+			$('#publish-board-modal').modal()
+		}else{
+			$('#edit_board_form').parsley( 'validate' )
+		}
+		
+	});
 	
 	$('.swatch').popover({ 
 	    html : true,
@@ -145,18 +166,6 @@ $(document).ready(function() {
 
 });
 
-
-//build the stage globally
-var stage = new Kinetic.Stage({
-	container: 'board-canvas',
-	width: 630,
-	height: 360
-});
-//var layer = new Kinetic.Layer();
-//stage.add(layer);
-
-
-
 $(function () {
     var element;
     
@@ -165,14 +174,9 @@ $(function () {
 		  var cn = element.className;
 		  return cn == 'board-lightbox-product' || 'board-lightbox-product-cloned'
 		},
-        drop: addProductToBoard
+        drop: handleDropEvent
     });
-	
-	
-	
-	
 	getSavedProducts($('#board-canvas').data('boardId'));
-	
 	
 	
 	/* attach a submit handler to the form */
@@ -200,4 +204,69 @@ $(function () {
 	});
 	
 });
+
+
+
+
+$(document).ready(function() {
+	var isResizingEvent = false;
+	
+});
+
+
+
+
+
 </script>
+
+
+
+
+<% if false %>
+
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <h3 class="panel-title">Status</h3>
+  </div>
+  <div class="panel-body">
+    <p><label>Status:</label> <%= @board.display_status%></p>
+
+	<% if @board.status == "new" %>
+		<a href="javascript:void(0);" id="publish-board-button" class="btn btn-primary btn-sm">Publish Board</a>
+	<% elsif @board.status == "published" %>
+		<a href="javascript:void(0);" id="unpublish-board-button" class="btn btn-primary btn-sm">Publish Board</a>
+	<% elsif @board.status == "needs_revision" %>
+		<a href="javascript:void(0);" id="unpublish-board-button" class="btn btn-primary btn-sm">Publish Board</a>
+	
+	<% elsif @board.status == "suspended" %>
+	
+	<% end %>
+	
+	
+	
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">History & Notes</h3>
+  </div>
+  <div class="panel-body">
+    <div class="board-history">
+	<% unless @board.messages.blank? %>
+		<% @board.messages.each do |message| %>
+			<%unless message.new_record?%>
+			<div class="history-item"><strong><%= message.subject %></strong>
+			<br /><%= message.created_at.strftime("%B %e, %Y at %l:%M %P")%>
+			<p><%= message.body %></p></div>
+			<% end %>
+			
+		<% end %>
+	<% end %>
+		<div class="history-item">Created on <%= @board.created_at.strftime("%B %e, %Y at %l:%M %P")%></div>
+	</div>
+	
+	
+  </div>
+</div>
+<% end %>

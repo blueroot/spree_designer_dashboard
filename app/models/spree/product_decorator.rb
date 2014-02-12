@@ -26,4 +26,8 @@ Spree::Product.class_eval do
     self.board_products and self.board_products.size > 0
   end
   
+  def image_for_board
+    self.images.first ? Magick::ImageList.new(self.images.first.attachment.url(:product)) : Magick::ImageList.new(self.variants.first.images.first.attachment.url(:product))
+  end
+  
 end
