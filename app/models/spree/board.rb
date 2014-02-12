@@ -166,8 +166,8 @@ class Spree::Board < ActiveRecord::Base
     # so skip this if it is already dirty...that means it has already been added to the queue
     unless self.is_dirty?
       self.update_attribute("is_dirty",1)
-      #self.delay(run_at: 3.seconds.from_now).generate_image
-      self.generate_image
+      self.delay(run_at: 3.seconds.from_now).generate_image
+      #self.generate_image
     end
   end
   
