@@ -68,6 +68,7 @@ class Spree::BoardsController < Spree::StoreController
   
   def show
     @board = Spree::Board.find(params[:id])
+    impressionist(@board)
   end
   
   def preview
