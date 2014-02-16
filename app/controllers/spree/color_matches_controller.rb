@@ -3,7 +3,7 @@ class Spree::ColorMatchesController < Spree::StoreController
   include Magick 
   
   def index
-    if params[:board_id] and @board = Spree::Board.find(params[:board_id])
+    if params[:room_id] and @board = Spree::Board.find(params[:room_id])
       
       @color_matches = @board.color_matches
       
@@ -17,13 +17,13 @@ class Spree::ColorMatchesController < Spree::StoreController
   
   
   def create
-    @board = Spree::Board.find(params[:board_id])
+    @board = Spree::Board.find(params[:room_id])
 
     if params[:id] and @color_match = @board.color_matches.find(params[:id])
       
     else  
       unless @color_match = @board.color_matches.find_by_color_id(params[:color_id])
-        @color_match = @board.color_matches.new(:color_id => params[:color_id], :board_id => params[:board_id])
+        @color_match = @board.color_matches.new(:color_id => params[:color_id], :board_id => params[:room_id])
       end
     end
     
@@ -38,7 +38,7 @@ class Spree::ColorMatchesController < Spree::StoreController
 
   
   def destroy
-    @board = Spree::Board.find(params[:board_id])
+    @board = Spree::Board.find(params[:room_id])
 
     if params[:id] and @color_match = @board.color_matches.find(params[:id])
       @color_match.destroy

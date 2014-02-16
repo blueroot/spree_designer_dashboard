@@ -161,7 +161,6 @@ class Spree::Board < ActiveRecord::Base
   end
   
   def queue_image_generation
-    
     # the board is marked as dirty whenever it is added to the delayed job queue.  That way we don't have to make countless updates but instead can just queue them all up
     # so skip this if it is already dirty...that means it has already been added to the queue
     unless self.is_dirty?
@@ -174,9 +173,7 @@ class Spree::Board < ActiveRecord::Base
   def generate_image
     white_canvas = Magick::Image.new(630,360){ self.background_color = "white" }
     self.board_products(:order => "z_index asc").reload.collect
-    
-    
-    
+
     self.board_products.each do |bp|
       top_left_x, top_left_y = bp.top_left_x, bp.top_left_y
       product_image = bp.product.image_for_board
@@ -193,9 +190,10 @@ class Spree::Board < ActiveRecord::Base
           top_left_x = centerX - bp.height/2
           top_left_y = centerY - bp.width/2
             
-        # original width and height work if it is just rotated is 180  
+        # original width and height work if it is just rotated 180  
         else
           product_image.rotate!(bp.rotation_offset)
+          product_image.scale!(bp.width, bp.height)
         end
       else
         product_image.scale!(bp.width, bp.height)

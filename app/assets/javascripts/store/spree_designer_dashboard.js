@@ -1,3 +1,31 @@
+
+
+function rotateObject(angleOffset) {
+    var obj = canvas.getActiveObject(),
+        resetOrigin = false;
+
+    if (!obj) return;
+
+    var angle = obj.getAngle() + angleOffset;
+
+    if ((obj.originX !== 'center' || obj.originY !== 'center') && obj.centeredRotation) {
+        obj.setOriginToCenter && obj.setOriginToCenter();
+        resetOrigin = true;
+    }
+
+    angle = angle > 360 ? 90 : angle < 0 ? 270 : angle;
+
+    obj.setAngle(angle).setCoords();
+
+    if (resetOrigin) {
+        obj.setCenterToOrigin && obj.setCenterToOrigin();
+    }
+
+    canvas.renderAll();
+}
+
+
+
 function saveProductToBoard(board_id, product_id, x, y, z, w, h, r){
 	var url = '/board_products'
 	var posting = $.post( url, {board_product: {product_id: product_id, board_id: board_id, top_left_x: x, top_left_y: y, z_index: z, width: w, height: h, rotation_offset: r}} );
@@ -120,6 +148,8 @@ function update(group, activeHandle) {
   imageX = image.getX();
   imageY = image.getY();
 
+	
+
   // Update handle positions to reflect new image dimensions
   topLeft.setPosition(imageX, imageY);
   topRight.setPosition(imageX + newWidth, imageY);
@@ -132,6 +162,9 @@ function update(group, activeHandle) {
 	}
 	
 	
+	//image.getParent().setX(topLeft.getX())
+	//image.getParent().setY(topLeft.getY())
+	console.log(image.getParent().getX() +':'+image.getParent().getY() + ' - ' + newWidth + ':' + newHeight)
 	
 
 }
@@ -163,10 +196,21 @@ function addAnchor(group, x, y, name) {
 	  this.moveToTop();
 	});
 	anchor.on("dragend", function() {
-	  group.setDraggable(true);
-	  thisLayer.draw();
-		image = group.get(".image")[0]
-		updateBoardProduct(thisLayer.getId(), {id: thisLayer.getId(), top_left_x: image.getX(), top_left_y: image.getY(), width: image.getWidth(), height: image.getHeight()})
+		image = this.getParent().get(".image")[0]
+		x = image.getX()
+		y = image.getY()
+		//updateBoardProduct(thisLayer.getId(), {id: thisLayer.getId(), top_left_x: x, top_left_y: y, width: image.getWidth(), height: image.getHeight()})
+		group.setDraggable(true);
+		
+		
+		console.log('anchor: ' 	+ this.getX() +':'+ this.getY() )
+		console.log('topleft: ' 	+ this.getParent().get(".topLeft")[0].getX() +':'+ this.getParent().get(".topLeft")[0].getY() )
+		console.log('group: ' 	+ this.getParent().getX() +':'+ this.getParent().getY() )
+		console.log('group 2: ' 	+ group.getX() +':'+ group.getY() )
+		console.log('group w/offset: ' 	+ this.getParent().getOffsetX() +':'+ this.getParent().getOffsetY() )
+		console.log('image: ' 	+ image.getX() +':'+ image.getY() )
+		console.log('layer: ' 	+ this.getParent().getParent().getX() +':'+ this.getParent().getParent().getX() )
+		//this.getParent().getParent().draw();
 	});
 	
 	// add hover styling
@@ -187,6 +231,59 @@ function addAnchor(group, x, y, name) {
 	
 }
 
+fabric.Object.prototype.setOriginToCenter = function () {
+    this._originalOriginX = this.originX;
+    this._originalOriginY = this.originY;
+
+    var center = this.getCenterPoint();
+
+    this.set({
+        originX: 'center',
+        originY: 'center',
+        left: center.x,
+        top: center.y
+    });
+};
+
+fabric.Object.prototype.setCenterToOrigin = function () {
+    var originPoint = this.translateToOriginPoint(
+    this.getCenterPoint(),
+    this._originalOriginX,
+    this._originalOriginY);
+
+    this.set({
+        originX: this._originalOriginX,
+        originY: this._originalOriginY,
+        left: originPoint.x,
+        top: originPoint.y
+    });
+};
+
+function rotateObject(angleOffset) {
+    var obj = canvas.getActiveObject(),
+        resetOrigin = false;
+
+    if (!obj) return;
+
+    var angle = obj.getAngle() + angleOffset;
+
+    if ((obj.originX !== 'center' || obj.originY !== 'center') && obj.centeredRotation) {
+        obj.setOriginToCenter && obj.setOriginToCenter();
+        resetOrigin = true;
+    }
+
+    angle = angle > 360 ? 90 : angle < 0 ? 270 : angle;
+
+    obj.setAngle(angle).setCoords();
+
+    if (resetOrigin) {
+        obj.setCenterToOrigin && obj.setCenterToOrigin();
+    }
+
+    canvas.renderAll();
+}
+
+
 
 function buildImageGroup(stage, board_product){
 	
@@ -196,6 +293,8 @@ function buildImageGroup(stage, board_product){
 	});
 
 	var productGroup = new Kinetic.Group({
+		
+		// position the group with an offset.  this is necessary so that it rotates around the center point
 		x: parseInt(board_product.top_left_x) + parseInt(board_product.width)/2,
 		y: parseInt(board_product.top_left_y) + parseInt(board_product.height)/2,
 		offset:[parseInt(board_product.width)/2, parseInt(board_product.height)/2],
@@ -230,11 +329,17 @@ function buildImageGroup(stage, board_product){
 			//layer.moveToTop();
 		});
 		productGroup.on('dragend', function() {
-			//console.log(this.getX() - this.getOffsetX())
-			x = this.getX() - this.getOffsetX();
-			y = this.getY() - this.getOffsetY()
-			updateBoardProduct(layer.getId(), {id: layer.getId(), top_left_x: x, top_left_y: y})
 			
+			x = this.getX() - this.getOffsetX();
+			y = this.getY() - this.getOffsetY();
+			width = this.get('.image')[0].getWidth()
+			height = this.get('.image')[0].getHeight()
+			//x = this.getX()
+			//y = this.getY()
+			
+			updateBoardProduct(layer.getId(), {id: layer.getId(), top_left_x: x, top_left_y: y, width: width, height: height})
+			console.log('product dragend: ' + x + ':' + y)
+			console.log('product w/h: '+width + ':' + height)
 	  });
 		
 		productImg.on('click', function(evt) {
@@ -276,6 +381,25 @@ function buildImageGroup(stage, board_product){
 	
 }
 
+function buildImageLayer(canvas, bp){
+	fabric.Image.fromURL(bp.product.image_url, function(oImg) {
+		oImg.scale(1).set({
+		      left: bp.top_left_x,
+		      top: bp.top_left_y,
+		      width : bp.width,
+			    height : bp.height,
+					hasRotatingPoint: false
+		    });
+		oImg.set('id', bp.id)
+		canvas.add(oImg);
+		canvas.setActiveObject(oImg);
+		rotateObject(bp.rotation_offset);
+		canvas.discardActiveObject();
+	});
+
+	
+}
+
 
 function addProductToBoard(event, ui){
 	// add the image to the board through jquery drag and drop in order to get its position
@@ -295,7 +419,7 @@ function addProductToBoard(event, ui){
 		url: url, 
 		type: "POST",
 		dataType: "json", 
-		data: {board_product: {board_id: $('#board-canvas').data('boardId'), product_id: cloned.data('productId'), top_left_x: cloned.position().left, top_left_y: cloned.position().top, width: cloned.width(), height: cloned.height()}},
+		data: {board_product: {board_id: $('#canvas').data('boardId'), product_id: cloned.data('productId'), top_left_x: cloned.position().left, top_left_y: cloned.position().top, width: cloned.width(), height: cloned.height()}},
 	     beforeSend : function(xhr){
 				xhr.setRequestHeader("Accept", "application/json")
 	     },
@@ -303,7 +427,9 @@ function addProductToBoard(event, ui){
 				
 				// add the kineticjs image layer to the board
 				//buildImageLayer(stage, board_product);
-				buildImageGroup(stage, board_product);
+				//buildImageGroup(stage, board_product);
+				buildImageLayer(canvas, board_product);
+				
 				
 				// remove the jquery drag/drop place holder that had been there.
 				// this is a bit of a hack - without the timer, then the graphic disappears for a second...this generally keeps it up until the kineticjs version is added
@@ -328,31 +454,40 @@ function addProductToBoard(event, ui){
 function moveLayer(layer, direction){
 	switch (direction) {
 		case "top":
-			layer.moveToTop();
+			canvas.bringToFront(layer)
 			break;
 		case "forward":
-			layer.moveUp();
+			canvas.bringForward(layer)
 			break;
 		case "bottom":
-			layer.moveToBottom();
+			canvas.sendToBack(layer)
 			break;
 		case "backward":
-			layer.moveDown();
+			canvas.sendBackwards(layer)
 			break;
 	}
 	
-	layer.draw();
+	//layer.draw();
 
 	//it's possible all z indices have changed.  update them all
-	layer.getParent().getChildren().each(function(l, n) {
-	  updateBoardProduct(l.getId(), {id: l.getId(), z_index: l.getZIndex()})
+	
+	
+	canvas.forEachObject(function(obj){
+			updateBoardProduct(obj.get('id'), {id: obj.get('id'), z_index:canvas.getObjects().indexOf(obj)})
+		
+	    console.log(canvas.getObjects().indexOf(obj))
 	});
+	
+	//layer.getParent().getChildren().each(function(l, n) {
+	//  updateBoardProduct(l.getId(), {id: l.getId(), z_index: l.getZIndex()})
+	//});
 	
 	
 	
 	//console.log(layer.getZIndex()); 
 	
 }
+
 
 function getSavedProducts(board_id){
 	var url = '/rooms/'+board_id+'/board_products.json'
@@ -364,53 +499,55 @@ function getSavedProducts(board_id){
 	       xhr.setRequestHeader("Accept", "application/json")
 	     },
 	     success : function(data){
+				
+				// add the products to the board
 				$.each(data, function(index, board_product) {
-					//buildImageLayer(stage, board_product);
-					buildImageGroup(stage, board_product);
-					
+					buildImageLayer(canvas, board_product);					
 				});
 				
-				var selectedLayer;
-				var selectedGroup;
-				var selectedImage;
-				
-				stage.on('click', function(evt) {
-					// get the shape that was clicked on
-					var object = evt.targetNode;
-					if (object.getName() == "image")
-						selectedLayer = object.getParent().getParent();
-						selectedGroup = object.getParent();
-						selectedImage = object;
+				// detect which product has focus
+				canvas.on('mouse:down', function(options) {
+				  if (options.target) {
+						selectedImage = options.target;}
+					else{
+						selectedImage = null;}
 				});
+				
+				canvas.on({
+			    'object:modified': function(e) {
+					      activeObject = e.target
+								updateBoardProduct(activeObject.get('id'), {id: activeObject.get('id'), top_left_x: getCurrentLeft(activeObject), top_left_y: getCurrentTop(activeObject), width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)})
+					    	console.log('modified!!!')
+							}
+			  });
+				
+				// listen for toolbar functions 
 				document.getElementById('bp-move-front').addEventListener('click', function() {
-					moveLayer(selectedLayer, "top")
+					moveLayer(selectedImage, "top")
 				}, false);
 				document.getElementById('bp-move-forward').addEventListener('click', function() {
-					moveLayer(selectedLayer, "forward")
+					moveLayer(selectedImage, "forward")
 				}, false);
 				document.getElementById('bp-move-back').addEventListener('click', function() {
-					moveLayer(selectedLayer, "bottom")
+					moveLayer(selectedImage, "bottom")
 				}, false);
 				document.getElementById('bp-move-backward').addEventListener('click', function() {
-					moveLayer(selectedLayer, "backward")
+					moveLayer(selectedImage, "backward")
 				}, false);
-				
 				document.getElementById('bp-rotate-left').addEventListener('click', function() {
-					//alert(selectedImage.getOffsetX() +':'+ selectedImage.getOffsetY());
-					//alert(selectedImage.getWidth()/2 +':'+ selectedImage.getHeight()/2)
-					//selectedGroup.setOffsetX(selectedImage.getWidth()/2)
-					//selectedGroup.setOffsetY(selectedImage.getHeight()/2)
-					selectedGroup.rotateDeg(90);
-					//selectedGroup.setOffsetX(0)
-					//selectedGroup.setOffsetY(0)
-					selectedLayer.draw();
-					rotation_offset = Math.ceil(selectedGroup.getRotation()*57.2957795)%360
-					console.log(rotation_offset)
-					updateBoardProduct(selectedLayer.getId(), {id: selectedLayer.getId(), rotation_offset: rotation_offset})
+					rotateObject(90);	
+					activeObject = canvas.getActiveObject()
+					updateBoardProduct(activeObject.get('id'), {id: activeObject.get('id'), top_left_x: getCurrentLeft(activeObject), top_left_y: getCurrentTop(activeObject), width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)})
+					console.log('getLeft: '+ activeObject.getLeft())
+					console.log('getTop: '+ activeObject.getTop())
+					console.log('getPointByOrigin: '+ activeObject.getPointByOrigin())
+					console.log('getOriginX: '+ activeObject.getOriginX())
+					console.log('getOriginY: '+ activeObject.getOriginY())
+					console.log('getCurrentLeft: '+ getCurrentLeft(activeObject))
+					console.log('getCurrentTop: '+ getCurrentTop(activeObject))
+					console.log('getAngle: '+ activeObject.getAngle())
 				}, false);
 				
-				
-				console.log(stage)
 	     },
 	     error: function(objAJAXRequest, strError, errorThrown){
 	       alert("ERROR: " + strError);
@@ -418,6 +555,49 @@ function getSavedProducts(board_id){
 	  }
 	);
  
+}
+
+function getCurrentLeft(obj){
+
+	// if the angle is 0 or 360, then the left should be as is.
+	// if the angle is 270 then the original left is in the bottom left and should be left as is 	
+	if (obj.getAngle() == 0 || obj.getAngle() == 270 || obj.getAngle() == 360){
+		return Math.round(obj.getLeft());
+	}
+	
+	// if the angle is 90, then the original left is in the top right.  
+	// currentLeft = origLeftPos - height
+	else if (obj.getAngle() == 90){
+		return Math.round(obj.getLeft() - obj.getHeight());
+	}
+	
+	//if the angle is 180 the the original left is in the bottom right.  
+	// currentLeft = origLeftPos - width
+	else if (obj.getAngle() == 180){
+		return Math.round(obj.getLeft() - obj.getWidth());
+	}
+	
+	
+}
+function getCurrentTop(obj){
+	
+	// if the angle is 0 or 360 then the top should be as is
+	// if the angle is 90, then the original corner is in the top right and should be left as is
+	if (obj.getAngle() == 0 || obj.getAngle() == 90 || obj.getAngle() == 360){
+		return Math.round(obj.getTop());
+	}
+	
+	// if the angle is 180 then the object is flipped vertically and original corner is in the bottom right
+	// currentTop = origTop - height
+	else if (obj.getAngle() == 180){
+		return Math.round(obj.getTop() - obj.getHeight());
+	}
+	
+	// if the angle is 270 then the object is rotated and flipped horizontally and original corner is on bottom left
+	// currentTop = origTop - width
+	else if (obj.getAngle() == 270){
+		return Math.round(obj.getTop() - obj.getWidth());
+	}
 }
 
 

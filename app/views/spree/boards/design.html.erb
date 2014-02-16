@@ -8,6 +8,10 @@
 				<div class="col-md-7">
 					<div class="board-content-body">
 						<div id="board-container">
+							
+							
+							
+							
 							<% if true %>
 							<div id="board-toolbar" class="board-toolbar">
 
@@ -21,7 +25,13 @@
 							</div>
 							<% end %>
 							
-							<div id="board-canvas" data-board-id="<%= @board.id %>" style="position: relative; border: 1px solid #eee"></div>
+							<div id="board-canvas">
+							
+							
+							<canvas id="canvas" data-board-id="<%= @board.id %>" width="630" height="360" style="border: 1px solid #eee;"></canvas>
+							</div>
+
+							        
 						</div>
 			
 					</div>		
@@ -147,17 +157,53 @@ $(document).ready(function() {
 
 
 //build the stage globally
-var stage = new Kinetic.Stage({
-	container: 'board-canvas',
-	width: 630,
-	height: 360
-});
+//var stage = new Kinetic.Stage({
+//	container: 'board-canvas',
+//	width: 630,
+//	height: 360
+//});
 //var layer = new Kinetic.Layer();
 //stage.add(layer);
 
 
-
+var canvas = new fabric.Canvas('canvas');
 $(function () {
+	
+	
+	
+	// Fabric JS initialization 
+	fabric.Object.prototype.setOriginToCenter = function() {
+	    this._originalOriginX = this.originX;
+	    this._originalOriginY = this.originY;
+
+	    var center = this.getCenterPoint();
+
+	    this.set({
+	      originX: 'center',
+	      originY: 'center',
+	      left: center.x,
+	      top: center.y
+	    });
+	  };
+
+	  fabric.Object.prototype.setCenterToOrigin = function() {
+	    var originPoint = this.translateToOriginPoint(
+	      this.getCenterPoint(),
+	      this._originalOriginX,
+	      this._originalOriginY);
+
+	    this.set({
+	      originX: this._originalOriginX,
+	      originY: this._originalOriginY,
+	      left: originPoint.x,
+	      top: originPoint.y
+	    });
+	  };
+	
+	
+	
+	
+	
     var element;
     
     $('#board-canvas').droppable({
@@ -171,7 +217,7 @@ $(function () {
 	
 	
 	
-	getSavedProducts($('#board-canvas').data('boardId'));
+	getSavedProducts($('#canvas').data('boardId'));
 	
 	
 	
