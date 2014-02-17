@@ -120,6 +120,8 @@ class Spree::BoardsController < Spree::StoreController
     @all_products = @searcher.retrieve_products
     @products = @all_products.select { |product| !product.is_on_board? }
     
+    @board = Spree::Board.find(params[:board_id])
+    
     #@products = Spree::Product.all()
     respond_to do |format|
       format.js   {render :layout => false}

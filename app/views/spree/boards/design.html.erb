@@ -8,13 +8,7 @@
 				<div class="col-md-7">
 					<div class="board-content-body">
 						<div id="board-container">
-							
-							
-							
-							
-							<% if true %>
 							<div id="board-toolbar" class="board-toolbar">
-
 								<div class="btn-group btn-group-sm">
 									<button type="button" class="btn btn-default" id="bp-rotate-left"><span class="fa fa-repeat" style="font-size: 12px;"></span> Rotate</button>
 									<button type="button" class="btn btn-default" id="bp-move-forward"><span class="fa fa-angle-up" style="font-size: 12px;"></span> Forward</button>
@@ -22,18 +16,17 @@
 									<button type="button" class="btn btn-default" id="bp-move-front"><span class="fa fa-angle-double-up" style="font-size: 12px;"></span> Front</button>
 									<button type="button" class="btn btn-default" id="bp-move-back"><span class="fa fa-angle-double-down" style="font-size: 12px;"></span> Back</button>
 								</div>
+							</div>	
+													
+							<div id="board-canvas" style="margin-bottom: 20px;">
+								<canvas id="canvas" data-board-id="<%= @board.id %>" width="630" height="360" style="border: 1px solid #eee;"></canvas>
 							</div>
-							<% end %>
-							
-							<div id="board-canvas">
-							
-							
-							<canvas id="canvas" data-board-id="<%= @board.id %>" width="630" height="360" style="border: 1px solid #eee;"></canvas>
-							</div>
-
-							        
 						</div>
-			
+						
+						<div id="board-product-preview" style=" height: 180px; border: 1px solid #eee;">
+							
+						</div>
+						
 					</div>		
 				</div>
 				<div class="col-md-5">
@@ -115,9 +108,6 @@
 </style>
 
 
-<script defer="defer">
-      
-    </script>
 
 
 <script>
@@ -125,9 +115,6 @@
 
 
 $(document).ready(function() {
-	
-
-	
 	initializeBoardManagement();
 	
 	$('.swatch').popover({ 
@@ -156,54 +143,11 @@ $(document).ready(function() {
 });
 
 
-//build the stage globally
-//var stage = new Kinetic.Stage({
-//	container: 'board-canvas',
-//	width: 630,
-//	height: 360
-//});
-//var layer = new Kinetic.Layer();
-//stage.add(layer);
-
 
 var canvas = new fabric.Canvas('canvas');
 $(function () {
-	
-	
-	
 	// Fabric JS initialization 
-	fabric.Object.prototype.setOriginToCenter = function() {
-	    this._originalOriginX = this.originX;
-	    this._originalOriginY = this.originY;
 
-	    var center = this.getCenterPoint();
-
-	    this.set({
-	      originX: 'center',
-	      originY: 'center',
-	      left: center.x,
-	      top: center.y
-	    });
-	  };
-
-	  fabric.Object.prototype.setCenterToOrigin = function() {
-	    var originPoint = this.translateToOriginPoint(
-	      this.getCenterPoint(),
-	      this._originalOriginX,
-	      this._originalOriginY);
-
-	    this.set({
-	      originX: this._originalOriginX,
-	      originY: this._originalOriginY,
-	      left: originPoint.x,
-	      top: originPoint.y
-	    });
-	  };
-	
-	
-	
-	
-	
     var element;
     
     $('#board-canvas').droppable({
@@ -213,37 +157,9 @@ $(function () {
 		},
         drop: addProductToBoard
     });
-	
-	
-	
-	
 	getSavedProducts($('#canvas').data('boardId'));
+	initializeProductSearchForm();
 	
-	
-	
-	/* attach a submit handler to the form */
-	$("#product_search_form").submit(function(event) {
-		
-		/* stop form from submitting normally */
-		event.preventDefault();
-
-		/* get some values from elements on the page: */
-		var $form = $( this ),
-		term = $form.find( 'input[name="product_keywords"]' ).val(),
-		wholesaler_taxon = $form.find( 'select[name="wholesaler_taxon"]' ).val(),
-		department_taxon = $form.find( 'select[name="department_taxon"]' ).val(),
-		url = $form.attr( 'action' );
-		
-		//alert(taxon);
-		/* Send the data using post */
-		var posting = $.post( url, { keywords: term, department_taxon_id: department_taxon, wholesaler_taxon_id: wholesaler_taxon, per_page: 100 } );
-
-		/* Put the results in a div */
-		posting.done(function( data ) {
-			//var content = $( data ).find( '#content' );
-			//$( "#result" ).empty().append( content );
-		});
-	});
 	
 });
 </script>
