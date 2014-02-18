@@ -217,9 +217,8 @@ function getSavedProducts(board_id){
 				canvas.on('mouse:down', function(options) {
 				  if (options.target) {
 						selectedImage = options.target;
-						//$('#board-product-preview').html('sdf')
 						
-						getProductDetails(selectedImage.get('product_permalink'))
+						getProductDetails(selectedImage.get('product_permalink'), board_id, selectedImage.get('id'))
 						console.log(selectedImage.get('product_permalink'))
 						}
 					else{
@@ -315,11 +314,8 @@ function getCurrentTop(obj){
 	}
 }
 
-
-
-
-function getProductDetails(product_id){
-	var url = '/products/'+product_id
+function getProductDetails(product_id, board_id, board_product_id){
+	var url = '/products/'+product_id+'?board_id='+board_id+'&board_product_id='+board_product_id
 	var request = $.get( url );
 
 	  /* Put the results in a div */
@@ -413,10 +409,12 @@ function getImageHeight(url){
 	return img.height
 }
 
-function showProductDetails(item){
-	$('#product-details-pane').html('Loading product details...')
-	getProductDetails(item.data('productPermalink'))
-}
+//function showProductDetails(item){
+//	$('#product-details-pane').html('Loading product details...')
+//	getProductDetails(item.data('productPermalink'), $('#canvas').data('boardId'))
+//}
+
+
 function setHeight(){
 	var modalHeight =  $('#product-modal').height();
 	$('.select-products-box').height(modalHeight-200);
