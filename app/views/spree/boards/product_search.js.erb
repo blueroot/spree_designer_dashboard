@@ -22,12 +22,12 @@ $('.board-lightbox-product').draggable({
 	}
 });
 
-//$('.board-lightbox-product').click(function() {
-//	
-//	showProductDetails($(this))
-//	//handleCloneAndAddEvent($(this))
-//	
-//});
+$('.add-to-board-link').click(function() {
+	getProductDetails($(this).data('productId'), $('#canvas').data('boardId'), null)
+	//showProductDetails($(this))
+	//handleCloneAndAddEvent($(this))
+	
+});
 //setHeight();
 //// Re-initialize the results pane on resize
 //$(window).resize(function() {		

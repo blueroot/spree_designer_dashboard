@@ -112,6 +112,7 @@ function buildImageLayer(canvas, bp){
 		      top: bp.top_left_y,
 		      width : bp.width,
 			    height : bp.height,
+					lockUniScaling: true,
 					hasRotatingPoint: false
 		    });
 		oImg.set('id', bp.id)
@@ -218,6 +219,7 @@ function getSavedProducts(board_id){
 				  if (options.target) {
 						selectedImage = options.target;
 						
+						// pass the product id and board_id (optional) and BoardProduct id (optional)
 						getProductDetails(selectedImage.get('product_permalink'), board_id, selectedImage.get('id'))
 						console.log(selectedImage.get('product_permalink'))
 						}
@@ -315,7 +317,21 @@ function getCurrentTop(obj){
 }
 
 function getProductDetails(product_id, board_id, board_product_id){
-	var url = '/products/'+product_id+'?board_id='+board_id+'&board_product_id='+board_product_id
+	
+	board_id = (typeof board_id === "undefined") ? "defaultValue" : board_id;
+	board_product_id = (typeof board_product_id === "undefined") ? "defaultValue" : board_product_id;
+	
+		
+	var qstring = "?q"
+	if (board_id != null){
+		qstring = qstring + '&board_id='+board_id
+	}
+	if (board_product_id != null){
+		qstring = qstring + '&board_product_id='+board_product_id
+	}
+	
+	
+	var url = '/products/'+product_id + qstring
 	var request = $.get( url );
 
 	  /* Put the results in a div */
