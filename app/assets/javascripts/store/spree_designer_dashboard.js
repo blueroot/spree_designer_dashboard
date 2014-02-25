@@ -116,6 +116,7 @@ function buildImageLayer(canvas, bp){
 					hasRotatingPoint: false
 		    });
 		oImg.set('id', bp.id)
+		console.log('build image: '+ bp.id)
 		oImg.set('product_permalink', bp.product.permalink)
 		canvas.add(oImg);
 		canvas.setActiveObject(oImg);
@@ -148,7 +149,8 @@ function addProductToBoard(event, ui){
 				xhr.setRequestHeader("Accept", "application/json")
 	     },
 	     success : function(board_product){
-				
+				console.log(board_product.product.permalink)
+		
 				buildImageLayer(canvas, board_product);
 				
 				// remove the jquery drag/drop place holder that had been there.

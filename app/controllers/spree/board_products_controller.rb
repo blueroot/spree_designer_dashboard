@@ -42,7 +42,7 @@ class Spree::BoardProductsController < Spree::StoreController
 
       respond_to do |format|
         format.js   { render :action => "show" }
-        format.json   {render :layout => false}
+        format.json   {render :action => "show", :layout => false}
         #format.html { redirect_to([:admin, @booking], :notice => 'Booking was successfully created.') }
         #format.xml  { render :xml => @booking, :status => :created, :location => @booking }
       end
