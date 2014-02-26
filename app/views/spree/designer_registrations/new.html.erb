@@ -37,14 +37,17 @@
 		
 	</div>
 	<div class="col-md-6">
-		<div class="registration-box">
-		<h3>Designer Registration Form</h3>
-		<% if spree_current_user %>
-			<%= render :partial => "form" %>
-		<% else %>
-		<p>To submit a registration, <%= link_to "please login with your Scout & Nimble user account", new_spree_user_session_url %>.  If you don't have a user account yet, <%= link_to "please create one real quick", new_spree_user_registration_url %>.  </p>
-		<% end %>
-		
+		<div class="login-box">
+			<div class="login-header">
+				<h6>Designer Registration Form</h6>
+			</div>
+			<div class="login-content">
+				<% if spree_current_user %>
+					<%= render :partial => "form" %>
+				<% else %>
+				<p>To submit a registration, <%= link_to "please login with your Scout & Nimble user account", new_spree_user_session_url %>.  If you don't have a user account yet, <%= link_to "please create one real quick", new_spree_user_registration_url %>.  </p>
+				<% end %>
+			</div>
 		</div>
 		
 	</div>

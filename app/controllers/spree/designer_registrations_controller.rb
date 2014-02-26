@@ -1,6 +1,7 @@
 class Spree::DesignerRegistrationsController < Spree::StoreController
   before_action :set_designer_registration, only: [:show, :edit, :update, :destroy]
-
+  layout "/spree/layouts/splash"
+  
   # GET /designer_registrations
   def index
     @designer_registrations = Spree::DesignerRegistration.all
