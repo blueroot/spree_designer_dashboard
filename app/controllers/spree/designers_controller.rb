@@ -8,6 +8,11 @@ class Spree::DesignersController < Spree::StoreController
     
   end
   
+  
+  def tutorials
+    
+  end
+  
   def update
     @user = spree_current_user
     

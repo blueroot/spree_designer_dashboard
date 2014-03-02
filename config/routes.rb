@@ -5,6 +5,7 @@ Spree::Core::Engine.routes.draw do
   match "/rooms/product_search" => "boards#product_search", :as => :board_product_search, :via =>[:get, :post]
   
   get "/rooms/search" => "boards#search", :as => :board_search
+  get "/tutorials" => "designers#tutorials", :as => :tutorials
   resources :rooms, controller: 'boards'  do 
     resources :board_products
     resources :color_matches
