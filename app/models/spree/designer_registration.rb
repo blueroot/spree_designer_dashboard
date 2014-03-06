@@ -61,7 +61,7 @@ class Spree::DesignerRegistration < ActiveRecord::Base
     message = {
      :subject=> "Congratulations! Your application has been accepted!",
      :from_name=> "Jesse Bodine",
-     :text=>"Now that you are an approved Room Designer with Scout & Nimble you may experience a loss of breath, dizziness, nausea, tingling and the need to celebrate. These feelings are completely normal and should be experienced daily from here on out. Thanks for signing up and welcome aboard. Your Room Designer account is now active, and we hope to have you desiging rooms very soon. In the meantime, please check out the tutorial below on how to navigate our site and build your rooms. If you have any questions along the way, don’t hesitate to reach out to us. We are here to help!  \n\n The Scout & Nimble Team",
+     :text=>"Now that you are an approved Room Designer with Scout & Nimble you may experience a loss of breath, dizziness, nausea, tingling and the need to celebrate. These feelings are completely normal and should be experienced daily from here on out. Thanks for signing up and welcome aboard. Your Room Designer account is now active, and we hope to have you desiging rooms very soon. In the meantime, please check out the tutorial below on how to navigate our site and build your rooms. If you have any questions along the way, do not hesitate to reach out to us. We are here to help!  \n\n The Scout & Nimble Team",
      :to=>[
        {
          :email=> self.user.email,
