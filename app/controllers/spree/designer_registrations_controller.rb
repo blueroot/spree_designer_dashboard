@@ -13,7 +13,9 @@ class Spree::DesignerRegistrationsController < Spree::StoreController
 
   # GET /designer_registrations/new
   def new
+    @user = Spree::User.new
     @designer_registration = Spree::DesignerRegistration.new
+    @designer_registration.user = @user
   end
 
   # GET /designer_registrations/1/edit

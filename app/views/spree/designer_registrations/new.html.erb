@@ -40,13 +40,18 @@
 	<div class="col-md-6">
 		<div class="login-box">
 			<div class="login-header">
-				<h6>Designer Registration Form</h6>
+				<h6>Designer Registration</h6>
 			</div>
 			<div class="login-content">
+				
 				<% if spree_current_user %>
+					<h4>Step 2 of 2: Complete designer application</h4>
 					<%= render :partial => "form" %>
 				<% else %>
-				<p>To submit a registration, <%= link_to "please login with your Scout & Nimble user account", new_spree_user_session_url %>.  If you don't have a user account yet, <%= link_to "please create one real quick", new_spree_user_registration_url %>.  </p>
+					<h4>Step 1 of 2: Create your Scout & Nimble Account</h4>
+					<p>Please enter the information below to create your Scout & Nimble account.</p>
+				<%= render :partial => "login_form" %>
+				
 				<% end %>
 			</div>
 		</div>
