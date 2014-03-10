@@ -2,7 +2,7 @@ class Spree::Board < ActiveRecord::Base
 
   validates_presence_of :name
   
-  has_many :board_products, :order => "z_index"
+  has_many :board_products, :order => "z_index", dependent: :destroy
   has_many :products, :through => :board_products
 	belongs_to :designer, :class_name => "User", :foreign_key => "designer_id"
 	has_many :color_matches
@@ -33,6 +33,19 @@ class Spree::Board < ActiveRecord::Base
     rs << self.room.name if self.room
     rs << self.style.name if self.style
     rs.join(", ")
+  end
+  
+  
+  def self.draft
+    where(:status => ["new"])
+  end
+  
+  def self.pending
+    where(:status => ["submitted_for_publication", "needs_revision"])
+  end
+  
+  def self.published
+    where(:status => ["published"])
   end
   
   def display_short_status

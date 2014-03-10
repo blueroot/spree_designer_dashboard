@@ -8,25 +8,29 @@
 
 <table class="index">
   <colgroup>
-    <col style="width: 40%" />
-    <col style="width: 40%" />
-    <col style="width: 10%" />
-    <col style="width: 10%" />
+	<col style="width: 20%" />
+	<col style="width: 20%" />
+	<col style="width: 20%" />
+	<col style="width: 20%" />
+	<col style="width: 10%" />
+	<col style="width: 10%" />
   </colgroup>
   <thead>
     <tr>
-      <th>Designer</th>
-	<th>Status</th>
-      <th class="actions"></th>
+		<th>First Name</th>
+		<th>Last Name</th>
+		<th>Designer</th>
+		<th>Status</th>
+		<th class="actions"></th>
     </tr>
   </thead>
   
   <tbody>
     <% @designer_registrations.each do |registration| %>
       <tr class="<%= cycle('odd', 'even') %>" id="<%= dom_id registration %>">
-        <td>
-          <%= registration.company_name %>
-        </td>
+        <td><%= registration.first_name %></td>
+		<td><%= registration.last_name %></td>
+		<td><%= registration.company_name %></td>
 		<td><%= registration.status %></td>
         
         <td  class="actions">

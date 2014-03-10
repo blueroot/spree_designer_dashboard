@@ -17,7 +17,7 @@
 		</div>
 
 
-  		<% unless @boards.blank? %>
+  		<% unless spree_current_user.boards.published.blank? %>
 		<table class="table table-board-listing">
 			<thead>
 				<tr>
@@ -32,7 +32,7 @@
 				</tr>
 			</thead>
 			<tbody>
-			<% @boards.each do |board|%>
+			<% spree_current_user.boards.published.each do |board|%>
 				
 				<tr>
 					<td class="status"><span class="label label-<%= board.display_short_status.downcase %>"><%= board.display_short_status %></label></td>

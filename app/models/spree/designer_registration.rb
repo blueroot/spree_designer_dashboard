@@ -49,7 +49,7 @@ class Spree::DesignerRegistration < ActiveRecord::Base
          :name=> self.user.full_name
        }
      ],
-     :from_email=>"jesse@scoutandnimble.com",
+     :from_email=>"designer@scoutandnimble.com",
      :track_opens => true,
      :track_clicks => true,
      :url_strip_qs => false,
@@ -77,7 +77,7 @@ class Spree::DesignerRegistration < ActiveRecord::Base
          :name=> self.user.full_name
        }
      ],
-     :from_email=>"jesse@scoutandnimble.com",
+     :from_email=>"designer@scoutandnimble.com",
      :track_opens => true,
      :track_clicks => true,
      :url_strip_qs => false,
@@ -105,7 +105,7 @@ class Spree::DesignerRegistration < ActiveRecord::Base
          :name=> self.user.full_name
        }
      ],
-     :from_email=>"jesse@scoutandnimble.com",
+     :from_email=>"designer@scoutandnimble.com",
      :track_opens => true,
      :track_clicks => true,
      :url_strip_qs => false,

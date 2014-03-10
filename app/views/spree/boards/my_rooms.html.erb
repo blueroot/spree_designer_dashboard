@@ -21,10 +21,10 @@
 			</div>
 		</div>
 		
-  		<% unless @boards.blank? %>
+  		<% unless spree_current_user.boards.published.blank? %>
 		<div class="dashboard-boards" data-hook="dashboard_boards">
 			<table class="table" cellspacing="0" border="0">
-			<% @boards.each do |board|%>
+			<% spree_current_user.boards.published.each do |board|%>
 				<tr>
 					<td style="vertical-align: top;">
 						<% if board.board_image %>
