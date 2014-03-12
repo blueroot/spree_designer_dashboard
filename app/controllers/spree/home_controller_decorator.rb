@@ -1,5 +1,6 @@
 module Spree
   HomeController.class_eval do
+    before_filter :require_authentication
     def dashboard
       @boards = spree_current_user.boards
     end

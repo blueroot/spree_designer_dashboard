@@ -1,4 +1,5 @@
 class Spree::ColorMatchesController < Spree::StoreController
+  before_filter :require_authentication
   require 'RMagick'
   include Magick 
   

@@ -1,5 +1,5 @@
 class Spree::DesignersController < Spree::StoreController
-  #before_filter :require_authentication,  :only => [:signup]
+  before_filter :require_authentication
 
   impressionist :actions=>[:show]
 
