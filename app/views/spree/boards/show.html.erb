@@ -1,6 +1,6 @@
 <div class="board-header">
 	<div class="row">
-		<div class="col-md-4">
+		<div class="col-md-12">
 			<ol class="breadcrumb">
 				<li><%= link_to "All Rooms" %></li>
 				<% if @board.room %>
@@ -8,11 +8,9 @@
 				<% end %>
 				<li class="active"><%= @board.name%></li>
 			</ol>
+			<h1><%= @board.name %></h1>
 		</div>
-		<div class="col-md-4">
-			
-		</div>
-		<div class="col-md-4"></div>
+		
 	</div>
 
 </div>
@@ -22,6 +20,8 @@
 			<div class="board-section board-image-section">
 				<%= board_image(@board,:large)%>
 			</div>
+			
+			<% if false %>
 			<% unless @board.colors.blank? %>
 			<div class="board-section board-swatch-section">
 				<h3>Suggested Paint Colors</h3>
@@ -70,23 +70,16 @@
 				<% end %>
 			</div>
 			<% end %>
+			<% end %>
 			
 			
 			</div>
 		</div>
 	<div class="col-md-5">
 		<div class="board-about-column">
-			<h1><%= @board.name %></h1>
 			<div class="board-description">
+				<h4>About This Room</h4>
 				<%= @board.description %>
-			</div>
-			<div class="board-sharing-tools">
-				<span class="share-label">Share:</span> 
-				<span class='st_facebook' displayText=''></span>
-				<span class='st_twitter' displayText=''></span>
-				<span class='st_pinterest' displayText=''></span>
-				<span class='st_googleplus' displayText=''></span>
-				<span class='st_email' displayText=''></span>
 			</div>
 			<h4>Room By</h4>
 			<div class="board-designer-header">
@@ -98,6 +91,74 @@
 					<p><%= @board.designer.company_name%></p>
 				</div>
 			</div>
+			<div class="board-sharing-tools">
+				<span class="share-label">Share:</span> 
+				<span class='st_facebook' displayText=''></span>
+				<span class='st_twitter' displayText=''></span>
+				<span class='st_pinterest' displayText=''></span>
+				<span class='st_googleplus' displayText=''></span>
+				<span class='st_email' displayText=''></span>
+			</div>
+			
+			<% unless @board.colors.blank? %>
+			<div class="board-swatch-colors">
+				<h4>Suggested Paint Colors</h4>
+				<% @board.colors.each_with_index do |color,index| %>
+					<div class="board-swatch-small color-match-link" id="add-colors-link-<%=index%>" data-match-id="1">
+						<span data-toggle="popover" data-color-id="<%=color.id%>" data-color-popover-container="color-popover-<%=color.id%>" data-html="true" data-trigger="hover" data-placement="top" data-animation="false" class="swatch-wrapper" data-color="<%=color.hex_val%>" data-color-hsv-h="<%=color.hsv_h%>" data-color-hsv-s="<%=color.hsv_s%>" data-color-hsv-v="<%=color.hsv_v%>" data-color-name="<%=color.name%>" data-color-swatch-val="<%=color.swatch_val%>">
+						<div class="board-swatch-color" id="board-swatch-color-<%=index%>" style="background-color: #<%= color.hex_val%>"></div>
+						
+						</span>
+					</div>
+					
+					
+					
+					<div id="color-popover-<%=color.id%>" class="hide">
+					<div class="row">
+						<div class="col-md-5">
+							<div style="height: 100px; width: 100px; background-color: #<%=color.hex_val%>"></div>
+						</div>
+						<div class="col-md-7 swatch-popover-info">
+							<h4><%=color.name%></h4>
+							<p>by Sherwin Williams</p>
+							<div class="swatch-number">
+								<div class="swatch-header">
+									SWATCH #
+								</div>
+								<div class="swatch-content">
+									<%=color.swatch_val%>
+								</div>
+							</div>
+							
+							
+							<% if false%>
+							<table class="table table-condensed swatch-table">
+								<tr>
+									<td><strong>Swatch #</strong></td>
+									<td><%=color.swatch_val%></td>
+								</tr>
+								
+								<tr>
+									<td><strong>Hex</strong></td>
+									<td>#<%=color.hex_val%></td>
+								</tr>
+								<tr>
+									<td><strong>HSV</strong></td>
+									<td>H: <%=color.hsv_h%><br />
+										S: <%=color.hsv_s%><br />
+										V: <%=color.hsv_v%></td>
+								</tr>	
+								
+							</table>
+							<% end %>
+						</div>
+					</div>
+					</div>
+				<% end %>
+			</div>
+			<% end %>
+			
+			
 		
 		</div>
 	</div>
