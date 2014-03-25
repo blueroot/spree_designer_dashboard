@@ -29,6 +29,7 @@ class Spree::ColorMatchesController < Spree::StoreController
     end
     
     if @color_match.save
+      @color_collections = Spree::ColorCollection.all()
       respond_to do |format|
         format.js   { render :action => "show" }
       end

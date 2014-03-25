@@ -11,9 +11,9 @@
 		<% @color_collections.each do |cc| %>
 		
 			<% if cc.name == "Sherwin Williams" %>
-				<a href="javascript:void(0);" class="swatch-vendor" data-vendor-id="<%=cc.id%>"><%= image_tag("/assets/store/colorvendors/sw.png")%></a>
+				<a href="javascript:void(0);" class="swatch-vendor" data-vendor-id="<%=cc.id%>"><%= image_tag(asset_path("/assets/store/colorvendors/sw.png"))%></a>
 			<% elsif cc.name == "Benjamin Moore" %>
-				<a href="javascript:void(0);" class="swatch-vendor" data-vendor-id="<%=cc.id%>"><%= image_tag("/assets/store/colorvendors/bm.png")%></a>
+				<a href="javascript:void(0);" class="swatch-vendor" data-vendor-id="<%=cc.id%>"><%= image_tag(asset_path("/assets/store/colorvendors/bm.png"))%></a>
 			<% end %>	
 			
 		<% end %>
@@ -21,7 +21,7 @@
 		<div id="color-preloader" class="hidden" style="padding-top: 20px; text-align: center;">
 			
 			<p>Just a moment...talking to the Magical Swatch Factory</p>
-			<%= image_tag("/assets/store/preloader64.gif")%>
+			<%= image_tag(asset_path("/assets/store/preloader64.gif"))%>
 			
 		</div>
 		<div id="color_swatches_container"></div>

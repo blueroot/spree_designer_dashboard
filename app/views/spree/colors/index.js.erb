@@ -25,7 +25,7 @@ $(document).ready(function() {
 
 
 			if (active_swatch_element.data('colorMatchId') > 0){
-				url = '/room/'+ $('#canvas').data('boardId')+'/color_matches'
+				url = '/rooms/'+ $('#canvas').data('boardId')+'/color_matches'
 				//url = '<%#=room_color_matches_path(@board.id)%>'
 
 				//alert(taxon);
@@ -40,7 +40,7 @@ $(document).ready(function() {
 			}
 
 			else{
-				url = '/room/'+ $('#canvas').data('boardId')+'/color_matches'
+				url = '/rooms/'+ $('#canvas').data('boardId')+'/color_matches'
 				//url = '<%#=room_color_matches_path(@board.id)%>'
 
 				//alert(taxon);
