@@ -161,6 +161,7 @@ class Spree::BoardsController < Spree::StoreController
     @products = Spree::Product.all()
     @department_taxons = Spree::Taxonomy.where(:name => 'Department').first().root.children
     @wholesaler_taxons = Spree::Taxonomy.where(:name => 'Wholesaler').first().root.children
+    @color_collections = Spree::ColorCollection.all()
   end
   
   private

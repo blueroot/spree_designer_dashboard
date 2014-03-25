@@ -3,86 +3,28 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        
-		<h4 class="modal-title">Choose Color Swatches for Your Board</h4>
-		
+		<h4 class="modal-title">Choose Color Swatches for Your Board</h4>		
       </div>
-		
       <div class="modal-body">
+	<h3>Choose a company to see available colors</h3>
+		<div class="color-vendors">
+		<% @color_collections.each do |cc| %>
 		
-		<h4>Red</h4>
-		<ul class="color-swatches">
-			<% Spree::Color.red.each do |color| %>
-				<%= render :partial => "/spree/boards/color_swatch", :locals => {:color => color}%>
-			<% end %>
-
-		</ul>
-		
-		<h4>Yellow</h4>
-		<ul class="color-swatches">
-			<% Spree::Color.yellow.each do |color| %>
-				<%= render :partial => "/spree/boards/color_swatch", :locals => {:color => color}%>
-			<% end %>
+			<% if cc.name == "Sherwin Williams" %>
+				<a href="javascript:void(0);" class="swatch-vendor" data-vendor-id="<%=cc.id%>"><%= image_tag("/assets/store/colorvendors/sw.png")%></a>
+			<% elsif cc.name == "Benjamin Moore" %>
+				<a href="javascript:void(0);" class="swatch-vendor" data-vendor-id="<%=cc.id%>"><%= image_tag("/assets/store/colorvendors/bm.png")%></a>
+			<% end %>	
 			
-		</ul>
-		
-		<h4>Cool Neutral</h4>
-		<ul class="color-swatches">
-			<% Spree::Color.cool_neutral.each do |color| %>
-				<%= render :partial => "/spree/boards/color_swatch", :locals => {:color => color}%>
-			<% end %>
+		<% end %>
+		</div>
+		<div id="color-preloader" class="hidden" style="padding-top: 20px; text-align: center;">
 			
-		</ul>
-		
-		<h4>Green</h4>
-		<ul class="color-swatches">
-			<% Spree::Color.green.each do |color| %>
-				<%= render :partial => "/spree/boards/color_swatch", :locals => {:color => color}%>
-			<% end %>
+			<p>Just a moment...talking to the Magical Swatch Factory</p>
+			<%= image_tag("/assets/store/preloader64.gif")%>
 			
-		</ul>
-		
-		<h4>Blue</h4>
-		<ul class="color-swatches">
-			<% Spree::Color.blue.each do |color| %>
-				<%= render :partial => "/spree/boards/color_swatch", :locals => {:color => color}%>
-			<% end %>
-			
-		</ul>
-		
-		<h4>Violet</h4>
-		<ul class="color-swatches">
-			<% Spree::Color.violet.each do |color| %>
-				<%= render :partial => "/spree/boards/color_swatch", :locals => {:color => color}%>
-			<% end %>
-			
-		</ul>
-
-		<h4>Warm Neutral</h4>
-		<ul class="color-swatches">
-			<% Spree::Color.warm_neutral.each do |color| %>
-				<%= render :partial => "/spree/boards/color_swatch", :locals => {:color => color}%>
-			<% end %>
-			
-		</ul>
-
-
-		<h4>White</h4>
-		<ul class="color-swatches">
-			<% Spree::Color.white.each do |color| %>
-				<%= render :partial => "/spree/boards/color_swatch", :locals => {:color => color}%>
-			<% end %>
-			
-		</ul>
-
-		
-		<h4>Orange</h4>
-		<ul class="color-swatches">
-			<% Spree::Color.orange.each do |color| %>
-				<%= render :partial => "/spree/boards/color_swatch", :locals => {:color => color}%>
-			<% end %>
-			
-		</ul>
+		</div>
+		<div id="color_swatches_container"></div>
       </div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

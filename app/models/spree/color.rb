@@ -4,6 +4,18 @@ class Spree::Color < ActiveRecord::Base
 	belongs_to :color_collection
   attr_accessible :swatch_val, :name, :hex_val, :position, :cmyk_c, :cmyk_m, :cmyk_y, :cmyk_k, :rgb_r, :rgb_g, :rgb_b, :lrv_x, :lrv_y, :lrv_z, :lstar, :bstart, :astar, :cstar, :hab, :munsell_hue, :munsell_value, :munsell_chroma, :sw_instrument, :sw_illuminant, :sw_observer, :color_collection_id, :hsv_h, :hsv_s, :hsv_v, :lrv, :color_family, :collection_name
 
+  def self.by_color_collection(color_collection)
+    includes(:color_collection).where("spree_color_collections.name = '#{color_collection}'")
+  end
+  
+  def self.sw_colors
+    includes(:color_collection).where("spree_color_collections.name = 'Sherwin Williams'")
+  end
+  
+  def self.bm_colors
+    includes(:color_collection).where("spree_color_collections.name = 'Benjamin Moore'")
+  end
+  
   def self.by_color_family(color_family)
     where(:color_family => color_family)
   end
@@ -43,5 +55,7 @@ class Spree::Color < ActiveRecord::Base
   def self.yellow
     where(color_family: 'Yellow')
   end
+  
+  
 
 end

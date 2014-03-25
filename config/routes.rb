@@ -2,6 +2,11 @@ Spree::Core::Engine.routes.draw do
   # Add your extension routes here
   
   
+  resources :color_collections do 
+    resources :colors
+  end
+  
+  
   match "/rooms/product_search" => "boards#product_search", :as => :board_product_search, :via =>[:get, :post]
   
   get "/rooms/search" => "boards#search", :as => :board_search

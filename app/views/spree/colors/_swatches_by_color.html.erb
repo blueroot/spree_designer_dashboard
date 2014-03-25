@@ -1,0 +1,82 @@
+<h3>Colors from <%= color_collection.name %></h3>
+
+<% unless @colors.red.blank? %>
+	<h4>Red</h4>
+	<ul class="color-swatches">
+		<% @colors.red.each do |color| %>
+			<%= render :partial => "/spree/boards/color_swatch", :locals => {:color => color}%>
+		<% end %>
+	</ul>
+<% end %>
+
+<% unless @colors.yellow.blank? %>
+<h4>Yellow</h4>
+<ul class="color-swatches">
+	<% @colors.yellow.each do |color| %>
+		<%= render :partial => "/spree/boards/color_swatch", :locals => {:color => color}%>
+	<% end %>
+</ul>
+<% end %>
+
+<% unless @colors.cool_neutral.blank? %>
+<h4>Cool Neutral</h4>
+<ul class="color-swatches">
+	<% @colors.cool_neutral.each do |color| %>
+		<%= render :partial => "/spree/boards/color_swatch", :locals => {:color => color}%>
+	<% end %>
+</ul>
+<% end %>
+
+<% unless @colors.green .blank? %>
+	<h4>Green</h4>
+	<ul class="color-swatches">
+		<% @colors.green.each do |color| %>
+			<%= render :partial => "/spree/boards/color_swatch", :locals => {:color => color}%>
+		<% end %>
+	</ul>
+<% end %>
+
+<% unless @colors.blue.blank? %>
+	<h4>Blue</h4>
+	<ul class="color-swatches">
+		<% @colors.blue.each do |color| %>
+			<%= render :partial => "/spree/boards/color_swatch", :locals => {:color => color}%>
+		<% end %>	
+	</ul>
+<% end %>
+
+<% unless @colors.violet.blank? %>
+	<h4>Violet</h4>
+	<ul class="color-swatches">
+		<% @colors.violet.each do |color| %>
+			<%= render :partial => "/spree/boards/color_swatch", :locals => {:color => color}%>
+		<% end %>
+	</ul>
+<% end %>
+
+<% unless @colors.warm_neutral.blank? %>
+	<h4>Warm Neutral</h4>
+	<ul class="color-swatches">
+		<% @colors.warm_neutral.each do |color| %>
+			<%= render :partial => "/spree/boards/color_swatch", :locals => {:color => color}%>
+		<% end %>	
+	</ul>
+<% end %>
+
+<% unless @colors.white.blank? %>
+	<h4>White</h4>
+	<ul class="color-swatches">
+		<% @colors.white.each do |color| %>
+			<%= render :partial => "/spree/boards/color_swatch", :locals => {:color => color}%>
+		<% end %>
+	</ul>
+<% end %>
+
+<% unless @colors.orange.blank? %>
+	<h4>Orange</h4>
+	<ul class="color-swatches">
+		<% @colors.orange.each do |color| %>
+			<%= render :partial => "/spree/boards/color_swatch", :locals => {:color => color}%>
+		<% end %>
+	</ul>
+<% end %>

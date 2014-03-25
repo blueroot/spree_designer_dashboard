@@ -1,0 +1,62 @@
+$('#color_swatches_container').html('<%= escape_javascript(raw render(:partial => "swatches_by_color", :locals => {:colors => @colors, :color_collection => @color_collection})) %>')
+$(document).ready(function() {
+	
+	
+	$('.swatch').popover({ 
+	    html : true,
+	    content: function() {
+			//$('.button-product-info').popover('hide');
+	      return $('#'+$(this).data('colorPopoverContainer')).html();
+	    }
+	  });
+	
+		$( ".swatch" ).click(function() {
+
+			active_swatch_element = $( "div.board-colors-container > .active" )
+		  	$( "div.board-colors-container > .active > .board-swatch-color" ).css("background-color", '#'+$(this).data('color'))
+			//$( "div.board-colors-container > .active" ).removeClass('board-swatch-default')
+			active_swatch_element.removeClass('board-swatch-default')
+
+			swatch_table = '<table class="table table-condensed swatch-table"><tr><td><strong>Swatch #</strong></td><td>'+$(this).data('colorSwatchVal')+'</td></tr><tr><td><strong>Hex</strong></td><td>#'+$(this).data('color')+'</td></tr><tr><td><strong>HSV</strong></td><td>H: '+$(this).data('colorHsvH')+'<br />S: '+$(this).data('colorHsvS')+'<br />V: '+$(this).data('colorHsvV')+'</td></tr></table>'
+
+			$( "div.board-colors-container > .active > .board-swatch-content" ).html('<h4>'+$(this).data('colorName')+'</h4>'+$(this).data('colorSwatchVal'))
+
+			$('#colors-modal').modal('hide')
+
+
+			if (active_swatch_element.data('colorMatchId') > 0){
+				url = '/room/'+ $('#canvas').data('boardId')+'/color_matches'
+				//url = '<%#=room_color_matches_path(@board.id)%>'
+
+				//alert(taxon);
+				/* Send the data using post */
+				var posting = $.post( url, { color_id: $(this).data('colorId'), id: active_swatch_element.data('colorMatchId') } );
+
+				/* Put the results in a div */
+				posting.done(function( data ) {
+					//var content = $( data ).find( '#content' );
+					//$( "#result" ).empty().append( content );
+				});
+			}
+
+			else{
+				url = '/room/'+ $('#canvas').data('boardId')+'/color_matches'
+				//url = '<%#=room_color_matches_path(@board.id)%>'
+
+				//alert(taxon);
+				/* Send the data using post */
+				var posting = $.post( url, { color_id: $(this).data('colorId') } );
+
+				/* Put the results in a div */
+				posting.done(function( data ) {
+					//var content = $( data ).find( '#content' );
+					//$( "#result" ).empty().append( content );
+				});
+			}
+
+		});
+	
+	
+	$('#color_swatches_container').removeClass('hidden')
+	$('#color-preloader').addClass('hidden')
+});
