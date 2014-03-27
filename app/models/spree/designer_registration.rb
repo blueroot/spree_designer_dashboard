@@ -8,12 +8,13 @@ class Spree::DesignerRegistration < ActiveRecord::Base
   
   after_save :update_designer_status
   after_create :send_designer_welcome
-  #after_create :update_user_names
+  after_create :update_user_names
   
   def update_user_names
     user = self.user
     
-    user.update_attributes({:first_name => self.first_name, :last_name => self.last_name})
+    self.update_attributes({:first_name => user.first_name, :last_name => user.last_name})
+    #user.update_attributes({:first_name => self.first_name, :last_name => self.last_name})
     
   end
   
