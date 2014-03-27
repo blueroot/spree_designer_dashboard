@@ -3,11 +3,12 @@ class Spree::DesignerRegistration < ActiveRecord::Base
   attr_accessible :address1, :address2, :city, :state, :postal_code, :phone, :website, :resale_certificate_number, :tin, :company_name, :status, :first_name, :last_name
   belongs_to :user, :class_name => "User"
   
-  validates_presence_of :address1, :city, :state, :postal_code, :phone, :website, :tin, :company_name, :first_name, :last_name
+  validates_presence_of :address1, :city, :state, :postal_code, :phone, :website, :tin, :company_name
+  #validates_presence_of :first_name, :last_name
   
   after_save :update_designer_status
   after_create :send_designer_welcome
-  after_create :update_user_names
+  #after_create :update_user_names
   
   def update_user_names
     user = self.user
