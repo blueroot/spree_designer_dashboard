@@ -23,7 +23,7 @@
 		<div class="col-md-3">
 			<div class="designer-listing">
 				<%= render :partial => "designer_thumb", :locals => {:designer => designer}%>
-				<h4><%= link_to designer.full_name, designer_path(designer) %></h4>
+				<h4><%= link_to designer.full_name, "/#{designer.username}" %></h4>
 			</div>
 		</div>
     <% end %>
