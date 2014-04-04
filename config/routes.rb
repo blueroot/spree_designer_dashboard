@@ -30,7 +30,7 @@ Spree::Core::Engine.routes.draw do
   get "/my_rooms" => "boards#my_rooms", :as => :my_rooms
 
   get "/designers" => "designers#index", :as => :designers
-  get "/designer/:id" => "designers#show", :as => :designer
+  
 
   get '/rooms/build/:id' => "boards#build", :as => :build_board
   get '/rooms/:id/design' => "boards#design", :as => :design_board

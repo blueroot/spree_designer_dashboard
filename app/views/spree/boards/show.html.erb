@@ -189,7 +189,7 @@
 			
 			<% if @board.board_products.any? %>
 				<% @board.products.in_groups_of(4, false) do |row_products| %>
-				<div id="products" class="row">
+				<div id="products" class="row products-row">
 					<% for product in row_products %>
 					<div class="col-md-3">
 						<div class="product-listing">
@@ -198,8 +198,8 @@
 					      	</div>
 					      	<%= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => product.name %>
 					      	<span class="price selling" itemprop="price"><%= display_price(product) %></span>
-							<div><% if product.images.first %>
-								<a href="javascript:void(0);" class="add-to-cart-button" data-product-name="<%=product.name%>" data-product-price="<%= display_price(product) %>" data-product-image-url="<%=product.images.first.attachment.url(:mini)%>" data-product-id="<%= product.id %>" data-variant-number="1">Add to Cart</a><% end %></div>
+							<% if false %><div><% if product.images.first %>
+								<a href="javascript:void(0);" class="add-to-cart-button" data-product-name="<%=product.name%>" data-product-price="<%= display_price(product) %>" data-product-image-url="<%=product.images.first.attachment.url(:mini)%>" data-product-id="<%= product.id %>" data-variant-number="1">Add to Cart</a><% end %></div><% end %>
 						</div>
 					</div>
 					<% end %>
@@ -210,7 +210,7 @@
 	</div>
 </div>
 
-<%= render :partial => "spree/shared/add_to_cart_modal" %>
+<%#= render :partial => "spree/shared/add_to_cart_modal" %>
 
 <h3>Related Rooms</h3>
 <% if !@board.related_boards.blank? %>

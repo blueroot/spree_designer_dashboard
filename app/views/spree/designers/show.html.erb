@@ -1,39 +1,103 @@
-
-<div class="designer-header">
-	<% if @designer.logo_image %>
-		<div class="designer-logo">
-			<%= image_tag(@designer.logo_image.attachment(:small)) %>
-		</div>
-	<% end %>
-	<div class="designer-info">
-		<h1><%= @designer.full_name %></h1>
-		<p><%= @designer.company_name %></p>
-	</div>
-	
-</div>
-<div id="designer-banner"></div>
-
-<div class="designer-description">
+<% content_for :page_header do %>
+<div class="row">
+	<div class="col-md-10 col-md-offset-1">
+  <div class="designer-header">
+	<div class="designer-header-band">&nbsp;</div>
 	<div class="row">
-		<div class="col-md-12">
-			<%= @designer.description %>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="profile-img">
+						<% if !@designer.user_images.blank? %>
+						<%=image_tag(@designer.user_images.first.attachment(:primary), :class => "img-circle")%>
+						<% else %>
+							<%=image_tag("/assets/store/profile_default_primary.jpg", :class => "img-circle")%>
+						<% end %>
+					</div>
+				</div>
+				<div class="col-md-8">
+					<div class="designer-info">
+					<h1><%= @designer.full_name %></h1>
+					<% unless @designer.location.blank? %>
+						<div class="info-item info-item-location"><%= "#{@designer.location}" %></div>
+					<% end %>
+					<% unless @designer.company_name.blank? %>
+						<div class="info-item info-item-company"><%= @designer.company_name %></div>
+					<% end %>
+					<% unless @designer.website_url.blank? %>
+						<div class="info-item info-item-url"><%= link_to @designer.website_url, format_url(@designer.website_url) %></div>
+					<% end %>
+					<div class="info-item info-item-social">
+						<ul>
+							<% unless @designer.social_facebook.blank? %>
+								<li><%= link_to raw("<i class=\"fa fa-facebook\"></i>"), format_url(@designer.social_facebook), :target => "_new"%></li>
+							<% end %>
+							<% unless @designer.social_twitter.blank? %>
+								<li><%= link_to raw("<i class=\"fa fa-twitter\"></i>"), "http://twitter.com/#{@designer.social_twitter}", :target => "_new"%></li>
+							<% end %>
+							<% unless @designer.social_instagram.blank? %>
+								<li><%= link_to raw("<i class=\"fa fa-instagram\"></i>"), "http://instagram.com/#{@designer.social_instagram}", :target => "_new"%></li>
+							<% end %>
+							<% unless @designer.social_pinterest.blank? %>
+								<li><%= link_to raw("<i class=\"fa fa-pinterest\"></i>"), "http://pinterest.com/#{@designer.social_pinterest}", :target => "_new"%></li>
+							<% end %>
+							<% unless @designer.social_googleplus.blank? %>
+								<li><%= link_to raw("<i class=\"fa fa-google-plus\"></i>"), format_url(@designer.social_googleplus), :target => "_new"%></li>
+							<% end %>
+							<% unless @designer.social_linkedin.blank? %>
+								<li><%= link_to raw("<i class=\"fa fa-linkedin\"></i>"), format_url(@designer.social_linkedin), :target => "_new"%></li>
+							<% end %>
+						</ul>
+					</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="designer-about">
+				<h4>About <%= @designer.first_name %></h4>	
+				<div class="designer-description">
+					<% if !@designer.description.blank? %>
+					<div id="designer-partial-description">
+						<%= first_x_words(@designer.description, 40) %> <a href="javascript:void(0);" id="show_more_description">show more</a>
+					</div>
+					<div id="designer-full-description" class="hidden">
+						<%= @designer.description %> <a href="javascript:void(0);" id="show_less_description">show less</a>
+					</div>
+					<% else %>
+					<%= @designer.first_name %> has not filled out their profile yet.  But when they do, it will be awesome!
+					<% end %>
+				</div>
+			</div>
 		</div>
 	</div>
+	</div>
+	</div>
 </div>
+
+<% end %>
+
+<h2>Featured Rooms</h2>
 <div class="designer-boards">
 	<% unless @designer.boards.active.blank? %>
 		<% @designer.boards.active.in_groups_of(3, false) do |row_boards| %>
 		<div class="row">
-
 			<% for board in row_boards %>
 			<div class="col-md-4">
 				<div class="board-listing">
 					<div class="board-image">
-					<%= link_to board_image(board, :primary), room_path(board)%>
+					<%= link_to board_image(board, :large), room_path(board)%>
 					</div>
-					<div class="board-meta">
-						<h3><%= link_to board.name, room_path(board) %></h3>
-						<div class=""><%= board.room_and_style%></div>
+					<div class="board-info">
+						<div class="board-meta">
+							<h3><%= link_to board.name, room_path(board) %></h3>
+							<div class=""><%= board.room_and_style%></div>
+						</div>
+						<div class="board-action">
+							<%= link_to "Shop Room", room_path(board) %>
+							<p><%= board.products.size%> products</p>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -46,11 +110,43 @@
 	</div>
 	<% end%>
 </div>
+	
+<div class="quote-divider-wrapper">
+	<div class="quote-divider-content">
+		<% if !@designer.designer_quote.blank?%>
+			<%= @designer.designer_quote %>	
+		<% else %>
+			"Design is not just what it looks like and feels like. Design is how it works."
+		<% end %>
+	</div>
+</div>
+	
+	
+
+<h2>Featured Products</h2>
+<div class="designer-boards">
+	<% unless @products.blank? %>
+		<%= render :partial => "products_list", :locals => {:products => @products}%>
+	
+		
+	<% else %>
+	<div class="empty-state">
+		This designer doesn't have featured products at this time.
+	</div>
+	<% end%>
+</div>
 
 <script>
-	<% if !@designer.user_images.blank? and @designer.user_images.first%>
-	$(document).ready(function() {	    
-		$("#designer-banner").backstretch("<%=@designer.user_images.first.attachment(:banner)%>");
-	});
-	<% end %>
+$(document).ready(function() {
+	$('#show_more_description').click(function() {
+        $('#designer-partial-description').addClass('hidden')
+		$('#designer-full-description').removeClass('hidden')
+
+    });
+	$('#show_less_description').click(function() {
+        $('#designer-partial-description').removeClass('hidden')
+		$('#designer-full-description').addClass('hidden')
+
+    });
+});
 </script>

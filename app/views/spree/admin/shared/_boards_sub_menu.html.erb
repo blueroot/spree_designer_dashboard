@@ -1,0 +1,9 @@
+<% content_for :sub_menu do %>
+  <ul id="sub_nav" data-hook="admin_boards_sub_tabs" class="inline-menu">
+    <%= tab :boards, :match_path => '/boards' %>
+    <%= tab :board_products %>
+    <%#= tab :prototypes %>
+    <%#= tab :taxonomies %>
+    <%#= tab :taxons %>
+  </ul>
+<% end %>

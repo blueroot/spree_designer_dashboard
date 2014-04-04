@@ -16,7 +16,7 @@ class Spree::BoardsController < Spree::StoreController
     @living_room_boards = Spree::Board.featured().by_room(Spree::Taxon.find_by_name('Living Room').id)
     @dining_room_boards = Spree::Board.featured().by_room(droom.id)
     @products = Spree::Product.featured()
-    
+    @selected_section = "home"
     
     render :layout => "/spree/layouts/spree_home"
   end

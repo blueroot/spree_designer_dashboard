@@ -1,6 +1,7 @@
 class Spree::DesignerRegistrationsController < Spree::StoreController
   before_action :set_designer_registration, only: [:show, :edit, :update, :destroy]
   layout "/spree/layouts/splash"
+  before_filter :check_existing_registration, :only => [:new]
   
   # GET /designer_registrations
   def index
@@ -67,6 +68,13 @@ class Spree::DesignerRegistrationsController < Spree::StoreController
   end
 
   private
+  
+    def check_existing_registration
+      if spree_current_user and !spree_current_user.designer_registrations.blank?
+        redirect_to "/"
+      end
+    end
+    
     # Use callbacks to share common setup or constraints between actions.
     def set_designer_registration
       @designer_registration = Spree::DesignerRegistration.find(params[:id])

@@ -8,14 +8,16 @@ class Spree::DesignerRegistration < ActiveRecord::Base
   
   after_save :update_designer_status
   after_create :send_designer_welcome
-  after_create :update_user_names
+  after_create :update_profile_information
   
-  def update_user_names
-    user = self.user
-    
-    self.update_attributes({:first_name => user.first_name, :last_name => user.last_name})
-    #user.update_attributes({:first_name => self.first_name, :last_name => self.last_name})
-    
+  def update_profile_information
+    if self.user
+      user = self.user
+      user.build_username
+      user.update_attributes({:location => "#{self.city}, #{self.state}", 
+                              :website_url => self.website,
+                              :company_name => self.company_name})
+    end
   end
   
   def self.status_options
