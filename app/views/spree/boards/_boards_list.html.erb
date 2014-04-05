@@ -5,21 +5,16 @@
 		<div class="col-md-6">
 			<div class="board-listing">
 				<div class="board-image">
-					<%= link_to board_image(board,"large"), room_path(board)%>
+				<%= link_to board_image(board, :large), room_path(board)%>
 				</div>
-				<div class="board-meta">
-					<div class="row">
-						<div class="col-md-2 board-designer-avatar">
-								<% unless board.designer.user_images.blank? %>
-									<%= link_to image_tag(board.designer.user_images.first.attachment(:mini)), designer_path(board.designer) %>
-								<% else %>
-									<%= link_to image_tag("/assets/store/profile_default_primary.jpg", :style => "width: 48px;"), designer_path(board.designer) %>
-								<% end %>
-						</div>
-						<div class="col-md-10">
-							<h3><%= link_to board.name, room_path(board) %></h3>
-							<div class="board-byline">by <%= board.designer.full_name%></div>				
-						</div>
+				<div class="board-info">
+					<div class="board-meta">
+						<h3><%= link_to board.name, room_path(board) %></h3>
+						<div class="">by <%= link_to board.designer.full_name, "/#{board.designer.username}"%></div>
+					</div>
+					<div class="board-action">
+						<%= link_to "Shop Room", room_path(board) %>
+						<p><%= board.products.size%> products</p>
 					</div>
 				</div>
 			</div>
