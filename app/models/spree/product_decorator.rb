@@ -27,8 +27,13 @@ Spree::Product.class_eval do
   end
   
   def is_on_board?
-    self.board_products and self.board_products.size > 0
+    !self.board_products.blank?
   end
+  
+  def not_on_a_board?
+    self.board_products.blank?
+  end
+  
   
   def image_for_board
     self.images.first ? Magick::ImageList.new(self.images.first.attachment.url(:product)) : Magick::ImageList.new(self.variants.first.images.first.attachment.url(:product))

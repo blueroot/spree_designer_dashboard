@@ -119,8 +119,8 @@ class Spree::BoardsController < Spree::StoreController
     end
     
     @all_products = @searcher.retrieve_products
-    @products = @all_products.select { |product| !product.is_on_board? }
-    
+    #@products = @all_products.select { |product| product.not_on_a_board? }
+    @products = @all_products
     @board = Spree::Board.find(params[:board_id])
     
     #@products = Spree::Product.all()

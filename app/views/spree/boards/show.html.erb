@@ -84,10 +84,10 @@
 			<h4>Room By</h4>
 			<div class="board-designer-header">
 				<div class="board-designer-logo">
-					<%= link_to logo_image(@board.designer.logo_image, :mini), designer_path(@board.designer)%>
+					<%= link_to logo_image(@board.designer.logo_image, :mini), "/#{@board.designer.username}"%>
 				</div>
 				<div class="board-designer-info">
-					<h3><%= link_to @board.designer.full_name, designer_path(@board.designer)%></h3>
+					<h3><%= link_to @board.designer.full_name, "/#{@board.designer.username}"%></h3>
 					<p><%= @board.designer.company_name%></p>
 				</div>
 			</div>
