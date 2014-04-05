@@ -84,7 +84,12 @@
 			<h4>Room By</h4>
 			<div class="board-designer-header">
 				<div class="board-designer-logo">
-					<%= link_to logo_image(@board.designer.logo_image, :mini), "/#{@board.designer.username}"%>
+					<% if !@board.designer.user_images.blank? %>
+					<%=image_tag(@board.designer.user_images.first.attachment(:mini), :class => "img-circle")%>
+					<% else %>
+						<%=image_tag("/assets/store/profile_default_primary.jpg", :class => "img-circle")%>
+					<% end %>
+					<%#= link_to logo_image(@board.designer.logo_image, :mini), "/#{@board.designer.username}"%>
 				</div>
 				<div class="board-designer-info">
 					<h3><%= link_to @board.designer.full_name, "/#{@board.designer.username}"%></h3>
