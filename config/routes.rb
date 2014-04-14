@@ -42,7 +42,6 @@ Spree::Core::Engine.routes.draw do
   
   
   
-  
   resources :board_products
   
   
@@ -50,6 +49,16 @@ Spree::Core::Engine.routes.draw do
     resources :boards
     resources :board_products
     resources :designer_registrations
+    
+    
+    # Product Import Tables
+    get "product_import" => "product_import#index", :as => :product_import
+    post "product_import" => "product_import#upload", :as => :post_product_import
+
+    resources :import_tables
+    resources :import_logs
+    #post 'import_tables/:id' => 'import_tables#merge'
+    
   end
 
 end

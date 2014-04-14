@@ -7,9 +7,14 @@ class Spree::BoardProduct < ActiveRecord::Base
   
   before_create :set_z_index
   
+  default_scope  { where("#{Spree::BoardProduct.quoted_table_name}.deleted_at IS NULL or #{Spree::BoardProduct.quoted_table_name}.deleted_at >= ?", Time.zone.now) }
+  
   def set_z_index
     self.z_index = self.board.board_products.size
   end
   
+  def destroy
+    self.update_attribute('deleted_at', Time.zone.now)
+  end
   
 end

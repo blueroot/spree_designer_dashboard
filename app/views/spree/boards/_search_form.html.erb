@@ -10,37 +10,60 @@
 	<fieldset class="form">
 		
 		<div class="control-group">
-		    <label class="control-label" for="inputEmail">Room Type</label>
+			<% if false %><label class="control-label" for="inputEmail">Room Type</label><% end %>
 		    <div class="controls">
-				<%= select_tag :room_id, options_from_collection_for_select(@room_taxons, "id", "name", @selected_room), :prompt => "All Rooms" %>
+				<%= select_tag :room_id, options_from_collection_for_select(@room_taxons, "id", "name", @selected_room), :prompt => "All Rooms", :class => "room-filter" %>
 			</div>
 		</div>
 		<div class="control-group">
-		    <label class="control-label" for="inputEmail">Style</label>
+		    <% if false %><label class="control-label" for="inputEmail">Style</label><% end %>
 		    <div class="controls">
-				<%= select_tag :style_id, options_from_collection_for_select(@style_taxons, "id", "name", @selected_style), :prompt => "All Styles" %>
+				<%= select_tag :style_id, options_from_collection_for_select(@style_taxons, "id", "name", @selected_style), :prompt => "All Styles", :class => "style-filter" %>
 			</div>
 		</div>
 		<div class="control-group">
-		    <label class="control-label" for="inputEmail">Color</label>
+		    <% if false %><label class="control-label" for="inputEmail">Color</label><% end %>
 		    <div class="controls">
-				<%= select_tag "color_family", options_for_select(Spree::Board.color_categories, @selected_color_family), :prompt => "All Colors" %>
+				<%= select_tag "color_family", options_for_select(Spree::Board.color_categories, @selected_color_family), :prompt => "All Colors", :class => "color-filter" %>
 			</div>
 		</div>
 		<div class="control-group">
-		    <label class="control-label" for="inputEmail">Designer</label>
+		    <% if false %><label class="control-label" for="inputEmail">Designer</label><% end %>
 		    <div class="controls">
-				<%= select_tag "designer_id", options_from_collection_for_select(@designers, "id", "full_name", @selected_designer), :prompt => "All Designers" %>
+				<%= select_tag "designer_id", options_from_collection_for_select(@designers, "id", "full_name", @selected_designer), :prompt => "All Designers", :class => "designer-filter" %>
 			</div>
 		</div>
 		<div class="control-group">
-		    <label class="control-label" for="inputEmail">Price</label>
+		    <% if false %><label class="control-label" for="inputEmail">Price</label><% end %>
 		    <div class="controls price-range">
-				<%= select_tag "price_low", options_for_select([["$10","10"], ["$50","50"], ["$100","100"], ["$200","200"], ["$500","500"], ["$1000","1000"], ["$5000","5000"]], @selected_price_low), :prompt => "$0" %> to <%= select_tag "price_high", options_for_select([["$50","50"], ["$100","100"], ["$200","200"], ["$500","500"], ["$1,000","1000"], ["$5,000","5000"], ["$10,000","10000"]], @selected_price_high), :prompt => "Any" %>
+				<div class="row">
+					<div class="col-sm-5">
+						<%= select_tag "price_low", options_for_select([["$10","10"], ["$50","50"], ["$100","100"], ["$200","200"], ["$500","500"], ["$1000","1000"], ["$5000","5000"]], @selected_price_low), :prompt => "$0", :class => "lowrange-filter", :style => "width: 100px; display:inline-block;" %>
+					</div>
+					<div class="col-sm-2" style="text-align: center; padding-top: 6px;">
+						to
+					</div>
+					
+					<div class="col-sm-5">
+						<%= select_tag "price_high", options_for_select([["$50","50"], ["$100","100"], ["$200","200"], ["$500","500"], ["$1,000","1000"], ["$5,000","5000"], ["$10,000","10000"]], @selected_price_high), :prompt => "Any", :class => "highrange-filter", :style => "width: 100px; display:inline-block;" %>
+					</div>
+					
+				</div>
 			</div>
 		</div>
-		<p><%= submit_tag("Search Rooms", :class => "btn btn-primary")%></p>
+		<div class="board-search-submit"><%= submit_tag("Search Rooms", :class => "btn btn-primary")%></div>
 	</fieldset>
 	<% end %>
 	</div>
 </div>
+
+
+<script>
+$("select.room-filter").minimalect({placeholder: 'All Rooms'});
+$("select.style-filter").minimalect({placeholder: 'All Styles'});
+$("select.color-filter").minimalect({placeholder: 'All Colors'});
+$("select.designer-filter").minimalect({placeholder: 'All Designers'});
+$("select.lowrange-filter").minimalect({placeholder: '$0', width: '100px'});
+$("select.highrange-filter").minimalect({placeholder: 'Any'});
+
+</script>

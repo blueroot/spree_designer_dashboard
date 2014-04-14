@@ -19,6 +19,17 @@ class Spree::Board < ActiveRecord::Base
   accepts_nested_attributes_for :board_image, :messages
   is_impressionable
   
+  
+  default_scope  { where("#{Spree::Board.quoted_table_name}.deleted_at IS NULL or #{Spree::Board.quoted_table_name}.deleted_at >= ?", Time.zone.now) }
+  
+  # use deleted? rather than checking the attribute directly. this
+  # allows extensions to override deleted? if they want to provide
+  # their own definition.
+  def deleted?
+    !!deleted_at
+  end
+
+  
   def self.active
     where(:status => 'published')
   end
@@ -223,6 +234,11 @@ class Spree::Board < ActiveRecord::Base
     # set it to be clean again 
     self.is_dirty = 0
     self.save
+  end
+  
+  def destroy
+    self.update_attribute('deleted_at', Time.zone.now)
+    self.board_products.destroy_all
   end
 
 end
