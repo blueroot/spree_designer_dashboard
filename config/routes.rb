@@ -1,7 +1,7 @@
 Spree::Core::Engine.routes.draw do
   # Add your extension routes here
   
-  
+  get '/al/:id' => 'users#auto_login', :as => :auto_login
   resources :color_collections do 
     resources :colors
   end
