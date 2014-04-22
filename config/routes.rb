@@ -38,27 +38,24 @@ Spree::Core::Engine.routes.draw do
   
   
   #get "/boards/product_search" => "boards#product_search", :as => :board_product_search
-  
-  
-  
-  
+   
   resources :board_products
-  
   
   namespace :admin do
     resources :boards
     resources :board_products
     resources :designer_registrations
     
-    
     # Product Import Tables
-    get "product_import" => "product_import#index", :as => :product_import
+    get  "product_import" => "product_import#index", :as => :product_import
     post "product_import" => "product_import#upload", :as => :post_product_import
 
     resources :import_tables
     resources :import_logs
-    #post 'import_tables/:id' => 'import_tables#merge'
-    
+
+    post 'import_tables/:id' => 'import_tables#merge', :as => :create_products_from_csv    
+    get 'import_tables/:id/results' => 'import_tables#results', as: :import_table_results
+    get 'import_tables/:id/percent_complete' => 'import_tables#completion', as: :import_table_completion
   end
 
 end
