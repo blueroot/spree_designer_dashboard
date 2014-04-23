@@ -23,6 +23,7 @@ $('.board-lightbox-product').draggable({
 });
 
 $('.add-to-board-link').click(function() {
+	//alert('product id:' + $(this).data('productId') + ' --- board_id: ' + $('#canvas').data('boardId'))
 	getProductDetails($(this).data('productId'), $('#canvas').data('boardId'), null)
 	//showProductDetails($(this))
 	//handleCloneAndAddEvent($(this))
