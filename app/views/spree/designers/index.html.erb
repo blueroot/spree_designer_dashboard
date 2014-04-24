@@ -17,6 +17,48 @@
 </ul>
 <% end %>
 
+<ul class="ch-grid">
+    
+    
+<% @designers.in_groups_of(4,false) do |row_designers| %>
+	
+
+	<% for designer in row_designers %>
+	
+		<% if designer.user_images.blank? %>
+			
+			<li>
+		        <div class="ch-item ch-img-default">
+		            <div class="ch-info">
+		                <h3><%= link_to designer.full_name, "/#{designer.username}" %></h3>
+		                <p><%= designer.location%></p>
+
+		            </div>
+		        </div>
+		    </li>
+		<% else %>
+			<style>
+				.ch-img-<%=designer.id %> { 
+				    background-image: url(<%=designer.user_images.first.attachment(:primary)%>);
+				}
+			</style>
+			<li>
+		        <div class="ch-item ch-img-<%=designer.id %>">
+		            <div class="ch-info">
+		                <h3><%= link_to designer.full_name, "/#{designer.username}" %></h3>
+						<p><%= designer.location%></p>
+		            </div>
+		        </div>
+		    </li>
+		<% end %>
+	
+		
+    <% end %>
+
+<% end %>
+</ul>
+
+<% if false %>
 <% @designers.in_groups_of(4,false) do |row_designers| %>
 	<div class="row">
 	<% for designer in row_designers %>
@@ -28,4 +70,5 @@
 		</div>
     <% end %>
 	</div>
+<% end %>
 <% end %>
