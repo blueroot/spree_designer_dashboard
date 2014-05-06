@@ -1,6 +1,6 @@
 <% content_for :page_header do %>
 <div class="row">
-	<div class="col-md-10 col-md-offset-1">
+	<div class="col-md-12">
   <div class="designer-header">
 	<div class="designer-header-band">&nbsp;</div>
 	<div class="row">
@@ -9,7 +9,7 @@
 				<div class="col-md-4">
 					<div class="profile-img">
 						<% if !@designer.user_images.blank? %>
-						<%=image_tag(@designer.user_images.first.attachment(:primary), :class => "img-circle")%>
+						<%=image_tag(@designer.user_images.first.attachment(:large), :class => "img-circle")%>
 						<% else %>
 							<%=image_tag("/assets/store/profile_default_primary.jpg", :class => "img-circle")%>
 						<% end %>
@@ -17,16 +17,36 @@
 				</div>
 				<div class="col-md-8">
 					<div class="designer-info">
-					<h1><%= @designer.full_name %></h1>
+					<h1><%= @designer.profile_display_name %></h1>
 					<% unless @designer.location.blank? %>
 						<div class="info-item info-item-location"><%= "#{@designer.location}" %></div>
 					<% end %>
-					<% unless @designer.company_name.blank? %>
-						<div class="info-item info-item-company"><%= @designer.company_name %></div>
-					<% end %>
-					<% unless @designer.website_url.blank? %>
-						<div class="info-item info-item-url"><%= link_to @designer.website_url, format_url(@designer.website_url) %></div>
-					<% end %>
+					<div class="row">
+						
+						<% if @designer.logo_image %>
+						<div class="col-md-2">
+							<%= logo_image(@designer.logo_image, :mini) %>
+						</div>
+						<div class="col-md-10">
+							<% unless @designer.company_name.blank? %>
+								<div class="info-item info-item-company"><%= @designer.company_name %></div>
+							<% end %>
+							<% unless @designer.website_url.blank? %>
+								<div class="info-item info-item-url"><%= link_to @designer.website_url, format_url(@designer.website_url) %></div>
+							<% end %>
+						</div>
+						<% else %>
+							<div class="col-md-12">
+								<% unless @designer.company_name.blank? %>
+									<div class="info-item info-item-company"><%= @designer.company_name %></div>
+								<% end %>
+								<% unless @designer.website_url.blank? %>
+									<div class="info-item info-item-url"><%= link_to @designer.website_url, format_url(@designer.website_url) %></div>
+								<% end %>
+							</div>
+						<% end %>
+					</div>
+					
 					<div class="info-item info-item-social">
 						<ul>
 							<% unless @designer.social_facebook.blank? %>

@@ -11,7 +11,16 @@
 			</div>
 
 			<%= form_for [@user], :url => update_designer_path, :html => {:multipart => true} do |f| %>
-
+			
+			<div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+						<%= f.label :profile_display_name, Spree.t(:profile_display_name) %>
+						<%= f.text_field :profile_display_name, :class => 'form-control' %>
+					</div>
+				</div>
+			</div>
+			
 			<div class="row">
 				<div class="col-md-12">
 					<div class="form-group">
@@ -20,6 +29,7 @@
 					</div>
 				</div>
 			</div>
+			<% if false %>
 			<div class="row">
 				<div class="col-md-6">
 					<div class="form-group">
@@ -34,6 +44,7 @@
 					</div>
 				</div>
 			</div>
+			<% end %>
 
 			<div class="row">
 				<div class="col-md-6">
@@ -109,14 +120,14 @@
 						<% end %>
 					<% end %>
 					</div>
-					<% if false %>
+					<% if true %>
 					<div class="form-group">
 					<%= f.field_container :logo_image do %>
 						<%= f.fields_for :logo_image do |logo_image|%>
 							<table class="form-image-table">
 								<tr>
 									<% unless @user.logo_image.new_record? %>
-									<td><%= image_tag(@user.logo_image.attachment(:small)) %></td>
+									<td style="padding-right: 10px;"><%= image_tag(@user.logo_image.attachment(:small)) %></td>
 									<% end %>
 									<td>
 										<% unless @user.logo_image.new_record? %>
@@ -179,7 +190,40 @@
 					</div>
 
 				</div>
+				<hr />
+				
+				<% if false %>
+				<div class="row">
+					<div class="col-md-12">
+						<label>Add more marketing images</label>
 
+						<div class="form-group">
+						<%= f.field_container :marketing_image do %>
+							<%= f.fields_for :marketing_images do |marketing_image|%>
+
+									<table class="form-image-table">
+										<tr>
+											<% unless @user.marketing_images.first.new_record? %>
+											<td style="padding-right: 10px;"><%= image_tag(@user.marketing_images.first.attachment(:small)) %></td>
+											<% end %>
+											<td>
+												<% unless @user.marketing_images.first.new_record? %>
+													<%= marketing_image.label :attachment, "Change Image" %>
+												<% else %>
+													<%= marketing_image.label :attachment, "Marketing  Image" %>
+												<% end%>
+												<div id="marketing_image_file" class="choose-file-button">Choose a file</div>
+												<%= marketing_image.file_field :attachment %>	
+											</td>
+										</tr>
+									</table>
+
+							<% end %>
+						<% end %>
+						</div>
+					</div>
+				</div>
+				<% end %>
 
 				<hr />
 				<p><%= submit_tag("Save Changes", :class => "btn btn-primary")%></p>
