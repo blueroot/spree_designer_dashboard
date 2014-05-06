@@ -6,7 +6,7 @@
 	<div class="row">
 		<div class="col-md-6">
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-5">
 					<div class="profile-img">
 						<% if !@designer.user_images.blank? %>
 						<%=image_tag(@designer.user_images.first.attachment(:primary), :class => "img-circle")%>
@@ -15,7 +15,7 @@
 						<% end %>
 					</div>
 				</div>
-				<div class="col-md-8">
+				<div class="col-md-7">
 					<div class="designer-info">
 					<h1><%= @designer.profile_display_name %></h1>
 					<% unless @designer.location.blank? %>
