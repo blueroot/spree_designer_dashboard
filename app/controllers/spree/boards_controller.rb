@@ -18,7 +18,7 @@ class Spree::BoardsController < Spree::StoreController
     @bedroom_boards = Spree::Board.featured().by_room(broom.id)
     @products = Spree::Product.featured()
     @selected_section = "home"
-    
+    @designers = Spree::User.is_active_designer()
     render :layout => "/spree/layouts/spree_home"
   end
   
