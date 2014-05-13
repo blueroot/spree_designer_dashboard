@@ -12,9 +12,10 @@ class Spree::BoardsController < Spree::StoreController
   
   def home
     @boards = Spree::Board.featured().limit(3)
-    lroom, droom = Spree::Taxon.find_by_name('Living Room'), Spree::Taxon.find_by_name('Dining Room')
+    lroom, droom, broom = Spree::Taxon.find_by_name('Living Room'), Spree::Taxon.find_by_name('Dining Room'), Spree::Taxon.find_by_name('Bedroom')
     @living_room_boards = Spree::Board.featured().by_room(Spree::Taxon.find_by_name('Living Room').id)
     @dining_room_boards = Spree::Board.featured().by_room(droom.id)
+    @bedroom_boards = Spree::Board.featured().by_room(broom.id)
     @products = Spree::Product.featured()
     @selected_section = "home"
     

@@ -34,8 +34,8 @@
 <div class="container">
 	<h2>Featured Living Rooms</h2>
 	<div class="boards-list-main">
-		<% unless @boards.blank? %>
-			<%= render :partial => "home_boards_list", :locals => {:boards => @boards}%>
+		<% unless @living_room_boards.blank? %>
+			<%= render :partial => "home_boards_list", :locals => {:boards => @living_room_boards}%>
 		<% else %>
 			<div class="empty-state">There aren't any featured living rooms at this time.</div>
 		<% end %>
@@ -44,22 +44,24 @@
 <div class="container">
 	<h2>Featured Dining Rooms</h2>
 	<div class="boards-list-main">
-		<% unless @boards.blank? %>
-			<%= render :partial => "home_boards_list", :locals => {:boards => @boards}%>
+		<% unless @dining_room_boards.blank? %>
+			<%= render :partial => "home_boards_list", :locals => {:boards => @dining_room_boards}%>
 		<% else %>
 			<div class="empty-state">There aren't any featured dining rooms at this time.</div>
 		<% end %>
 	</div>
 </div>
 <div class="container">
+	<h2>Featured Bedrooms</h2>
 	<div class="boards-list-main">
-		<% unless @products.blank? %>
-			<%#= render :partial => "products_list", :locals => {:products => @products}%>
+		<% unless @bedroom_room_boards.blank? %>
+			<%= render :partial => "home_boards_list", :locals => {:boards => @bedroom_room_boards}%>
 		<% else %>
-			<div class="empty-state">There aren't any featured products at this time.</div>
+			<div class="empty-state">There aren't any featured dining rooms at this time.</div>
 		<% end %>
 	</div>
 </div>
+
 		
 		
 		<% if false %>
