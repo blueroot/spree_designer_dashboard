@@ -11,7 +11,7 @@
 					<div class="home-product">
 						<div>
 						<% unless @designer.user_images.blank? %>
-							<%= link_to image_tag(@designer.user_images.first.attachment(:primary), :style => "width: 60%;"), "/#{@designer.username}" %>
+							<%= link_to image_tag(@designer.user_images.first.attachment(:primary), :style => "width:100%;height:200px;"), "/#{@designer.username}" %>
 						<% else %>
 						<%= image_tag('store/home/designer.png')%>
 						<%end%>
@@ -25,7 +25,7 @@
 					<div>
 					<% unless @product.blank? %>
 					 <a href="javascript:void(0);" class="add-to-board-link" data-product-id="<%=@product.permalink %>">
-					   <%= thumb_image(@product, :itemprop => 'image', :style => "width:60%") %>
+					   <%= large_image(@product, :itemprop => 'image', :style => "width:100%;height:200px;") %>
 					 </a>  
 					<%else%>
 					<%= image_tag('store/home/product.png')%>
@@ -36,11 +36,11 @@
 					</div>
 				</div>
 				<div class="col-md-4">
-					<div class="home-product">
-					<div>
+					<div class="home-product" >
+					<div style="width:100%;height:200px;">
 					
 					<% unless board_image(@board, :large).blank? %>
-							<%= link_to board_image(@board, :large), room_path(@board), :style => "width:60%"%>
+						<%= link_to board_image(@board, :large), room_path(@board)%>
 					<% else %>
 					  <%= image_tag('store/home/board.png')%>
 					<%end%>
@@ -89,13 +89,13 @@
 <div style="background-color: #eee; padding: 60px 0;">
 	<div class="container">
 		<h2 style="margin: 0 0 20px 0; padding: 0">Meet some the industry's top designers</h2>
-		<div class="slideshow"  id="cycle2"  data-cycle-fx=carousel data-cycle-timeout=0 data-cycle-carousel-visible=4 data-cycle-next="#next" data-cycle-prev="#prev" data-cycle-pager="#pager">
+		<div class="slideshow"  style="left: 10%;" id="cycle2"  data-cycle-fx=carousel data-cycle-timeout=0 data-cycle-carousel-visible=4 data-cycle-next="#next" data-cycle-prev="#prev" data-cycle-pager="#pager">
 	     <% @designers.each do |designer| %>
 			
 			<% unless designer.user_images.blank? %>
-	          <%= image_tag(designer.user_images.first.attachment(:primary)) %>
+	          <%= image_tag(designer.user_images.first.attachment(:primary), :style=>"border-radius:250px;")  %>
 			<% else %>
-				<%= image_tag("/assets/store/profile_default_primary.jpg") %>
+				<%= image_tag("/assets/store/profile_default_primary.jpg", :style=>"border-radius:250px;") %>
 			<% end %>
 		<%end%>	
 			<div class=center>
