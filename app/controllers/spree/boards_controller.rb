@@ -12,13 +12,18 @@ class Spree::BoardsController < Spree::StoreController
   
   def home
     @boards = Spree::Board.featured().limit(3)
+    @board = Spree::Board.featured().order("featured_starts_at desc").first
     lroom, droom, broom = Spree::Taxon.find_by_name('Living Room'), Spree::Taxon.find_by_name('Dining Room'), Spree::Taxon.find_by_name('Bedroom')
     @living_room_boards = Spree::Board.featured().by_room(Spree::Taxon.find_by_name('Living Room').id)
     @dining_room_boards = Spree::Board.featured().by_room(droom.id)
     @bedroom_boards = Spree::Board.featured().by_room(broom.id)
     @products = Spree::Product.featured()
+    @product = Spree::Product.where("homepage_featured_starts_at <= ? and homepage_featured_ends_at >= ?", Date.today, Date.today).order("homepage_featured_starts_at desc").first
+
     @selected_section = "home"
     @designers = Spree::User.is_active_designer()
+    @designer =  Spree::User.where("can_add_boards = ? and designer_featured_starts_at <= ? and designer_featured_ends_at >= ?",'1', Date.today, Date.today).order("designer_featured_starts_at desc").first
+    puts @designer.inspect
     render :layout => "/spree/layouts/spree_home"
   end
   

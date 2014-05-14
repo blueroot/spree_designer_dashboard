@@ -1,3 +1,4 @@
+
 <div class="container">					
 	<div class="prime">
 		<div class="tagline">
@@ -8,21 +9,43 @@
 			<div class="row">
 				<div class="col-md-4">
 					<div class="home-product">
-						<div><%= image_tag('store/home/designer.png')%></div>
+						<div>
+						<% unless @designer.user_images.blank? %>
+							<%= link_to image_tag(@designer.user_images.first.attachment(:primary), :style => "width: 60%;"), "/#{@designer.username}" %>
+						<% else %>
+						<%= image_tag('store/home/designer.png')%>
+						<%end%>
+						</div>
 						<h4>Exceptional Designers</h4>
 						<p></p>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="home-product">
-					<div><%= image_tag('store/home/product.png')%></div>
+					<div>
+					<% unless @product.blank? %>
+					 <a href="javascript:void(0);" class="add-to-board-link" data-product-id="<%=@product.permalink %>">
+					   <%= thumb_image(@product, :itemprop => 'image', :style => "width:60%") %>
+					 </a>  
+					<%else%>
+					<%= image_tag('store/home/product.png')%>
+					<%end%>
+					</div>
 					<h4>Unique Products</h4>
 					<p></p>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="home-product">
-					<div><%= image_tag('store/home/board.png')%></div>
+					<div>
+					
+					<% unless board_image(@board, :large).blank? %>
+							<%= link_to board_image(@board, :large), room_path(@board), :style => "width:60%"%>
+					<% else %>
+					  <%= image_tag('store/home/board.png')%>
+					<%end%>
+					
+					</div>
 					<h4>Beautiful Rooms</h4>
 					<p></p>
 					</div>
@@ -62,7 +85,27 @@
 	</div>
 </div>
 
-		
+
+<div style="background-color: #eee; padding: 60px 0;">
+	<div class="container">
+		<h2 style="margin: 0 0 20px 0; padding: 0">Meet some the industry's top designers</h2>
+		<div class="slideshow"  id="cycle2"  data-cycle-fx=carousel data-cycle-timeout=0 data-cycle-carousel-visible=4 data-cycle-next="#next" data-cycle-prev="#prev" data-cycle-pager="#pager">
+	     <% @designers.each do |designer| %>
+			
+			<% unless designer.user_images.blank? %>
+	          <%= image_tag(designer.user_images.first.attachment(:primary)) %>
+			<% else %>
+				<%= image_tag("/assets/store/profile_default_primary.jpg") %>
+			<% end %>
+		<%end%>	
+			<div class=center>
+			    <a href=# id=prev>&lt;&lt; Prev </a>
+			    <a href=# id=next> Next &gt;&gt; </a>
+			</div>
+			
+		</div>
+	</div>
+</div>
 		
 		<% if false %>
 	<ul class="ch-grid">
@@ -115,3 +158,10 @@
 	</div>
 </div>
 <% end %>
+
+<script type="text/javascript">
+$( document ).ready(function() {
+$( '#cycle2' ).cycle();
+});
+
+</script>
