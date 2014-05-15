@@ -1,4 +1,53 @@
+<style type="text/css">
+      #carousel {
+        width:1000px;
+        height:290px;    
+        margin:0 auto;
+    }
+    #slides {
+        overflow:hidden;
+        /* fix ie overflow issue */
+        position:relative;
+        width:1000px;
+        height:290px;
+       // border:1px solid #ccc;
+    }
+    /* remove the list styles, width : item width * total items */    
+    #slides ul {
+       // position:relative;
+        left:0;
+        top:0;
+        list-style:none;
+        margin:0;
+        padding:0;    
+        width:1000px;            
+    }
+    /* width of the item, in this case I put 250x250x gif */
+    #slides li {
+        width:250px;
+        height:250px;    
+        float:left;
+    }
+    #slides li img {
+        padding:5px;
+    }
+    /* Styling for prev and next buttons */
+    #buttons {
+      //  padding:0 0 5px 0;    
+      //  float:right;
+    }
+    #buttons a {
+        display:block;
+        width:31px;
+        height:32px;
+       // text-indent:-999em;
+        float:left;
+        outline:0;
+    }
 
+    .clear {clear:both}
+
+</style>
 <div class="container">					
 	<div class="prime">
 		<div class="tagline">
@@ -11,7 +60,7 @@
 					<div class="home-product">
 						<div>
 						<% unless @designer.user_images.blank? %>
-							<%= link_to image_tag(@designer.user_images.first.attachment(:primary), :style => "width:100%;height:200px;"), "/#{@designer.username}" %>
+							<%= link_to image_tag(@designer.user_images.first.attachment(:primary), :style => "width:100%;height:300px;"), "/#{@designer.username}" %>
 						<% else %>
 						<%= image_tag('store/home/designer.png')%>
 						<%end%>
@@ -25,7 +74,7 @@
 					<div>
 					<% unless @product.blank? %>
 					 <a href="javascript:void(0);" class="add-to-board-link" data-product-id="<%=@product.permalink %>">
-					   <%= large_image(@product, :itemprop => 'image', :style => "width:100%;height:200px;") %>
+					   <%= large_image(@product, :itemprop => 'image', :style => "width:100%;height:300px;") %>
 					 </a>  
 					<%else%>
 					<%= image_tag('store/home/product.png')%>
@@ -89,23 +138,61 @@
 <div style="background-color: #eee; padding: 60px 0;">
 	<div class="container">
 		<h2 style="margin: 0 0 20px 0; padding: 0">Meet some the industry's top designers</h2>
-		<div class="slideshow"  style="left: 10%;" id="cycle2"  data-cycle-fx=carousel data-cycle-timeout=0 data-cycle-carousel-visible=4 data-cycle-next="#next" data-cycle-prev="#prev" data-cycle-pager="#pager">
-	     <% @designers.each do |designer| %>
+		
+<div id="carousel">
+<div id="buttons">
+        <a href="#" id="prev">Prev</a>
+        <a href="#" id="next" style="margin-left:20px;">Next</a>
+        <div class="clear"></div>
+    </div>
+    
+    <div class="clear"></div>
+    <div id="slides"> 
+    	
+<ul class="ch-grid" >
+    
+    
+<% @designers.each do |designer| %>
+	
+
+
+	
+		<% if designer.user_images.blank? %>
 			
-			<% unless designer.user_images.blank? %>
-	          <%= image_tag(designer.user_images.first.attachment(:primary), :style=>"border-radius:250px;")  %>
-			<% else %>
-				<%= image_tag("/assets/store/profile_default_primary.jpg", :style=>"border-radius:250px;") %>
-			<% end %>
-		<%end%>	
-			<div class=center>
-			    <a href=# id=prev>&lt;&lt; Prev </a>
-			    <a href=# id=next> Next &gt;&gt; </a>
-			</div>
-			
-		</div>
-	</div>
+			<li>
+		        <div class="ch-item ch-img-default">
+		            <div class="ch-info">
+		                <h3><%= link_to designer.full_name, "/#{designer.username}" %></h3>
+		                <p><%= designer.location%></p>
+
+		            </div>
+		        </div>
+		    </li>
+		<% else %>
+			<style>
+				.ch-img-<%=designer.id %> { 
+				    background-image: url(<%=designer.user_images.first.attachment(:primary)%>);
+				}
+			</style>
+			<li>
+		        <div class="ch-item ch-img-<%=designer.id %>">
+		            <div class="ch-info">
+		                <h3><%= link_to designer.full_name, "/#{designer.username}" %></h3>
+						<p><%= designer.location%></p>
+		            </div>
+		        </div>
+		    </li>
+		<% end %>
+	
+		
+  
+
+<% end %>
+</ul>
+ <div class="clear"></div>
+    </div>
 </div>
+		
 		
 		<% if false %>
 	<ul class="ch-grid">
@@ -160,8 +247,71 @@
 <% end %>
 
 <script type="text/javascript">
-$( document ).ready(function() {
-$( '#cycle2' ).cycle();
-});
+
+       $(document).ready(function() {
+        //rotation speed and timer
+        var speed = 5000;
+        var run = setInterval('rotate()', speed);    
+        
+        //grab the width and calculate left value
+        var item_width = $('#slides li').outerWidth();
+        var left_value = item_width * (-1);
+    //move the last item before first item, just in case user click prev button
+        $('#slides li:first').before($('#slides li:last'));
+        
+        //set the default item to the correct position
+        $('#slides ul').css({'left' : left_value});
+    //if user clicked on prev button
+        $('#prev').click(function() {
+            //get the right position
+            var left_indent = parseInt($('#slides ul').css('left')) + item_width;
+            //slide the item
+            $('#slides ul').animate({'left' : left_indent}, 200,function(){
+    //move the last item and put it as first item     
+                $('#slides li:first').before($('#slides li:last'));
+                //set the default item to correct position
+                $('#slides ul').css({'left' : left_value});
+            
+            });
+            //cancel the link behavior
+            return false;
+        });
+    //if user clicked on next button
+        $('#next').click(function() {
+            
+            //get the right position
+            var left_indent = parseInt($('#slides ul').css('left')) - item_width;
+            
+            //slide the item
+            $('#slides ul').animate({'left' : left_indent}, 200, function () {
+    //move the first item and put it as last item
+                $('#slides li:last').after($('#slides li:first'));     
+                
+                //set the default item to correct position
+                $('#slides ul').css({'left' : left_value});
+            
+            });
+            
+            //cancel the link behavior
+            return false;
+            
+        });
+        
+        //if mouse hover, pause the auto rotation, otherwise rotate it
+        $('#slides').hover(
+            
+            function() {
+                clearInterval(run);
+            },
+            function() {
+                run = setInterval('rotate()', speed);    
+            }
+        );
+    });
+    //a simple function to click next link
+    //a timer will call this function, and the rotation will begin :)
+    function rotate() {
+        $('#next').click();
+    }
 
 </script>

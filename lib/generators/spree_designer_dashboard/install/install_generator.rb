@@ -4,8 +4,6 @@ module SpreeDesignerDashboard
 
       def add_javascripts
         append_file 'app/assets/javascripts/store/all.js', "//= require store/spree_designer_dashboard\n"
-        append_file 'app/assets/javascripts/store/all.js', "//= require store/cycle2\n"
-        append_file 'app/assets/javascripts/store/all.js', "//= require store/cycle2min\n"
         append_file 'app/assets/javascripts/admin/all.js', "//= require admin/spree_designer_dashboard\n"
       end
 
