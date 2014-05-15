@@ -1,6 +1,6 @@
 <style type="text/css">
       #carousel {
-        width:1000px;
+        width:1200px;
         height:290px;    
         margin:0 auto;
     }
@@ -8,7 +8,7 @@
         overflow:hidden;
         /* fix ie overflow issue */
         position:relative;
-        width:1000px;
+        width:1200px;
         height:290px;
        // border:1px solid #ccc;
     }
@@ -20,7 +20,7 @@
         list-style:none;
         margin:0;
         padding:0;    
-        width:1000px;            
+        width:1200px;            
     }
     /* width of the item, in this case I put 250x250x gif */
     #slides li {
@@ -38,14 +38,32 @@
     }
     #buttons a {
         display:block;
-        width:31px;
-        height:32px;
-       // text-indent:-999em;
-        float:left;
-        outline:0;
+        height: 52px;
+	    margin-top: 60%;
+	    outline: 0 none;
+	    position: absolute;
+	    text-indent: -9999px;
+	    top: 49%;
+	    width: 28px;
+	    z-index: 9999;
     }
-
-    .clear {clear:both}
+	#buttons a:hover
+	{
+	 text-decoration:none;
+	}
+	.clear {clear:both}
+    #prev
+    {
+        left:180px;
+        background: url("/assets/left_arrow.png") repeat scroll 0 0 transparent;
+    }
+    
+    #next
+    {
+ 
+    right:150px;
+    background: url("/assets/right_arrow.png") repeat scroll 0 0 transparent;
+    }
 
 </style>
 <div class="container">					
@@ -141,8 +159,8 @@
 		
 <div id="carousel">
 <div id="buttons">
-        <a href="#" id="prev">Prev</a>
-        <a href="#" id="next" style="margin-left:20px;">Next</a>
+        <a href="#" id="prev"><</a>
+        <a href="#" id="next" style="margin-left:20px;">></a>
         <div class="clear"></div>
     </div>
     
