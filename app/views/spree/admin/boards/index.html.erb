@@ -67,16 +67,18 @@
 
 <table class="index">
   <colgroup>
-    <col style="width: 40%" />
+    <col style="width: 10%" />
+	<col style="width: 40%" />
     <col style="width: 40%" />
     <col style="width: 10%" />
     <col style="width: 10%" />
   </colgroup>
   <thead>
     <tr>
-      <th><%= Spree::Board.human_attribute_name(:name) %></th>
-      <th>status</th>
-	<th class="actions"></th>
+		<th></th>
+      	<th><%= Spree::Board.human_attribute_name(:name) %></th>
+		<th>status</th>
+		<th class="actions"></th>
     </tr>
   </thead>
   
@@ -84,9 +86,15 @@
     <% @boards.each do |board| %>
       <tr class="<%= cycle('odd', 'even') %>" id="<%= dom_id board %>">
         <td>
-          <%= board.name %>
+        	<%= link_to board_image(board,:small), edit_admin_board_path(board) %>
         </td>
-        <td>
+		<td style="vertical-align: top;">
+			<strong><%= board.name %></strong>
+			<br /><%= board.designer.full_name %>
+			<br /><%= board.board_products.size %> Products
+			<br /><%= board.room_and_style %> 
+        </td>
+        <td style="vertical-align: top; text-align: right;">
           <%= board.display_status %>
         </td>
         <td  class="actions">

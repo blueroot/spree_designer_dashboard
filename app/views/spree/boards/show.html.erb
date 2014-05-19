@@ -104,6 +104,27 @@
 				<span class='st_googleplus' displayText=''></span>
 				<span class='st_email' displayText=''></span>
 			</div>
+			<div class="board-sharing-tools">
+				<span class="share-label"><a href="javascript:void(0);" id="embed-room" data-toggle="popover" data-placement="bottom" data-container="body" data-html="true">Add a Scout & Nimble widget to your site</a></span> 
+			
+				<div id="room-widget" class="hidden">
+					<div class="embed-widget-instructions" style="width: 320px; margin-bottom: 20px;">
+						Copy the code below and paste it wherever you want the widget to appear.
+						<textarea class="" style="width: 100%; border: 1px solid #999;" onclick="this.focus();this.select()"><script src="" type="text/javascript"></script><div id="sn_widget" data-siteid=""></div></textarea>
+					</div>
+					<div class="embed-widget-container">
+						
+						<script src="http://localhost:3000/widget/widget.js?wtype=room&rid=<%=@board.id%>" type="text/javascript"></script><div id="sn_widget" data-site="http://localhost:3000" data-room-id="<%=@board.id%>">
+					</div>
+
+						
+					</div>
+				</div>
+				
+			</div>
+			
+			
+			
 			
 			<% unless @board.colors.blank? %>
 			<div class="board-swatch-colors">
@@ -225,6 +246,15 @@
 <% end%>
 <script>
 $(document).ready(function() {
+	$('#embed-room').popover({ 
+	    html : true,
+	    content: function() {
+			//$('.button-product-info').popover('hide');
+	      return $('#room-widget').html();
+	    }
+	  });
+	
+	
 	$('.swatch-wrapper').popover({ 
 	    html : true,
 	    content: function() {

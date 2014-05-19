@@ -23,7 +23,8 @@ Spree::Product.class_eval do
   end
   
   def self.active
-    includes(:boards).where('spree_boards.id' => Spree::Board.active.collect{|board| board.id})
+    true
+    #includes(:boards).where('spree_boards.id' => Spree::Board.active.collect{|board| board.id})
   end
   
   def is_on_board?

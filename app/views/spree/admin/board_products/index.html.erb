@@ -84,6 +84,7 @@
   
 	<tbody>
     <% @board_products.each do |board_product| %>
+	<% if board_product.product %>
 		<tr class="<%= cycle('odd', 'even') %>" id="<%= dom_id board_product %>">
 			<td class="align-center"><%= mini_image(board_product.product) %></td>
 			<td><%= link_to board_product.product.try(:name), edit_admin_product_path(board_product.product) %>
@@ -102,6 +103,7 @@
           		<%= link_to_delete board_product, :no_text => true %>
 			</td>
 		</tr>
+		<% end %>
 	<% end %>
 	</tbody>
 </table>

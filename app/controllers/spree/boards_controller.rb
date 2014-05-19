@@ -22,7 +22,7 @@ class Spree::BoardsController < Spree::StoreController
 
     @selected_section = "home"
     @designers = Spree::User.is_active_designer()
-    @designer =  Spree::User.where("can_add_boards = ? and designer_featured_starts_at <= ? and designer_featured_ends_at >= ?",'1', Date.today, Date.today).order("designer_featured_starts_at desc").first
+    @designer =  Spree::User.where("designer_featured_starts_at <= ? and designer_featured_ends_at >= ?", Date.today, Date.today).order("designer_featured_starts_at desc").first
     puts @designer.inspect
     render :layout => "/spree/layouts/spree_home"
   end
