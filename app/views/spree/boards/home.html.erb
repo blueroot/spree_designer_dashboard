@@ -76,9 +76,9 @@
 			<div class="row">
 				<div class="col-md-4">
 					<div class="home-product">
-						<div>
+						<div style="height: 212px; width: 360px; background: #eee url(<%=@designer.user_images.first.attachment(:primary)%>) 60px -25px no-repeat">
 						<% unless @designer.user_images.blank? %>
-							<%= link_to image_tag(@designer.user_images.first.attachment(:primary), :style => "width:100%;height:300px;"), "/#{@designer.username}" %>
+							<%#= link_to image_tag(@designer.user_images.first.attachment(:primary), :style => "width:100%;height:300px;"), "/#{@designer.username}" %>
 						<% else %>
 						<%= image_tag('store/home/designer.png')%>
 						<%end%>
@@ -158,11 +158,13 @@
 		<h2 style="margin: 0 0 20px 0; padding: 0">Meet some the industry's top designers</h2>
 		
 <div id="carousel">
+	<% if false %>
 <div id="buttons">
         <a href="#" id="prev"><</a>
         <a href="#" id="next" style="margin-left:20px;">></a>
         <div class="clear"></div>
     </div>
+<% end %>
     
     <div class="clear"></div>
     <div id="slides"> 
