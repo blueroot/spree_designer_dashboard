@@ -4,8 +4,6 @@
   <%= Spree.t(:products_on_boards) %>
 <% end %>
 
-
-
 <% content_for :table_filter_title do %>
   <%= Spree.t(:filter) %>
 <% end %>
@@ -37,7 +35,7 @@
 
 	            <span class="range-divider">
 	              <i class="icon-arrow-right"></i>
-	            </span>
+            </span>
 
 	            <%= f.text_field :created_at_lt, :class => 'datepicker datepicker-to', :value => params[:q][:created_at_lt], :placeholder => Spree.t(:stop) %>
 	          </div>
@@ -99,8 +97,15 @@
 			<td class="align-center">10 lbs.</td>
 			<td/>contact</td>
 			<td  class="actions">
-				<%= link_to_edit board_product, :no_text => true %>
-          		<%= link_to_delete board_product, :no_text => true %>
+        <%= link_to_edit board_product, :no_text => true, href: "#", class: "edit-product" %> 
+<script>
+  $(".edit-product").click(function(){
+      alert("hey!");
+
+  });
+</script>
+
+        <%= link_to_delete board_product, :no_text => true %>
 			</td>
 		</tr>
 		<% end %>

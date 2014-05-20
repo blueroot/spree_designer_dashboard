@@ -32,7 +32,13 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
     params[:q][:created_at_gt] = created_at_gt
     params[:q][:created_at_lt] = created_at_lt
   end
-  
+
+  def new
+    @board = Spree::Board.new(:name => "Untitled Room")
+    @board.designer = spree_current_user
+    @board.save!
+  end
+
   
   # redirect to the edit action after create
   #  create.response do |wants|
