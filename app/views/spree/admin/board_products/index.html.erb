@@ -83,6 +83,7 @@
 	<tbody>
     <% @board_products.each do |board_product| %>
 	<% if board_product.product %>
+    <!-- Normal version -->
 		<tr class="<%= cycle('odd', 'even') %>" id="<%= dom_id board_product %>">
 			<td class="align-center"><%= mini_image(board_product.product) %></td>
 			<td><%= link_to board_product.product.try(:name), edit_admin_product_path(board_product.product) %>
@@ -97,20 +98,46 @@
 			<td class="align-center">10 lbs.</td>
 			<td/>contact</td>
 			<td  class="actions">
-        <%= link_to_edit board_product, :no_text => true, href: "#", class: "edit-product" %> 
-<script>
-  $(".edit-product").click(function(){
-      alert("hey!");
+        <%= link_to_edit board_product, :no_text => true, href: "##{board_product.id}", class: "edit-product" %> 
 
-  });
-</script>
 
         <%= link_to_delete board_product, :no_text => true %>
 			</td>
 		</tr>
-		<% end %>
+
+    <!-- Edit version -->
+      <%= form_for board_product.product, url: "#", html: { multipart: true } do |f| %>
+        <tr class="<%= cycle('odd', 'even') %>" id="<%= dom_id board_product %>">
+          <td class="align-center"><%= mini_image(board_product.product) %></td>
+          <td><%= f.text_field :name  %>
+            <br/>SKU: <%= board_product.product.sku rescue '' %>
+            <br/><%= board_product.product.display_price.to_html rescue '' %>
+            <br/><%= board_product.product.supplier.name.to_html rescue '' %></td>
+          <td><strong><%= board_product.board.name%></strong>
+            <br /><%= board_product.board.designer.full_name%></td>
+          <td class="align-center">10</td>
+          <td class="align-center">Parcel</td>
+          <td class="align-center">3 x 13 x 13</td>
+          <td class="align-center">10 lbs.</td>
+          <td/>contact</td>
+          <td  class="actions">
+            <%= link_to_edit board_product, :no_text => true, href: "##{board_product.id}", class: "edit-product" %> 
+
+
+            <%= link_to_delete board_product, :no_text => true %>
+          </td>
+        </tr>
+    <% end %>
+	<% end %>
 	<% end %>
 	</tbody>
 </table>
+<script>
+  $(".edit-product").click(function(e){
+      split_url = e.target.href.split("#");
+      board_product_id = split_url[(split_url.length-1)];
+      $table_row = $("#board_product_"+board_product_id);
+  });
+</script>
 
 <%= paginate @board_products %>
