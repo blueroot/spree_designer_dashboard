@@ -24,7 +24,7 @@
 		<div class="control-group">
 		    <% if false %><label class="control-label" for="inputEmail">Color</label><% end %>
 		    <div class="controls">
-				<%= select_tag "color_family", options_for_select(Spree::Board.color_categories, @selected_color_family), :prompt => "All Colors", :class => "color-filter" %>
+				<%= select_tag "color_family", options_for_select(Spree::Board.color_categories, @selected_color_family), :prompt => "All Wall Colors", :class => "color-filter" %>
 			</div>
 		</div>
 		<div class="control-group">
