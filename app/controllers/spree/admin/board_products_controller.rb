@@ -13,7 +13,6 @@ class Spree::Admin::BoardProductsController < Spree::Admin::ResourceController
     created_at_gt = params[:q][:created_at_gt]
     created_at_lt = params[:q][:created_at_lt]
 
-
     if !params[:q][:created_at_gt].blank?
       params[:q][:created_at_gt] = Time.zone.parse(params[:q][:created_at_gt]).beginning_of_day rescue ""
     end
@@ -22,8 +21,6 @@ class Spree::Admin::BoardProductsController < Spree::Admin::ResourceController
       params[:q][:created_at_lt] = Time.zone.parse(params[:q][:created_at_lt]).end_of_day rescue ""
     end
 
-    
-
     @search = Spree::BoardProduct.accessible_by(current_ability, :index).ransack(params[:q])
     @board_products = @search.result.page(params[:page]).
       per(params[:per_page] || 50)
@@ -31,6 +28,7 @@ class Spree::Admin::BoardProductsController < Spree::Admin::ResourceController
     # Restore dates
     params[:q][:created_at_gt] = created_at_gt
     params[:q][:created_at_lt] = created_at_lt
+
   end
   
   
