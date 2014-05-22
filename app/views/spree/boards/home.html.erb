@@ -24,8 +24,8 @@
     }
     /* width of the item, in this case I put 250x250x gif */
     #slides li {
-        width:250px;
-        height:250px;    
+        //width:250px;
+        //height:250px;    
         float:left;
     }
     #slides li img {
@@ -39,7 +39,7 @@
     #buttons a {
         display:block;
         height: 52px;
-	    margin-top: 60%;
+	    margin-top: 55%;
 	    outline: 0 none;
 	    position: absolute;
 	    text-indent: -9999px;
@@ -76,13 +76,16 @@
 			<div class="row">
 				<div class="col-md-4">
 					<div class="home-product">
-						<div style="height: 212px; width: 360px; background: #eee url(<%=@designer.user_images.first.attachment(:primary)%>) 60px -25px no-repeat">
-						<% unless @designer.user_images.blank? %>
-							<%#= link_to image_tag(@designer.user_images.first.attachment(:primary), :style => "width:100%;height:300px;"), "/#{@designer.username}" %>
-						<% else %>
-						<%= image_tag('store/home/designer.png')%>
-						<%end%>
-						</div>
+					    
+					    <a href="/<%=@designer.username%>">
+							 <div style="height: 212px; width: 360px; background: #eee url(<%=@designer.user_images.first.attachment(:primary)%>) 60px -25px no-repeat"> 
+								<% unless @designer.user_images.blank? %>
+									<%#= link_to image_tag(@designer.user_images.first.attachment(:primary), :style => "background: #eee;width:100%;height:212px;"), "/#{@designer.username}" %>
+								<% else %>
+								    <%= image_tag('store/home/designer.png')%>
+								<%end%>
+							</div>
+						</a>
 						<h4>Exceptional Designers</h4>
 						<p></p>
 					</div>
@@ -91,7 +94,7 @@
 					<div class="home-product">
 					<div>
 					<% unless @product.blank? %>
-					 <a href="javascript:void(0);" class="add-to-board-link" data-product-id="<%=@product.permalink %>">
+					 <a href="/products/<%=@product.permalink%>" class="add-to-board-link" data-product-id="<%=@product.permalink %>">
 					   <%= large_image(@product, :itemprop => 'image', :style => "width:100%;height:300px;") %>
 					 </a>  
 					<%else%>
@@ -106,10 +109,13 @@
 					<div class="home-product" >
 					<div style="width:100%;height:200px;">
 					
+					<% unless @board.blank? %>
 					<% unless board_image(@board, :large).blank? %>
 						<%= link_to board_image(@board, :large), room_path(@board)%>
+							<%end%>
 					<% else %>
 					  <%= image_tag('store/home/board.png')%>
+				
 					<%end%>
 					
 					</div>
@@ -158,57 +164,62 @@
 		<h2 style="margin: 0 0 20px 0; padding: 0">Meet some the industry's top designers</h2>
 		
 <div id="carousel">
-	<% if false %>
+	
 <div id="buttons">
         <a href="#" id="prev"><</a>
         <a href="#" id="next" style="margin-left:20px;">></a>
         <div class="clear"></div>
     </div>
-<% end %>
+
     
     <div class="clear"></div>
     <div id="slides"> 
     	
-<ul class="ch-grid" >
-    
-    
-<% @designers.each do |designer| %>
-	
-
-
-	
-		<% if designer.user_images.blank? %>
+			<ul class="ch-grid" >
+			    
+			    
+			<% @designers.each do |designer| %>
+				
+						<% if designer.user_images.blank? %>
+						
+						<li>
+				
+					        <div class="ch-item ch-img-default">
+					          <a href="/<%=designer.username%>" >
+					             <div class="ch-info">
+					                <h3><%=designer.full_name %></h3>
+					                <p><%= designer.full_name%></p>
+					             </div>
+					          </a>
+					        </div>
+					        
+					    </li>
+					<% else %>
+						<style>
+							.ch-img-<%=designer.id %> { 
+							    background-image: url(<%=designer.user_images.first.attachment(:primary)%>);
+							}
+						</style>
+						<li>
+						
 			
-			<li>
-		        <div class="ch-item ch-img-default">
-		            <div class="ch-info">
-		                <h3><%= link_to designer.full_name, "/#{designer.username}" %></h3>
-		                <p><%= designer.location%></p>
-
-		            </div>
-		        </div>
-		    </li>
-		<% else %>
-			<style>
-				.ch-img-<%=designer.id %> { 
-				    background-image: url(<%=designer.user_images.first.attachment(:primary)%>);
-				}
-			</style>
-			<li>
-		        <div class="ch-item ch-img-<%=designer.id %>">
-		            <div class="ch-info">
-		                <h3><%= link_to designer.full_name, "/#{designer.username}" %></h3>
-						<p><%= designer.location%></p>
-		            </div>
-		        </div>
-		    </li>
-		<% end %>
-	
-		
-  
-
-<% end %>
-</ul>
+					        <div class="ch-item ch-img-<%=designer.id %>">
+					          <a href="/<%=designer.username%>" >
+					             <div class="ch-info">
+					                <h3><%= designer.full_name%></h3>
+									<p><%= designer.location%></p>
+					             </div>
+					           </a>
+					        </div>
+					        </a>
+					    </li>
+					<% end %>
+				
+					
+			  
+			
+			<% end %>
+			</ul>
  <div class="clear"></div>
     </div>
 </div>
