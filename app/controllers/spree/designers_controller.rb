@@ -44,7 +44,8 @@ class Spree::DesignersController < Spree::StoreController
     @designer = Spree::User.is_active_designer().where(:username => params[:username]).first
     
     if @designer and spree_current_user and (spree_current_user.is_beta_user? or spree_current_user.id == @designer.id)
-      @products = @designer.products.active
+      #@products = @designer.products.active
+      @products = @designer.products
       render :action => "show"
     else
       redirect_to "/"
