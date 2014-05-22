@@ -60,88 +60,64 @@
 
 <table class="index">
 	<colgroup>
-		<col style="width: 8%;">
-		<col style="width: 17%;">
-		<col style="width: 25%;">
-		<col style="width: 25%;">
-		<col style="width: 8%;">
-		<col style="width: 8%;">
+		<col style="width: 5%;">
+		<col style="width: 10%;">
+		<col style="width: 85%;">
 	</colgroup>
 	<thead>
 		<tr>
 			<th class="actions"></th>
-			<th colspan="2">Product Name</th>
-			<th>Room / Designer</th>
-			<th>Stock</th>
-			<th>Shipping Category</th>
-			<th>Dimensions</th>
-			<th>Weight</th>
-			<th>Contact Method</th>
+			<th colspan="2">Products on Boards</th>
 		</tr>
 	</thead>
   
 	<tbody>
     <% @board_products.each do |board_product| %>
     <% if board_product.product %>
-      <% background_color = cycle('odd', 'even') %>
-      <tr class="<%= background_color %>" id="<%= dom_id board_product %>">
-  <!-- Normal version -->
-        <td  class="actions">
-          <%= link_to_edit board_product, :no_text => true, href:"##{board_product.id}##{board_product.product.id}##{board_product.board.id}", class: "edit-product" %> 
-          <br />
-          <%= link_to_delete board_product, :no_text => true %>
-        </td>
-        <td class="align-center"><%= mini_image(board_product.product) %></td>
-        <td><%= link_to board_product.product.try(:name), edit_admin_product_path(board_product.product) %>
-          <br/>SKU: <%= board_product.product.sku rescue '' %>
-          <br/><%= board_product.product.display_price.to_html rescue '' %>
-          <br/><%= board_product.product.supplier.name.to_html rescue '' %></td>
-        <td><strong><%= board_product.board.name%></strong>
-          <br /><%= board_product.board.designer.full_name%></td>
-        <td class="align-center">10</td>
-        <td class="align-center">Parcel</td>
-        <td class="align-center">3 x 13 x 13</td>
-        <td class="align-center">10 lbs.</td>
-        <td/>contact</td>
-  <!-- Normal version -->
-      </tr>
 
-      <tr class="<%= background_color %> hidden" id="editing_<%= board_product.id %>">
-<!-- Edit version -->
+      <% background_color = cycle('odd', 'even') %>
+      <% shipping_dimensions = "#{board_product.product.master.shipping_height}x#{board_product.product.master.shipping_width}x#{board_product.product.master.shipping_depth}" %>
+      <% shipping_dimensions = (shipping_dimensions == "xx") ? "" : shipping_dimensions %>
+  <!-- Edit version -->
+      <tr class="<%= background_color %> " id="editing_<%= board_product.id %>">
         <td  class="actions">
           <%= link_to_edit board_product, :no_text => true, href: "##{board_product.id}##{board_product.product.id}##{board_product.board.id}", class: "edit-product save-product-button" %> 
           <br />
           <%= link_to_delete board_product, :no_text => true %>
         </td>
+
         <td class="align-center"><%= mini_image(board_product.product) %></td>
-        <td><%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.name %>
-        <br/>SKU: <%= board_product.product.sku rescue '' %>
-      <br/><%= text_field_tag "product_#{board_product.product.id}_price", board_product.product.price %>
-        <br/><%= board_product.product.supplier.name.to_html rescue '' %></td>
-      <td><strong><%= text_field_tag "board_#{board_product.board.id}_name", board_product.board.name %></strong>
-          <br /><%= board_product.board.designer.full_name%></td>
-        <td class="align-center"><%= number_field_tag :stock, "10" %></td>
-        <td class="align-center"><%= select_tag :shipping_category, options_for_select(["Parcel", "Ground"], "Parcel") %></td>
-        <td class="align-center"><%= text_field_tag :dimensions, "3 x 13 x 13" %></td>
-        <td class="align-center"><%= text_field_tag :weight, "10 lbs." %></td>
-        <td/><%= text_field_tag :contact_method, "contact" %></td>
+
+        <td class = "product-data">
+
+          <table>
+            <tr>
+              <td>Name: <%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.name, placeholder: "Name" %></td>
+              <td>Price: <%= text_field_tag "product_#{board_product.product.id}_price", board_product.product.price %></td>
+              <td>Dimensions: <%= text_field_tag "product_#{board_product.product.id}_name", shipping_dimensions %></td>
+            </tr>
+            <tr>
+              <td>SKU: <%= board_product.product.sku %></td>
+              <td>MSRP: <%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.master.msrp_price %></td>
+              <td>Inventory: <%= text_field_tag "product_#{board_product.product.id}_name", "inventory" %></td>
+            </tr>
+            <tr>
+              <td>Cost: <%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.master.cost_price %></td>
+              <td>MAP: <%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.master.map_price %></td>
+              <td></td>
+            </tr>
+          </table>
+
+        </td>
+
+
 <!-- Edit version -->
-      </tr>
+
   <% end %>
   <% end %>
   </tbody>
 </table>
 <script>
-  $(".edit-product").click(function(e){
-      split_url = e.target.href.split("#");
-
-      board_product_id = split_url[1];
-      product_id = split_url[2];
-      board_id = split_url[3];
-
-      $("#board_product_"+board_product_id).hide();
-      $("#editing_"+board_product_id).show();
-  });
 
   $(".save-product-button").click(function(e){
       split_url = e.target.href.split("#");
@@ -171,8 +147,8 @@
       alert(JSON.stringify(new_board));
       alert("Looking into routes to post these to...");
 
-      $("#board_product_"+board_product_id).show();
-      $("#editing_"+board_product_id).hide();
+//      $("#board_product_"+board_product_id).show();
+//      $("#editing_"+board_product_id).hide();
   });
 
 </script>
