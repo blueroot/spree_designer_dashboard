@@ -1,4 +1,9 @@
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
 <%= render :partial => 'spree/admin/shared/boards_sub_menu' %>
+
+<button type="button" class="btn btn-danger btn-lg">Default</button>
 
 <% content_for :page_title do %>
   <%= Spree.t(:products_on_boards) %>
@@ -19,9 +24,6 @@
         </div>
 		
       </div>
-
-
-
 
 		<div class="omega six columns">
 			<div class="field">
@@ -78,7 +80,9 @@
       <% background_color = cycle('odd', 'even') %>
       <% shipping_dimensions = "#{board_product.product.master.shipping_height}x#{board_product.product.master.shipping_width}x#{board_product.product.master.shipping_depth}" %>
       <% shipping_dimensions = (shipping_dimensions == "xx") ? "" : shipping_dimensions %>
-  <!-- Edit version -->
+<!-- Edit version -->
+
+
       <tr class="<%= background_color %> " id="editing_<%= board_product.id %>">
         <td  class="actions">
           <%= link_to_edit board_product, :no_text => true, href: "##{board_product.id}##{board_product.product.id}##{board_product.board.id}", class: "edit-product save-product-button" %> 
