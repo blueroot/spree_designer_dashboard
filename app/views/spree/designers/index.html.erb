@@ -28,13 +28,16 @@
 		<% if designer.user_images.blank? %>
 			
 			<li>
+					<a href="/#{designer.username}" >
 		        <div class="ch-item ch-img-default">
-		            <div class="ch-info">
-		                <h3><%= link_to designer.full_name, "/#{designer.username}" %></h3>
+		          <a href="/<%=designer.username%>" >
+		             <div class="ch-info">
+		                <h3><%=designer.full_name %></h3>
 		                <p><%= designer.location%></p>
-
-		            </div>
+		             </div>
+		          </a>
 		        </div>
+		        </a>
 		    </li>
 		<% else %>
 			<style>
@@ -43,12 +46,16 @@
 				}
 			</style>
 			<li>
+			<a href="/#{designer.username}" >
 		        <div class="ch-item ch-img-<%=designer.id %>">
-		            <div class="ch-info">
-		                <h3><%= link_to designer.full_name, "/#{designer.username}" %></h3>
+		          <a href="/<%=designer.username%>" >
+		             <div class="ch-info">
+		                <h3><%= designer.full_name %></h3>
 						<p><%= designer.location%></p>
 		            </div>
+		          </a>
 		        </div>
+		     </a>
 		    </li>
 		<% end %>
 	
