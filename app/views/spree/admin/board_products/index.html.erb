@@ -14,48 +14,58 @@
     <% shipping_dimensions = "#{board_product.product.master.shipping_height}x#{board_product.product.master.shipping_width}x#{board_product.product.master.shipping_depth}" %>
     <% shipping_dimensions = (shipping_dimensions == "xx") ? "0x0x0" : shipping_dimensions %>
 
-    <div class = "search-result row index bg-danger">
+    <div class = "search-result row index ">
 
-      <div class="actions col-md-1">
+      <div class="actions col-md-1 tile-contents" >
 
-        <a class = "ok" href = "#<%= board_product.id %>"> <span class="glyphicon glyphicon-ok glyphicon-ok-<%= board_product.id %>"></span></a>
+        <div>
+          <a data-toggle ="tooltip" data-placement = "right" title = "Approve item for board" class = "ok" href = "#<%= board_product.id %>">
+            <span class="glyphicon glyphicon-ok glyphicon-ok-<%= board_product.id %>"></span>
+          </a>
+        </div>
+
         <br/>
         <br/>
+
+        <div>
+          <a data-toggle ="tooltip" data-placement = "right" title = "Remove item from board" class = "remove" href = "#<%= board_product.id %>">
+            <span class="glyphicon glyphicon-remove"></span>
+          </a>
+        </div>
+
         <br/>
-        <a href = "#<%= board_product.id %>"> <span class="glyphicon glyphicon-remove"></span></a>
         <br/>
-        <br/>
-        <br/>
-        <a href = "#<%= board_product.id %>"> <span class="glyphicon glyphicon-floppy-disk"></span><br/></a>
-<!--        <%= link_to_edit board_product, :no_text => true, href: "##{board_product.id}##{board_product.product.id}##{board_product.board.id}", class: "edit-product save-product-button" %> 
-        <br />
-        <%= link_to_delete board_product, :no_text => true %>
--->
+        <div>
+          <a data-toggle ="tooltip" data-placement = "right" title = "Save board information" class = "save" href = "#<%= board_product.id %>">
+            <span class="glyphicon glyphicon-floppy-disk"></span><br/>
+          </a>
+        </div>
+
       </div>
 
-      <div class = "col-md-2 product-picture">
+      <div class = "col-md-2">
         <%= small_image(board_product.product, class: "img-thumbnail") %>
       </div>
 
-      <div class = "col-md-7 product-details">
+      <div class = "col-md-7 product-details tile-contents">
 
         <div class = "row">
-          <div class = "col-md-3">Name:<br/> <%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.name, placeholder: "Name" %></div>
-          <div class = "col-md-3">SKU:<br/> <%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.sku  %></div>
-          <div class = "col-md-3">Dimensions:<br/> <%= text_field_tag "product_#{board_product.product.id}_name", shipping_dimensions %></div>
-          <div class = "col-md-3">Inventory: <br/><%= text_field_tag "product_#{board_product.product.id}_name", "10" %></div>
+          <div class = "col-md-3">Name:<br/><%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.name, placeholder: "Name" %></div>
+          <div class = "col-md-3">SKU:<br/> <%= text_field_tag "product_#{board_product.product.id}_sku", board_product.product.sku  %></div>
+          <div class = "col-md-3">Dimensions:<br/> <%= text_field_tag "product_#{board_product.product.id}_dimensions", shipping_dimensions %></div>
+          <div class = "col-md-3">Inventory: <br/><%= text_field_tag "product_#{board_product.product.id}_inventory", "10" %></div>
         </div>
 
         <div class = "row">
-          <div class = "col-md-3">MSRP: <br/><%= text_field_tag "product_#{board_product.product.id}_price", board_product.product.price %></div>
+          <div class = "col-md-3">MSRP: <br/><%= text_field_tag "product_#{board_product.product.id}_msrp", board_product.product.price %></div>
           <div class = "col-md-3">Price: <br/><%= text_field_tag "product_#{board_product.product.id}_price", board_product.product.price %></div>
-          <div class = "col-md-3">Cost: <br/><%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.name, placeholder: "Name" %></div>
-          <div class = "col-md-3">MAP: <br/><%= text_field_tag "product_#{board_product.product.id}_price", board_product.product.price %></div>
+          <div class = "col-md-3">Cost: <br/><%= text_field_tag "product_#{board_product.product.id}_cost", board_product.product.name, placeholder: "Name" %></div>
+          <div class = "col-md-3">MAP: <br/><%= text_field_tag "product_#{board_product.product.id}_map", board_product.product.price %></div>
         </div>
 
       </div>
 
-      <div class = "col-md-2 farm-picture">
+      <div class = "col-md-2 img-thumbnail tile-contents board-image">
         <%= board_image(board_product.board, :small) %>
       </div>
 
@@ -64,6 +74,10 @@
 <% end %>
 
 <script>
+
+$(".ok").tooltip();
+$(".remove").tooltip();
+$(".save").tooltip();
 
 $(".sixteen").removeClass("sixteen")
 
