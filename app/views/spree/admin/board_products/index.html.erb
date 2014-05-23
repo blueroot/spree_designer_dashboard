@@ -7,71 +7,84 @@
   <%= Spree.t(:products_on_boards) %>
 <% end %>
 
-<table class="index">
-	<colgroup>
-		<col style="width: 5%;">
-		<col style="width: 10%;">
-		<col style="width: 85%;">
-	</colgroup>
-	<thead>
-		<tr>
-			<th class="actions"></th>
-			<th colspan="2">Products on Boards</th>
-		</tr>
-	</thead>
+
+<% @board_products.each do |board_product| %>
   
-	<tbody>
-    <% @board_products.each do |board_product| %>
-    <% if board_product.product %>
+  <% if board_product.product %>
+    <% shipping_dimensions = "#{board_product.product.master.shipping_height}x#{board_product.product.master.shipping_width}x#{board_product.product.master.shipping_depth}" %>
+    <% shipping_dimensions = (shipping_dimensions == "xx") ? "0x0x0" : shipping_dimensions %>
 
-      <% background_color = cycle('odd', 'even') %>
-      <% shipping_dimensions = "#{board_product.product.master.shipping_height}x#{board_product.product.master.shipping_width}x#{board_product.product.master.shipping_depth}" %>
-      <% shipping_dimensions = (shipping_dimensions == "xx") ? "" : shipping_dimensions %>
-<!-- Edit version -->
+    <div class = "search-result row index bg-danger">
 
+      <div class="actions col-md-1">
 
-      <tr class="<%= background_color %> " id="editing_<%= board_product.id %>">
-        <td  class="actions">
-          <%= link_to_edit board_product, :no_text => true, href: "##{board_product.id}##{board_product.product.id}##{board_product.board.id}", class: "edit-product save-product-button" %> 
-          <br />
-          <%= link_to_delete board_product, :no_text => true %>
-        </td>
+        <a class = "ok" href = "#<%= board_product.id %>"> <span class="glyphicon glyphicon-ok glyphicon-ok-<%= board_product.id %>"></span></a>
+        <br/>
+        <br/>
+        <br/>
+        <a href = "#<%= board_product.id %>"> <span class="glyphicon glyphicon-remove"></span></a>
+        <br/>
+        <br/>
+        <br/>
+        <a href = "#<%= board_product.id %>"> <span class="glyphicon glyphicon-floppy-disk"></span><br/></a>
+<!--        <%= link_to_edit board_product, :no_text => true, href: "##{board_product.id}##{board_product.product.id}##{board_product.board.id}", class: "edit-product save-product-button" %> 
+        <br />
+        <%= link_to_delete board_product, :no_text => true %>
+-->
+      </div>
 
-        <td class="align-center"><%= mini_image(board_product.product) %></td>
+      <div class = "col-md-2 product-picture">
+        <%= small_image(board_product.product, class: "img-thumbnail") %>
+      </div>
 
-        <td class = "product-data">
+      <div class = "col-md-7 product-details">
 
-          <table>
-            <tr>
-              <td>Name: <%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.name, placeholder: "Name" %></td>
-              <td>Price: <%= text_field_tag "product_#{board_product.product.id}_price", board_product.product.price %></td>
-              <td>Dimensions: <%= text_field_tag "product_#{board_product.product.id}_name", shipping_dimensions %></td>
-            </tr>
-            <tr>
-              <td>SKU: <%= board_product.product.sku %></td>
-              <td>MSRP: <%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.master.msrp_price %></td>
-              <td>Inventory: <%= text_field_tag "product_#{board_product.product.id}_name", "inventory" %></td>
-            </tr>
-            <tr>
-              <td>Cost: <%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.master.cost_price %></td>
-              <td>MAP: <%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.master.map_price %></td>
-              <td></td>
-            </tr>
-          </table>
+        <div class = "row">
+          <div class = "col-md-3">Name:<br/> <%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.name, placeholder: "Name" %></div>
+          <div class = "col-md-3">SKU:<br/> <%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.sku  %></div>
+          <div class = "col-md-3">Dimensions:<br/> <%= text_field_tag "product_#{board_product.product.id}_name", shipping_dimensions %></div>
+          <div class = "col-md-3">Inventory: <br/><%= text_field_tag "product_#{board_product.product.id}_name", "10" %></div>
+        </div>
 
-        </td>
+        <div class = "row">
+          <div class = "col-md-3">MSRP: <br/><%= text_field_tag "product_#{board_product.product.id}_price", board_product.product.price %></div>
+          <div class = "col-md-3">Price: <br/><%= text_field_tag "product_#{board_product.product.id}_price", board_product.product.price %></div>
+          <div class = "col-md-3">Cost: <br/><%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.name, placeholder: "Name" %></div>
+          <div class = "col-md-3">MAP: <br/><%= text_field_tag "product_#{board_product.product.id}_price", board_product.product.price %></div>
+        </div>
 
+      </div>
 
-<!-- Edit version -->
+      <div class = "col-md-2 farm-picture">
+        <%= board_image(board_product.board, :small) %>
+      </div>
 
+    </div>
   <% end %>
-  <% end %>
-  </tbody>
-</table>
+<% end %>
+
 <script>
 
+$(".sixteen").removeClass("sixteen")
+
+$(".glyphicon-ok").click(function(e){
+    split_url = document.URL.split("#");
+    alert("approving " + split_url[1]);
+});
+
+$(".glyphicon-remove").click(function(e){
+    split_url = document.URL.split("#");
+    alert("removing " + split_url[1]);
+});
+
+$(".glyphicon-floppy-disk").click(function(e){
+    split_url = document.URL.split("#");
+    alert("saving the changes to " + split_url[1]);
+});
+
+$(".columns").removeClass("columns")
+
   $(".save-product-button").click(function(e){
-      split_url = e.target.href.split("#");
 
       board_product_id = split_url[1];
       product_id = split_url[2];
