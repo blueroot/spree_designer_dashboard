@@ -50,17 +50,17 @@
       <div class = "col-md-7 product-details tile-contents">
 
         <div class = "row">
-          <div class = "col-md-3">Name:<br/><%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.name, placeholder: "Name" %></div>
-          <div class = "col-md-3">SKU:<br/> <%= text_field_tag "product_#{board_product.product.id}_sku", board_product.product.sku  %></div>
-          <div class = "col-md-3">Dimensions:<br/> <%= text_field_tag "product_#{board_product.product.id}_dimensions", shipping_dimensions %></div>
-          <div class = "col-md-3">Inventory: <br/><%= text_field_tag "product_#{board_product.product.id}_inventory", "10" %></div>
+          <div class = "col-md-3"><b>Name:</b><br/><%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.name, placeholder: "Name" %></div>
+          <div class = "col-md-3"><b>SKU:</b><br/> <%= text_field_tag "product_#{board_product.product.id}_sku", board_product.product.sku  %></div>
+          <div class = "col-md-3"><b>Dimensions:</b><br/> <%= text_field_tag "product_#{board_product.product.id}_dimensions", shipping_dimensions %></div>
+          <div class = "col-md-3"><b>Inventory:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_inventory", "10" %></div>
         </div>
 
         <div class = "row">
-          <div class = "col-md-3">MSRP: <br/><%= text_field_tag "product_#{board_product.product.id}_msrp", board_product.product.price %></div>
-          <div class = "col-md-3">Price: <br/><%= text_field_tag "product_#{board_product.product.id}_price", board_product.product.price %></div>
-          <div class = "col-md-3">Cost: <br/><%= text_field_tag "product_#{board_product.product.id}_cost", board_product.product.name, placeholder: "Name" %></div>
-          <div class = "col-md-3">MAP: <br/><%= text_field_tag "product_#{board_product.product.id}_map", board_product.product.price %></div>
+          <div class = "col-md-3"><b>MSRP:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_msrp", board_product.product.price %></div>
+          <div class = "col-md-3"><b>Price:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_price", board_product.product.price %></div>
+          <div class = "col-md-3"><b>Cost:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_cost", board_product.product.name, placeholder: "Name" %></div>
+          <div class = "col-md-3"><b>MAP:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_map", board_product.product.price %></div>
         </div>
 
       </div>
