@@ -1,134 +1,192 @@
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.8/angular.min.js"></script>
+<%= javascript_include_tag "admin/board_product_controller" %>
+
+
 <%= render :partial => 'spree/admin/shared/boards_sub_menu' %>
 
 <% content_for :page_title do %>
   <%= Spree.t(:products_on_boards) %>
 <% end %>
+<div ng-app >
+  <div ng-controller = "board_product_controller">
 
+    {{ initial_message }}
 
-<% @board_products.each do |board_product| %>
-  
-  <% if board_product.product %>
-    <% shipping_dimensions = "#{board_product.product.master.shipping_height}x#{board_product.product.master.shipping_width}x#{board_product.product.master.shipping_depth}" %>
-    <% shipping_dimensions = (shipping_dimensions == "xx") ? "0x0x0" : shipping_dimensions %>
+    <div class = "row">
+      <div class = " col-md-8">
 
-    <div class = "search-result row index ">
-
-      <div class="actions col-md-1 tile-contents" >
-
-        <div>
-          <a data-toggle ="tooltip" data-placement = "right" title = "Approve item for board" class = "ok" href = "#<%= board_product.id %>">
-            <span class="glyphicon glyphicon-ok glyphicon-ok-<%= board_product.id %>"></span>
-          </a>
-        </div>
-
-        <br/>
-        <br/>
-
-        <div>
-          <a data-toggle ="tooltip" data-placement = "right" title = "Remove item from board" class = "remove" href = "#<%= board_product.id %>">
-            <span class="glyphicon glyphicon-remove"></span>
-          </a>
-        </div>
-
-        <br/>
-        <br/>
-        <div>
-          <a data-toggle ="tooltip" data-placement = "right" title = "Save board information" class = "save" href = "#<%= board_product.id %>">
-            <span class="glyphicon glyphicon-floppy-disk"></span><br/>
-          </a>
+        <div class = "form-group col-md-5 left" id = "product-search">
+          <b><%= label_tag "Show only products for supplier:" %></b>
+          <%= select_tag :suppliers, options_for_select(@supplier_names, @supplier_names.first), class: "form-control" %>
         </div>
 
       </div>
-
-      <div class = "col-md-2">
-        <%= small_image(board_product.product, class: "img-thumbnail") %>
-      </div>
-
-      <div class = "col-md-7 product-details tile-contents">
-
-        <div class = "row">
-          <div class = "col-md-3"><b>Name:</b><br/><%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.name, placeholder: "Name" %></div>
-          <div class = "col-md-3"><b>SKU:</b><br/> <%= text_field_tag "product_#{board_product.product.id}_sku", board_product.product.sku  %></div>
-          <div class = "col-md-3"><b>Dimensions:</b><br/> <%= text_field_tag "product_#{board_product.product.id}_dimensions", shipping_dimensions %></div>
-          <div class = "col-md-3"><b>Inventory:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_inventory", "10" %></div>
-        </div>
-
-        <div class = "row">
-          <div class = "col-md-3"><b>MSRP:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_msrp", board_product.product.price %></div>
-          <div class = "col-md-3"><b>Price:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_price", board_product.product.price %></div>
-          <div class = "col-md-3"><b>Cost:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_cost", board_product.product.name, placeholder: "Name" %></div>
-          <div class = "col-md-3"><b>MAP:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_map", board_product.product.price %></div>
-        </div>
-
-      </div>
-
-      <div class = "col-md-2 img-thumbnail tile-contents board-image">
-        <%= board_image(board_product.board, :small) %>
-      </div>
-
     </div>
-  <% end %>
-<% end %>
 
-<script>
+    <% @board_products.each do |board_product| %>
+      
+      <% if board_product.product %>
+        <% shipping_dimensions = "#{board_product.product.master.shipping_height}x#{board_product.product.master.shipping_width}x#{board_product.product.master.shipping_depth}" %>
+        <% shipping_dimensions = (shipping_dimensions == "xx") ? "0 x 0 x 0" : shipping_dimensions %>
 
-$(".ok").tooltip();
-$(".remove").tooltip();
-$(".save").tooltip();
+        <div class = "search-result row index ">
 
-$(".sixteen").removeClass("sixteen")
+          <div class="actions col-md-1 tile-contents" >
 
-$(".glyphicon-ok").click(function(e){
-    split_url = document.URL.split("#");
-    alert("approving " + split_url[1]);
-});
+            <div>
+              <a data-toggle ="tooltip" data-placement = "right" title = "Approve item for board" class = "ok" href = "#<%= board_product.id %>">
+                <span class="glyphicon glyphicon-ok <%= board_product.id %>"></span>
+              </a>
+            </div>
 
-$(".glyphicon-remove").click(function(e){
-    split_url = document.URL.split("#");
-    alert("removing " + split_url[1]);
-});
+            <br/>
+            <br/>
 
-$(".glyphicon-floppy-disk").click(function(e){
-    split_url = document.URL.split("#");
-    alert("saving the changes to " + split_url[1]);
-});
+            <div>
+              <a data-toggle ="tooltip" data-placement = "right" title = "Remove item from board" class = "remove-button" href = "#<%= board_product.id %>">
+                <span class="glyphicon glyphicon-remove <%= board_product.id %>"></span>
+              </a>
+            </div>
 
-$(".columns").removeClass("columns")
+            <br/>
+            <br/>
+            <div>
+              <a data-toggle ="tooltip" data-placement = "right" title = "Save board information" class = "save" href = "#<%= board_product.id %>">
+                <span class="glyphicon glyphicon-floppy-disk <%= board_product.id %>"></span><br/>
+              </a>
+            </div>
 
-  $(".save-product-button").click(function(e){
+          </div>
 
-      board_product_id = split_url[1];
-      product_id = split_url[2];
-      board_id = split_url[3];
+          <div class = "col-md-2">
+            <%= small_image(board_product.product, class: "img-thumbnail") %>
+          </div>
 
-      // here we'll need to make a couple posts
-      // so far i know we'll need to post to products and board_products
-      // maybe variants and shipping options too?
-      new_product_name = $("#product_"+product_id+"_name").val();
-      new_product_price = $("#product_"+product_id+"_price").val();
+          <% shipping_dimensions_inputs = text_field_tag("height") + text_field_tag("width") + text_field_tag("depth") %>
+          <div class = "col-md-7 product-details tile-contents">
 
-      new_product = {
-        name: new_product_name,
-        price: new_product_price
-      };
+            <div class = "row">
+              <div class = "col-md-3"><b>Name:</b><br/><%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.name, placeholder: "Name" %></div>
+              <div class = "col-md-3"><b>SKU:</b><br/> <%= text_field_tag "product_#{board_product.product.id}_sku", board_product.product.sku  %></div>
+              <div class = "col-md-3"><b>Shipping Dimensions:</b><br/> 
+                <%= button_tag shipping_dimensions, 
+                          data: { 
+                            title: "Shipping Dimensions", html: true, container: "body", toggle: "popover", placement: "right", 
+                            content: "<p> 
+                                        Height: <input class = 'product_shipping_height' id = '#{board_product.product.id}' type = 'text'></input><br/><br/> 
+                                        Width: <input class = 'product_shipping_width' id = '#{board_product.product.id}' type = 'text'></input><br/><br/> 
+                                        Depth: <input class = 'product_shipping_depth' id = '#{board_product.product.id}' type = 'text'></input>"}, 
+                          class: "btn btn-default btn-primary dimension-button", 
+                          id: "product_#{board_product.product.id}_dimensions" ,
+                          width: "500px"
+                %>
+             </div>
+              <div class = "col-md-3"><b>Inventory:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_inventory", "10" %></div>
+            </div>
 
-      new_board_name = $("#board_"+board_id+"_name").val();
+            <div class = "row">
+              <div class = "col-md-3">
+                <b>Cost:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_cost", board_product.product.master.cost_price %>
+              </div>
 
-      new_board = {
-        name: new_board_name
-      };
+              <div class = "col-md-3">
+                <b>Price:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_price", board_product.product.price %>
+              </div>
 
-      alert(JSON.stringify(new_product));
-      alert(JSON.stringify(new_board));
-      alert("Looking into routes to post these to...");
+              <div class = "col-md-3">
+                <b>MSRP:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_msrp", board_product.product.master.msrp_price %>
+              </div>
 
-//      $("#board_product_"+board_product_id).show();
-//      $("#editing_"+board_product_id).hide();
-  });
+              <div class = "col-md-3">
+                <b>MAP:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_map", board_product.product.master.map_price %>
+              </div>
+            </div>
 
-</script>
+          </div>
 
-<%= paginate @board_products %>
+          <div class = "col-md-2 img-thumbnail tile-contents board-image">
+            <%= board_image(board_product.board, :small) %>
+          </div>
+
+        </div>
+      <% end %>
+    <% end %>
+
+    <script>
+
+    $(".ok").tooltip();
+    $(".remove-button").tooltip();
+    $(".save").tooltip();
+
+    $(".btn").popover();
+
+    $(".sixteen").removeClass("sixteen")
+
+    // $(".product_shipping_height").on("change", function(){
+    //   alert("shipping height changed!");
+    // })
+
+    // $(".product_shipping_width").change(function(){
+    //   alert("shipping width changed!");
+    // })
+
+    // $(".product_shipping_depth").change(function(){
+    //   alert("shipping depth changed!");
+    // })
+
+    $(".glyphicon-ok").click(function(e){
+        alert("approving board_product with id == " + $(this).attr("class").split(" ")[2]);
+
+
+
+    });
+
+    $(".glyphicon-remove").click(function(e){
+        alert("removing " + $(this).attr("class").split(" ")[2]);
+    });
+
+    $(".glyphicon-floppy-disk").click(function(e){
+        alert("saving the changes to " + $(this).attr("class").split(" ")[2]);
+    });
+
+    $(".columns").removeClass("columns")
+
+      $(".save-product-button").click(function(e){
+
+          board_product_id = split_url[1];
+          product_id = split_url[2];
+          board_id = split_url[3];
+
+          // here we'll need to make a couple posts
+          // so far i know we'll need to post to products and board_products
+          // maybe variants and shipping options too?
+          new_product_name = $("#product_"+product_id+"_name").val();
+          new_product_price = $("#product_"+product_id+"_price").val();
+
+          new_product = {
+            name: new_product_name,
+            price: new_product_price
+          };
+
+          new_board_name = $("#board_"+board_id+"_name").val();
+
+          new_board = {
+            name: new_board_name
+          };
+
+          alert(JSON.stringify(new_product));
+          alert(JSON.stringify(new_board));
+          alert("Looking into routes to post these to...");
+
+    //      $("#board_product_"+board_product_id).show();
+    //      $("#editing_"+board_product_id).hide();
+      });
+
+    </script>
+
+  </div>
+
+<div>
