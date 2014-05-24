@@ -13,32 +13,44 @@
 <div ng-app >
   <div ng-controller = "board_product_controller">
 
-    {{ initial_message }}
-
     <div class = "row">
-      <div class = " col-md-8">
 
-        <div class = "form-group col-md-5 left" id = "product-search">
+        <div class = "form-group col-md-4 left" id = "product-search">
           <b><%= label_tag "Show only products for supplier:" %></b>
           <%= select_tag :suppliers, options_for_select(@supplier_names, @supplier_names.first), class: "form-control" %>
         </div>
 
-      </div>
+        <div class = "form-group col-md-4 col-md-offset-4 right" id = "product-search">
+          <b><%= label_tag "Show products that are :" %></b>
+          <%= select_tag :status, options_for_select(["Pending", "Live"], "Pending"), class: "form-control" %>
+        </div>
+
     </div>
 
     <% @board_products.each do |board_product| %>
-      
-      <% if board_product.product %>
+     <% if board_product.product %>
         <% shipping_dimensions = "#{board_product.product.master.shipping_height}x#{board_product.product.master.shipping_width}x#{board_product.product.master.shipping_depth}" %>
         <% shipping_dimensions = (shipping_dimensions == "xx") ? "0 x 0 x 0" : shipping_dimensions %>
 
+        <script>
+          var product_id       = <%= board_product.product.id %>;
+          var board_id         = <%= board_product.board.id %>;
+          var board_product_id = <%= board_product.id %>;
+
+
+
+        </script>
+          
+ 
         <div class = "search-result row index ">
 
           <div class="actions col-md-1 tile-contents" >
 
             <div>
               <a data-toggle ="tooltip" data-placement = "right" title = "Approve item for board" class = "ok" href = "#<%= board_product.id %>">
-                <span class="glyphicon glyphicon-ok <%= board_product.id %>"></span>
+                <span class="glyphicon glyphicon-ok <%= board_product.id %>" 
+                      ng-click=<%= "approve_product_for_board(#{board_product.product.id},#{board_product.board.id})" %>>
+                </span>
               </a>
             </div>
 
@@ -69,16 +81,22 @@
           <div class = "col-md-7 product-details tile-contents">
 
             <div class = "row">
-              <div class = "col-md-3"><b>Name:</b><br/><%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.name, placeholder: "Name" %></div>
+              <div class = "col-md-3"><b>Name:</b><br/><%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.name, placeholder: "Name", ng_model: "products[#{board_product.product.id}]['name']" %></div>
               <div class = "col-md-3"><b>SKU:</b><br/> <%= text_field_tag "product_#{board_product.product.id}_sku", board_product.product.sku  %></div>
               <div class = "col-md-3"><b>Shipping Dimensions:</b><br/> 
                 <%= button_tag shipping_dimensions, 
                           data: { 
                             title: "Shipping Dimensions", html: true, container: "body", toggle: "popover", placement: "right", 
-                            content: "<p> 
-                                        Height: <input class = 'product_shipping_height' id = '#{board_product.product.id}' type = 'text'></input><br/><br/> 
-                                        Width: <input class = 'product_shipping_width' id = '#{board_product.product.id}' type = 'text'></input><br/><br/> 
-                                        Depth: <input class = 'product_shipping_depth' id = '#{board_product.product.id}' type = 'text'></input>"}, 
+                            content: %Q{ 
+                                        Height: <input class = 'product_shipping_height' 
+                                                       id    = 'board_product_#{board_product.product.id}_shipping_height' 
+                                                       type  = 'text' 
+                                                       ng-model="variants['#{board_product.product.master.id}']['shipping_height']">
+                                                </input><br/><br/> 
+                                        Width: <input ng-model = "hi" class = 'product_shipping_width' id = 'board_product_#{board_product.product.id}_shipping_width' type = 'text'></input><br/><br/> 
+                                        Depth: <input class = 'product_shipping_depth' id = 'board_product_#{board_product.product.id}_shipping_depth' type = 'text'></input> 
+                                      }
+                          }, 
                           class: "btn btn-default btn-primary dimension-button", 
                           id: "product_#{board_product.product.id}_dimensions" ,
                           width: "500px"
@@ -139,8 +157,6 @@
 
     $(".glyphicon-ok").click(function(e){
         alert("approving board_product with id == " + $(this).attr("class").split(" ")[2]);
-
-
 
     });
 
