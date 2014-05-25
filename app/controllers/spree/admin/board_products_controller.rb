@@ -7,7 +7,7 @@ class Spree::Admin::BoardProductsController < Spree::Admin::ResourceController
     @board_products = Spree::BoardProduct.all.select {|bp| bp.approved_at == nil && bp.removed_at == nil  }
     @products       = @board_products.map(&:product).compact
     @suppliers      = @products.map(&:supplier).compact.uniq
-    @supplier_names = @suppliers.map(&:name).compact.uniq
+    @supplier_names = ["All suppliers"] + @suppliers.map(&:name).compact.uniq
   end
   
   
