@@ -1,17 +1,73 @@
 
+
 $(function() {
 
 
+/*
+/
+/  PAGE SETUP
+/
+*/
+  $(".ok").tooltip();
+  $(".remove-button").tooltip();
+  $(".save").tooltip();
+
+  $(".btn").popover();
+
+  $(".sixteen").removeClass("sixteen");
+/*
+/
+/  APPROVE AND REJECT BUTTONS
+/
+*/
+  $(".rejected").css("background-color", "#F2DEDE");
+  $(".rejected").css("color", "#E82C0C");
+
+  $(".approved").css("background-color", "#D9EDF7");
+  $(".approved").css("color", "#5498DA");
+
   $(".glyphicon-ok").click(function(e){
-    console.log("approving board_product with id == " + $(this).attr("class").split(" ")[2]);
+    board_product_id = $(this).attr("class").split(" ")[2];
+    console.log("approving board_product with id == " + board_product_id);
+
+    $(".board_product_"+board_product_id).removeClass("pending");
+    $(".board_product_"+board_product_id).removeClass("rejected");
+    $(".board_product_"+board_product_id).addClass("approved");
+
+    $(".approved").css("background-color", "#D9EDF7");
+    $(".approved").css("color", "#5498DA");
+
+    $(this).css("color", "#5498da");
+    $(this).css("background-color", "#D9EDF7");
+
+
+    $(".glyphicon-remove."+board_product_id).css("color","black");
+    $(".glyphicon-remove."+board_product_id).css("background-color","#D9EDF7");
+
+
   });
 
   $(".glyphicon-remove").click(function(e){
-    console.log("removing " + $(this).attr("class").split(" ")[2]);
+    board_product_id = $(this).attr("class").split(" ")[2];
+    console.log("removing board_product with id == " + board_product_id);
+
+    $(".board_product_"+board_product_id).addClass("rejected");
+    $(".board_product_"+board_product_id).removeClass("pending");
+    $(".board_product_"+board_product_id).removeClass("approved");
+
+    $(".rejected").css("background-color", "#F2DEDE");
+    $(".rejected").css("color", "#E82C0C");
+
+    $(this).css("color", "#E82C0C");
+    $(this).css("background-color", "#F2DEDE");
+
+    $(".glyphicon-ok."+board_product_id).css("color","black");
+    $(".glyphicon-ok."+board_product_id).css("background-color","#F2DEDE");
+
+
   });
 
   $(".glyphicon-floppy-disk").click(function(e){
-    alert('hi');
     classes = $(this).attr("class").split(" ");
 
     board_product_id = classes[2];
@@ -43,21 +99,12 @@ $(function() {
     // display error or success messages
   });
 
-  $(".ok").tooltip();
-  $(".remove-button").tooltip();
-  $(".save").tooltip();
 
-  $(".btn").popover();
-
-  $(".sixteen").removeClass("sixteen");
-
-  $(".pending").css("background-color", "#FCF8E3");
-
-  $(".rejected").css("background-color", "#F2DEDE");
-  $(".rejected").css("color", "#E82C0C");
-
-  $(".approved").css("background-color", "#D9EDF7");
-  $(".approved").css("color", "#5498DA");
+/*
+/
+/  FILTERS
+/
+*/
 
   $("select#status").change(function(e){
     status = $(this).val();
@@ -94,9 +141,15 @@ $(function() {
       });
     }
   });
-
+/*
+/
+/  SHIPPING DIMENSIONS
+/
+*/
   $(".dimension-button").click(function(){
     variant_id = $(this).attr("class").split(" ")[4];
+
+    console.log(variant_id);
 
     $("#variant_"+variant_id+"_shipping_height").val( $("#variant_"+variant_id+"_shipping_height_actual").val() );
     $("#variant_"+variant_id+"_shipping_width").val( $("#variant_"+variant_id+"_shipping_width_actual").val() );
@@ -104,8 +157,11 @@ $(function() {
 
     $('#variant_'+variant_id+'_shipping_height').on('input',function(e){
       old_dimensions = $("#variant_"+variant_id+"_dimensions").html().split(" x ");
+      console.log("old dimensions: " + old_dimensions);
+
       old_dimensions[0] = $(this).val();
       new_dimensions = old_dimensions.join(" x ");
+
       $("#variant_"+variant_id+"_dimensions").html(new_dimensions);
 
       $("#variant_"+variant_id+"_shipping_height_actual").val($(this).val());
