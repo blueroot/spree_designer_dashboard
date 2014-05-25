@@ -54,7 +54,7 @@ $(function() {
   $(".pending").css("background-color", "#FCF8E3");
 
   $(".rejected").css("background-color", "#F2DEDE");
-  $(".rejected").css("color", "#A94442");
+  $(".rejected").css("color", "#E82C0C");
 
   $(".approved").css("background-color", "#D9EDF7");
   $(".approved").css("color", "#5498DA");

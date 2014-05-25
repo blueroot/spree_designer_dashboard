@@ -33,7 +33,7 @@
 
             <div>
               <a data-toggle ="tooltip" data-placement = "right" title = "Approve item for board" class = "ok">
-                <span class="glyphicon glyphicon-ok <%= board_product.id %> <%= board_product.product.id %> <%= board_product.board.id %> <%= board_product.product.master.id %> <%= board_product.status %>"></span>
+                <span class="glyphicon glyphicon-ok <%= board_product.id %> <%= board_product.product.id %> <%= board_product.board.id %> <%= board_product.product.master.id %> <%= board_product.status if board_product.status == "approved" %>"></span>
               </a>
             </div>
 
@@ -42,7 +42,7 @@
 
             <div>
               <a data-toggle ="tooltip" data-placement = "right" title = "Reject item from board" class = "remove-button" href = "#<%= board_product.id %>">
-                <span class="glyphicon glyphicon-remove <%= board_product.id %> <%= board_product.product.id %> <%= board_product.board.id %> <%= board_product.product.master.id %>"></span>
+                <span class="glyphicon glyphicon-remove <%= board_product.id %> <%= board_product.product.id %> <%= board_product.board.id %> <%= board_product.product.master.id %> <%= board_product.status if board_product.status == "rejected" %>"></span>
               </a>
             </div>
 
