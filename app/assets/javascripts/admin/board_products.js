@@ -51,9 +51,13 @@ $(function() {
 
   $(".sixteen").removeClass("sixteen");
 
-  $(".rejected").css("background-color", "#F2DEDE")
-  $(".pending").css("background-color", "#FCF8E3")
-  $(".approved").css("background-color", "#D9EDF7")
+  $(".pending").css("background-color", "#FCF8E3");
+
+  $(".rejected").css("background-color", "#F2DEDE");
+  $(".rejected").css("color", "#A94442");
+
+  $(".approved").css("background-color", "#D9EDF7");
+  $(".approved").css("color", "#5498DA");
 
   $("select#status").change(function(e){
     status = $(this).val();
