@@ -28,6 +28,7 @@
         <% shipping_dimensions = (shipping_dimensions == " x  x ") ? "0 x 0 x 0" : shipping_dimensions %>
  
         <div class = "board_product_<%= board_product.id %> search-result board-product-tile row index <%= board_product.product.supplier.name %> <%= board_product.status %>">
+        <%= text_field_tag "board_product_#{board_product.id}_status", "", value: "#{board_product.status}", class: "hidden" %>
 
           <div class="actions col-md-1 tile-contents" >
 
@@ -90,7 +91,12 @@
     Depth: <input class = 'product_shipping_depth' id = <%= "variant_#{board_product.product.master.id}_shipping_depth_actual" %> type = 'text' value = <%= "#{board_product.product.master.shipping_depth}" %>></input> 
   </p>
              </div>
-              <div class = "col-md-3"><b>Inventory:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_inventory", "10" %></div>
+              <div class = "col-md-3">
+                <b>Inventory:</b> <br/>
+                <%= text_field_tag "variant_#{board_product.product.master.id}_inventory", board_product.product.master.stock_items.first.count_on_hand || "0", class: "inventory"  %>
+                <span> of </span>
+                <%= text_field_tag "variant_#{board_product.product.master.id}_supplier_inventory", board_product.product.master.stock_items.first.supplier_count_on_hand || "0", class: "inventory" %>
+              </div>
             </div>
 
             <div class = "row">

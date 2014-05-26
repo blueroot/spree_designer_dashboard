@@ -9,6 +9,11 @@ class Spree::Admin::BoardProductsController < Spree::Admin::ResourceController
     @suppliers      = @products.map(&:supplier).compact.uniq
     @supplier_names = ["All suppliers"] + @suppliers.map(&:name).compact.uniq
   end
+
+  def update
+    debugger
+    a = 1
+  end
   
   
   # redirect to the edit action after create

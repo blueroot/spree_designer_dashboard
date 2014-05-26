@@ -44,6 +44,9 @@ $(function() {
     $(".glyphicon-remove."+board_product_id).css("color","black");
     $(".glyphicon-remove."+board_product_id).css("background-color","#D9EDF7");
 
+    $("#board_product_"+board_product_id+"_status").val("approved");
+
+    // SEND JSON UPDATE TO SERVER!!!!!!!
 
   });
 
@@ -64,6 +67,8 @@ $(function() {
     $(".glyphicon-ok."+board_product_id).css("color","black");
     $(".glyphicon-ok."+board_product_id).css("background-color","#F2DEDE");
 
+    $("#board_product_"+board_product_id+"_status").val("rejected");
+
 
   });
 
@@ -76,25 +81,36 @@ $(function() {
     variant_id       = classes[5];
 
     // create the necessary json objects
-    product =  {
-      name:       $("#product_"+product_id+"_name").val(),
-      sku:        $("#product_"+product_id+"_sku").val(),
-      price:      $("#product_"+product_id+"_price").val(),
-      cost_price: $("#product_"+product_id+"_cost_price").val()
-    };
 
+    stock_item = {
+      count_on_hand: $("#variant_"+variant_id+"_inventory").val(),
+      supplier_count_on_hand: $("#variant_"+variant_id+"_supplier_inventory").val(),
+    }
     variant = {
       map_price:       $("#variant_"+variant_id+"_map_price").val(),
       msrp_price:      $("#variant_"+variant_id+"_msrp_price").val(),
       shipping_height: $("#variant_"+variant_id+"_shipping_height_actual").val(),
       shipping_width:  $("#variant_"+variant_id+"_shipping_width_actual").val(),
-      shipping_depth:  $("#variant_"+variant_id+"_shipping_depth_actual").val()
+      shipping_depth:  $("#variant_"+variant_id+"_shipping_depth_actual").val(),
+      stock_item: stock_item
+    };
+
+    product =  {
+      name:       $("#product_"+product_id+"_name").val(),
+      sku:        $("#product_"+product_id+"_sku").val(),
+      price:      $("#product_"+product_id+"_price").val(),
+      cost_price: $("#product_"+product_id+"_cost_price").val(),
+      variant: variant
+    };
+    
+    board_product = {
+      status: $("#board_product_"+board_product_id+"_status").val(),
+      product: product
     };
 
 
-    // ajax them to the server
-    console.log(JSON.stringify(product));
-    console.log(JSON.stringify(variant));
+    // SEND JSON UPDATE TO SERVER!!!!!!!
+    console.log(board_product);
 
     // display error or success messages
   });
