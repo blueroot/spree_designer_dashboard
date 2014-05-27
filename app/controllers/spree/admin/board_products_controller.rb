@@ -9,11 +9,14 @@ class Spree::Admin::BoardProductsController < Spree::Admin::ResourceController
   end
 
   def update
-    @board_product = Spree::BoardProduct.find_by id: params[:id]
-    @product       = Spree::Product.find_by id: params[:product_id]
-    @variant       = Spree::Variant.find_by id: params[:variant_id]
-    @stock_item    = Spree::StockItem.find_by id: params[:stock_item_id]
+    @board_product  = Spree::BoardProduct.find_by id: params[:id]
+    @product        = Spree::Product.find_by id: params[:product_id]
+    @variant        = Spree::Variant.find_by id: params[:variant_id]
+    @stock_item     = Spree::StockItem.find_by id: params[:stock_item_id]
 
+    stock_change_amount = params[:stock_item][:count_on_hand].to_i - @stock_item.count_on_hand
+    @stock_movement = Spree::StockMovement.new(stock_item_id: @stock_item.id, quantity: stock_change_amount, action: "received")
+    @stock_movement.save
     @board_product.update_attributes(board_product_params)
 
     @product.update_attributes(product_params)
@@ -21,6 +24,8 @@ class Spree::Admin::BoardProductsController < Spree::Admin::ResourceController
     @variant.update_attributes(variant_params, without_protection: true)
 
     @stock_item.update_attributes(stock_item_params, without_protection: true)
+
+    render layout: false
   end
 
   private
@@ -37,7 +42,7 @@ class Spree::Admin::BoardProductsController < Spree::Admin::ResourceController
     end
 
     def stock_item_params
-      params.require(:stock_item).permit(:count_on_hand, :supplier_count_on_hand)
+      params.require(:stock_item).permit(:supplier_count_on_hand)
     end
  
 end
