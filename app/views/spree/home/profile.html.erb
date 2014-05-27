@@ -94,7 +94,7 @@
 			<hr />
 			<div class="row">
 				<div class="col-md-12">
-					<label>Your Profile Image</label>
+					<label>Your Profile Images</label>
 
 					<div class="form-group">
 					<%= f.field_container :user_image do %>
@@ -107,9 +107,9 @@
 										<% end %>
 										<td>
 											<% unless @user.user_images.first.new_record? %>
-												<%= user_image.label :attachment, "Change Profile Image" %>
+												<%= user_image.label :attachment, "Change Headshot Image" %>
 											<% else %>
-												<%= user_image.label :attachment, "Profile Image" %>
+												<%= user_image.label :attachment, "Headshot Image" %>
 											<% end%>
 											<div id="user_image_file" class="choose-file-button">Choose a file</div>
 											<%= user_image.file_field :attachment %>	

@@ -14,6 +14,20 @@
 
 									<%#= image_tag product.images.first.attachment.url(:small), {:style => "width: 100%; height: auto;", :class => 'board-lightbox-product-img cloudzoom', :"data-cloudzoom" => "zoomImage: '#{product.images.first.attachment.url(:original)}'"}%>
 									<%= thumb_image(product, :itemprop => 'image', :class => "board-lightbox-product-img") %></a>
+									<div class="meta">
+										<% if false %>
+										favorite
+										made to order
+										show only cateogories that a wholesaler offers
+										<% end %>
+										<div title="Days to Ship" class="product-results-meta"><i class="fa fa-truck"></i> <%= product.master.display_days_to_ship %></div>
+										<% if product.master.made_to_order?%>
+											<div title="Made to Order" class="product-results-meta"><i class="fa fa-truck"></i> <%= product.master.display_made_to_order %> Made to Order</div>
+										<% else %>
+											<div title="Available Inventory" class="product-results-meta"><i class="fa fa-archive"></i> <%= product.master.display_inventory %></div>
+										<% end %>
+										
+									</div>
 								</div>
 							</div>
 						</div>

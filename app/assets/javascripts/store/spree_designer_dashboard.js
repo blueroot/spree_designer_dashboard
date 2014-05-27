@@ -7,14 +7,14 @@ function initializeProductSearchForm(){
 		/* get some values from elements on the page: */
 		var $form = $( this ),
 		term = $form.find( 'input[name="product_keywords"]' ).val(),
-		wholesaler_taxon = $form.find( 'select[name="wholesaler_taxon"]' ).val(),
+		supplier_id = $form.find( 'select[name="supplier_id"]' ).val(),
 		department_taxon = $form.find( 'select[name="department_taxon"]' ).val(),
 		url = $form.attr( 'action' );
 		bid = $('#canvas').data('boardId')
 		
 		//alert(taxon);
 		/* Send the data using post */
-		var posting = $.post( url, { keywords: term, department_taxon_id: department_taxon, wholesaler_taxon_id: wholesaler_taxon, per_page: 100, board_id: bid } );
+		var posting = $.post( url, { keywords: term, department_taxon_id: department_taxon, supplier_id: supplier_id, per_page: 100, board_id: bid } );
 
 		/* Put the results in a div */
 		posting.done(function( data ) {

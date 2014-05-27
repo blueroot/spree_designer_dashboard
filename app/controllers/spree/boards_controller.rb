@@ -107,11 +107,14 @@ class Spree::BoardsController < Spree::StoreController
   
   def product_search
     params.merge(:per_page => 100)
+    #if params[:supplier_id]
+    #  params.merge(:supplier_id => params[:supplier_id])
+    #end
     taxons = []
-    unless params[:wholesaler_taxon_id].blank?
-      taxon = Spree::Taxon.find(params[:wholesaler_taxon_id])
-      taxons << taxon.id
-    end
+    #unless params[:wholesaler_taxon_id].blank?
+    #  taxon = Spree::Taxon.find(params[:wholesaler_taxon_id])
+    #  taxons << taxon.id
+    #end
     
     unless params[:department_taxon_id].blank?
       taxon = Spree::Taxon.find(params[:department_taxon_id])
@@ -126,7 +129,12 @@ class Spree::BoardsController < Spree::StoreController
     
     @all_products = @searcher.retrieve_products
     #@products = @all_products.select { |product| product.not_on_a_board? }
-    @products = @all_products
+    if params[:supplier_id]
+      @products = @all_products.by_supplier(params[:supplier_id])
+    else
+      @products = @all_products.by_supplier(supplier_id)
+    end
+    
     @board = Spree::Board.find(params[:board_id])
     
     #@products = Spree::Product.all()
@@ -166,7 +174,8 @@ class Spree::BoardsController < Spree::StoreController
     @board.messages.new(:sender_id => spree_current_user.id, :recipient_id => 0, :subject => "Publication Submission")
     @products = Spree::Product.all()
     @department_taxons = Spree::Taxonomy.where(:name => 'Department').first().root.children
-    @wholesaler_taxons = Spree::Taxonomy.where(:name => 'Wholesaler').first().root.children
+    @suppliers = Spree::Supplier.where(:public => 1).order(:name)
+    #@wholesaler_taxons = Spree::Taxonomy.where(:name => 'Wholesaler').first().root.children
     @color_collections = Spree::ColorCollection.all()
   end
   
