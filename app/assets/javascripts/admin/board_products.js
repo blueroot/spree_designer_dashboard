@@ -46,7 +46,8 @@ $(function() {
 
     $("#board_product_"+board_product_id+"_status").val("approved");
 
-    // SEND JSON UPDATE TO SERVER!!!!!!!
+
+    $(".glyphicon-floppy-disk."+board_product_id).click();
 
   });
 
@@ -68,6 +69,8 @@ $(function() {
     $(".glyphicon-ok."+board_product_id).css("background-color","#F2DEDE");
 
     $("#board_product_"+board_product_id+"_status").val("rejected");
+    
+    $(".glyphicon-floppy-disk."+board_product_id).click();
 
 
   });
@@ -79,6 +82,7 @@ $(function() {
     product_id       = classes[3];
     board_id         = classes[4];
     variant_id       = classes[5];
+    stock_item_id    = classes[6];
 
     // create the necessary json objects
 
@@ -86,13 +90,13 @@ $(function() {
       count_on_hand: $("#variant_"+variant_id+"_inventory").val(),
       supplier_count_on_hand: $("#variant_"+variant_id+"_supplier_inventory").val(),
     }
+
     variant = {
       map_price:       $("#variant_"+variant_id+"_map_price").val(),
       msrp_price:      $("#variant_"+variant_id+"_msrp_price").val(),
       shipping_height: $("#variant_"+variant_id+"_shipping_height_actual").val(),
       shipping_width:  $("#variant_"+variant_id+"_shipping_width_actual").val(),
       shipping_depth:  $("#variant_"+variant_id+"_shipping_depth_actual").val(),
-      stock_item: stock_item
     };
 
     product =  {
@@ -100,17 +104,32 @@ $(function() {
       sku:        $("#product_"+product_id+"_sku").val(),
       price:      $("#product_"+product_id+"_price").val(),
       cost_price: $("#product_"+product_id+"_cost_price").val(),
-      variant: variant
     };
     
     board_product = {
       status: $("#board_product_"+board_product_id+"_status").val(),
-      product: product
     };
 
-
-    // SEND JSON UPDATE TO SERVER!!!!!!!
     console.log(board_product);
+
+    $.ajax({
+      type: "PUT",
+      url: "/admin/board_products",
+      contentType: "application/json",
+      data: JSON.stringify({ 
+        id: board_product_id, 
+        product_id: product_id, 
+        variant_id: variant_id,
+        stock_item_id: stock_item_id,
+        board_product: board_product,
+        product: product,
+        variant: variant,
+        stock_item: stock_item
+      })
+    })
+    .done(function(data){
+      console.log(data);
+    });
 
     // display error or success messages
   });

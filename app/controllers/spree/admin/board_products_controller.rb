@@ -1,6 +1,4 @@
 class Spree::Admin::BoardProductsController < Spree::Admin::ResourceController
-
-
  
   def index
     @boards         = Spree::Board.all
@@ -11,19 +9,35 @@ class Spree::Admin::BoardProductsController < Spree::Admin::ResourceController
   end
 
   def update
-    debugger
-    a = 1
+    @board_product = Spree::BoardProduct.find_by id: params[:id]
+    @product       = Spree::Product.find_by id: params[:product_id]
+    @variant       = Spree::Variant.find_by id: params[:variant_id]
+    @stock_item    = Spree::StockItem.find_by id: params[:stock_item_id]
+
+    @board_product.update_attributes(board_product_params)
+
+    @product.update_attributes(product_params)
+
+    @variant.update_attributes(variant_params, without_protection: true)
+
+    @stock_item.update_attributes(stock_item_params, without_protection: true)
   end
-  
-  
-  # redirect to the edit action after create
-  #  create.response do |wants|
-  #    wants.html { redirect_to edit_admin_fancy_thing_url( @fancy_thing ) }
-  #  end
-  #  
-  #  # redirect to the edit action after update
-  #  update.response do |wants|
-  #    wants.html { redirect_to edit_admin_fancy_thing_url( @fancy_thing ) }
-  #  end
+
+  private
+    def board_product_params
+      params.require(:board_product).permit(:status)
+    end
+
+    def product_params
+      params.require(:product).permit(:name, :sku, :price, :cost_price)
+    end
+
+    def variant_params
+      params.require(:variant).permit(:map_price, :msrp_price, :shipping_height, :shipping_width, :shipping_depth)
+    end
+
+    def stock_item_params
+      params.require(:stock_item).permit(:count_on_hand, :supplier_count_on_hand)
+    end
  
 end
