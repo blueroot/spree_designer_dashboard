@@ -1,180 +1,132 @@
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+<%= javascript_include_tag 'admin/board_products.js' %>
+
 <%= render :partial => 'spree/admin/shared/boards_sub_menu' %>
 
 <% content_for :page_title do %>
   <%= Spree.t(:products_on_boards) %>
 <% end %>
 
-<% content_for :table_filter_title do %>
-  <%= Spree.t(:filter) %>
-<% end %>
 
-<% content_for :table_filter do %>
-  <div data-hook="admin_boards_index_filter">
-    <%= search_form_for [:admin, @search] do |f| %>
-      <div class="field-block alpha six columns">
-
-        <div class="field">
-          <%= label_tag nil, Spree.t(:board_status) %><br />
-          <%= f.select :status_eq, Spree::Board.status_options, {:include_blank => true}, :class => 'select2' %>
-        </div>
-		
-      </div>
-
-
-
-
-		<div class="omega six columns">
-			<div class="field">
-	          <%= label_tag nil, Spree.t(:designer) %><br />
-	          <%#= f.select :designer_id_eq, Spree::User.all().is_active_designer.collect{|designer| [designer.full_name, designer.id]}, {:include_blank => true}, :class => 'select2' %>
-	        </div>
-	        <div class="date-range-filter field">
-	          <%= label_tag nil, Spree.t(:date_range) %>
-	          <div class="date-range-fields">
-	            <%= f.text_field :created_at_gt, :class => 'datepicker datepicker-from', :value => params[:q][:created_at_gt], :placeholder => Spree.t(:start) %>
-
-	            <span class="range-divider">
-	              <i class="icon-arrow-right"></i>
-            </span>
-
-	            <%= f.text_field :created_at_lt, :class => 'datepicker datepicker-to', :value => params[:q][:created_at_lt], :placeholder => Spree.t(:stop) %>
-	          </div>
-	        </div>
-
-	      </div>
-
-
-
-
-      <div class="clearfix"></div>
-
-      <div class="actions filter-actions">
-        <div data-hook="admin_orders_index_search_buttons">
-          <%= button Spree.t(:filter_results), 'icon-search' %>
-        </div>
-      </div>
-    <% end %>
+<div class = 'row '>
+  <div class = "form-group col-md-4 left" id = "product-search">
+    <b><%= label_tag "Show only products for supplier:" %></b>
+    <%= select_tag :suppliers, options_for_select(@supplier_names, @supplier_names.first), class: "form-control" %>
   </div>
-<% end %>
 
+  <div class = "form-group col-md-4 col-md-offset-4 right" id = "product-search">
+    <b><%= label_tag "Show products that are :" %></b>
+    <%= select_tag :status, options_for_select(["All products","Pending", "Approved", "Rejected"], "All Products"), class: "form-control" %>
+  </div>
+</div>
 
-<table class="index">
-	<colgroup>
-		<col style="width: 8%;">
-		<col style="width: 17%;">
-		<col style="width: 25%;">
-		<col style="width: 25%;">
-		<col style="width: 8%;">
-		<col style="width: 8%;">
-	</colgroup>
-	<thead>
-		<tr>
-			<th class="actions"></th>
-			<th colspan="2">Product Name</th>
-			<th>Room / Designer</th>
-			<th>Stock</th>
-			<th>Shipping Category</th>
-			<th>Dimensions</th>
-			<th>Weight</th>
-			<th>Contact Method</th>
-		</tr>
-	</thead>
-  
-	<tbody>
     <% @board_products.each do |board_product| %>
-    <% if board_product.product %>
-      <% background_color = cycle('odd', 'even') %>
-      <tr class="<%= background_color %>" id="<%= dom_id board_product %>">
-  <!-- Normal version -->
-        <td  class="actions">
-          <%= link_to_edit board_product, :no_text => true, href:"##{board_product.id}##{board_product.product.id}##{board_product.board.id}", class: "edit-product" %> 
-          <br />
-          <%= link_to_delete board_product, :no_text => true %>
-        </td>
-        <td class="align-center"><%= mini_image(board_product.product) %></td>
-        <td><%= link_to board_product.product.try(:name), edit_admin_product_path(board_product.product) %>
-          <br/>SKU: <%= board_product.product.sku rescue '' %>
-          <br/><%= board_product.product.display_price.to_html rescue '' %>
-          <br/><%= board_product.product.supplier.name.to_html rescue '' %></td>
-        <td><strong><%= board_product.board.name%></strong>
-          <br /><%= board_product.board.designer.full_name%></td>
-        <td class="align-center">10</td>
-        <td class="align-center">Parcel</td>
-        <td class="align-center">3 x 13 x 13</td>
-        <td class="align-center">10 lbs.</td>
-        <td/>contact</td>
-  <!-- Normal version -->
-      </tr>
+     <% if board_product.product %>
+        <% shipping_dimensions = "#{board_product.product.master.shipping_height} x #{board_product.product.master.shipping_width} x #{board_product.product.master.shipping_depth}" %>
+        <% shipping_dimensions = (shipping_dimensions == " x  x ") ? "0 x 0 x 0" : shipping_dimensions %>
+ 
+        <div class = "board_product_<%= board_product.id %> search-result board-product-tile row index <%= board_product.product.supplier.name %> <%= board_product.status %>">
+        <%= text_field_tag "board_product_#{board_product.id}_status", "", value: "#{board_product.status}", class: "hidden" %>
 
-      <tr class="<%= background_color %> hidden" id="editing_<%= board_product.id %>">
-<!-- Edit version -->
-        <td  class="actions">
-          <%= link_to_edit board_product, :no_text => true, href: "##{board_product.id}##{board_product.product.id}##{board_product.board.id}", class: "edit-product save-product-button" %> 
-          <br />
-          <%= link_to_delete board_product, :no_text => true %>
-        </td>
-        <td class="align-center"><%= mini_image(board_product.product) %></td>
-        <td><%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.name %>
-        <br/>SKU: <%= board_product.product.sku rescue '' %>
-      <br/><%= text_field_tag "product_#{board_product.product.id}_price", board_product.product.price %>
-        <br/><%= board_product.product.supplier.name.to_html rescue '' %></td>
-      <td><strong><%= text_field_tag "board_#{board_product.board.id}_name", board_product.board.name %></strong>
-          <br /><%= board_product.board.designer.full_name%></td>
-        <td class="align-center"><%= number_field_tag :stock, "10" %></td>
-        <td class="align-center"><%= select_tag :shipping_category, options_for_select(["Parcel", "Ground"], "Parcel") %></td>
-        <td class="align-center"><%= text_field_tag :dimensions, "3 x 13 x 13" %></td>
-        <td class="align-center"><%= text_field_tag :weight, "10 lbs." %></td>
-        <td/><%= text_field_tag :contact_method, "contact" %></td>
-<!-- Edit version -->
-      </tr>
-  <% end %>
-  <% end %>
-  </tbody>
-</table>
-<script>
-  $(".edit-product").click(function(e){
-      split_url = e.target.href.split("#");
+          <div class="actions col-md-1 tile-contents" >
 
-      board_product_id = split_url[1];
-      product_id = split_url[2];
-      board_id = split_url[3];
+            <div>
+              <a data-toggle ="tooltip" data-placement = "right" title = "Approve item for board" class = "ok">
+                <span class="glyphicon glyphicon-ok <%= board_product.id %> <%= board_product.product.id %> <%= board_product.board.id %> <%= board_product.product.master.id %> <%= board_product.product.master.stock_items.first.id %> <%= board_product.status if board_product.status == "approved" %>"></span>
+              </a>
+            </div>
 
-      $("#board_product_"+board_product_id).hide();
-      $("#editing_"+board_product_id).show();
-  });
+            <br/>
+            <br/>
 
-  $(".save-product-button").click(function(e){
-      split_url = e.target.href.split("#");
+            <div>
+              <a data-toggle ="tooltip" data-placement = "right" title = "Reject item from board" class = "remove-button" href = "#<%= board_product.id %>">
+                <span class="glyphicon glyphicon-remove <%= board_product.id %> <%= board_product.product.id %> <%= board_product.board.id %> <%= board_product.product.master.id %> <%= board_product.product.master.stock_items.first.id %> <%= board_product.status if board_product.status == "rejected" %>"></span>
+              </a>
+            </div>
 
-      board_product_id = split_url[1];
-      product_id = split_url[2];
-      board_id = split_url[3];
+            <br/>
+            <br/>
+            <div>
+              <a data-toggle ="tooltip" data-placement = "right" title = "Save board information" class = "save" href = "#<%= board_product.id %>">
+                <span class="glyphicon glyphicon-floppy-disk <%= board_product.id %> <%= board_product.product.id %> <%= board_product.board.id %> <%= board_product.product.master.id %> <%= board_product.product.master.stock_items.first.id %> "></span><br/>
+              </a>
+            </div>
 
-      // here we'll need to make a couple posts
-      // so far i know we'll need to post to products and board_products
-      // maybe variants and shipping options too?
-      new_product_name = $("#product_"+product_id+"_name").val();
-      new_product_price = $("#product_"+product_id+"_price").val();
+          </div>
 
-      new_product = {
-        name: new_product_name,
-        price: new_product_price
-      };
+          <div class = "col-md-2">
+            <%= small_image(board_product.product, class: "img-thumbnail") %>
+          </div>
 
-      new_board_name = $("#board_"+board_id+"_name").val();
+          <% shipping_dimensions_inputs = text_field_tag("height") + text_field_tag("width") + text_field_tag("depth") %>
+          <div class = "col-md-7 product-details tile-contents">
 
-      new_board = {
-        name: new_board_name
-      };
+            <div class = "row">
+              <div class = "col-md-3"><b>Name:</b><br/><%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.name, placeholder: "Name"  %></div>
+              <div class = "col-md-3"><b>SKU:</b><br/> <%= text_field_tag "product_#{board_product.product.id}_sku", board_product.product.sku  %></div>
+              <div class = "col-md-3"><b>Shipping Dimensions:</b><br/> 
+                <%= button_tag shipping_dimensions, 
+                          data: { 
+                            title: "Shipping Dimensions", html: true, container: "body", toggle: "popover", placement: "right", 
+                            content: %Q{ 
+                                        Height: <input class = 'product_shipping_height' 
+                                                       id    = 'variant_#{board_product.product.master.id}_shipping_height' 
+                                                       type  = 'text' 
+                                                       >
+                                                </input><br/><br/> 
+                                        Width: <input class = 'product_shipping_width' id = 'variant_#{board_product.product.master.id}_shipping_width' type = 'text'></input><br/><br/> 
+                                        Depth: <input class = 'product_shipping_depth' id = 'variant_#{board_product.product.master.id}_shipping_depth' type = 'text'></input> 
+                                      }
+                          }, 
+                          class: "btn btn-default btn-primary dimension-button #{board_product.product.master.id}", 
+                          id: "variant_#{board_product.product.master.id}_dimensions" ,
+                          width: "500px"
+                %>
+  <p class = "hidden" id= "variant_<%= board_product.product.master.id %>_shipping_information">
+    Height: <input class = 'product_shipping_height' id = <%= "variant_#{board_product.product.master.id}_shipping_height_actual" %> type  = 'text' value = <%= "#{board_product.product.master.shipping_height}" %>></input><br/><br/> 
+    Width: <input class = 'product_shipping_width' id = <%= "variant_#{board_product.product.master.id}_shipping_width_actual" %> type = 'text' value = <%= "#{board_product.product.master.shipping_width}" %>></input><br/><br/> 
+    Depth: <input class = 'product_shipping_depth' id = <%= "variant_#{board_product.product.master.id}_shipping_depth_actual" %> type = 'text' value = <%= "#{board_product.product.master.shipping_depth}" %>></input> 
+  </p>
+             </div>
+              <div class = "col-md-3">
+                <b>Inventory:</b> <br/>
+                <%= text_field_tag "variant_#{board_product.product.master.id}_inventory", board_product.product.master.stock_items.first.count_on_hand || "0", class: "inventory"  %>
+                <span> of </span>
+                <%= text_field_tag "variant_#{board_product.product.master.id}_supplier_inventory", board_product.product.master.stock_items.first.supplier_count_on_hand || "0", class: "inventory" %>
+              </div>
+            </div>
 
-      alert(JSON.stringify(new_product));
-      alert(JSON.stringify(new_board));
-      alert("Looking into routes to post these to...");
+            <div class = "row">
+              <div class = "col-md-3">
+                <b>Cost:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_cost", board_product.product.master.cost_price %>
+              </div>
 
-      $("#board_product_"+board_product_id).show();
-      $("#editing_"+board_product_id).hide();
-  });
+              <div class = "col-md-3">
+                <b>Price:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_price", board_product.product.price %>
+              </div>
 
-</script>
+              <div class = "col-md-3">
+                <b>MSRP:</b> <br/><%= text_field_tag "variant_#{board_product.product.master.id}_msrp_price", board_product.product.master.msrp_price %>
+              </div>
 
-<%= paginate @board_products %>
+              <div class = "col-md-3">
+                <b>MAP:</b> <br/><%= text_field_tag "variant_#{board_product.product.master.id}_map_price", board_product.product.master.map_price %>
+              </div>
+            </div>
+
+          </div>
+
+          <div class = "col-md-2 img-thumbnail tile-contents board-image">
+            <%= board_image(board_product.board, :small) %>
+          </div>
+
+        </div>
+      <% end %>
+    <% end %>
+
+  </div>
+
+<div>

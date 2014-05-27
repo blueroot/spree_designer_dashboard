@@ -244,6 +244,10 @@
 <% else %>
 	<div class="empty-state">There are no related boards at this time.</div>
 <% end%>
+
+ <div class="fb-comments" data-href="<%=url_for(:only_path => false)%>" data-numposts="5" data-colorscheme="light"></div>
+
+
 <script>
 $(document).ready(function() {
 	$('#embed-room').popover({ 

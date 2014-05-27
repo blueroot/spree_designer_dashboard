@@ -1,11 +1,11 @@
 Spree::Core::Engine.routes.draw do
   # Add your extension routes here
-  
+  resources :board_products
+
   get '/al/:id' => 'users#auto_login', :as => :auto_login
   resources :color_collections do 
     resources :colors
   end
-  
   
   match "/rooms/product_search" => "boards#product_search", :as => :board_product_search, :via =>[:get, :post]
   
@@ -41,9 +41,9 @@ Spree::Core::Engine.routes.draw do
   
   #get "/boards/product_search" => "boards#product_search", :as => :board_product_search
    
-  resources :board_products
-  
+ 
   namespace :admin do
+    match "/board_products", to: "board_products#update", via: :put
     resources :boards
     resources :board_products
     resources :designer_registrations
