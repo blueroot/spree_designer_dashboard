@@ -29,6 +29,10 @@ $('.add-to-board-link').click(function() {
 	//handleCloneAndAddEvent($(this))
 	
 });
+
+$('.bookmark-product').click(function() {
+	addProductBookmark($(this).data('productId'))
+});
 //setHeight();
 //// Re-initialize the results pane on resize
 //$(window).resize(function() {		

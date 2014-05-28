@@ -20,6 +20,7 @@
 										made to order
 										show only cateogories that a wholesaler offers
 										<% end %>
+										<div title="Bookmark this Product" class="product-results-meta"><a href="javascript:void(0);" class="bookmark-product" id="bookmark_product_<%= product.id %>" data-product-id="<%= product.id %>"><i class="fa fa-bookmark"></i> Bookmark</a></div>
 										<div title="Days to Ship" class="product-results-meta"><i class="fa fa-truck"></i> <%= product.master.display_days_to_ship %></div>
 										<% if product.master.made_to_order?%>
 											<div title="Made to Order" class="product-results-meta"><i class="fa fa-truck"></i> <%= product.master.display_made_to_order %> Made to Order</div>

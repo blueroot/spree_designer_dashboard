@@ -344,6 +344,45 @@ function getProductDetails(product_id, board_id, board_product_id){
 }
 
 
+function addProductBookmark(product_id){
+	
+	
+		
+
+	
+	var url = '/bookmarks/?product_id='+product_id
+	$.ajax({
+		url: url, 
+		type: "POST",
+		dataType: "json", 
+		data: {board_product: {board_id: $('#canvas').data('boardId'), product_id: cloned.data('productId'), top_left_x: cloned.position().left, top_left_y: cloned.position().top, width: cloned.width(), height: cloned.height()}},
+	     beforeSend : function(xhr){
+				xhr.setRequestHeader("Accept", "application/json")
+	     },
+	     success : function(board_product){
+				console.log(board_product.product.permalink)
+		
+				buildImageLayer(canvas, board_product);
+				
+				// remove the jquery drag/drop place holder that had been there.
+				// this is a bit of a hack - without the timer, then the graphic disappears for a second...this generally keeps it up until the kineticjs version is added
+				setTimeout(function() {
+				      cloned.hide();
+				}, 1000);
+				
+				
+				
+	     },
+	     error: function(objAJAXRequest, strError, errorThrown){
+				alert("ERROR: " + strError);
+	     }
+	  }
+	);
+	
+	
+	
+}
+
 
 function initializeBoardManagement(){
 	$("#submit_board_button").click(function() {
