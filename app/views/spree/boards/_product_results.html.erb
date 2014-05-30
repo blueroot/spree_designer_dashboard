@@ -3,9 +3,10 @@
 		<% products.in_groups_of(3, false) do |row_products| %>
 			<div class="row">
 			<% for product in row_products %>
+			<% is_bookmarked = product.is_bookmarked_by?(spree_current_user) %>
 				<div class="col-md-4">
-					<div class="board-product-select">
-						<div class="board-product-select-image">
+					<div id="board-product-select-<%= product.id %>" class="board-product-select">
+						<div class="board-product-select-image <%= "bookmarked" if is_bookmarked %>">
 							<div class="board-lightbox-product" id="board-product-<%= product.id %>" data-product-id="<%= product.id %>" id="<%= product.id %>" data-img-url="<%=product_board_image_url(product, "small")%>" data-product-permalink="<%=product.permalink%>">
 								<div style="position: relative;">
 									<a href="javascript:void(0);" class="button-remove-product" style="font-family: helvetica; font-size: 12px; line-height: 12px; font-weight: bold; background-color: #fff; padding: 4px 7px; border-width: 0 0 1px 1px; border-style: none; border-color: #ccc; right: 0px; top: 0; position: absolute; display: none;">x</a>
@@ -14,22 +15,30 @@
 
 									<%#= image_tag product.images.first.attachment.url(:small), {:style => "width: 100%; height: auto;", :class => 'board-lightbox-product-img cloudzoom', :"data-cloudzoom" => "zoomImage: '#{product.images.first.attachment.url(:original)}'"}%>
 									<%= thumb_image(product, :itemprop => 'image', :class => "board-lightbox-product-img") %></a>
-									<div class="meta">
-										<% if false %>
-										favorite
-										made to order
-										show only cateogories that a wholesaler offers
-										<% end %>
-										<div title="Bookmark this Product" class="product-results-meta"><a href="javascript:void(0);" class="bookmark-product" id="bookmark_product_<%= product.id %>" data-product-id="<%= product.id %>"><i class="fa fa-bookmark"></i> Bookmark</a></div>
-										<div title="Days to Ship" class="product-results-meta"><i class="fa fa-truck"></i> <%= product.master.display_days_to_ship %></div>
-										<% if product.master.made_to_order?%>
-											<div title="Made to Order" class="product-results-meta"><i class="fa fa-truck"></i> <%= product.master.display_made_to_order %> Made to Order</div>
-										<% else %>
-											<div title="Available Inventory" class="product-results-meta"><i class="fa fa-archive"></i> <%= product.master.display_inventory %></div>
-										<% end %>
-										
-									</div>
+									
 								</div>
+								
+							</div>
+							<div class="meta">
+								<% if false %>
+								favorite
+								made to order
+								show only cateogories that a wholesaler offers
+								<% end %>
+								
+								
+								<div title="Bookmark this Product" class="product-results-meta bookmark-product-container <%= "hidden" if is_bookmarked %>"><a href="javascript:void(0);" class="bookmark-product bookmark-link" id="bookmark_product_<%= product.id %>" data-product-id="<%= product.id %>"><i class="fa fa-bookmark"></i> Add Bookmark</a></div>
+								
+								<div title="Remove Bookmark for this Product" class="product-results-meta unbookmark-product-container <%= "hidden" unless is_bookmarked %>"><a href="javascript:void(0);" class="remove-bookmark-product unbookmark-link" id="unbookmark_product_<%= product.id %>" data-product-id="<%= product.id %>"><i class="fa fa-bookmark"></i> Bookmarked</a></div>
+								<% if false %>
+								<div title="Days to Ship" class="product-results-meta"><i class="fa fa-truck"></i> <%#= product.master.display_days_to_ship %></div>
+								<% if product.master.made_to_order?%>
+									<div title="Made to Order" class="product-results-meta"><i class="fa fa-truck"></i> <%#= product.master.display_made_to_order %> Made to Order</div>
+								<% else %>
+									<div title="Available Inventory" class="product-results-meta"><i class="fa fa-archive"></i> <%#= product.master.display_inventory %></div>
+								<% end %>
+								<% end %>
+								
 							</div>
 						</div>
 						<% if false %>

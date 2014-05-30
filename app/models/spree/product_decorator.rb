@@ -1,6 +1,7 @@
 Spree::Product.class_eval do
   has_many :board_products
   has_many :boards, :through => :board_products
+  has_many :bookmarks
   
   add_search_scope :in_all_taxons do |*taxons|
     taxons = get_taxons(taxons)
@@ -39,6 +40,9 @@ Spree::Product.class_eval do
     self.board_products.blank?
   end
   
+  def is_bookmarked_by?(user)
+    self.bookmarks.find_by_user_id(user.id) ? true : false
+  end
   
   def image_for_board
     self.images.first ? Magick::ImageList.new(self.images.first.attachment.url(:product)) : Magick::ImageList.new(self.variants.first.images.first.attachment.url(:product))

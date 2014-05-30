@@ -116,7 +116,7 @@ function buildImageLayer(canvas, bp){
 					hasRotatingPoint: false
 		    });
 		oImg.set('id', bp.id)
-		console.log('build image: '+ bp.id)
+		//console.log('build image: '+ bp.id)
 		oImg.set('product_permalink', bp.product.permalink)
 		canvas.add(oImg);
 		canvas.setActiveObject(oImg);
@@ -132,7 +132,7 @@ function addProductToBoard(event, ui){
 	$(this).append(cloned.removeClass('board-lightbox-product').addClass('board-lightbox-product-cloned'));
 	
 	//hide the image of the product in the search results to indicate that it is no longer available to others.
-	selector = '#board-product-' + cloned.data('productId')
+	selector = '#board-product-select-' + cloned.data('productId')
 	$(selector).hide();
 	
 	//alert(cloned.position().left + ':' + cloned.position().top)
@@ -149,7 +149,7 @@ function addProductToBoard(event, ui){
 				xhr.setRequestHeader("Accept", "application/json")
 	     },
 	     success : function(board_product){
-				console.log(board_product.product.permalink)
+				//console.log(board_product.product.permalink)
 		
 				buildImageLayer(canvas, board_product);
 				
@@ -345,43 +345,41 @@ function getProductDetails(product_id, board_id, board_product_id){
 
 
 function addProductBookmark(product_id){
+	var url = '/bookmarks.json?product_id='+product_id
+	selector = "#board-product-select-"+product_id+' .board-product-select-image'
+	$(selector).addClass('bookmarked')
+	$('#bookmark_product_'+product_id).parent().addClass('hidden')
+	$('#bookmark_product_'+product_id).parent().parent().children('.unbookmark-product-container').removeClass('hidden')
 	
-	
-		
-
-	
-	var url = '/bookmarks/?product_id='+product_id
 	$.ajax({
 		url: url, 
 		type: "POST",
 		dataType: "json", 
-		data: {board_product: {board_id: $('#canvas').data('boardId'), product_id: cloned.data('productId'), top_left_x: cloned.position().left, top_left_y: cloned.position().top, width: cloned.width(), height: cloned.height()}},
+		data: {},
 	     beforeSend : function(xhr){
 				xhr.setRequestHeader("Accept", "application/json")
 	     },
-	     success : function(board_product){
-				console.log(board_product.product.permalink)
-		
-				buildImageLayer(canvas, board_product);
-				
-				// remove the jquery drag/drop place holder that had been there.
-				// this is a bit of a hack - without the timer, then the graphic disappears for a second...this generally keeps it up until the kineticjs version is added
-				setTimeout(function() {
-				      cloned.hide();
-				}, 1000);
-				
-				
-				
+	     success : function(bookmark){
+					//alert('u r the one')
 	     },
 	     error: function(objAJAXRequest, strError, errorThrown){
-				alert("ERROR: " + strError);
+				//alert("ERROR: " + strError);
 	     }
 	  }
 	);
-	
-	
-	
 }
+
+function removeProductBookmark(product_id){
+	var url = '/bookmarks?product_id='+product_id
+	$.post(url, {_method:'delete'}, null, "script");
+	selector = "#board-product-select-"+product_id+' .board-product-select-image'
+	$(selector).removeClass('bookmarked')
+	$('#unbookmark_product_'+product_id).parent().addClass('hidden')
+	$('#unbookmark_product_'+product_id).parent().parent().children('.bookmark-product-container').removeClass('hidden')
+	//$(this).parent().child('').addClass('hidden')
+}
+
+
 
 
 function initializeBoardManagement(){

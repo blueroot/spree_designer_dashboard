@@ -16,6 +16,7 @@ Spree::Core::Engine.routes.draw do
     resources :color_matches
   end
   resources :designer_registrations
+  resources :bookmarks
   
   get "/designers/thanks" => "designer_registrations#thanks", :as => :designer_registration_thanks
   
