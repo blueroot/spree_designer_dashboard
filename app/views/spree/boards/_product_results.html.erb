@@ -30,12 +30,13 @@
 								<div title="Bookmark this Product" class="product-results-meta bookmark-product-container <%= "hidden" if is_bookmarked %>"><a href="javascript:void(0);" class="bookmark-product bookmark-link" id="bookmark_product_<%= product.id %>" data-product-id="<%= product.id %>"><i class="fa fa-bookmark"></i> Add Bookmark</a></div>
 								
 								<div title="Remove Bookmark for this Product" class="product-results-meta unbookmark-product-container <%= "hidden" unless is_bookmarked %>"><a href="javascript:void(0);" class="remove-bookmark-product unbookmark-link" id="unbookmark_product_<%= product.id %>" data-product-id="<%= product.id %>"><i class="fa fa-bookmark"></i> Bookmarked</a></div>
-								
-								<div title="Days to Ship" class="product-results-meta"><i class="fa fa-truck"></i> <%= product.master.display_days_to_ship %></div>
+								<% if false %>
+								<div title="Days to Ship" class="product-results-meta"><i class="fa fa-truck"></i> <%#= product.master.display_days_to_ship %></div>
 								<% if product.master.made_to_order?%>
-									<div title="Made to Order" class="product-results-meta"><i class="fa fa-truck"></i> <%= product.master.display_made_to_order %> Made to Order</div>
+									<div title="Made to Order" class="product-results-meta"><i class="fa fa-truck"></i> <%#= product.master.display_made_to_order %> Made to Order</div>
 								<% else %>
-									<div title="Available Inventory" class="product-results-meta"><i class="fa fa-archive"></i> <%= product.master.display_inventory %></div>
+									<div title="Available Inventory" class="product-results-meta"><i class="fa fa-archive"></i> <%#= product.master.display_inventory %></div>
+								<% end %>
 								<% end %>
 								
 							</div>
