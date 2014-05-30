@@ -36,16 +36,19 @@
 			                <p><%= designer.location%></p>
 			             </div>
 		            </a>
-		        </div><br/>
+		        </div>
 		        
 		       <a href="/<%=designer.username%>" style="color:black;font-size:18px;">
-		       <%if designer.full_name.present?%>
-		         <%= designer.full_name %> 
-		       <%elsif designer.username.present?%>
-		              <%= designer.username %> 
-		        <%else%>
-		                   <br/>
-		       <%end%>
+			       <div style="margin-top: 30px;">
+				       <%if designer.full_name.present?%>
+					 <%= designer.full_name %> 
+				       <%elsif designer.username.present?%>
+					      <%= designer.username %> 
+					<%else%>
+						  &nbsp;    
+		            	       <%end%>
+		               </div>
+
 		        </a>
 		    </li>
 		       	
@@ -64,8 +67,18 @@
 						<p><%= designer.location%></p>
 		            </div>
 		          </a>
-		        </div><br/>
-		     <a href="/<%=designer.username%>" style="color:black;font-size:18px;"> <%= designer.full_name %> </a>
+		        </div>
+		     <a href="/<%=designer.username%>" style="color:black;font-size:18px;"> 
+                       <div style="margin-top: 30px;">
+		               <%if designer.full_name.present?%>
+				 <%= designer.full_name %> 
+			       <%elsif designer.username.present?%>
+				      <%= designer.username %> 
+				<%else%>
+				           
+			       <%end%>
+   	              </div>
+                     </a>
 		    </li>
 		<% end %>
 	
