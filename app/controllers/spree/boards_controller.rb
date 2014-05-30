@@ -127,13 +127,15 @@ class Spree::BoardsController < Spree::StoreController
       @searcher = build_searcher(params)
     end
     
-    @all_products = @searcher.retrieve_products
+    @all_products = @searcher.retrieve_products.by_supplier(params[:supplier_id])
+    @products = @all_products
+    
     #@products = @all_products.select { |product| product.not_on_a_board? }
-    if params[:supplier_id]
-      @products = @all_products.by_supplier(params[:supplier_id])
-    else
-      @products = @all_products.by_supplier(supplier_id)
-    end
+    #if params[:supplier_id]
+    #  @products = @all_products.by_supplier(params[:supplier_id])
+    #else
+    #  @products = @all_products.by_supplier(supplier_id)
+    #end
     
     @board = Spree::Board.find(params[:board_id])
     
@@ -173,6 +175,7 @@ class Spree::BoardsController < Spree::StoreController
     @board = Spree::Board.find(params[:id])
     @board.messages.new(:sender_id => spree_current_user.id, :recipient_id => 0, :subject => "Publication Submission")
     @products = Spree::Product.all()
+    @bookmarked_products = spree_current_user.bookmarks.collect{|bookmark| bookmark.product}
     @department_taxons = Spree::Taxonomy.where(:name => 'Department').first().root.children
     @suppliers = Spree::Supplier.where(:public => 1).order(:name)
     #@wholesaler_taxons = Spree::Taxonomy.where(:name => 'Wholesaler').first().root.children

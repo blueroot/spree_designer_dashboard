@@ -33,6 +33,11 @@ $('.add-to-board-link').click(function() {
 $('.bookmark-product').click(function() {
 	addProductBookmark($(this).data('productId'))
 });
+$('.remove-bookmark-product').click(function() {
+	removeProductBookmark($(this).data('productId'))
+});
+
+
 //setHeight();
 //// Re-initialize the results pane on resize
 //$(window).resize(function() {		

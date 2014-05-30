@@ -31,33 +31,62 @@
 				</div>
 				<div class="col-md-5">
 					
-					<div id="design" class="tab-pane active board-manage-panel">
-						<div id="board_search_panel" class="">
-							<div class="board-products-search-fields">
-								<%= form_tag("/rooms/product_search", method: "get", :id => "product_search_form") do %>
-									<div class="row">
-										<div class="col-md-3">
-											<%= select_tag "supplier_id", options_from_collection_for_select(@suppliers, "id", "name"), :include_blank => false, :class => "form-control input-sm", :prompt => "Wholesaler" %>
-										</div>
-										<div class="col-md-3">
-											<%= select_tag "department_taxon", options_from_collection_for_select(@department_taxons, "id", "name"), :include_blank => false, :class => "form-control input-sm", :prompt => "Department" %>
-										</div>
-										<div class="col-md-3">
+					
+					<ul class="nav nav-tabs">
+					  <li class="active"><a href="#search_pane" data-toggle="tab">Find Products</a></li>
+					  <li><a href="#bookmarks" data-toggle="tab">Bookmarks</a></li>
+					</ul>
 
-											<input type="text" id="product_keywords" name="product_keywords" class="form-control input-sm" placeholder="Keywords">
-										</div>
-										<div class="col-md-3">
-											<%= submit_tag("Search", :class => "btn btn-primary btn-sm")%>
-										</div>
+					<!-- Tab panes -->
+					<div class="tab-content">
+					  <div class="tab-pane active" id="search_pane">
+					  		<div id="design" class="tab-pane active board-manage-panel">
+								<div id="board_search_panel" class="">
+									<div class="board-products-search-fields">
+										<%= form_tag("/rooms/product_search", method: "get", :id => "product_search_form") do %>
+											<div class="row">
+												<div class="col-md-3">
+													<%= select_tag "supplier_id", options_from_collection_for_select(@suppliers, "id", "name"), :include_blank => false, :class => "form-control input-sm", :prompt => "Wholesaler" %>
+												</div>
+												<div class="col-md-3">
+													<%= select_tag "department_taxon", options_from_collection_for_select(@department_taxons, "id", "name"), :include_blank => false, :class => "form-control input-sm", :prompt => "Department" %>
+												</div>
+												<div class="col-md-3">
+
+													<input type="text" id="product_keywords" name="product_keywords" class="form-control input-sm" placeholder="Keywords">
+												</div>
+												<div class="col-md-3">
+													<%= submit_tag("Search", :class => "btn btn-primary btn-sm")%>
+												</div>
+											</div>
+										<% end %>
 									</div>
-								<% end %>
+									<div id="select-products-pagination" class="select-products-pagination"></div>
+									<div id="select-products-box" class="select-products-box">							
+										<div class="board-search-empty-state">Search for products above and drag them onto your board.</div>
+									</div>
+								</div>
 							</div>
-							<div id="select-products-pagination" class="select-products-pagination"></div>
-							<div id="select-products-box" class="select-products-box">							
-								<div class="board-search-empty-state">Search for products above and drag them onto your board.</div>
-							</div>
+					  </div>
+					  <div class="tab-pane" id="bookmarks">
+							<div id="design" class="tab-pane active board-manage-panel">
+								<div id="board_search_panel" class="">
+						<div id="select-bookmark-products-box" class="select-products-box">							
+							<% if !@bookmarked_products.blank? %>
+						  	<%= render :partial => "product_results", :locals => {:products => @bookmarked_products}%>
+							<% else %>
+							<div class="board-search-empty-state">You don't have any bookmarks.</div>
+							<% end %>
 						</div>
+						</div>
+						</div>
+						
+						
+					  </div>
 					</div>
+					
+					
+					
 				</div>
 			</div>
 		</div>
