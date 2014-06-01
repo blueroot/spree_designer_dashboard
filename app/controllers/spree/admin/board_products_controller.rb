@@ -25,7 +25,9 @@ class Spree::Admin::BoardProductsController < Spree::Admin::ResourceController
 
     @stock_item.update_attributes(stock_item_params, without_protection: true)
 
-    render layout: false
+    respond_to do |format|
+      format.json { render json: { status: 200 } }
+    end
   end
 
   private
