@@ -114,7 +114,7 @@ $(function() {
 
     $.ajax({
       type: "PUT",
-      url: "/admin/board_products",
+      url: "/admin/board_products.json",
       contentType: "application/json",
       data: JSON.stringify({ 
         id: board_product_id, 
