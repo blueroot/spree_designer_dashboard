@@ -41,7 +41,7 @@ class Spree::ColorMatchesController < Spree::StoreController
   
   def destroy
     @board = Spree::Board.find(params[:room_id])
-
+    @color_collections = Spree::ColorCollection.all()
     if params[:id] and @color_match = @board.color_matches.find(params[:id])
       @color_match.destroy
       

@@ -1,5 +1,7 @@
 <% selected ||= "" %>
+<% if false %>
 <h4>Designer Dashboard</h4>
+<% end %>
 <ul class="nav nav-pills nav-stacked">
 	<li class="<%="active" if selected == "dashboard"%>"><a href="/dashboard"><i class="glyphicon glyphicon-th"></i> My Scout Rooms</a>
 		<% if false %>
@@ -14,4 +16,9 @@
 	<li class="<%="active" if selected == "client-rooms"%>"><a href="/dashboard"><i class="glyphicon glyphicon-th"></i> My Client Rooms</a></li>
 	<% end %>
 	<li class="<%="active" if selected == "profile"%>"><a href="/my_profile"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
+	<li class="<%="active" if selected == "tutorial"%>"><a href="/video_tutorial"><i class="fa fa-video-camera"></i> Video Tutorial</a></li>
+	<% if false %>
+	<li class="<%="active" if selected == "tips"%>"><a href="/tips_tricks"><i class="fa fa-bolt"></i> &nbsp;Tips &amp; Tricks</a></li>
+	<% end %>
+	<li class="<%="active" if selected == "suppliers"%>"><a href="/our_suppliers"><i class="fa fa-building-o"></i> &nbsp;Our Suppliers</a></li>
 </ul>

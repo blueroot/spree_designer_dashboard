@@ -52,6 +52,7 @@ class Spree::BoardProductsController < Spree::StoreController
   def destroy
     if @board_product = Spree::BoardProduct.find(params[:id])
       @board_product.destroy
+      @board_product.board.queue_image_generation
     end
     respond_to do |format|
       format.js   { render :text => "Deleted" }

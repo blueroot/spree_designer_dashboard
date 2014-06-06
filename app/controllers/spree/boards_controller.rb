@@ -21,7 +21,7 @@ class Spree::BoardsController < Spree::StoreController
     @product = Spree::Product.where("homepage_featured_starts_at <= ? and homepage_featured_ends_at >= ?", Date.today, Date.today).order("homepage_featured_starts_at desc").first
 
     @selected_section = "home"
-    @designers = Spree::User.is_active_designer()
+    @designers = Spree::User.is_active_designer().limit(4)
     @designer =  Spree::User.where("designer_featured_starts_at <= ? and designer_featured_ends_at >= ?", Date.today, Date.today).order("designer_featured_starts_at desc").first
     puts @designer.inspect
     render :layout => "/spree/layouts/spree_home"
@@ -180,6 +180,16 @@ class Spree::BoardsController < Spree::StoreController
     @suppliers = Spree::Supplier.where(:public => 1).order(:name)
     #@wholesaler_taxons = Spree::Taxonomy.where(:name => 'Wholesaler').first().root.children
     @color_collections = Spree::ColorCollection.all()
+  end
+  
+  def destroy
+    @board = spree_current_user.boards.find(params[:id])
+    if @board and @board.destroy
+      flash[:notice] = "The room has been deleted."
+    else
+      flash[:warning] = "We could not delete this room."
+    end
+    redirect_to designer_dashboard_path
   end
   
   private

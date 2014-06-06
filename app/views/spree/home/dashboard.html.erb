@@ -11,7 +11,13 @@
 					<h1>Your Rooms</h1>
 				</div>
 				<div class="col-md-3 header-actions">
-					<%= link_to "Add a Room", new_room_path, :class => "btn btn-primary" %>
+					
+					<% if spree_current_user.boards.size < 5 %>
+						<%= link_to "Add a Room", new_room_path, :class => "btn btn-primary" %>
+					<% else %>
+					
+					<a href="javascript:void(0);" id="new_room_button" class="btn btn-primary" data-toggle="popover" data-placement="left" data-content="Looks like you're getting the hang of this.  Awesome.  During the beta period, we are limiting the number of rooms you can create to 5 so that we can better manage the feedback.  Now that you've got your feet wet, maybe you would be interested in giving us some feedback at designer@scoutandnimble.com." title="" data-original-title="Whoa. You're killin' it.">Add a Room</a>
+					<% end %>
 				</div>
 			</div>
 		</div>
@@ -42,6 +48,7 @@
 						<% if board.status == "new"%>
 							<%= link_to "Preview", preview_board_path(board), :class => "btn btn-default btn-sm"%>
 							<%= link_to "Edit", design_board_path(board), :class => "btn btn-default btn-sm"%>
+							<%= link_to "Delete", room_path(board), :class => "btn btn-default btn-sm", :confirm => 'Are you sure you want to delete this room?', :method => :delete%>
 							
 						<% elsif ["submitted_for_publication"].include?(board.status)  %>
 							<%= link_to "Preview", preview_board_path(board), :class => "btn btn-default btn-sm"%>
@@ -65,3 +72,9 @@
 		<% end %>
 	</div>
 </div>
+
+
+<script>
+$('#new_room_button').popover()
+</script>
+

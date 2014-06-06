@@ -105,6 +105,7 @@
 				<span class='st_email' displayText=''></span>
 			</div>
 			<div class="board-sharing-tools">
+				<% if @board.status == "published" %>
 				<span class="share-label"><a href="javascript:void(0);" id="embed-room" data-toggle="popover" data-placement="bottom" data-container="body" data-html="true">Add a Scout & Nimble widget to your site</a></span> 
 			
 				<div id="room-widget" class="hidden">
@@ -120,6 +121,7 @@
 						
 					</div>
 				</div>
+				<% end %>
 				
 			</div>
 			

@@ -33,6 +33,10 @@ Spree::Core::Engine.routes.draw do
 
   get "/designers" => "designers#index", :as => :designers
   
+  
+  get "/our_suppliers" => "extra#our_suppliers", :as => :our_suppliers
+  get "/tips_tricks" => "extra#tips_tricks", :tips_tricks => :tips_tricks
+  get "/video_tutorial" => "extra#video_tutorial", :as => :video_tutorial
 
   get '/rooms/build/:id' => "boards#build", :as => :build_board
   get '/rooms/:id/design' => "boards#design", :as => :design_board
