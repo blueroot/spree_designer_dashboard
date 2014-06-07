@@ -126,8 +126,11 @@ class Spree::BoardsController < Spree::StoreController
     else
       @searcher = build_searcher(params)
     end
-    
-    @all_products = @searcher.retrieve_products.by_supplier(params[:supplier_id])
+    if params[:supplier_id] and params[:supplier_id].to_i > 0
+      @all_products = @searcher.retrieve_products.by_supplier(params[:supplier_id])
+    else
+      @all_products = @searcher.retrieve_products
+    end
     @products = @all_products
     
     #@products = @all_products.select { |product| product.not_on_a_board? }
