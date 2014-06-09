@@ -20,13 +20,6 @@
 								
 							</div>
 							<div class="meta">
-								<% if false %>
-								favorite
-								made to order
-								show only cateogories that a wholesaler offers
-								<% end %>
-								
-								
 								<div title="Bookmark this Product" class="product-results-meta bookmark-product-container <%= "hidden" if is_bookmarked %>"><a href="javascript:void(0);" class="bookmark-product bookmark-link" id="bookmark_product_<%= product.id %>" data-product-id="<%= product.id %>"><i class="fa fa-bookmark"></i> Add Bookmark</a></div>
 								
 								<div title="Remove Bookmark for this Product" class="product-results-meta unbookmark-product-container <%= "hidden" unless is_bookmarked %>"><a href="javascript:void(0);" class="remove-bookmark-product unbookmark-link" id="unbookmark_product_<%= product.id %>" data-product-id="<%= product.id %>"><i class="fa fa-bookmark"></i> Bookmarked</a></div>

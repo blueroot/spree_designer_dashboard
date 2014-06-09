@@ -1,0 +1,11 @@
+<div id="design" class="tab-pane active board-manage-panel">
+	<div id="board_search_panel" class="">
+		<div id="select-bookmark-products-box" class="select-products-box">							
+			<% if !bookmarked_products.blank? %>
+		  	<%= render :partial => "spree/boards/product_results", :locals => {:products => bookmarked_products}%>
+			<% else %>
+			<div class="board-search-empty-state">You don't have any bookmarks.</div>
+			<% end %>
+		</div>
+	</div>
+</div>

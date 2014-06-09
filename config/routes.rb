@@ -17,6 +17,7 @@ Spree::Core::Engine.routes.draw do
   end
   resources :designer_registrations
   resources :bookmarks
+  post "/bookmarks/remove" => "bookmarks#destroy", :as => :remove_bookmark
   
   get "/designers/thanks" => "designer_registrations#thanks", :as => :designer_registration_thanks
   

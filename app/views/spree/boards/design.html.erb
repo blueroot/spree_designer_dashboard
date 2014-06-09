@@ -34,7 +34,7 @@
 					
 					<ul class="nav nav-tabs">
 					  <li class="active"><a href="#search_pane" data-toggle="tab">Find Products</a></li>
-					  <li><a href="#bookmarks" data-toggle="tab">Bookmarks</a></li>
+					  <li><a href="#bookmarks" id="bookmarks_tab" data-toggle="tab">Bookmarks</a></li>
 					</ul>
 
 					<!-- Tab panes -->
@@ -69,20 +69,8 @@
 							</div>
 					  </div>
 					  <div class="tab-pane" id="bookmarks">
-							<div id="design" class="tab-pane active board-manage-panel">
-								<div id="board_search_panel" class="">
-						<div id="select-bookmark-products-box" class="select-products-box">							
-							<% if !@bookmarked_products.blank? %>
-						  	<%= render :partial => "product_results", :locals => {:products => @bookmarked_products}%>
-							<% else %>
-							<div class="board-search-empty-state">You don't have any bookmarks.</div>
-							<% end %>
+							<%= render :partial => "bookmarks", :locals => {:bookmarked_products => @bookmarked_products}%>
 						</div>
-						</div>
-						</div>
-						
-						
-					  </div>
 					</div>
 					
 					
@@ -173,6 +161,13 @@ $(document).ready(function() {
 	});
 
 	$('#publish_room_button').popover()
+	
+	$('#bookmarks_tab').on('shown.bs.tab', function (e) {
+	  getProductBookmarks()
+		//e.target // activated tab
+	  //e.relatedTarget // previous tab
+	})
+	
 });
 
 

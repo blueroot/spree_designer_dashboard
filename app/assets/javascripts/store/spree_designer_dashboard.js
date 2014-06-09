@@ -370,8 +370,8 @@ function addProductBookmark(product_id){
 }
 
 function removeProductBookmark(product_id){
-	var url = '/bookmarks?product_id='+product_id
-	$.post(url, {_method:'delete'}, null, "script");
+	var url = '/bookmarks/remove?product_id='+product_id
+	$.post(url, null, "script");
 	selector = "#board-product-select-"+product_id+' .board-product-select-image'
 	$(selector).removeClass('bookmarked')
 	$('#unbookmark_product_'+product_id).parent().addClass('hidden')
@@ -379,7 +379,16 @@ function removeProductBookmark(product_id){
 	//$(this).parent().child('').addClass('hidden')
 }
 
+function getProductBookmarks(){
+	var url = '/bookmarks/'
+	var request = $.get( url );
 
+	  /* Put the results in a div */
+	  request.done(function( data ) {
+	    //var content = $( data ).find( '#content' );
+	    //$( "#result" ).empty().append( content );
+	  });
+}
 
 
 function initializeBoardManagement(){
