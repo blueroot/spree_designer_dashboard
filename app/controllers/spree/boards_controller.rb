@@ -127,9 +127,9 @@ class Spree::BoardsController < Spree::StoreController
       @searcher = build_searcher(params)
     end
     if params[:supplier_id] and params[:supplier_id].to_i > 0
-      @all_products = @searcher.retrieve_products.by_supplier(params[:supplier_id])
+      @all_products = @searcher.retrieve_products.by_supplier(params[:supplier_id]) - @searcher.retrieve_products.by_supplier(params[:supplier_id]).on_a_board
     else
-      @all_products = @searcher.retrieve_products
+      @all_products = @searcher.retrieve_products - @searcher.retrieve_products.on_a_board
     end
     @products = @all_products
     

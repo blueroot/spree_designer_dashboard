@@ -27,9 +27,11 @@ Spree::Product.class_eval do
     where("spree_boards.featured_starts_at <= ? and spree_boards.featured_expires_at >= ?", Date.today, Date.today).includes(:boards, :board_products).references(:boards, :board_products)
   end
   
-  def self.active_on_store
-    includes(:boards).where('spree_boards.id' => Spree::Board.active.collect{|board| board.id})
+  def self.on_a_board
+    includes(:boards).where('spree_boards.id' => Spree::Board.all().collect{|board| board.id})
   end
+  
+  
   
   def is_on_board?
     !self.board_products.blank?
