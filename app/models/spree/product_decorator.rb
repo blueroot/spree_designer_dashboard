@@ -18,6 +18,12 @@ Spree::Product.class_eval do
     where(supplier_id: supplier_id)
   end
   
+  add_search_scope :not_on_a_board do
+    includes(:board_products).where(:spree_board_products => { :id => nil })
+  end
+  
+  #scope :not_on_a_board, includes(:board_products).where(:spree_board_products => { :id => nil })
+  
   def other_board_products
     self.boards.first().products
   end
@@ -30,7 +36,7 @@ Spree::Product.class_eval do
   def self.on_a_board
     includes(:boards).where('spree_boards.id' => Spree::Board.all().collect{|board| board.id})
   end
-  
+    
   
   
   def is_on_board?
