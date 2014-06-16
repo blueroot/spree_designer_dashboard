@@ -33,7 +33,7 @@
 				<%= select_tag "designer_id", options_from_collection_for_select(@designers, "id", "full_name", @selected_designer), :prompt => "All Designers", :class => "designer-filter" %>
 			</div>
 		</div>
-		<div class="control-group">
+		<!-- <div class="control-group">
 		    <% if false %><label class="control-label" for="inputEmail">Price</label><% end %>
 		    <div class="controls price-range">
 				<div class="row">
@@ -51,6 +51,7 @@
 				</div>
 			</div>
 		</div>
+		-->
 		<div class="board-search-submit"><%= submit_tag("Search Rooms", :class => "btn btn-primary")%></div>
 	</fieldset>
 	<% end %>
@@ -59,12 +60,16 @@
 
 
 <script>
-
 $("select.room-filter").minimalect({placeholder: 'All Rooms'});
 $("select.style-filter").minimalect({placeholder: 'All Styles'});
-$("select.color-filter").minimalect({placeholder: 'All Colors'});
+$("select.color-filter").minimalect({placeholder: 'Wall Colors'});
 $("select.designer-filter").minimalect({placeholder: 'All Designers'});
-$("select.lowrange-filter").minimalect({placeholder: '$0', width: '100px'});
-$("select.highrange-filter").minimalect({placeholder: 'Any'});
+//$("select.lowrange-filter").minimalect({placeholder: '$0', width: '100px'});
+//$("select.highrange-filter").minimalect({placeholder: 'Any'});
+
+$('.minict_wrapper ul:first').prepend("<li class='' data-value=''>All Rooms</li>");
+$('.minict_wrapper ul:last').prepend("<li class='' data-value=''>All Designers</li>");
+$('.minict_wrapper ul:eq(2)').prepend("<li class='' data-value=''>Wall Colors</li>");
+$('.minict_wrapper ul:eq(1)').prepend("<li class='' data-value=''>All Styles</li>");
 
 </script>
