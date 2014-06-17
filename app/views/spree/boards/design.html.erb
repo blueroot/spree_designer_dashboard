@@ -46,10 +46,10 @@
 										<%= form_tag("/rooms/product_search", method: "get", :id => "product_search_form") do %>
 											<div class="row">
 												<div class="col-md-3">
-													<%= select_tag "supplier_id", options_from_collection_for_select(@suppliers, "id", "name"), :include_blank => false, :class => "form-control input-sm", :prompt => "Wholesaler" %>
+													<%= select_tag "supplier_id", options_from_collection_for_select(@suppliers, "id", "name"),:include_blank => false, :class => "form-control input-sm", :prompt => "Wholesaler" %>
 												</div>
 												<div class="col-md-3">
-													<%= select_tag "department_taxon", options_from_collection_for_select(@department_taxons, "id", "name"), :include_blank => false, :class => "form-control input-sm", :prompt => "Department" %>
+													<%= select_tag "department_taxon", options_for_select(@ary), :include_blank => false,  :class => "form-control input-sm", :prompt => "Department" %>
 												</div>
 												<div class="col-md-3">
 
@@ -187,7 +187,29 @@ $(document).ready(function() {
 	
 });
 
-
+$( "#supplier_id" ).change(function () {
+		var str = "";
+		$( "#supplier_id option:selected" ).each(function() {
+		  str += $( this ).val();
+		       $.ajax({
+			        type: "GET",
+			        url: "/rooms/gettaxons",
+			        data: "supplier_id="+str,
+			        success: function(msg){ 
+						var $el = $("#department_taxon");
+						$el.empty();
+						
+						 // remove old options
+							$.each(msg, function(key, value) {
+					
+							  $el.append($("<option></option>").attr("value", value[1]).text(value[0]));
+							});
+			         }
+			      });
+		});
+		
+   }).change();
+	
 
 var canvas = new fabric.Canvas('canvas');
 $(function () {
