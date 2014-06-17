@@ -125,6 +125,16 @@ function buildImageLayer(canvas, bp){
 	});
 }
 
+function build_variants_list(variants){
+	var list = document.createElement('ul');
+	var json = { items: ['item 1', 'item 2', 'item 3'] };
+	$(variants).each(function(index, item) {
+	    list.append(
+	        $(document.createElement('li')).text(item)
+	    );
+	});
+	return list
+}
 
 function addProductToBoard(event, ui){
 	// add the image to the board through jquery drag and drop in order to get its position
@@ -152,14 +162,46 @@ function addProductToBoard(event, ui){
 				//console.log(board_product.product.permalink)
 		
 				buildImageLayer(canvas, board_product);
+				//alert(board_product.product.id)
+				
+				var variant_count = $.map(board_product.product.variants, function(n, i) { return i; }).length;
+				if (variant_count > 1){
+					//alert(variant_count);
+					$('#variant_options_modal').modal('show')
+					$('#board_options_preloader').removeClass('hidden')
+					$('#room_variant_options_container').addClass('hidden')
+					
+					var url = '/products/'+board_product.product.permalink+'/product_with_variants'
+					
+					
+					
+					
+					$.ajax({
+						url: url, 
+						type: "GET",
+						//dataType: "text/javascript", 
+						data: {},
+					     beforeSend : function(xhr){
+								xhr.setRequestHeader("Accept", "text/javascript")
+					     },
+					     success : function(product){
+					     },
+					     error: function(objAJAXRequest, strError, errorThrown){ //alert("ERROR: " + strError);
+ 								}
+					  }
+					);
+					
+					
+					
+					
+					
+				}
 				
 				// remove the jquery drag/drop place holder that had been there.
-				// this is a bit of a hack - without the timer, then the graphic disappears for a second...this generally keeps it up until the kineticjs version is added
+				// this is a bit of a hack - without the timer, then the graphic disappears for a second...this generally keeps it up until the fabricjs version is added
 				setTimeout(function() {
 				      cloned.hide();
 				}, 1000);
-				
-				
 				
 	     },
 	     error: function(objAJAXRequest, strError, errorThrown){
@@ -167,12 +209,6 @@ function addProductToBoard(event, ui){
 	     }
 	  }
 	);
-	
-	//buildImageLayer(stage, board_product);
-	
-	
-	//save product to the database
-	//buildImageLayer(stage, board_product);
 }
 
 function moveLayer(layer, direction){
@@ -223,7 +259,7 @@ function getSavedProducts(board_id){
 						
 						// pass the product id and board_id (optional) and BoardProduct id (optional)
 						getProductDetails(selectedImage.get('product_permalink'), board_id, selectedImage.get('id'))
-						console.log(selectedImage.get('product_permalink'))
+						//console.log(selectedImage.get('product_permalink'))
 						}
 					else{
 						selectedImage = null;
@@ -346,10 +382,14 @@ function getProductDetails(product_id, board_id, board_product_id){
 
 function addProductBookmark(product_id){
 	var url = '/bookmarks.json?product_id='+product_id
-	selector = "#board-product-select-"+product_id+' .board-product-select-image'
-	$(selector).addClass('bookmarked')
-	$('#bookmark_product_'+product_id).parent().addClass('hidden')
-	$('#bookmark_product_'+product_id).parent().parent().children('.unbookmark-product-container').removeClass('hidden')
+	//$('.bookmark-link-'+product_id).parent().addClass('hidden')
+	//$('.bookmark-link-'+product_id).parent().parent().children('.unbookmark-product-container').removeClass('hidden')
+	$('.bookmark-link-'+product_id).each(function() {
+		$(this).parent().addClass('hidden')
+		$(this).parent().parent().children('.unbookmark-product-container').removeClass('hidden')
+	});
+	
+	
 	
 	$.ajax({
 		url: url, 
@@ -369,25 +409,37 @@ function addProductBookmark(product_id){
 	);
 }
 
+function observeBookmarkChanges(){
+	$('.bookmark-product').click(function() {
+		addProductBookmark($(this).data('productId'))
+	});
+	$('.remove-bookmark-product').click(function() {
+		removeProductBookmark($(this).data('productId'))
+	});
+	
+}
+
 function removeProductBookmark(product_id){
+	$('.unbookmark-link-'+product_id).each(function() {
+		$(this).parent().addClass('hidden')
+		$(this).parent().parent().children('.bookmark-product-container').removeClass('hidden')
+	});
 	var url = '/bookmarks/remove?product_id='+product_id
 	$.post(url, null, "script");
-	selector = "#board-product-select-"+product_id+' .board-product-select-image'
-	$(selector).removeClass('bookmarked')
-	$('#unbookmark_product_'+product_id).parent().addClass('hidden')
-	$('#unbookmark_product_'+product_id).parent().parent().children('.bookmark-product-container').removeClass('hidden')
-	//$(this).parent().child('').addClass('hidden')
+	
+	
+	
+	//$('.unbookmark-link-'+product_id).parent().addClass('hidden')
+	//$('.unbookmark-link-'+product_id).parent().parent().children('.bookmark-product-container').removeClass('hidden')
 }
 
 function getProductBookmarks(){
+	$('#bookmark-preloader').removeClass('hidden')
+	$('#bookmarks_container').html('')
 	var url = '/bookmarks/'
 	var request = $.get( url );
-
-	  /* Put the results in a div */
 	  request.done(function( data ) {
-	    //var content = $( data ).find( '#content' );
-	    //$( "#result" ).empty().append( content );
-	  });
+	});
 }
 
 

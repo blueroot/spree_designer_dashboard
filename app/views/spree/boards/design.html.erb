@@ -69,7 +69,19 @@
 							</div>
 					  </div>
 					  <div class="tab-pane" id="bookmarks">
-							<%= render :partial => "bookmarks", :locals => {:bookmarked_products => @bookmarked_products}%>
+						<div class="tab-pane active board-manage-panel">
+							<div id="" class="">		
+								<div id="select-bookmark-products-box" class="select-products-box">	
+									<div id="bookmark-preloader" class="hidden" style="padding-top: 20px; text-align: center;"><%= image_tag("store/preloader64.gif")%></div>
+									<div id="bookmarks_container">
+										<%= render :partial => "product_results", :locals => {:products => @bookmarked_products}%>
+								</div>
+							</div>
+						</div>
+							
+							
+							
+							</div>
 						</div>
 					</div>
 					
@@ -117,6 +129,7 @@
 	</div>
 
 <%= render :partial => "submit_for_publication_modal"%>	
+<%= render :partial => "variant_options_modal" %>
 
 <style>
 	.board-product-selected{
@@ -139,12 +152,12 @@ $(document).ready(function() {
 	initializeBoardManagement();
 	
 	$('.swatch').popover({ 
-	    html : true,
+		html : true,
 	    content: function() {
 			//$('.button-product-info').popover('hide');
-	      return $('#'+$(this).data('colorPopoverContainer')).html();
-	    }
-	  });
+			return $('#'+$(this).data('colorPopoverContainer')).html();
+		}
+	});
 
 	<% if @board.status == "submitted_for_publication" %>
 		$( "#add-products-button" ).click(function() {
@@ -163,10 +176,14 @@ $(document).ready(function() {
 	$('#publish_room_button').popover()
 	
 	$('#bookmarks_tab').on('shown.bs.tab', function (e) {
-	  getProductBookmarks()
-		//e.target // activated tab
-	  //e.relatedTarget // previous tab
+		getProductBookmarks()
 	})
+	
+	//$('#bookmarks_tab').on('shown.bs.tab', function (e) {
+	//  getProductBookmarks()
+	//	//e.target // activated tab
+	//  //e.relatedTarget // previous tab
+	//})
 	
 });
 

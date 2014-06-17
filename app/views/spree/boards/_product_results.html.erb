@@ -6,7 +6,7 @@
 			<% is_bookmarked = product.is_bookmarked_by?(spree_current_user) %>
 				<div class="col-md-4">
 					<div id="board-product-select-<%= product.id %>" class="board-product-select">
-						<div class="board-product-select-image <%= "bookmarked" if is_bookmarked %>">
+						<div class="board-product-select-image">
 							<div class="board-lightbox-product" id="board-product-<%= product.id %>" data-product-id="<%= product.id %>" id="<%= product.id %>" data-img-url="<%=product_board_image_url(product, "small")%>" data-product-permalink="<%=product.permalink%>">
 								<div style="position: relative;">
 									<a href="javascript:void(0);" class="button-remove-product" style="font-family: helvetica; font-size: 12px; line-height: 12px; font-weight: bold; background-color: #fff; padding: 4px 7px; border-width: 0 0 1px 1px; border-style: none; border-color: #ccc; right: 0px; top: 0; position: absolute; display: none;">x</a>
@@ -20,9 +20,10 @@
 								
 							</div>
 							<div class="meta">
-								<div title="Bookmark this Product" class="product-results-meta bookmark-product-container <%= "hidden" if is_bookmarked %>"><a href="javascript:void(0);" class="bookmark-product bookmark-link" id="bookmark_product_<%= product.id %>" data-product-id="<%= product.id %>"><i class="fa fa-bookmark"></i> Add Bookmark</a></div>
 								
-								<div title="Remove Bookmark for this Product" class="product-results-meta unbookmark-product-container <%= "hidden" unless is_bookmarked %>"><a href="javascript:void(0);" class="remove-bookmark-product unbookmark-link" id="unbookmark_product_<%= product.id %>" data-product-id="<%= product.id %>"><i class="fa fa-bookmark"></i> Bookmarked</a></div>
+								<div title="Bookmark this Product" class="product-results-meta bookmark-product-container <%= "hidden" if is_bookmarked %>"><a href="javascript:void(0);" class="bookmark-product bookmark-link bookmark-link-<%= product.id %>" data-product-id="<%= product.id %>"><i class="fa fa-bookmark"></i> Add Bookmark</a></div>
+								
+								<div title="Remove Bookmark for this Product" class="product-results-meta unbookmark-product-container <%= "hidden" unless is_bookmarked %>"><a href="javascript:void(0);" class="remove-bookmark-product unbookmark-link unbookmark-link-<%= product.id %>" data-product-id="<%= product.id %>"><i class="fa fa-bookmark"></i> Bookmarked</a></div>
 								
 								<div title="Days to Ship" class="product-results-meta"><i class="fa fa-truck"></i> <%= product.master.display_days_to_ship %></div>
 								<% if false %>
@@ -31,6 +32,30 @@
 								<% else %>
 									<div title="Available Inventory" class="product-results-meta"><i class="fa fa-archive"></i> <%= product.master.display_inventory %></div>
 								<% end %>
+								<% end %>
+								
+								<% if product.variants.size > 0 %>
+								<div class="product-results-meta">
+									<a href="javascript:void(0);" class="has-variant-options" data-container="body" data-toggle="popover" data-title="There are <%= product.variants.size %> options for <%= product.name %>" data-placement="left" data-variant-popover-container="variant-popver-<%= product.id %>"><i class="fa fa-star"></i> Show Options</a>						</div>
+									<div id="variant-popver-<%= product.id %>" class="hidden">
+										<% product.variants.in_groups_of(3, false) do |row_variants| %>
+											<div class="row">
+												<% for variant in row_variants %>
+													<div class="col-md-4">
+													<p><%= thumb_image(variant, :itemprop => 'image', :class => "") %></p>
+													<div>
+														<% variant.option_values.each do |ov| %>
+														<div style="margin-bottom: 5px;"><%= ov.name %></div>
+														<% end %>
+													</div>
+													</div>
+										
+												<% end %>
+											</div>
+										<% end %>
+										
+										
+									</div>
 								<% end %>
 								
 							</div>
