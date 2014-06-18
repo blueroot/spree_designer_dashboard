@@ -13,8 +13,6 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
       puts "#{board.name} has #{board_product_count} products"
       board_product_count > 0
     end
-
-
     @board_products = Spree::BoardProduct.all.select {|bp| bp.approved_at == nil && bp.removed_at == nil  }
     @products       = @board_products.map(&:product).compact
     @suppliers      = @products.map(&:supplier).compact.uniq

@@ -1,5 +1,31 @@
 class Spree::Board < ActiveRecord::Base
 
+  state_machine initial: :draft do
+    event :submit_for_publication do
+      transition :draft => :submitted_for_publication 
+    end
+
+    event :delete_permanently do
+      transition :draft => :deleted, :suspended_for_inactivity => :deleted, :submitted_for_publication => :deleted
+    end
+
+    event :request_revision do
+      transition :submitted_for_publication => :draft
+    end
+
+    event :suspend_for_inactivity do
+      transition :draft => :suspended_for_inactivity
+    end
+
+    event :revoke_suspension do
+      transition :suspended_for_inactivity => :draft
+    end
+
+    event :publish do
+      transition :submitted_for_publication => :published
+    end
+  end
+
   validates_presence_of :name
   
   has_many :board_products, :order => "z_index", dependent: :destroy
