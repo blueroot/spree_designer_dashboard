@@ -8,13 +8,13 @@
 
 <div class = 'row'>
   <div class = "form-group col-md-4 left" id = "product-search">
-    <b><%= label_tag "Show only products for supplier:" %></b>
-    <%= select_tag :suppliers, options_for_select(@supplier_names, @supplier_names.first), class: "form-control" %>
+    <b><%= label_tag "Show only products for:" %></b>
+    <%= select_tag :suppliers, options_for_select(@designer_names, @designer_names.first), class: "form-control" %>
   </div>
 
   <div class = "form-group col-md-4 col-md-offset-4 right" id = "product-search">
     <b><%= label_tag "Show products that are :" %></b>
-    <%= select_tag :status, options_for_select(["All products","Pending", "Approved", "Rejected"], "All Products"), class: "form-control" %>
+    <%= select_tag :status, options_for_select(["All boards","Submitted for Approval", "Approved", "Under Revision"], "All Products"), class: "form-control" %>
   </div>
 </div>
 
@@ -22,30 +22,16 @@
   <% @boards.each do |board| %>
     <div class = "row search-result col-md-12">
 
-    <div class = "row">
-      <div class = "col-md-4">
-        <%= link_to "Expand/Collapse", "", class: "#{board.id} btn btn-warning collapse-button", style: "color: white;" %>
+    <div class = "board row">
+      <div class = "col-md-2">
+        <%= link_to "Expand/Collapse", "", class: "#{board.id} btn btn-default collapse-button", style: "color: white;" %>
       </div>
-      <div class = "col-md-4">
-        <h3><%= board.name %></h3>
+      <div class = "col-md-5 board-title"><%= board.name %> <small class="by"><b> by John Smith</b></small> <small class ="help-block">contains 2 products: 1 approved, 1 removed, 0 pending</small></div>
+      <div class = "col-md-4 col-md-offset-1">
+          <%= link_to "Publish","#", class: "btn btn-primary"%>
+          <%= link_to "Request Revision","#", class: "btn btn-warning"%>
+          <%= link_to "Delete","#", class: "btn btn-danger"%>
       </div>
-
-      <div class = "col-md-2 col-md-offset-2">
-
-        <a data-toggle ="tooltip" data-placement = "right" title = "Approve Board">
-          <span class="glyphicon glyphicon-ok <%= board.id %>"></span>
-        </a>
-
-        <a data-toggle ="tooltip" data-placement = "right" title = "Reject Board">
-          <span class="glyphicon glyphicon-ban-circle <%= board.id %>"></span>
-        </a>
-
-        <a data-toggle ="tooltip" data-placement = "right" title = "Delete Board">
-          <span class="glyphicon glyphicon-remove <%= board.id %>"></span>
-        </a>
-        
-      </div>
-
     </div>
 
     <div class = "row collapsable <%= board.id %> hidden">
