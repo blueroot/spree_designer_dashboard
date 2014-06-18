@@ -26,7 +26,7 @@
       <div class = "col-md-2">
         <%= link_to "Expand/Collapse", "", class: "#{board.id} btn btn-default collapse-button", style: "color: white;" %>
       </div>
-      <div class = "col-md-5 board-title"><%= board.name %> <small class="by"><b> by John Smith</b></small> <small class ="help-block">contains 2 products: 1 approved, 1 removed, 0 pending</small></div>
+      <div class = "col-md-5 board-title"><%= board.name %> <small class="by"><b> by <%= board.designer.first_name %> <%= board.designer.last_name %></b></small> <small class ="help-block">contains 2 products: 1 approved, 1 removed, 0 pending</small></div>
       <div class = "col-md-4 col-md-offset-1">
           <%= link_to "Publish","#", class: "btn btn-primary"%>
           <%= link_to "Request Revision","#", class: "btn btn-warning"%>

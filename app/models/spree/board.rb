@@ -1,5 +1,4 @@
 class Spree::Board < ActiveRecord::Base
-  #include ActiveRecord::StateMachine
 
   validates_presence_of :name
   
