@@ -24,9 +24,14 @@
 
 <script>
 $(document).ready(function() {
-$("select.room-filter").val("All Roooms").change();
-$("select.style-filter").val("All Styles").change();
-$("select.color-filter").val("All Colors").change();
-$("select.designer-filter").val("All Designers").change();
+$('.minict_wrapper ul:first li').first().remove();
+$('.minict_wrapper ul:last li').first().remove();
+$('.minict_wrapper ul:eq(2) li').first().remove();
+$('.minict_wrapper ul:eq(1) li').first().remove();
+  
+$('.minict_wrapper ul:first').prepend("<li class='' data-value=''>All Rooms</li>");
+$('.minict_wrapper ul:last').prepend("<li class='' data-value=''>All Designers</li>");
+$('.minict_wrapper ul:eq(2)').prepend("<li class='' data-value=''>Wall Colors</li>");
+$('.minict_wrapper ul:eq(1)').prepend("<li class='' data-value=''>All Styles</li>");
 });
 </script>

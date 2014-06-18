@@ -1,11 +1,5 @@
-
-//$('#board_search_panel').hide()
-//$('#board_search_panel').addClass('hidden')
-//$('#board_search_panel').hide();
 $('#select-products-box').html('<%= escape_javascript(raw render(:partial => "product_results", :locals => {:products => @products})) %>')
-//$('.select-products-box').addClass('animated fadeInUp')
 $('#select-products-pagination').html('<%= escape_javascript(raw render(:partial => "product_results_pagination", :locals => {:products => @all_products})) %>')
-//$('#select-products-box').html('hh')
 
 
 $('.board-lightbox-product').draggable({
@@ -23,24 +17,24 @@ $('.board-lightbox-product').draggable({
 });
 
 $('.add-to-board-link').click(function() {
-	//alert('product id:' + $(this).data('productId') + ' --- board_id: ' + $('#canvas').data('boardId'))
-	getProductDetails($(this).data('productId'), $('#canvas').data('boardId'), null)
-	//showProductDetails($(this))
-	//handleCloneAndAddEvent($(this))
-	
-});
-
-$('.bookmark-product').click(function() {
-	addProductBookmark($(this).data('productId'))
-});
-$('.remove-bookmark-product').click(function() {
-	removeProductBookmark($(this).data('productId'))
+	getProductDetails($(this).data('productId'), $('#canvas').data('boardId'), null)	
 });
 
 
-//setHeight();
-//// Re-initialize the results pane on resize
-//$(window).resize(function() {		
-//	setHeight();
-//	
+
+$('.has-variant-options').popover({ 
+	html : true,
+    content: function() {
+		//alert($(this).data('variantPopoverContainer'))
+		return $('#'+$(this).data('variantPopoverContainer')).html();
+	}
+});
+
+
+//$('.has-variant-options').click(function() {
+	//addProductBookmark($(this).data('productId'))
 //});
+
+observeBookmarkChanges();
+
+

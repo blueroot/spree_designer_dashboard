@@ -174,14 +174,52 @@ class Spree::BoardsController < Spree::StoreController
     @wholesaler_taxons = Spree::Taxonomy.where(:name => 'Wholesaler').first().root.children
   end
   
+  def gettaxons
+     
+     @searcher = build_searcher(params.merge(:supplier_id => params[:supplier_id]))
+     @supplierid = params[:supplier_id]
+      if params[:supplier_id].present?
+        @all_products = @searcher.retrieve_products.by_supplier(params[:supplier_id])
+      else
+        @all_products = @searcher.retrieve_products
+      end
+      
+      @ary = Array.new(Array.new) 
+     
+      @all_products.each do |prod|
+         @prod = Spree::Product.find_by_id(prod.id)
+   
+          @prod.taxons.each do |tax|
+             @ary.push([tax.name,tax.id])
+          end
+      end
+      render :json => @ary
+  end
+  
   def design
+    
     @board = Spree::Board.find(params[:id])
     @board.messages.new(:sender_id => spree_current_user.id, :recipient_id => 0, :subject => "Publication Submission")
     @products = Spree::Product.all()
     @bookmarked_products = spree_current_user.bookmarks.collect{|bookmark| bookmark.product}
     @department_taxons = Spree::Taxonomy.where(:name => 'Department').first().root.children
+    #@department_taxons= Spree::Supplier.find_by(id: 16).taxons 
+      @searcher = build_searcher(params)
+     
+      @all_products = @searcher.retrieve_products.by_supplier('')
+      @ary = Array.new(Array.new) 
+     
+      @all_products.each do |prod|
+         @prod = Spree::Product.find_by_id(prod.id)
+   
+          @prod.taxons.each do |tax|
+             @ary.push([tax.name,tax.id])
+          end
+      end
+   
     @suppliers = Spree::Supplier.where(:public => 1).order(:name)
     #@wholesaler_taxons = Spree::Taxonomy.where(:name => 'Wholesaler').first().root.children
+
     @color_collections = Spree::ColorCollection.all()
   end
   
