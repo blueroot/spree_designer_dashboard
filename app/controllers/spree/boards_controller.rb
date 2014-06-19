@@ -30,25 +30,38 @@ class Spree::BoardsController < Spree::StoreController
   def search
     
     @boards_scope = Spree::Board.active
-    
+    if params[:color_family] == 0
+        params[:color_family] = nil
+      end
     unless params[:color_family].blank?
+     
       #@related_colors = Spree::Color.by_color_family(params[:color_family])
       @boards_scope = @boards_scope.by_color_family(params[:color_family])
     end
-    
+    if params[:room_id] == '0'
+        params[:room_id] = nil
+      end
     unless params[:room_id].blank?
+      
       @boards_scope = @boards_scope.by_room(params[:room_id])
     end
-    
+      if params[:style_id] == 0
+        params[:style_id] = nil
+      end
     unless params[:style_id].blank?
+     
       @boards_scope = @boards_scope.by_style(params[:style_id])
     end
-    
+      if params[:designer_id] == 0
+        params[:designer_id] = nil
+      end
     unless params[:designer_id].blank?
+      
       @boards_scope = @boards_scope.by_designer(params[:designer_id])
     end
     
     unless params[:price_high].blank?
+    
       @boards_scope = @boards_scope.by_upper_bound_price(params[:price_high])
     end
     
