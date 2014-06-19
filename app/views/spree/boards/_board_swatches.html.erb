@@ -54,9 +54,11 @@ $(document).ready(function() {
 
 
 	$( ".color-match-link" ).click(function() {
-	  	$( ".color-match-link" ).removeClass('active')
-		$(this).addClass('active')
-		$('#colors-modal').modal()
+	  	$( ".color-match-link" ).removeClass('active');
+		$(this).addClass('active');
+		$('#colors-modal').modal();
+		$('#colorfrom').val($(this).data('colorMatchId'));
+	
 	});
 	
 	$( ".color-match-delete-link" ).click(function(event) {

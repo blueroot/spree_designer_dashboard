@@ -12,12 +12,21 @@
 		
 			<% if cc.name == "Sherwin Williams" %>
 				<a href="javascript:void(0);" class="swatch-vendor" data-vendor-id="<%=cc.id%>"><%= image_tag("store/colorvendors/sw.png")%></a>
+				
+				<input type="hidden" id="colorfrom" name="colorfrom" /> 
+				
 			<% elsif cc.name == "Benjamin Moore" %>
-				<a href="javascript:void(0);" class="swatch-vendor" data-vendor-id="<%=cc.id%>"><%= image_tag("store/colorvendors/bm.png")%></a>
+				<span style="margin-left:20px;"><a href="javascript:void(0);" class="swatch-vendor" data-vendor-id="<%=cc.id%>"><%= image_tag("store/colorvendors/bm.png")%></a>
+				</span>
+				
 			<% end %>	
 			
 		<% end %>
-		</div>
+		<br/><br/>
+		Color Code:  <input style="height: 24px;font-size: 12px;line-height: 14px;width:70px;" type="text" id="colorcode" name="colorcode">
+		<span style="margin-left:25px;">Color Code: </span> 
+		<input style=" height: 24px;font-size: 12px;line-height: 14px;width:70px;" type="text" id="colorcode1" name="colorcode">
+	</div>
 		<div id="color-preloader" class="hidden" style="padding-top: 20px; text-align: center;">
 			
 			<p>Just a moment...talking to the Magical Swatch Factory</p>

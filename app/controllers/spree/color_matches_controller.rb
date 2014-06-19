@@ -23,11 +23,24 @@ class Spree::ColorMatchesController < Spree::StoreController
     if params[:id] and @color_match = @board.color_matches.find(params[:id])
       
     else  
-      unless @color_match = @board.color_matches.find_by_color_id(params[:color_id])
-        @color_match = @board.color_matches.new(:color_id => params[:color_id], :board_id => params[:room_id])
-      end
+      if params[:colorid].present?
+       @color_id = Spree::Color.find_by_swatch_val(params[:colorid]).id
+	      unless @color_match = @board.color_matches.find_by_color_id(@color_id)
+	        @color_match = @board.color_matches.new(:color_id => @color_id, :board_id => params[:room_id])
+	      end
+     else
+	      unless @color_match = @board.color_matches.find_by_color_id(params[:color_id])
+	        @color_match = @board.color_matches.new(:color_id => params[:color_id], :board_id => params[:room_id])
+	      end
+	 end
+	 
     end
     
+    if params[:colorid].present?
+       @color_id = Spree::Color.find_by_swatch_val(params[:colorid]).id
+	      
+	         @color_match.update_attributes(:color_id => @color_id, :board_id => params[:room_id])
+	end
     if @color_match.save
       @color_collections = Spree::ColorCollection.all()
       respond_to do |format|
