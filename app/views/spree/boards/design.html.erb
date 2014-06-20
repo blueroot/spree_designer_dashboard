@@ -97,9 +97,11 @@
 					2
 				</span> Add color swatches
 			</div>
+			
 			<div class="row">
 				<div class="col-md-12">
 					<div id="board-colors-container" class="board-colors-container">
+					<input type="hidden" id="board_id" name="board_id" value="<%=params[:id]%>" /> 
 						<%= render :partial => "board_swatches", :locals => {:board => @board} %>
 					</div>
 				</div>
@@ -187,46 +189,8 @@ $(document).ready(function() {
 	
 });
 
-$('#colorcode').keydown(function (event) { // your input(textarea) class
-        if (event.keyCode == 13) {
-            event.preventDefault();
-            var id= '<%=params[:id]%>';
-             if ($('#colorfrom').val() == 0)
-              str1 = 'colorid='+$('#colorcode').val(); 
-            else
-              str1 = 'colorid='+$('#colorcode').val()+'&id='+$('#colorfrom').val();
-            $.ajax({
-                url: '/rooms/'+id+'/color_matches', // script to process data
-                type: 'POST',
-                data: str1, 
-                success: function(result) {
-                   //alert(result);
-                  location.reload(); 
-                }
-            });
-        }
-    });
 
-$('#colorcode1').keydown(function (event) { // your input(textarea) class
-        if (event.keyCode == 13) {
-            event.preventDefault();
-            var id= '<%=params[:id]%>';
-           
-            if ($('#colorfrom').val() == 0)
-              str1 = 'colorid='+$('#colorcode1').val(); 
-            else
-              str1 = 'colorid='+$('#colorcode1').val()+'&id='+$('#colorfrom').val();
-            $.ajax({
-                url: '/rooms/'+id+'/color_matches', // script to process data
-                type: 'POST',
-                data: str1, 
-                success: function(result) {
-                   //alert(result);
-                  location.reload(); 
-                }
-            });
-        }
-    });
+
 
 $( "#supplier_id" ).change(function () {
 		var str = "";

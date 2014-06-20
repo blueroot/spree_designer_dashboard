@@ -22,11 +22,16 @@
 			<% end %>	
 			
 		<% end %>
+		<div id="colorpreview" style="width:150px;display:inline;float:right;height:75px;"></div>
 		<br/><br/>
 		Color Code:  <input style="height: 24px;font-size: 12px;line-height: 14px;width:70px;" type="text" id="colorcode" name="colorcode">
+		<input type="button" id="searchcolor1" value="Submit" class="btn btn-default" />
 		<span style="margin-left:25px;">Color Code: </span> 
 		<input style=" height: 24px;font-size: 12px;line-height: 14px;width:70px;" type="text" id="colorcode1" name="colorcode">
+		<input type="button" id="searchcolor2" value="Submit" class="btn btn-default" />
+		
 	</div>
+	
 		<div id="color-preloader" class="hidden" style="padding-top: 20px; text-align: center;">
 			
 			<p>Just a moment...talking to the Magical Swatch Factory</p>
@@ -36,10 +41,106 @@
 		<div id="color_swatches_container"></div>
       </div>
 	<div class="modal-footer">
-		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		<button type="button" id="cancel" class="btn btn-default" data-dismiss="modal">Close</button>
 	</div>
       
 	
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<script>
+
+$('#searchcolor1').click(function () { // your input(textarea) class
+   board_id= $('#board_id').val();
+    $('#colors-modal  #cancel').click();
+            //var id= '<%=params[:board_id]%>';
+             if ($('#colorfrom').val() == 0)
+              str1 = 'colorid='+$('#colorcode').val()+'&color_collection_id=1'; 
+             else
+              str1 = 'colorid='+$('#colorcode').val()+'&id='+$('#colorfrom').val()+'&color_collection_id=1';
+            $.ajax({
+                url: '/rooms/'+board_id+'/color_matches', // script to process data
+                type: 'POST',
+                data: str1, 
+                success: function(result) {
+                  //alert(result);
+               //  $("#colors-modal").hide();
+                // $("#colors-modal").attr("aria-hidden","true");
+                
+                // $("#colors-modal").addClass("modal");
+                //  $("#default").removeClass( "one-col modal-open" ).addClass("one-col");
+                  //$(".modal-backdrop" ).remove();
+                location.reload();
+                 
+                }
+                 
+            });
+        
+    });
+ 
+ 
+ $('#colorcode1').keyup(function (event) { // your input(textarea) class
+       
+         
+        if ($('#colorfrom').val() == 0)
+              str1 = 'colorid='+$('#colorcode1').val()+'&color_collection_id=1'; 
+             else
+              str1 = 'colorid='+$('#colorcode1').val()+'&id='+$('#colorfrom').val()+'&color_collection_id=2';
+            $.ajax({
+                url: '/getcolors', // script to process data
+                type: 'GET',
+                data: str1, 
+                success: function(result) {
+                id='#'+result;
+                 $('#colorpreview').css('background-color',id);
+                                  
+                }
+            });
+        
+    });
+ 
+ $('#colorcode').keyup(function (event) { // your input(textarea) class
+       
+         
+        if ($('#colorfrom').val() == 0)
+              str1 = 'colorid='+$('#colorcode').val()+'&color_collection_id=1'; 
+             else
+              str1 = 'colorid='+$('#colorcode').val()+'&id='+$('#colorfrom').val()+'&color_collection_id=2';
+            $.ajax({
+                url: '/getcolors', // script to process data
+                type: 'GET',
+                data: str1, 
+                success: function(result) {
+                id='#'+result;
+                 $('#colorpreview').css('background-color',id);
+                                 
+                }
+            });
+        
+    });
+ 
+ 
+$('#searchcolor2').click(function () { // your input(textarea) class
+    board_id= $('#board_id').val();
+    $('#colors-modal  #cancel').click();
+            //var id= '<%=params[:board_id]%>';
+             if ($('#colorfrom').val() == 0)
+              str1 = 'colorid='+$('#colorcode1').val()+'&color_collection_id=2'; 
+             else
+              str1 = 'colorid='+$('#colorcode1').val()+'&id='+$('#colorfrom').val()+'&color_collection_id=2';
+            $.ajax({
+                url: '/rooms/'+board_id+'/color_matches', // script to process data
+                type: 'POST',
+                data: str1, 
+                success: function(result) {
+                                      location.reload();
+                 
+                }
+                
+                 
+            });
+        
+    });
+    
+    </script>

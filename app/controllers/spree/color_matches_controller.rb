@@ -37,20 +37,45 @@ class Spree::ColorMatchesController < Spree::StoreController
     end
     
     if params[:colorid].present?
-       @color_id = Spree::Color.find_by_swatch_val(params[:colorid]).id
-	      
+       @color_collection = Spree::ColorCollection.find(params[:color_collection_id])
+       @colors = @color_collection.colors
+       @color=@colors.find_by_swatch_val(params[:colorid])
+       if @color.present?
+         @color_id = @color.id
+         @colorpresent = '1'
+       else
+        @colorpresent = '0'
+          redirect_to :back, :notice => 'Wrong Color Code.'
+       end
+	       if @colorpresent == '1'
 	         @color_match.update_attributes(:color_id => @color_id, :board_id => params[:room_id])
+	         
+	       end
 	end
-    if @color_match.save
+    if @color_match.save && @colorpresent == '1'
       @color_collections = Spree::ColorCollection.all()
+       #sleep(100.0)
       respond_to do |format|
+      
         format.js   { render :action => "show" }
+        
       end
     else
     end
   end
   
-
+ def getcolors
+     if params[:colorid].present?
+       @color_collection = Spree::ColorCollection.find(params[:color_collection_id])
+       @colors = @color_collection.colors
+       @color=@colors.find_by_swatch_val(params[:colorid])
+       puts @color.inspect
+         render json: @color.hex_val.to_json 
+  
+ end
+        
+       
+ end
   
   def destroy
     @board = Spree::Board.find(params[:room_id])

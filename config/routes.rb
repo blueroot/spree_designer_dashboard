@@ -43,7 +43,7 @@ Spree::Core::Engine.routes.draw do
   get '/rooms/build/:id' => "boards#build", :as => :build_board
   get '/rooms/:id/design' => "boards#design", :as => :design_board
   get '/rooms/:id/preview' => "boards#preview", :as => :preview_board
-
+  get '/getcolors' => "color_matches#getcolors"
   get '/products/:id/product_with_variants' => "products#product_with_variants", :as => :product_with_variants
   
 
