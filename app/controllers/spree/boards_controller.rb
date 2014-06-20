@@ -188,25 +188,33 @@ class Spree::BoardsController < Spree::StoreController
   end
   
   def gettaxons
-     
-     @searcher = build_searcher(params.merge(:supplier_id => params[:supplier_id]))
-     @supplierid = params[:supplier_id]
-      if params[:supplier_id].present?
-        @all_products = @searcher.retrieve_products.by_supplier(params[:supplier_id])
-      else
-        @all_products = @searcher.retrieve_products
-      end
-      
-      @ary = Array.new(Array.new) 
-     
-      @all_products.each do |prod|
-         @prod = Spree::Product.find_by_id(prod.id)
-   
-          @prod.taxons.each do |tax|
-             @ary.push([tax.name,tax.id])
-          end
-      end
-      render :json => @ary
+
+    @searcher = build_searcher(params.merge(:supplier_id => params[:supplier_id]))
+    @supplierid = params[:supplier_id]
+    if params[:supplier_id].present?
+      @all_products = @searcher.retrieve_products.by_supplier(params[:supplier_id])
+    else
+      @all_products = @searcher.retrieve_products
+    end
+    
+    department_taxons = Spree::Taxonomy.where(:name => 'Department').first().root.children
+    product_taxon_ids = @all_products.collect{|p| p.taxons.collect{|t| t.id} }.flatten.uniq
+    @ary = department_taxons.where(:id => product_taxon_ids).map{|taxon| [taxon.name, taxon.id]}
+    
+
+    
+    
+    #@ary = Array.new(Array.new) 
+    #
+    #
+    #
+    #@all_products.each do |prod|
+    #  @prod = Spree::Product.find_by_id(prod.id)
+    #  @prod.taxons.each do |tax|
+    #    @ary.push([tax.name,tax.id])
+    #  end
+    #end
+    render :json => @ary
   end
   
   def design
