@@ -174,10 +174,16 @@ class Spree::BoardsController < Spree::StoreController
   
   def update
     @board = Spree::Board.find(params[:id])
-    if @board.update_attributes(params[:board])
-      redirect_to designer_dashboard_path(@board, :notice => 'Your board was updated.')
-    else
-    end
+    
+    #respond_to do |format|
+      if @board.update_attributes(params[:board])
+        redirect_to designer_dashboard_path(@board, :notice => 'Your board was updated.')
+      else
+        puts @board.errors.collect{|e| e.to_s}
+        #format.html { render :action => "design"}
+      end
+    #end
+    
   end
   
   def build
