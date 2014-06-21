@@ -193,28 +193,28 @@ $(document).ready(function() {
 
 
 $( "#supplier_id" ).change(function () {
-		var str = "";
-		$( "#supplier_id option:selected" ).each(function() {
-		  str += $( this ).val();
-		       $.ajax({
-			        type: "GET",
-			        url: "/rooms/gettaxons",
-			        data: "supplier_id="+str,
-			        success: function(msg){ 
-						
-						// alert(msg)
-						var $el = $("#department_taxon");
-						$el.empty();
-						$el.append($("<option></option>").text('Department'));
-						// remove old options
-						$.each(msg, function(key, value) {
-							$el.append($("<option></option>").attr("value", value[1]).text(value[0]));
-						});
-			         }
-			      });
-		});
-		
-   });
+	var str = "";
+	$( "#supplier_id option:selected" ).each(function() {
+	  str += $( this ).val();
+	       $.ajax({
+		        type: "GET",
+		        url: "/rooms/gettaxons",
+		        data: "supplier_id="+str,
+		        success: function(msg){ 
+					
+					// alert(msg)
+					var $el = $("#department_taxon");
+					$el.empty();
+					$el.append($("<option></option>").text('Department'));
+					// remove old options
+					$.each(msg, function(key, value) {
+						$el.append($("<option></option>").attr("value", value[1]).text(value[0]));
+					});
+		         }
+		      });
+	});
+	
+  });
 	
 
 var canvas = new fabric.Canvas('canvas');

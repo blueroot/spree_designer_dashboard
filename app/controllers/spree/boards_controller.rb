@@ -189,7 +189,7 @@ class Spree::BoardsController < Spree::StoreController
   
   def gettaxons
 
-    @searcher = build_searcher(params.merge(:supplier_id => params[:supplier_id]))
+    @searcher = build_searcher(params.merge(:supplier_id => params[:supplier_id], :per_page => 5000))
     @supplierid = params[:supplier_id]
     if params[:supplier_id].present?
       @all_products = @searcher.retrieve_products.by_supplier(params[:supplier_id])
@@ -200,9 +200,6 @@ class Spree::BoardsController < Spree::StoreController
     department_taxons = Spree::Taxonomy.where(:name => 'Department').first().root.children
     product_taxon_ids = @all_products.collect{|p| p.taxons.collect{|t| t.id} }.flatten.uniq
     @ary = department_taxons.where(:id => product_taxon_ids).map{|taxon| [taxon.name, taxon.id]}
-    
-
-    
     
     #@ary = Array.new(Array.new) 
     #
