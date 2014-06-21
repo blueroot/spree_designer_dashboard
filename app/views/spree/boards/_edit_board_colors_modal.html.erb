@@ -3,34 +3,37 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		<h4 class="modal-title">Choose Color Swatches for Your Board</h4>		
+		<h4 class="modal-title">Choose Color Swatches for Your Room</h4>		
       </div>
       <div class="modal-body">
-	<h3>Choose a company to see available colors</h3>
-		<div class="color-vendors">
-		<% @color_collections.each do |cc| %>
+	
+		<div class="color-vendors modal-section">
+			<h3>Choose a company to see available colors</h3>
+			<% @color_collections.each do |cc| %>
 		
-			<% if cc.name == "Sherwin Williams" %>
-				<a href="javascript:void(0);" class="swatch-vendor" data-vendor-id="<%=cc.id%>"><%= image_tag("store/colorvendors/sw.png")%></a>
+				<% if cc.name == "Sherwin Williams" %>
+					<a href="javascript:void(0);" class="swatch-vendor" data-vendor-id="<%=cc.id%>"><%= image_tag("store/colorvendors/sw.png")%></a>
 				
-				<input type="hidden" id="colorfrom" name="colorfrom" /> 
+					<input type="hidden" id="colorfrom" name="colorfrom" /> 
 				
-			<% elsif cc.name == "Benjamin Moore" %>
-				<span style="margin-left:20px;"><a href="javascript:void(0);" class="swatch-vendor" data-vendor-id="<%=cc.id%>"><%= image_tag("store/colorvendors/bm.png")%></a>
-				</span>
+				<% elsif cc.name == "Benjamin Moore" %>
+					<span style="margin-left:20px;"><a href="javascript:void(0);" class="swatch-vendor" data-vendor-id="<%=cc.id%>"><%= image_tag("store/colorvendors/bm.png")%></a>
+					</span>
 				
-			<% end %>	
+				<% end %>	
 			
-		<% end %>
-		<div id="colorpreview" style="width:150px;display:inline;float:right;height:75px;"></div>
-		<br/><br/>
-		Color Code:  <input style="height: 24px;font-size: 12px;line-height: 14px;width:70px;" type="text" id="colorcode" name="colorcode">
-		<input type="button" id="searchcolor1" value="Submit" class="btn btn-default" />
-		<span style="margin-left:25px;">Color Code: </span> 
-		<input style=" height: 24px;font-size: 12px;line-height: 14px;width:70px;" type="text" id="colorcode1" name="colorcode">
-		<input type="button" id="searchcolor2" value="Submit" class="btn btn-default" />
-		
-	</div>
+			<% end %>
+		</div>
+		<div class="color-search modal-section">
+			<h3>Already know the swatch code? Enter it below to search for it.</h3>
+			<form class="form-inline" role="form">
+			  <div class="form-group">
+			    <input type="text" id="swatch_val" name="swatch_val" class="form-control" placeholder="Swatch Code">
+			  </div>
+			  <input type="button" id="searchcolor" value="Search" class="btn btn-primary" />		
+			</form>
+<div id="color_swatch_preview"></div>
+		</div>
 	
 		<div id="color-preloader" class="hidden" style="padding-top: 20px; text-align: center;">
 			
@@ -51,14 +54,29 @@
 
 <script>
 
-$('#searchcolor1').click(function () { // your input(textarea) class
+$('#searchcolor').click(function () { // your input(textarea) class
+		url = '/colors/get_color/'+$('#swatch_val').val()
+
+		$.ajax({
+            url: url,
+            type: 'GET',
+            success: function(result) {
+            id='#'+result;
+             $('#colorpreview').css('background-color',id);
+                              
+            }
+        });
+        
+});
+
+$('#sddearchcolor').click(function () { // your input(textarea) class
    board_id= $('#board_id').val();
     $('#colors-modal  #cancel').click();
             //var id= '<%=params[:board_id]%>';
              if ($('#colorfrom').val() == 0)
-              str1 = 'colorid='+$('#colorcode').val()+'&color_collection_id=1'; 
+              str1 = 'colorid='+$('#colorcode').val(); 
              else
-              str1 = 'colorid='+$('#colorcode').val()+'&id='+$('#colorfrom').val()+'&color_collection_id=1';
+              str1 = 'colorid='+$('#colorcode').val()+'&id='+$('#colorfrom').val();
             $.ajax({
                 url: '/rooms/'+board_id+'/color_matches', // script to process data
                 type: 'POST',
@@ -121,26 +139,5 @@ $('#searchcolor1').click(function () { // your input(textarea) class
     });
  
  
-$('#searchcolor2').click(function () { // your input(textarea) class
-    board_id= $('#board_id').val();
-    $('#colors-modal  #cancel').click();
-            //var id= '<%=params[:board_id]%>';
-             if ($('#colorfrom').val() == 0)
-              str1 = 'colorid='+$('#colorcode1').val()+'&color_collection_id=2'; 
-             else
-              str1 = 'colorid='+$('#colorcode1').val()+'&id='+$('#colorfrom').val()+'&color_collection_id=2';
-            $.ajax({
-                url: '/rooms/'+board_id+'/color_matches', // script to process data
-                type: 'POST',
-                data: str1, 
-                success: function(result) {
-                                      location.reload();
-                 
-                }
-                
-                 
-            });
-        
-    });
     
     </script>

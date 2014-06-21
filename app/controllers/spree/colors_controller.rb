@@ -9,6 +9,19 @@ class Spree::ColorsController < Spree::StoreController
     end
   end
   
+  def get_color
+    if !params[:swatch_val].blank?
+      @color = Spree::Color.find_by_swatch_val(params[:swatch_val])
+    else
+      @color = nil
+    end
+    respond_to do |format|
+      format.js   
+    end
+  
+  end
+
+  
  
 end
 

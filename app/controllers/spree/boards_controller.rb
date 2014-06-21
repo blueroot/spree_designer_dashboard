@@ -129,7 +129,7 @@ class Spree::BoardsController < Spree::StoreController
     #  taxons << taxon.id
     #end
     
-    unless params[:department_taxon_id].blank?
+    if !params[:department_taxon_id].blank? and !params[:department_taxon_id] == "Department"
       taxon = Spree::Taxon.find(params[:department_taxon_id])
       taxons << taxon.id
     end
