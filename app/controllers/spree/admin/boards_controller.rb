@@ -3,22 +3,25 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
 
  
   def index
-    @boards         = Spree::Board.all.select { |board| board.board_products.count > 0 }
+    #@boards = Spree::Board.all.select { |board| board.board_products.count > 0 }
 
-    @boards = @boards.select do |board| 
-      board_product_count = 0
-      board.board_products.each do |bp|
-        board_product_count += 1 unless bp.product.nil?
-      end
-      puts "#{board.name} has #{board_product_count} products"
-      board_product_count > 0
-    end
-    @board_products = Spree::BoardProduct.all.select {|bp| bp.approved_at == nil && bp.removed_at == nil  }
+    #@boards = @boards.select do |board| 
+      #board_product_count = 0
+      #board.board_products.each do |bp|
+        #board_product_count += 1 unless bp.product.nil?
+      #end
+
+      #puts "#{board.name} has #{board_product_count} products"
+      #board_product_count > 0
+    #end
+    @boards = Spree::Board.all.page(params[:page]).
+      per(params[:per_page] || 10)
+    @board_products = Spree::BoardProduct.where( approved_at: nil, removed_at: nil)
+    #@board_products = Spree::BoardProduct.all.select {|bp| bp.approved_at == nil && bp.removed_at == nil  }
     @products       = @board_products.map(&:product).compact
     @suppliers      = @products.map(&:supplier).compact.uniq
-    @designers      = Spree::DesignerRegistration.all
-    #@supplier_names = ["All designers"] + @suppliers.map(&:name).compact.uniq
-    @designer_names = ["All designers"] + @designers.map { |d| "#{d.first_name}" + " #{d.last_name}" } - [" "] 
+    designers       = Spree::DesignerRegistration.all
+    @designer_names = ["All designers"] + designers.map { |d| "#{d.first_name}" + " #{d.last_name}" } - [" "] 
   end
 
 

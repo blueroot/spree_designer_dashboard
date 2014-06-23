@@ -2,7 +2,8 @@ class Spree::Admin::BoardProductsController < Spree::Admin::ResourceController
  
   def index
     @boards         = Spree::Board.all
-    @board_products = Spree::BoardProduct.all.select {|bp| bp.approved_at == nil && bp.removed_at == nil  }
+    @board_products = Spree::BoardProduct.where( approved_at: nil, removed_at: nil).page(params[:page]).
+      per(params[:per_page] || 50)
     @products       = @board_products.map(&:product).compact
     @suppliers      = @products.map(&:supplier).compact.uniq
     @supplier_names = ["All suppliers"] + @suppliers.map(&:name).compact.uniq
