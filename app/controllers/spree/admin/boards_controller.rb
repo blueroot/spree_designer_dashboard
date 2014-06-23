@@ -3,7 +3,7 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
 
  
   def index
-    @boards         = Spree::Board.all.select { |board| board.board_products.count > 0 }
+    @boards = Spree::Board.all.select { |board| board.board_products.count > 0 }
 
     @boards = @boards.select do |board| 
       board_product_count = 0

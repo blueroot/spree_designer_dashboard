@@ -226,6 +226,14 @@ class Spree::Board < ActiveRecord::Base
 
     self.board_products.each do |bp|
       top_left_x, top_left_y = bp.top_left_x, bp.top_left_y
+      if bp.height == 0
+        bp.height = 5
+        bp.width = 5 * bp.width
+      end
+      if bp.width == 0
+        bp.width == 5
+        bp.height == 5 * bp.height
+      end
       product_image = bp.product.image_for_board
       if bp.rotation_offset and bp.rotation_offset > 0
         
