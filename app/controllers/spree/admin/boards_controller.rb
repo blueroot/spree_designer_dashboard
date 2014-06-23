@@ -20,8 +20,8 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
     #@board_products = Spree::BoardProduct.all.select {|bp| bp.approved_at == nil && bp.removed_at == nil  }
     @products       = @board_products.map(&:product).compact
     @suppliers      = @products.map(&:supplier).compact.uniq
-    designers       = Spree::DesignerRegistration.all
-    @designer_names = ["All designers"] + designers.map { |d| "#{d.first_name}" + " #{d.last_name}" } - [" "] 
+    designers = @boards.collect(&:designer).collect { |d| "#{d.first_name} #{d.last_name}"}.uniq
+    @designer_names = ["All designers"] + designers
   end
 
 
