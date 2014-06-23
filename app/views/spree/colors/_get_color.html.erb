@@ -1,0 +1,15 @@
+<% if color %>
+<div class="color-search-results clearfix" style="margin-top: 20px;">
+	<div class="board-swatch-preview-box">
+		<div class="board-swatch-preview-color" id="" style="background-color: #<%= color.hex_val%>"></div>
+		<div class="board-swatch-preview-content" id="">
+			<h4><%= color.name %></h4>
+			<%= color.color_collection.name%>
+			<br /><%= color.swatch_val%>
+			<br /><input type="button" data-color-id="<%=color.id%>" data-color-popover-container="color-popover-<%=color.id%>" data-html="true" data-trigger="hover" data-placement="top" data-animation="false" class="btn btn-primary btn-sm add-swatch-button" data-color="<%=color.hex_val%>" data-color-hsv-h="<%=color.hsv_h%>" data-color-hsv-s="<%=color.hsv_s%>" data-color-hsv-v="<%=color.hsv_v%>" data-color-name="<%=color.name%>" data-color-swatch-val="<%=color.swatch_val%>" value="Add to Room">
+		</div>
+	</div>
+</div>
+<% else %>
+<div style="margin-top: 20px;">We could not find a color for that code.  Please try again.</div>
+<% end %>

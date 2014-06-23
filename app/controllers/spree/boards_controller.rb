@@ -30,25 +30,38 @@ class Spree::BoardsController < Spree::StoreController
   def search
     
     @boards_scope = Spree::Board.active
-    
+    if params[:color_family] == 0
+        params[:color_family] = nil
+      end
     unless params[:color_family].blank?
+     
       #@related_colors = Spree::Color.by_color_family(params[:color_family])
       @boards_scope = @boards_scope.by_color_family(params[:color_family])
     end
-    
+    if params[:room_id] == '0'
+        params[:room_id] = nil
+      end
     unless params[:room_id].blank?
+      
       @boards_scope = @boards_scope.by_room(params[:room_id])
     end
-    
+      if params[:style_id] == 0
+        params[:style_id] = nil
+      end
     unless params[:style_id].blank?
+     
       @boards_scope = @boards_scope.by_style(params[:style_id])
     end
-    
+      if params[:designer_id] == 0
+        params[:designer_id] = nil
+      end
     unless params[:designer_id].blank?
+      
       @boards_scope = @boards_scope.by_designer(params[:designer_id])
     end
     
     unless params[:price_high].blank?
+    
       @boards_scope = @boards_scope.by_upper_bound_price(params[:price_high])
     end
     
@@ -116,7 +129,7 @@ class Spree::BoardsController < Spree::StoreController
     #  taxons << taxon.id
     #end
     
-    unless params[:department_taxon_id].blank?
+    if !params[:department_taxon_id].blank? and !params[:department_taxon_id] == "Department"
       taxon = Spree::Taxon.find(params[:department_taxon_id])
       taxons << taxon.id
     end
@@ -161,10 +174,16 @@ class Spree::BoardsController < Spree::StoreController
   
   def update
     @board = Spree::Board.find(params[:id])
-    if @board.update_attributes(params[:board])
-      redirect_to designer_dashboard_path(@board, :notice => 'Your board was updated.')
-    else
-    end
+    
+    #respond_to do |format|
+      if @board.update_attributes(params[:board])
+        redirect_to designer_dashboard_path(@board, :notice => 'Your board was updated.')
+      else
+        puts @board.errors.collect{|e| e.to_s}
+        #format.html { render :action => "design"}
+      end
+    #end
+    
   end
   
   def build
@@ -175,25 +194,30 @@ class Spree::BoardsController < Spree::StoreController
   end
   
   def gettaxons
-     
-     @searcher = build_searcher(params.merge(:supplier_id => params[:supplier_id]))
-     @supplierid = params[:supplier_id]
-      if params[:supplier_id].present?
-        @all_products = @searcher.retrieve_products.by_supplier(params[:supplier_id])
-      else
-        @all_products = @searcher.retrieve_products
-      end
-      
-      @ary = Array.new(Array.new) 
-     
-      @all_products.each do |prod|
-         @prod = Spree::Product.find_by_id(prod.id)
-   
-          @prod.taxons.each do |tax|
-             @ary.push([tax.name,tax.id])
-          end
-      end
-      render :json => @ary
+
+    @searcher = build_searcher(params.merge(:supplier_id => params[:supplier_id], :per_page => 5000))
+    @supplierid = params[:supplier_id]
+    if params[:supplier_id].present?
+      @all_products = @searcher.retrieve_products.by_supplier(params[:supplier_id])
+    else
+      @all_products = @searcher.retrieve_products
+    end
+    
+    department_taxons = Spree::Taxonomy.where(:name => 'Department').first().root.children
+    product_taxon_ids = @all_products.collect{|p| p.taxons.collect{|t| t.id} }.flatten.uniq
+    @ary = department_taxons.where(:id => product_taxon_ids).map{|taxon| [taxon.name, taxon.id]}
+    
+    #@ary = Array.new(Array.new) 
+    #
+    #
+    #
+    #@all_products.each do |prod|
+    #  @prod = Spree::Product.find_by_id(prod.id)
+    #  @prod.taxons.each do |tax|
+    #    @ary.push([tax.name,tax.id])
+    #  end
+    #end
+    render :json => @ary
   end
   
   def design

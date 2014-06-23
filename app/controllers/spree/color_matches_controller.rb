@@ -14,30 +14,25 @@ class Spree::ColorMatchesController < Spree::StoreController
       end
     end
   end
-  
-  
-  
   def create
-    @board = Spree::Board.find(params[:room_id])
+      @board = Spree::Board.find(params[:room_id])
 
-    if params[:id] and @color_match = @board.color_matches.find(params[:id])
-      
-    else  
-      unless @color_match = @board.color_matches.find_by_color_id(params[:color_id])
-        @color_match = @board.color_matches.new(:color_id => params[:color_id], :board_id => params[:room_id])
+      if params[:id] and @color_match = @board.color_matches.find(params[:id])
+
+      else  
+        unless @color_match = @board.color_matches.find_by_color_id(params[:color_id])
+          @color_match = @board.color_matches.new(:color_id => params[:color_id], :board_id => params[:room_id])
+        end
+      end
+
+      if @color_match.save
+        @color_collections = Spree::ColorCollection.all()
+        respond_to do |format|
+          format.js   { render :action => "show" }
+        end
+      else
       end
     end
-    
-    if @color_match.save
-      @color_collections = Spree::ColorCollection.all()
-      respond_to do |format|
-        format.js   { render :action => "show" }
-      end
-    else
-    end
-  end
-  
-
   
   def destroy
     @board = Spree::Board.find(params[:room_id])

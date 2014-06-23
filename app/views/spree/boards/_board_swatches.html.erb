@@ -1,6 +1,5 @@
 <h3>Choose paint swatches for your board</h3>
 <% unless board.color_matches.reload.blank? %>
-
 	<% board.color_matches.reload.each_with_index do |color_match,index| %>
 		<% if color_match.color %>
 		<div class="board-swatch color-match-link" id="add-colors-link-<%=index%>" data-match-id="1" data-color-match-id="<%=color_match.id%>">
@@ -54,9 +53,11 @@ $(document).ready(function() {
 
 
 	$( ".color-match-link" ).click(function() {
-	  	$( ".color-match-link" ).removeClass('active')
-		$(this).addClass('active')
-		$('#colors-modal').modal()
+	  	$( ".color-match-link" ).removeClass('active');
+		$(this).addClass('active');
+		$('#colors-modal').modal();
+		$('#colorfrom').val($(this).data('colorMatchId'));
+	
 	});
 	
 	$( ".color-match-delete-link" ).click(function(event) {

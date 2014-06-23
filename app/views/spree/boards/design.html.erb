@@ -49,7 +49,7 @@
 													<%= select_tag "supplier_id", options_from_collection_for_select(@suppliers, "id", "name"),:include_blank => false, :class => "form-control input-sm", :prompt => "Wholesaler" %>
 												</div>
 												<div class="col-md-3">
-													<%= select_tag "department_taxon", options_for_select(@ary), :include_blank => false,  :class => "form-control input-sm", :prompt => "Department" %>
+													<%= select_tag "department_taxon", options_from_collection_for_select(@department_taxons, "id", "name"), :include_blank => false, :class => "form-control input-sm", :prompt => "Department" %>
 												</div>
 												<div class="col-md-3">
 
@@ -97,9 +97,11 @@
 					2
 				</span> Add color swatches
 			</div>
+			
 			<div class="row">
 				<div class="col-md-12">
 					<div id="board-colors-container" class="board-colors-container">
+					<input type="hidden" id="board_id" name="board_id" value="<%=params[:id]%>" /> 
 						<%= render :partial => "board_swatches", :locals => {:board => @board} %>
 					</div>
 				</div>
@@ -187,29 +189,33 @@ $(document).ready(function() {
 	
 });
 
+
+
+<% if false %>
 $( "#supplier_id" ).change(function () {
-		var str = "";
-		$( "#supplier_id option:selected" ).each(function() {
-		  str += $( this ).val();
-		       $.ajax({
-			        type: "GET",
-			        url: "/rooms/gettaxons",
-			        data: "supplier_id="+str,
-			        success: function(msg){ 
-						var $el = $("#department_taxon");
-						$el.empty();
-						
-						 // remove old options
-							$.each(msg, function(key, value) {
+	var str = "";
+	$( "#supplier_id option:selected" ).each(function() {
+	  str += $( this ).val();
+	       $.ajax({
+		        type: "GET",
+		        url: "/rooms/gettaxons",
+		        data: "supplier_id="+str,
+		        success: function(msg){ 
 					
-							  $el.append($("<option></option>").attr("value", value[1]).text(value[0]));
-							});
-			         }
-			      });
-		});
-		
-   }).change();
+					// alert(msg)
+					var $el = $("#department_taxon");
+					$el.empty();
+					$el.append($("<option></option>").text('Department'));
+					// remove old options
+					$.each(msg, function(key, value) {
+						$el.append($("<option></option>").attr("value", value[1]).text(value[0]));
+					});
+		         }
+		      });
+	});
 	
+  });
+<% end %>	
 
 var canvas = new fabric.Canvas('canvas');
 $(function () {

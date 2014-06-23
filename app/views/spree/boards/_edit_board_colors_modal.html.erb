@@ -3,21 +3,38 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		<h4 class="modal-title">Choose Color Swatches for Your Board</h4>		
+		<h4 class="modal-title">Choose Color Swatches for Your Room</h4>		
       </div>
       <div class="modal-body">
-	<h3>Choose a company to see available colors</h3>
-		<div class="color-vendors">
-		<% @color_collections.each do |cc| %>
+	
+		<div class="color-vendors modal-section">
+			<h3>Choose a company to see available colors</h3>
+			<% @color_collections.each do |cc| %>
 		
-			<% if cc.name == "Sherwin Williams" %>
-				<a href="javascript:void(0);" class="swatch-vendor" data-vendor-id="<%=cc.id%>"><%= image_tag("store/colorvendors/sw.png")%></a>
-			<% elsif cc.name == "Benjamin Moore" %>
-				<a href="javascript:void(0);" class="swatch-vendor" data-vendor-id="<%=cc.id%>"><%= image_tag("store/colorvendors/bm.png")%></a>
-			<% end %>	
+				<% if cc.name == "Sherwin Williams" %>
+					<a href="javascript:void(0);" class="swatch-vendor" data-vendor-id="<%=cc.id%>"><%= image_tag("store/colorvendors/sw.png")%></a>
+				
+					<input type="hidden" id="colorfrom" name="colorfrom" /> 
+				
+				<% elsif cc.name == "Benjamin Moore" %>
+					<span style="margin-left:20px;"><a href="javascript:void(0);" class="swatch-vendor" data-vendor-id="<%=cc.id%>"><%= image_tag("store/colorvendors/bm.png")%></a>
+					</span>
+				
+				<% end %>	
 			
-		<% end %>
+			<% end %>
 		</div>
+		<div class="color-search modal-section">
+			<h3>Already know the swatch code? Enter it below to search for it.</h3>
+			<form class="form-inline" role="form">
+			  <div class="form-group">
+			    <input type="text" id="swatch_val" name="swatch_val" class="form-control" placeholder="Swatch Code">
+			  </div>
+			  <input type="button" id="searchcolor" value="Search" class="btn btn-primary" />		
+			</form>
+<div id="color_swatch_preview"></div>
+		</div>
+	
 		<div id="color-preloader" class="hidden" style="padding-top: 20px; text-align: center;">
 			
 			<p>Just a moment...talking to the Magical Swatch Factory</p>
@@ -27,10 +44,100 @@
 		<div id="color_swatches_container"></div>
       </div>
 	<div class="modal-footer">
-		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		<button type="button" id="cancel" class="btn btn-default" data-dismiss="modal">Close</button>
 	</div>
       
 	
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<script>
+
+$('#searchcolor').click(function () { // your input(textarea) class
+		url = '/colors/get_color/'+$('#swatch_val').val()
+
+		$.ajax({
+            url: url,
+            type: 'GET',
+            success: function(result) {
+            id='#'+result;
+             $('#colorpreview').css('background-color',id);
+                              
+            }
+        });
+        
+});
+
+$('#sddearchcolor').click(function () { // your input(textarea) class
+   board_id= $('#board_id').val();
+    $('#colors-modal  #cancel').click();
+            //var id= '<%=params[:board_id]%>';
+             if ($('#colorfrom').val() == 0)
+              str1 = 'colorid='+$('#colorcode').val(); 
+             else
+              str1 = 'colorid='+$('#colorcode').val()+'&id='+$('#colorfrom').val();
+            $.ajax({
+                url: '/rooms/'+board_id+'/color_matches', // script to process data
+                type: 'POST',
+                data: str1, 
+                success: function(result) {
+                  //alert(result);
+               //  $("#colors-modal").hide();
+                // $("#colors-modal").attr("aria-hidden","true");
+                
+                // $("#colors-modal").addClass("modal");
+                //  $("#default").removeClass( "one-col modal-open" ).addClass("one-col");
+                  //$(".modal-backdrop" ).remove();
+                location.reload();
+                 
+                }
+                 
+            });
+        
+    });
+ 
+ 
+ $('#colorcode1').keyup(function (event) { // your input(textarea) class
+       
+         
+        if ($('#colorfrom').val() == 0)
+              str1 = 'colorid='+$('#colorcode1').val()+'&color_collection_id=1'; 
+             else
+              str1 = 'colorid='+$('#colorcode1').val()+'&id='+$('#colorfrom').val()+'&color_collection_id=2';
+            $.ajax({
+                url: '/getcolors', // script to process data
+                type: 'GET',
+                data: str1, 
+                success: function(result) {
+                id='#'+result;
+                 $('#colorpreview').css('background-color',id);
+                                  
+                }
+            });
+        
+    });
+ 
+ $('#colorcode').keyup(function (event) { // your input(textarea) class
+       
+         
+        if ($('#colorfrom').val() == 0)
+              str1 = 'colorid='+$('#colorcode').val()+'&color_collection_id=1'; 
+             else
+              str1 = 'colorid='+$('#colorcode').val()+'&id='+$('#colorfrom').val()+'&color_collection_id=2';
+            $.ajax({
+                url: '/getcolors', // script to process data
+                type: 'GET',
+                data: str1, 
+                success: function(result) {
+                id='#'+result;
+                 $('#colorpreview').css('background-color',id);
+                                 
+                }
+            });
+        
+    });
+ 
+ 
+    
+    </script>

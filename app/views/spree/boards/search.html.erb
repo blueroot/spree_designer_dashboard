@@ -24,14 +24,16 @@
 
 <script>
 $(document).ready(function() {
-$('.minict_wrapper ul:first li').first().remove();
-$('.minict_wrapper ul:last li').first().remove();
-$('.minict_wrapper ul:eq(2) li').first().remove();
-$('.minict_wrapper ul:eq(1) li').first().remove();
+
   
-$('.minict_wrapper ul:first').prepend("<li class='' data-value=''>All Rooms</li>");
-$('.minict_wrapper ul:last').prepend("<li class='' data-value=''>All Designers</li>");
-$('.minict_wrapper ul:eq(2)').prepend("<li class='' data-value=''>Wall Colors</li>");
-$('.minict_wrapper ul:eq(1)').prepend("<li class='' data-value=''>All Styles</li>");
+  $('select.room-filter').prepend("<option value='0'>All Rooms</option>");
+  $('select.style-filter').prepend("<option value='0'>All Styles</option>");
+  $('select.color-filter').prepend("<option value='0'>All Wall Colors</option>");
+  $('select.designer-filter').prepend("<option value='0'>All Designers</option>");
+  
+//$('.minict_wrapper ul:first').prepend("<li class='' data-value=''>All Rooms</li>");
+//$('.minict_wrapper ul:last').prepend("<li class='' data-value=''>All Designers</li>");
+//$('.minict_wrapper ul:eq(2)').prepend("<li class='' data-value=''>All Wall Colors</li>");
+//$('.minict_wrapper ul:eq(1)').prepend("<li class='' data-value=''>All Styles</li>");
 });
 </script>
