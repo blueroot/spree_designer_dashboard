@@ -13,7 +13,7 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
       #puts "#{board.name} has #{board_product_count} products"
       #board_product_count > 0
     #end
-    @boards = Spree::Board.where(state: "draft").page(params[:page]).
+    @boards = Spree::Board.all.page(params[:page]).
       per(params[:per_page] || 10)
     @board_products = Spree::BoardProduct.where( approved_at: nil, removed_at: nil)
     #@board_products = Spree::BoardProduct.all.select {|bp| bp.approved_at == nil && bp.removed_at == nil  }

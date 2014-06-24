@@ -1,16 +1,24 @@
 class Spree::Board < ActiveRecord::Base
 
   state_machine initial: :draft do
+
     event :submit_for_publication do
       transition :draft => :submitted_for_publication 
     end
 
     event :delete_permanently do
-      transition :draft => :deleted, :suspended_for_inactivity => :deleted, :submitted_for_publication => :deleted
+      transition :draft => :deleted, 
+                 :suspended_for_inactivity => :deleted, 
+                 :submitted_for_publication => :deleted,
+                 :published => :deleted,
+                 :unpublished => :deleted
+
     end
 
     event :request_revision do
-      transition :submitted_for_publication => :draft
+      transition :submitted_for_publication => :draft,
+                 :published => :draft,
+                 :unpublished => :draft
     end
 
     event :suspend_for_inactivity do
@@ -22,8 +30,10 @@ class Spree::Board < ActiveRecord::Base
     end
 
     event :publish do
-      transition :submitted_for_publication => :published
+      transition :submitted_for_publication => :published,
+                 :unpublished => :published
     end
+  
   end
 
   validates_presence_of :name
@@ -55,6 +65,9 @@ class Spree::Board < ActiveRecord::Base
     !!deleted_at
   end
 
+  #def after_request_revision(board)
+    #puts 'EFFFF -----------'
+  #end
   
   def self.active
     where(:status => 'published')
@@ -273,6 +286,14 @@ class Spree::Board < ActiveRecord::Base
   def destroy
     self.update_attribute('deleted_at', Time.zone.now)
     self.board_products.destroy_all
+  end
+
+  def designer_name
+    "#{self.designer.first_name} #{self.designer.last_name}"
+  end
+
+  def coded_designer_name
+    "#{self.designer.first_name.downcase}_#{self.designer.last_name.downcase}"
   end
 
 end
