@@ -218,6 +218,40 @@ $( "#supplier_id" ).change(function () {
 <% end %>	
 
 var canvas = new fabric.Canvas('canvas');
+
+
+//function preventLeaving(e) {
+//    var activeObject = e.target;
+//    if ((activeObject.get('left') - (activeObject.get('width') * activeObject.get('scaleX')  / 2) < 0))
+//        activeObject.set('left', activeObject.get('width') * activeObject.get('scaleX')  / 2); 
+//    if ((activeObject.get('top') - (activeObject.get('height') * activeObject.get('scaleY')  / 2) < 0))
+//        activeObject.set('top', activeObject.get('height') * activeObject.get('scaleY')  / 2);
+//    if (activeObject.get('left') + (activeObject.get('width') * activeObject.get('scaleX')  / 2) > canvas.getWidth())
+//    {
+//        var positionX = canvas.getWidth() - (activeObject.get('width') * activeObject.get('scaleX'))  / 2;
+//        activeObject.set('left', positionX > canvas.getWidth() / 2 ? positionX : canvas.getWidth() / 2);
+//    }
+//    if (activeObject.get('top') + (activeObject.get('height') * activeObject.get('scaleY') / 2) > canvas.getHeight())
+//    {
+//        var positionY = canvas.getHeight() - (activeObject.get('height') * activeObject.get('scaleY') / 2);
+//        activeObject.set('top', positionY > canvas.getHeight() / 2 ? positionY : canvas.getHeight() / 2);
+//    }
+//
+//    //below just prevention for object from getting width or height greater than canvas width and height
+//    if (activeObject.get('width') * activeObject.get('scaleX') > canvas.getWidth())
+//    {
+//        activeObject.set('scaleX', canvas.getWidth() / activeObject.get('width'));
+//    }
+//    if (activeObject.get('height') * activeObject.get('scaleY') > canvas.getHeight())
+//    {
+//        activeObject.set('scaleY', canvas.getHeight() / activeObject.get('height'));
+//    }
+//}
+//
+//    canvas.observe( 'object:moving', preventLeaving);
+//    canvas.observe( 'object:scaling', preventLeaving);
+//
+
 $(function () {
 	// Fabric JS initialization 
 
