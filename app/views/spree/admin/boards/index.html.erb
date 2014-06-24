@@ -2,31 +2,33 @@
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
+
 <%= javascript_include_tag 'admin/board_products.js' %>
+<%= javascript_include_tag 'admin/boards.js' %>
 
 <%= render :partial => 'spree/admin/shared/boards_sub_menu' %>
 
 <div class = 'row'>
-  <div class = "form-group col-md-4 left" id = "product-search">
-    <b><%= label_tag "Show only products for:" %></b>
-    <%= select_tag :suppliers, options_for_select(@designer_names, @designer_names.first), class: "form-control" %>
+  <div class = "form-group col-md-4 left designer-dropdown" id = "">
+    <b><%= label_tag "Show only boards for:" %></b>
+    <%= select_tag :designers, options_for_select(@designer_names, @designer_names.first), class: "form-control" %>
   </div>
 
-  <div class = "form-group col-md-4 col-md-offset-4 right" id = "product-search">
-    <b><%= label_tag "Show products that are :" %></b>
-    <%= select_tag :status, options_for_select(["All boards","Submitted for Approval", "Approved", "Under Revision"], "All Products"), class: "form-control" %>
+  <div class = "form-group col-md-4 col-md-offset-4 right board-state-dropdown" id = "">
+    <b><%= label_tag "Show boards that are :" %></b>
+    <%= select_tag :state, options_for_select(["All boards", "Draft", "Deleted", "Submitted for Publication", "Published"], "All Products"), class: "form-control" %>
   </div>
 </div>
 
 <div class = "row">
   <% @boards.each do |board| %>
-    <div class = "row search-result col-md-12">
+    <div class = "row search-result col-md-12 board-tile <%= board.state %> <%= board.coded_designer_name %>">
 
-    <div class = "board row">
+      <div class = "board row">
       <div class = "col-md-2">
         <%= link_to "Expand/Collapse", "", class: "#{board.id} btn btn-default collapse-button", style: "color: white;" %>
       </div>
-      <div class = "col-md-5 board-title"><%= board.name %> <small class="by"><b> by <%= board.designer.first_name %> <%= board.designer.last_name %></b></small> 
+      <div class = "col-md-5 board-title"><%= board.name %> <small class="by"><b> by <%= board.designer_name %></b></small> 
         <small class ="help-block">
           contains <%= board.board_products.count %> products: <%= board.board_products.select {|bp| bp.status == "approved"}.count %> approved, <%= board.board_products.select {|bp| bp.status == "rejected" }.count %> removed, <%= board.board_products.select {|bp| bp.status == "active" || bp.status == "pending" }.count %> pending
         </small>
