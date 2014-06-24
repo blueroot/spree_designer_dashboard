@@ -55,4 +55,12 @@ Spree::Product.class_eval do
     self.images.first ? Magick::ImageList.new(self.images.first.attachment.url(:product)) : Magick::ImageList.new(self.variants.first.images.first.attachment.url(:product))
   end
   
+  def self.like_any(fields, values)
+    where fields.map { |field|
+      values.map { |value|
+        arel_table[field].matches("%#{value}%")
+      }.inject(:and)
+    }.inject(:or)
+  end
+  
 end

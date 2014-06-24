@@ -129,10 +129,13 @@ class Spree::BoardsController < Spree::StoreController
     #  taxons << taxon.id
     #end
     
-    if !params[:department_taxon_id].blank? and !params[:department_taxon_id] == "Department"
+    if params[:department_taxon_id] and !params[:department_taxon_id].empty? and params[:department_taxon_id] != "Department"
       taxon = Spree::Taxon.find(params[:department_taxon_id])
       taxons << taxon.id
     end
+    
+  
+    
     
     unless taxons.empty? 
       @searcher = build_searcher(params.merge(:taxon => taxons))
