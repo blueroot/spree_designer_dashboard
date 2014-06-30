@@ -1,39 +1,34 @@
 class Spree::Board < ActiveRecord::Base
+  include AASM
 
-  state_machine initial: :draft do
+  aasm column: :state, whiny_transitions: false do
+    state :draft, initial: true
+    state :suspended_for_inactivity
+    state :submitted_for_publication
+    state :deleted
+    state :published
+    state :unpublished
+
+    event :request_revision, before: :update_state_label do
+      transitions from: :submitted_for_publication, to: :draft
+    end
 
     event :submit_for_publication do
-      transition :draft => :submitted_for_publication 
+      transitions from: :draft, to: :submitted_for_publication
     end
 
-    event :delete_permanently do
-      transition :draft => :deleted, 
-                 :suspended_for_inactivity => :deleted, 
-                 :submitted_for_publication => :deleted,
-                 :published => :deleted,
-                 :unpublished => :deleted
-
-    end
-
-    event :request_revision do
-      transition :submitted_for_publication => :draft,
-                 :published => :draft,
-                 :unpublished => :draft
-    end
-
-    event :suspend_for_inactivity do
-      transition :draft => :suspended_for_inactivity
-    end
-
-    event :revoke_suspension do
-      transition :suspended_for_inactivity => :draft
+    event :delete_permanently, after: :destroy do
+      transitions from: [:submitted_for_publication, :draft, :suspended_for_inactivity, :published, :unpublished], to: :deleted
     end
 
     event :publish do
-      transition :submitted_for_publication => :published,
-                 :unpublished => :published
+      transitions from: :submitted_for_publication, to: :published
     end
-  
+
+  end
+
+  def update_state_label
+    self.update_attributes!({current_state_label: "needs revision"}, without_protection: true)
   end
 
   validates_presence_of :name
@@ -65,10 +60,6 @@ class Spree::Board < ActiveRecord::Base
     !!deleted_at
   end
 
-  #def after_request_revision(board)
-    #puts 'EFFFF -----------'
-  #end
-  
   def self.active
     where(:status => 'published')
   end
@@ -84,7 +75,6 @@ class Spree::Board < ActiveRecord::Base
     rs << self.style.name if self.style
     rs.join(", ")
   end
-  
   
   def self.draft
     where(:status => ["new"])

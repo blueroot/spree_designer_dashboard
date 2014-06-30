@@ -5,6 +5,8 @@ Gem::Specification.new do |s|
 
   s.version     = '1.2.53'
 
+
+
   s.summary     = 'Designer Dashboard Functionality for Scout & Nimble'
   s.description = ''
   s.required_ruby_version = '>= 1.9.3'
