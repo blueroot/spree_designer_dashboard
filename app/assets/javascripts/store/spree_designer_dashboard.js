@@ -164,38 +164,38 @@ function addProductToBoard(event, ui){
 				buildImageLayer(canvas, board_product);
 				//alert(board_product.product.id)
 				
-				var variant_count = $.map(board_product.product.variants, function(n, i) { return i; }).length;
-				if (variant_count > 1){
-					//alert(variant_count);
-					$('#variant_options_modal').modal('show')
-					$('#board_options_preloader').removeClass('hidden')
-					$('#room_variant_options_container').addClass('hidden')
-					
-					var url = '/products/'+board_product.product.permalink+'/product_with_variants'
-					
-					
-					
-					
-					$.ajax({
-						url: url, 
-						type: "GET",
-						//dataType: "text/javascript", 
-						data: {},
-					     beforeSend : function(xhr){
-								xhr.setRequestHeader("Accept", "text/javascript")
-					     },
-					     success : function(product){
-					     },
-					     error: function(objAJAXRequest, strError, errorThrown){ //alert("ERROR: " + strError);
- 								}
-					  }
-					);
-					
-					
-					
-					
-					
-				}
+				//var variant_count = $.map(board_product.product.variants, function(n, i) { return i; }).length;
+				//if (variant_count > 1){
+				//	//alert(variant_count);
+				//	$('#variant_options_modal').modal('show')
+				//	$('#board_options_preloader').removeClass('hidden')
+				//	$('#room_variant_options_container').addClass('hidden')
+				//	
+				//	var url = '/products/'+board_product.product.permalink+'/product_with_variants'
+				//	
+				//	
+				//	
+				//	
+				//	$.ajax({
+				//		url: url, 
+				//		type: "GET",
+				//		//dataType: "text/javascript", 
+				//		data: {},
+				//	     beforeSend : function(xhr){
+				//				xhr.setRequestHeader("Accept", "text/javascript")
+				//	     },
+				//	     success : function(product){
+				//	     },
+				//	     error: function(objAJAXRequest, strError, errorThrown){ //alert("ERROR: " + strError);
+ 				//				}
+				//	  }
+				//	);
+				//	
+				//	
+				//	
+				//	
+				//	
+				//}
 				
 				// remove the jquery drag/drop place holder that had been there.
 				// this is a bit of a hack - without the timer, then the graphic disappears for a second...this generally keeps it up until the fabricjs version is added
