@@ -14,6 +14,20 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
     @designer_names = ["All designers"] + designers
   end
 
+  def update
+    @board = Spree::Board.find_by id: params[:id]
+
+    if params[:state] == "deleted"
+      @board.delete_permanently
+    elsif params[:state] == "request_revision"
+      @board.request_revision
+    elsif params[:state] == "publish"
+      @board.publish
+    end
+
+    render json: @board
+  end
+
   def new
     @board = Spree::Board.new(:name => "Untitled Room")
     @board.designer = spree_current_user

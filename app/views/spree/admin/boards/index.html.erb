@@ -6,6 +6,7 @@
 <%= javascript_include_tag 'admin/board_products.js' %>
 <%= javascript_include_tag 'admin/boards.js' %>
 
+
 <%= render :partial => 'spree/admin/shared/boards_sub_menu' %>
 
 <div class = 'row'>
@@ -22,21 +23,90 @@
 
 <div class = "row">
   <% @boards.each do |board| %>
-    <div class = "row search-result col-md-12 board-tile <%= board.state %> <%= board.coded_designer_name %>">
+    <div class = "row search-result col-md-12 board-tile board-<%=board.id %> <%= board.state %> <%= board.coded_designer_name %>">
 
       <div class = "board row">
       <div class = "col-md-2">
         <%= link_to "Expand/Collapse", "", class: "#{board.id} btn btn-default collapse-button", style: "color: white;" %>
       </div>
-      <div class = "col-md-5 board-title"><%= board.name %> <small class="by"><b> by <%= board.designer_name %></b></small> 
+      <div class = "col-md-4 board-title"><%= board.name %> <small class="by"><b> by <%= board.designer_name %></b></small> 
         <small class ="help-block">
           contains <%= board.board_products.count %> products: <%= board.board_products.select {|bp| bp.status == "approved"}.count %> approved, <%= board.board_products.select {|bp| bp.status == "rejected" }.count %> removed, <%= board.board_products.select {|bp| bp.status == "active" || bp.status == "pending" }.count %> pending
         </small>
       </div>
-      <div class = "col-md-4 col-md-offset-1">
-          <%= link_to "Publish","#", class: "btn btn-primary"%>
-          <%= link_to "Request Revision","#", class: "btn btn-warning"%>
-          <%= link_to "Delete","#", class: "btn btn-danger"%>
+      <div class = "col-md-2 board-title">Status: <%= board.state.capitalize %>
+      </div>
+      <div class = "col-md-4 ">
+        <%= link_to "Publish","#", class: "btn btn-primary", data: {toggle: "modal", target: "#modal-publish-#{board.id}"} %>
+        <%= link_to "Request Revision","#", class: "btn btn-warning", data: {toggle: "modal", target: "#modal-revise-#{board.id}"}%>
+        <%= link_to "Delete","#", class: "btn btn-danger", data: {toggle: "modal", target: "#modal-delete-#{board.id}"}%>
+
+        <!-- Publish Modal -->
+        <div class="modal fade" id="modal-publish-<%=board.id%>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Publishing <%= board.name %> </h4>
+              </div>
+              <div class="modal-body">
+                <h4><%= board.designer_name %> will be notified of the publication of their board.</h4>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="publish-board <%= board.id %> btn btn-primary"data-dismiss="modal">Confirm</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delete Modal -->
+        <div class="modal fade" id="modal-delete-<%=board.id%>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Deleting <%= board.name %> </h4>
+              </div>
+              <div class="modal-body">
+                <h4>Are you sure you want to delete <%= board.name %>?</h4>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="delete-board <%= board.id %> btn btn-danger"data-dismiss="modal">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Revision Modal -->
+        <div class="modal fade" id="modal-revise-<%=board.id%>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Requesting Revision of <%= board.name %> </h4>
+              </div>
+              <div class="modal-body">
+                <h4>Requesting revision of <%= board.name %></h4>
+                <p>
+                  <%= board.designer_name %> will be asked to revise their board, the following changes were made:
+                  <ul class = "list-group">
+                    <li class = "list-group-item">Reason one.</li>
+                    <li class = "list-group-item">Reason one.</li>
+                  </ul>
+                  <%= text_area_tag 'revise' %>
+                </p>
+                
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="delete-board <%= board.id %> btn btn-primary" data-dismiss="modal">Confirm</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -66,3 +136,4 @@ $(".collapse-button").click(function(e){
 
 </script>
 <%= paginate @boards %>
+
