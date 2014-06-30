@@ -118,6 +118,8 @@ function buildImageLayer(canvas, bp){
 		oImg.set('id', bp.id)
 		//console.log('build image: '+ bp.id)
 		oImg.set('product_permalink', bp.product.permalink)
+		oImg.set('current_x', bp.top_left_x)
+		oImg.set('current_y', bp.top_left_y)
 		canvas.add(oImg);
 		canvas.setActiveObject(oImg);
 		rotateObject(bp.rotation_offset);
@@ -289,9 +291,13 @@ function getSavedProducts(board_id){
 					moveLayer(selectedImage, "backward")
 				}, false);
 				document.getElementById('bp-rotate-left').addEventListener('click', function() {
-					rotateObject(90);	
 					activeObject = canvas.getActiveObject()
-					updateBoardProduct(activeObject.get('id'), {id: activeObject.get('id'), top_left_x: getCurrentLeft(activeObject), top_left_y: getCurrentTop(activeObject), width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)})
+					x = activeObject.get('current_x')
+					y = activeObject.get('current_y')
+					rotateObject(90);	
+					
+					updateBoardProduct(activeObject.get('id'), {id: activeObject.get('id'), top_left_x: x, top_left_y: y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)})
+					
 					console.log('getLeft: '+ activeObject.getLeft())
 					console.log('getTop: '+ activeObject.getTop())
 					console.log('getPointByOrigin: '+ activeObject.getPointByOrigin())

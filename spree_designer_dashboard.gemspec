@@ -3,7 +3,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_designer_dashboard'
 
-  s.version     = '1.2.53'
+  s.version     = '1.2.54'
 
 
 
