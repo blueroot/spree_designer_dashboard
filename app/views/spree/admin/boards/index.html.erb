@@ -31,10 +31,10 @@
       </div>
       <div class = "col-md-4 board-title"><%= board.name %> <small class="by"><b> by <%= board.designer_name %></b></small> 
         <small class ="help-block">
-          contains <%= board.product_count %> products: 
-          <%= board.board_products.select {|bp| bp.status == "approved"}.count %> approved, 
-          <%= board.board_products.select {|bp| bp.status == "rejected" }.count %> removed, 
-          <%= board.board_products.select {|bp| bp.status == "active" || bp.status == "pending" }.count %> pending
+          contains <%= board.board_products.size %> products: 
+          <%= board.board_products.select {|bp| bp.status == "approved"}.size %> approved, 
+          <%= board.board_products.select {|bp| bp.status == "rejected" }.size %> removed, 
+          <%= board.board_products.select {|bp| bp.status == "active" || bp.status == "pending" }.size %> pending
         </small>
       </div>
       <div class = "col-md-2 board-title">Status:
