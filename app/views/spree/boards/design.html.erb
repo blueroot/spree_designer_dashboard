@@ -122,12 +122,12 @@
 	<div class="manage-board-footer">
 		<%= link_to "Cancel", designer_dashboard_path, :class => "btn btn-default" %>
 		<%= link_to "Save Changes", "javascript:void(0);", :class => "btn btn-primary", :id => "submit_board_button" %>
-		<a href="javascript:void(0);" id="publish_room_button" class="btn btn-primary" data-toggle="popover" data-placement="left" title="" data-content="You've got your room looking preeettty nice and now you're ready to show the world.  You have come to the right place.  However, during this beta period we have turned publishing off.  However, you can preview what your room will look like by saving it and clicking the Preview button." data-original-title="Ready to Publish?">Save and Publish</a>
+		
 		
 		<% if false %>
-		<%= link_to "Save and Publish", "javascript:void(0);", :class => "btn btn-primary", :id => "submit_and_publish_board_button" %>
+		<a href="javascript:void(0);" id="publish_room_button" class="btn btn-primary" data-toggle="popover" data-placement="left" title="" data-content="You've got your room looking preeettty nice and now you're ready to show the world.  You have come to the right place.  However, during this beta period we have turned publishing off.  However, you can preview what your room will look like by saving it and clicking the Preview button." data-original-title="Ready to Publish?">Save and Publish</a>
 		<% end%>
-		
+		<%= link_to "Save and Publish", "javascript:void(0);", :class => "btn btn-primary", :id => "submit_and_publish_board_button" %>
 	</div>
 
 <%= render :partial => "submit_for_publication_modal"%>	
