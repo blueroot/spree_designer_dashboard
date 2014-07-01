@@ -118,6 +118,8 @@ function buildImageLayer(canvas, bp){
 		oImg.set('id', bp.id)
 		//console.log('build image: '+ bp.id)
 		oImg.set('product_permalink', bp.product.permalink)
+		oImg.set('current_x', bp.top_left_x)
+		oImg.set('current_y', bp.top_left_y)
 		canvas.add(oImg);
 		canvas.setActiveObject(oImg);
 		rotateObject(bp.rotation_offset);
@@ -164,38 +166,38 @@ function addProductToBoard(event, ui){
 				buildImageLayer(canvas, board_product);
 				//alert(board_product.product.id)
 				
-				var variant_count = $.map(board_product.product.variants, function(n, i) { return i; }).length;
-				if (variant_count > 1){
-					//alert(variant_count);
-					$('#variant_options_modal').modal('show')
-					$('#board_options_preloader').removeClass('hidden')
-					$('#room_variant_options_container').addClass('hidden')
-					
-					var url = '/products/'+board_product.product.permalink+'/product_with_variants'
-					
-					
-					
-					
-					$.ajax({
-						url: url, 
-						type: "GET",
-						//dataType: "text/javascript", 
-						data: {},
-					     beforeSend : function(xhr){
-								xhr.setRequestHeader("Accept", "text/javascript")
-					     },
-					     success : function(product){
-					     },
-					     error: function(objAJAXRequest, strError, errorThrown){ //alert("ERROR: " + strError);
- 								}
-					  }
-					);
-					
-					
-					
-					
-					
-				}
+				//var variant_count = $.map(board_product.product.variants, function(n, i) { return i; }).length;
+				//if (variant_count > 1){
+				//	//alert(variant_count);
+				//	$('#variant_options_modal').modal('show')
+				//	$('#board_options_preloader').removeClass('hidden')
+				//	$('#room_variant_options_container').addClass('hidden')
+				//	
+				//	var url = '/products/'+board_product.product.permalink+'/product_with_variants'
+				//	
+				//	
+				//	
+				//	
+				//	$.ajax({
+				//		url: url, 
+				//		type: "GET",
+				//		//dataType: "text/javascript", 
+				//		data: {},
+				//	     beforeSend : function(xhr){
+				//				xhr.setRequestHeader("Accept", "text/javascript")
+				//	     },
+				//	     success : function(product){
+				//	     },
+				//	     error: function(objAJAXRequest, strError, errorThrown){ //alert("ERROR: " + strError);
+ 				//				}
+				//	  }
+				//	);
+				//	
+				//	
+				//	
+				//	
+				//	
+				//}
 				
 				// remove the jquery drag/drop place holder that had been there.
 				// this is a bit of a hack - without the timer, then the graphic disappears for a second...this generally keeps it up until the fabricjs version is added
@@ -289,9 +291,13 @@ function getSavedProducts(board_id){
 					moveLayer(selectedImage, "backward")
 				}, false);
 				document.getElementById('bp-rotate-left').addEventListener('click', function() {
-					rotateObject(90);	
 					activeObject = canvas.getActiveObject()
-					updateBoardProduct(activeObject.get('id'), {id: activeObject.get('id'), top_left_x: getCurrentLeft(activeObject), top_left_y: getCurrentTop(activeObject), width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)})
+					x = activeObject.get('current_x')
+					y = activeObject.get('current_y')
+					rotateObject(90);	
+					
+					updateBoardProduct(activeObject.get('id'), {id: activeObject.get('id'), top_left_x: x, top_left_y: y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)})
+					
 					console.log('getLeft: '+ activeObject.getLeft())
 					console.log('getTop: '+ activeObject.getTop())
 					console.log('getPointByOrigin: '+ activeObject.getPointByOrigin())
