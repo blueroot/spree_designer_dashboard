@@ -31,10 +31,16 @@
       </div>
       <div class = "col-md-4 board-title"><%= board.name %> <small class="by"><b> by <%= board.designer_name %></b></small> 
         <small class ="help-block">
-          contains <%= board.board_products.count %> products: <%= board.board_products.select {|bp| bp.status == "approved"}.count %> approved, <%= board.board_products.select {|bp| bp.status == "rejected" }.count %> removed, <%= board.board_products.select {|bp| bp.status == "active" || bp.status == "pending" }.count %> pending
+          contains <%= board.product_count %> products: 
+          <%= board.board_products.select {|bp| bp.status == "approved"}.count %> approved, 
+          <%= board.board_products.select {|bp| bp.status == "rejected" }.count %> removed, 
+          <%= board.board_products.select {|bp| bp.status == "active" || bp.status == "pending" }.count %> pending
         </small>
       </div>
-      <div class = "col-md-2 board-title">Status: <%= board.state.capitalize %>
+      <div class = "col-md-2 board-title">Status:
+        <small class = "help-block">
+          <%= board.state.capitalize.gsub("_", " ") %>
+        </small>
       </div>
       <div class = "col-md-4 ">
         <%= link_to "Publish","#", class: "btn btn-primary", data: {toggle: "modal", target: "#modal-publish-#{board.id}"} %>

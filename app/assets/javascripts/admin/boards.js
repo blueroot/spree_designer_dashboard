@@ -1,7 +1,8 @@
 
 $(function() {
 
-
+  $('#state').val("Submitted for Publication");
+  
 
   $('.modal').appendTo("body");
 
@@ -98,4 +99,6 @@ $(function() {
       });
     }
   });
+
+  $('#state').change();
 });

@@ -17,7 +17,7 @@ class Spree::Board < ActiveRecord::Base
       transitions from: :draft, to: :submitted_for_publication
     end
 
-    event :delete_permanently, after: :destroy do
+    event :delete_permanently, before: :remove_all_products do
       transitions from: [:submitted_for_publication, :draft, :suspended_for_inactivity, :published, :unpublished], to: :deleted
     end
 
@@ -29,6 +29,10 @@ class Spree::Board < ActiveRecord::Base
 
   def update_state_label
     self.update_attributes!({current_state_label: "needs revision"}, without_protection: true)
+  end
+
+  def remove_all_products
+    self.board_products.each(&:destroy!)
   end
 
   validates_presence_of :name
