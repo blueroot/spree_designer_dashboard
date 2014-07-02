@@ -13,7 +13,7 @@ class Spree::Board < ActiveRecord::Base
       transitions from: :submitted_for_publication, to: :draft
     end
 
-    event :submit_for_publication do
+    event :submit_for_publication, before: :update_old_status do
       transitions from: :draft, to: :submitted_for_publication
     end
 
@@ -27,8 +27,12 @@ class Spree::Board < ActiveRecord::Base
 
   end
 
+  def update_old_status
+    self.update_attributes!({status: "published"}, without_protection: true )
+  end
+
   def update_state_label
-    self.update_attributes!({current_state_label: "needs revision"}, without_protection: true)
+    self.update_attributes!({current_state_label: "needs revision", status: "needs_revision"}, without_protection: true)
   end
 
   def remove_all_products
