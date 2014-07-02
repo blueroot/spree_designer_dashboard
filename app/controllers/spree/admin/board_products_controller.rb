@@ -1,9 +1,8 @@
 class Spree::Admin::BoardProductsController < Spree::Admin::ResourceController
  
   def index
-    @board_products = Spree::BoardProduct.where( approved_at: nil, removed_at: nil).page(params[:page]).
-      per(params[:per_page] || 50).includes({:product => [{:master => [:stock_items, :images]}, :supplier]}, :board)
-      
+    #@board_products = Spree::BoardProduct.where( approved_at: nil, removed_at: nil).page(params[:page]).per(params[:per_page] || 50).includes({:product => [{:master => [:stock_items, :images]}, :supplier]}, :board)
+     @board_products = Spree::BoardProduct.where( approved_at: nil, removed_at: nil).includes({:product => [{:master => [:stock_items, :images]}, :supplier]}, :board) 
 
     #@board_products = Spree::BoardProduct.all.includes(:board, :product => [:supplier, { :variants => :stock_items }] ).page(params[:page]).per(params[:per_page] || 50)
     #@boards         = @board_products.map(&:board).uniq.compact
