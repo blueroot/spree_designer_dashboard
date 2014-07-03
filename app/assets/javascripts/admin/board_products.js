@@ -161,20 +161,22 @@ $(function() {
 
   $("select#suppliers").change(function(e){
     supplier = $(this).val();
-    if( supplier == "All suppliers"){
-      $(".board-product-tile").show();
-    }
-    else{
-      $(".board-product-tile").each( function( index, element ){
-        if($(this).hasClass(supplier)){
-          $(this).show();
-        }
-        else{
-          $(this).hide();
-        }
+    window.location.href = "/admin/board_products?supplier="+supplier;
 
-      });
-    }
+    //if( supplier == "All suppliers"){
+      //$(".board-product-tile").show();
+    //}
+    //else{
+      //$(".board-product-tile").each( function( index, element ){
+        //if($(this).hasClass(supplier)){
+          //$(this).show();
+        //}
+        //else{
+          //$(this).hide();
+        //}
+
+      //});
+    //}
   });
 /*
 /

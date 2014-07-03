@@ -2,6 +2,12 @@ class Spree::Admin::BoardProductsController < Spree::Admin::ResourceController
  
   def index
     @board_products = Spree::BoardProduct.all.includes(:board, :product => [:supplier, { :variants => :stock_items }] ).page(params[:page]).per(params[:per_page] || 50)
+
+    #
+    # This won't work cause the pagination stuff won't work with an array
+    #
+    #@board_products = @board_products.select {|bp| bp.product.supplier.name == params[:supplier] } if params[:supplier]
+    
     @boards         = @board_products.map(&:board).uniq.compact
     @products       = @board_products.map(&:product).compact
     @suppliers      = @products.map(&:supplier).compact.uniq
