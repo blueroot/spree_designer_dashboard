@@ -8,7 +8,7 @@ class Spree::Admin::BoardProductsController < Spree::Admin::ResourceController
     if params[:supplier_id]
       @board_products = Spree::BoardProduct.where( "isnull(spree_board_products.removed_at) and isnull(spree_board_products.approved_at) and spree_products.supplier_id = #{params[:supplier_id]}" ).includes({:product => [{:master => [:stock_items, :images]}, :supplier]}, :board).references("spree_products")
     else
-      @board_products = Spree::BoardProduct.where( approved_at: nil, removed_at: nil).includes({:product => [{:master => [:stock_items, :images]}, :supplier]}, :board)
+      @board_products = Spree::BoardProduct.where( approved_at: nil, removed_at: nil).includes({:product => [{:master => [:stock_items, :images]}, :supplier]}, :board).page(params[:page] || 1).per(params[:per_page] || 50)
     end
     #@board_products = Spree::BoardProduct.all.includes(:board, :product => [:supplier, { :variants => :stock_items }] ).page(params[:page]).per(params[:per_page] || 50)
     #@boards         = @board_products.map(&:board).uniq.compact
