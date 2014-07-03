@@ -9,6 +9,10 @@ class Spree::BoardProduct < ActiveRecord::Base
   
   default_scope  { where("#{Spree::BoardProduct.quoted_table_name}.deleted_at IS NULL or #{Spree::BoardProduct.quoted_table_name}.deleted_at >= ?", Time.zone.now) }
   
+  def self.by_supplier(supplier_id)
+    includes(:product).where("products.supplier_id = #{supplier_id}").references(:product)
+  end
+  
   def set_z_index
     self.z_index = self.board.board_products.size
   end

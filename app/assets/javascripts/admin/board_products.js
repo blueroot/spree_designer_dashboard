@@ -160,8 +160,14 @@ $(function() {
   });
 
   $("select#suppliers").change(function(e){
-    supplier = $(this).val();
-    window.location.href = "/admin/board_products?supplier="+supplier;
+    supplier_id = $(this).val();
+		if (supplier_id == "0"){
+			window.location.href = "/admin/board_products"
+		}
+		else{
+			window.location.href = "/admin/board_products?supplier_id="+supplier_id;
+		}
+    
 
     //if( supplier == "All suppliers"){
       //$(".board-product-tile").show();

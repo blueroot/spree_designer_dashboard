@@ -4,14 +4,18 @@ class Spree::Admin::BoardProductsController < Spree::Admin::ResourceController
     
     #@board_products = Spree::BoardProduct.where( approved_at: nil, removed_at: nil).page(params[:page]).per(params[:per_page] || 50).includes({:product => [{:master => [:stock_items, :images]}, :supplier]}, :board)
     #@board_products = Spree::BoardProduct.all.includes(:board, :product => [:supplier, { :variants => :stock_items }] ).page(params[:page]).per(params[:per_page] || 50)
-     @board_products = Spree::BoardProduct.where( approved_at: nil, removed_at: nil).includes({:product => [{:master => [:stock_items, :images]}, :supplier]}, :board) 
-
+    
+    if params[:supplier_id]
+      @board_products = Spree::BoardProduct.where( "isnull(spree_board_products.removed_at) and isnull(spree_board_products.approved_at) and spree_products.supplier_id = #{params[:supplier_id]}" ).includes({:product => [{:master => [:stock_items, :images]}, :supplier]}, :board).references("spree_products")
+    else
+      @board_products = Spree::BoardProduct.where( approved_at: nil, removed_at: nil).includes({:product => [{:master => [:stock_items, :images]}, :supplier]}, :board)
+    end
     #@board_products = Spree::BoardProduct.all.includes(:board, :product => [:supplier, { :variants => :stock_items }] ).page(params[:page]).per(params[:per_page] || 50)
     #@boards         = @board_products.map(&:board).uniq.compact
 
     @products       = @board_products.map(&:product).compact
     @suppliers      = @products.map(&:supplier).compact.uniq
-    @supplier_names = ["All suppliers"] + @suppliers.map(&:name).compact.uniq
+    @supplier_names = ["All suppliers",0] + @suppliers.collect{|supplier| [supplier.name, supplier.id]}.compact.uniq
   end
 
   def update
