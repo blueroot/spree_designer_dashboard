@@ -85,10 +85,12 @@ $(function() {
     stock_item_id    = classes[6];
 
     // create the necessary json objects
+    var back_orderable = $("#variant_"+variant_id+"_backorderable").is(':checked')
 
     stock_item = {
       count_on_hand: $("#variant_"+variant_id+"_inventory").val(),
       supplier_count_on_hand: $("#variant_"+variant_id+"_supplier_inventory").val(),
+      backorderable: back_orderable
     }
 
     variant = {
@@ -97,6 +99,7 @@ $(function() {
       shipping_height: $("#variant_"+variant_id+"_shipping_height_actual").val(),
       shipping_width:  $("#variant_"+variant_id+"_shipping_width_actual").val(),
       shipping_depth:  $("#variant_"+variant_id+"_shipping_depth_actual").val(),
+      days_to_ship: $("#variant_"+variant_id+"_days_to_ship").val()
     };
 
     product =  {
@@ -169,20 +172,6 @@ $(function() {
 		}
     
 
-    //if( supplier == "All suppliers"){
-      //$(".board-product-tile").show();
-    //}
-    //else{
-      //$(".board-product-tile").each( function( index, element ){
-        //if($(this).hasClass(supplier)){
-          //$(this).show();
-        //}
-        //else{
-          //$(this).hide();
-        //}
-
-      //});
-    //}
   });
 /*
 /

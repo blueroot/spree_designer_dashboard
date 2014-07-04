@@ -11,6 +11,7 @@ class Spree::Admin::BoardProductsController < Spree::Admin::ResourceController
     else
       @board_products = Spree::BoardProduct.where( approved_at: nil, removed_at: nil).includes({:product => [{:master => [:stock_items, :images]}, :supplier]}, :board).page(params[:page] || 1).per(params[:per_page] || 50)
     end
+
     #@board_products = Spree::BoardProduct.all.includes(:board, :product => [:supplier, { :variants => :stock_items }] ).page(params[:page]).per(params[:per_page] || 50)
     #@boards         = @board_products.map(&:board).uniq.compact
 
@@ -43,19 +44,19 @@ class Spree::Admin::BoardProductsController < Spree::Admin::ResourceController
 
   private
     def board_product_params
-      params.require(:board_product).permit(:status)
+      params.require(:board_product).permit!
     end
 
     def product_params
-      params.require(:product).permit(:name, :sku, :price, :cost_price)
+      params.require(:product).permit!
     end
 
     def variant_params
-      params.require(:variant).permit(:map_price, :msrp_price, :shipping_height, :shipping_width, :shipping_depth)
+      params.require(:variant).permit!
     end
 
     def stock_item_params
-      params.require(:stock_item).permit(:supplier_count_on_hand)
+      params.require(:stock_item).permit(:supplier_count_on_hand, :backorderable)
     end
  
 end
