@@ -59,6 +59,8 @@ Spree::Core::Engine.routes.draw do
     resources :board_products
     resources :designer_registrations
     
+    get  "designers" => "users#designers", :as => :designers
+    
     # Product Import Tables
     get  "product_import" => "product_import#index", :as => :product_import
     post "product_import" => "product_import#upload", :as => :post_product_import
