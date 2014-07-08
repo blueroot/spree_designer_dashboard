@@ -114,7 +114,7 @@ class Spree::Board < ActiveRecord::Base
       when "retired"
         "Retired"  
       when "needs_revision"
-        "Pending"
+        "Draft"
       else
         "N/A"
     end

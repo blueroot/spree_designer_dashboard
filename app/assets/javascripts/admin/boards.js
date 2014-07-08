@@ -50,7 +50,7 @@ $(function() {
       contentType: "application/json",
       data: JSON.stringify({ 
         id: board_id, 
-        state: "publish"
+        state: "published"
       })
     }).done(function(data){
       console.log(data);
@@ -100,5 +100,5 @@ $(function() {
     }
   });
 
-  $('#state').change();
+  //$('#state').change();
 });

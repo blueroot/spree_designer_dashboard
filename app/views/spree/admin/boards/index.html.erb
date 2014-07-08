@@ -18,7 +18,6 @@
   </div>
 </div>
 
-<div class = "row">
   <% @boards.each do |board| %>
     <div class = "row search-result col-md-12 board-tile board-<%=board.id %> <%= board.state %> <%= board.coded_designer_name %>">
 
@@ -36,7 +35,8 @@
       </div>
       <div class = "col-md-2 board-title">Status:
         <small class = "help-block">
-          <%= board.state.capitalize.gsub("_", " ") %>
+			<%= board.state.capitalize.gsub("_", " ") %>
+			(<%= board.status.capitalize.gsub("_", " ") %>)
         </small>
       </div>
       <div class = "col-md-4 ">
@@ -104,7 +104,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="delete-board <%= board.id %> btn btn-primary" data-dismiss="modal">Confirm</button>
+                <button type="button" class="revise-board <%= board.id %> btn btn-primary" data-dismiss="modal">Confirm</button>
               </div>
             </div>
           </div>
@@ -119,7 +119,6 @@
 
   </div>
 <% end %>
-</div>
 
 <script>
 $(".collapse-button").click(function(e){
@@ -138,5 +137,5 @@ $(".collapse-button").click(function(e){
 });
 
 </script>
-<%#= paginate @boards %>
+<%= paginate @boards %>
 
