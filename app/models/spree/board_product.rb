@@ -21,4 +21,9 @@ class Spree::BoardProduct < ActiveRecord::Base
     self.update_attribute('deleted_at', Time.zone.now)
   end
   
+  def self.marked_as_removed
+    where(:status => "rejected")
+    
+  end
+  
 end

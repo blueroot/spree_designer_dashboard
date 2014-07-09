@@ -9,7 +9,7 @@ class Spree::Board < ActiveRecord::Base
     state :published
     state :unpublished
 
-    event :request_revision, before: :update_state_label do
+    event :request_revision, before: :process_revision_request do
       transitions from: :submitted_for_publication, to: :draft
     end
 
@@ -30,10 +30,25 @@ class Spree::Board < ActiveRecord::Base
   def update_old_status
     self.update_attributes!({status: "published"}, without_protection: true )
   end
-
-  def update_state_label
+  
+  def process_revision_request
+    
+    #update state label
     self.update_attributes!({current_state_label: "needs revision", status: "needs_revision"}, without_protection: true)
+    
+    # build message to the designer listing the rejected products - save it to the board
+    
+    
+    #remove rejected board_products
+    self.board_products.marked_as_removed.each do |bp|
+      bp.destroy
+    end
+    
+    # 
+    
   end
+  
+  
 
   def remove_all_products
     self.board_products.each(&:destroy!)
@@ -76,6 +91,12 @@ class Spree::Board < ActiveRecord::Base
     #where(:featured => 1)
     where("featured_starts_at <= ? and featured_expires_at >= ?", Date.today, Date.today)
   end
+  
+  #this is called when an admin is trying to publish a board from the backend
+  def publish
+    self.update_attribute("status", "published")
+  end
+  
   
   def room_and_style
     rs = []

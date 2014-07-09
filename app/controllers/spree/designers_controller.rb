@@ -10,7 +10,7 @@ class Spree::DesignersController < Spree::StoreController
     @selected_section = "designers"
   end
   def index
-    @designers = Spree::User.is_active_designer().order("created_at desc")
+    @designers = Spree::User.published_designers().order("created_at desc")
     
   end
   

@@ -24,7 +24,7 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
       @board.delete_permanently
     elsif params[:state] == "request_revision"
       @board.request_revision
-    elsif params[:state] == "publish"
+    elsif params[:state] == "published"
       @board.publish
     end
 

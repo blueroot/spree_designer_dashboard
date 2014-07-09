@@ -22,6 +22,7 @@ class Spree::BoardProductsController < Spree::StoreController
     
     if @board_product.update_attributes(params[:board_product])
       @board_product.board.queue_image_generation
+      
       respond_to do |format|
         format.json   {render :layout => false, :action => "show"}
       end
@@ -52,7 +53,9 @@ class Spree::BoardProductsController < Spree::StoreController
   def destroy
     if @board_product = Spree::BoardProduct.find(params[:id])
       @board_product.destroy
-      @board_product.board.queue_image_generation
+      board = @board_product.board
+      board.board_products.reload
+      board.queue_image_generation
     end
     respond_to do |format|
       format.js   { render :text => "Deleted" }
