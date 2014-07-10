@@ -16,6 +16,7 @@ $(function() {
 
   hide_all_boards_except_submitted_for_publication();
 
+
   $('.modal').appendTo("body");
 
   $(".delete-board").click(function(e){ 

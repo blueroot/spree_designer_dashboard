@@ -26,7 +26,7 @@
         </div>
       </div>
       <div class = "col-md-4 board-title"><%= board.name %> <small class="by"><b> by <%= board.designer_name %></b></small> 
-        <small class ="help-block">
+        <small class ="help-block board-<%= board.id %>-stats">
           contains <%= board.board_products.size %> products: 
           <%= board.board_products.select {|bp| bp.status == "approved"}.size %> approved, 
           <%= board.board_products.select {|bp| bp.status == "rejected" }.size %> removed, 

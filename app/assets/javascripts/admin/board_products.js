@@ -26,9 +26,20 @@ $(function() {
   $(".approved").css("background-color", "#D9EDF7");
   $(".approved").css("color", "#5498DA");
 
+  function calculate_board_stats(board_id){
+      //var new_stats = 
+      var approved_count = $(".board_product.approved.board_"+board_id).length;
+      var rejected_count = $(".board_product.rejected.board_"+board_id).length;
+      var pending_count  = $(".board_product.pending.board_"+board_id).length;
+      var total_count    = $(".board_product.board_"+board_id).length;
+
+
+      $(".board-"+board_id+"-stats").html("contains "+total_count+" products: "+approved_count+" approved, "+rejected_count+" removed "+pending_count+" pending");
+  }
+
   $(".glyphicon-ok").click(function(e){
+
     board_product_id = $(this).attr("class").split(" ")[2];
-    console.log("approving board_product with id == " + board_product_id);
 
     $(".board_product_"+board_product_id).removeClass("pending");
     $(".board_product_"+board_product_id).removeClass("rejected");
@@ -46,12 +57,20 @@ $(function() {
 
     $("#board_product_"+board_product_id+"_status").val("approved");
 
-
     $(".glyphicon-floppy-disk."+board_product_id).click();
+
+    if(document.URL.split('/')[4].split('#')[0] === "boards"){
+
+      board_id = parseInt($(this).attr("class").split(' ')[8])
+
+      console.log(board_id);
+      calculate_board_stats(board_id);
+    }
 
   });
 
   $(".glyphicon-remove").click(function(e){
+
     board_product_id = $(this).attr("class").split(" ")[2];
     console.log("removing board_product with id == " + board_product_id);
 
@@ -71,9 +90,18 @@ $(function() {
     $("#board_product_"+board_product_id+"_status").val("rejected");
     
     $(".glyphicon-floppy-disk."+board_product_id).click();
+    
+    if(document.URL.split('/')[4].split('#')[0] === "boards"){
 
+      board_id = parseInt($(this).attr("class").split(' ')[8])
+
+      console.log(board_id);
+      calculate_board_stats(board_id);
+    }
 
   });
+
+
 
   $(".glyphicon-floppy-disk").click(function(e){
     classes = $(this).attr("class").split(" ");

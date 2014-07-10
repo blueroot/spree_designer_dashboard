@@ -2,14 +2,14 @@
 <div = "row">
   <% board.board_products.each do |board_product| %>
    <% if board_product.product %>
-      <div class = "board_product_<%= board_product.id %> search-result board-product-tile row index <%= board_product.product.supplier.name %> <%= board_product.status %>">
+      <div class = "board_product_<%= board_product.id %> search-result board-product-tile row index <%= board_product.product.supplier.name %> <%= board_product.status %> board_<%= board_product.board.id %> board_product">
       <%= text_field_tag "board_product_#{board_product.id}_status", "", value: "#{board_product.status}", class: "hidden" %>
 
         <div class="actions col-md-1 tile-contents" >
 
           <div>
             <a data-toggle ="tooltip" data-placement = "right" title = "Approve item for board" class = "ok">
-              <span class="glyphicon glyphicon-ok <%= board_product.id %> <%= board_product.product.id %> <%= board_product.board.id %> <%= board_product.product.master.id %> <%= board_product.product.master.stock_items.first.id %> <%= board_product.status if board_product.status == "approved" %>"></span>
+              <span class="glyphicon glyphicon-ok <%= board_product.id %> <%= board_product.product.id %> <%= board_product.board.id %> <%= board_product.product.master.id %> <%= board_product.product.master.stock_items.first.id %> <%= board_product.status if board_product.status == 'approved' %> <%= board_product.board.id %>"></span>
             </a>
           </div>
 
@@ -18,7 +18,7 @@
 
           <div>
             <a data-toggle ="tooltip" data-placement = "right" title = "Reject item from board" class = "remove-button" href = "#<%= board_product.id %>">
-              <span class="glyphicon glyphicon-remove <%= board_product.id %> <%= board_product.product.id %> <%= board_product.board.id %> <%= board_product.product.master.id %> <%= board_product.product.master.stock_items.first.id %> <%= board_product.status if board_product.status == "rejected" %>"></span>
+              <span class="glyphicon glyphicon-remove <%= board_product.id %> <%= board_product.product.id %> <%= board_product.board.id %> <%= board_product.product.master.id %> <%= board_product.product.master.stock_items.first.id %> <%= board_product.status if board_product.status == "rejected" %> <%= board_product.board.id %>"></span>
             </a>
           </div>
 
