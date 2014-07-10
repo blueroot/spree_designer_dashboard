@@ -6,15 +6,15 @@ class Spree::BoardsController < Spree::StoreController
   impressionist :actions=>[:show]
 
   def index
-    @boards = Spree::Board.featured()
-    @products = Spree::Product.featured()
+    @boards = Spree::Board.published().order("created_at desc")
+    #@products = Spree::Product.featured()
   end
   
   def home
     @boards = Spree::Board.featured().limit(3)
     @board = Spree::Board.featured().order("featured_starts_at desc").first
-    lroom, droom, broom = Spree::Taxon.find_by_name('Living Room'), Spree::Taxon.find_by_name('Dining Room'), Spree::Taxon.find_by_name('Bedroom')
-    @living_room_boards = Spree::Board.featured().by_room(Spree::Taxon.find_by_name('Living Room').id)
+    lroom, droom, broom = Spree::Taxon.find_by_permalink('rooms/living-room'), Spree::Taxon.find_by_permalink('rooms/dining-room'), Spree::Taxon.find_by_permalink('rooms/bedroom')
+    @living_room_boards = Spree::Board.featured().by_room(lroom.id)
     @dining_room_boards = Spree::Board.featured().by_room(droom.id)
     @bedroom_boards = Spree::Board.featured().by_room(broom.id)
     @products = Spree::Product.featured()

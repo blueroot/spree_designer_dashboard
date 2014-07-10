@@ -27,8 +27,19 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
     elsif params[:state] == "published"
       @board.publish
     end
-
-    render json: @board
+    
+    respond_to do |format|
+      if @board.update_attributes(params[:board])
+        format.html {redirect_to edit_admin_board_path(@board, :notice => 'Your board was updated.')}
+        format.json {render json: @board}
+      else
+        #format.html { render :action => ""}
+      end
+    end
+    
+    
+    
+    
   end
 
   def new

@@ -35,7 +35,7 @@
       </div>
 
       <div class = "col-md-2 img-thumbnail">
-        <%= board_image(board, :small) %>
+        <%= link_to board_image(board, :small), edit_admin_board_path(board) %>
       </div>
       
       <div class = "col-md-4 ">

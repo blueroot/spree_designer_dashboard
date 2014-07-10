@@ -47,7 +47,7 @@
 			<% end %>
 		</div>
 		
-		
+		<% if false %>
 		<div class="boards-list-main">
 			<% unless @products.blank? %>
 				<%#= render :partial => "products_list", :locals => {:products => @products}%>
@@ -55,6 +55,7 @@
 				<div class="empty-state">There aren't any featured products at this time.</div>
 			<% end %>
 		</div>
+		<% end %>
 	</div>
 </div>
 
