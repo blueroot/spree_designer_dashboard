@@ -99,6 +99,9 @@ $(function() {
       shipping_height: $("#variant_"+variant_id+"_shipping_height_actual").val(),
       shipping_width:  $("#variant_"+variant_id+"_shipping_width_actual").val(),
       shipping_depth:  $("#variant_"+variant_id+"_shipping_depth_actual").val(),
+      height: $("#variant_"+variant_id+"_product_height_actual").val(),
+      width: $("#variant_"+variant_id+"_product_width_actual").val(),
+      depth: $("#variant_"+variant_id+"_product_depth_actual").val(),
       days_to_ship: $("#variant_"+variant_id+"_days_to_ship").val()
     };
 
@@ -178,7 +181,7 @@ $(function() {
 /  SHIPPING DIMENSIONS
 /
 */
-  $(".dimension-button").click(function(){
+  $(".shipping-dimension-button").click(function(){
     variant_id = $(this).attr("class").split(" ")[4];
 
     console.log(variant_id);
@@ -188,35 +191,74 @@ $(function() {
     $("#variant_"+variant_id+"_shipping_depth").val( $("#variant_"+variant_id+"_shipping_depth_actual").val() );
 
     $('#variant_'+variant_id+'_shipping_height').on('input',function(e){
-      old_dimensions = $("#variant_"+variant_id+"_dimensions").html().split(" x ");
+      old_dimensions = $("#variant_"+variant_id+"_shipping_dimensions").html().split(" x ");
       console.log("old dimensions: " + old_dimensions);
 
       old_dimensions[0] = $(this).val();
       new_dimensions = old_dimensions.join(" x ");
 
-      $("#variant_"+variant_id+"_dimensions").html(new_dimensions);
+      $("#variant_"+variant_id+"_shipping_dimensions").html(new_dimensions);
 
       $("#variant_"+variant_id+"_shipping_height_actual").val($(this).val());
     });
 
     $('#variant_'+variant_id+'_shipping_width').on('input',function(e){
-      old_dimensions = $("#variant_"+variant_id+"_dimensions").html().split(" x ");
+      old_dimensions = $("#variant_"+variant_id+"_shipping_dimensions").html().split(" x ");
       old_dimensions[1] = $(this).val();
       new_dimensions = old_dimensions.join(" x ");
-      $("#variant_"+variant_id+"_dimensions").html(new_dimensions);
+      $("#variant_"+variant_id+"_shipping_dimensions").html(new_dimensions);
 
       $("#variant_"+variant_id+"_shipping_width_actual").val($(this).val());
     });
 
     $('#variant_'+variant_id+'_shipping_depth').on('input',function(e){
-      old_dimensions = $("#variant_"+variant_id+"_dimensions").html().split(" x ");
+      old_dimensions = $("#variant_"+variant_id+"_shipping_dimensions").html().split(" x ");
       old_dimensions[2] = $(this).val();
       new_dimensions = old_dimensions.join(" x ");
-      $("#variant_"+variant_id+"_dimensions").html(new_dimensions);
+      $("#variant_"+variant_id+"_shipping_dimensions").html(new_dimensions);
 
       $("#variant_"+variant_id+"_shipping_depth_actual").val($(this).val());
     });
   });
 
 
+  $(".product-dimension-button").click(function(){
+    variant_id = $(this).attr("class").split(" ")[4];
+
+    console.log(variant_id);
+
+    $("#variant_"+variant_id+"_product_height").val( $("#variant_"+variant_id+"_product_height_actual").val() );
+    $("#variant_"+variant_id+"_product_width").val( $("#variant_"+variant_id+"_product_width_actual").val() );
+    $("#variant_"+variant_id+"_product_depth").val( $("#variant_"+variant_id+"_product_depth_actual").val() );
+
+    $('#variant_'+variant_id+'_product_height').on('input',function(e){
+      old_dimensions = $("#variant_"+variant_id+"_product_dimensions").html().split(" x ");
+      console.log("old dimensions: " + old_dimensions);
+
+      old_dimensions[0] = $(this).val();
+      new_dimensions = old_dimensions.join(" x ");
+
+      $("#variant_"+variant_id+"_product_dimensions").html(new_dimensions);
+
+      $("#variant_"+variant_id+"_product_height_actual").val($(this).val());
+    });
+
+    $('#variant_'+variant_id+'_product_width').on('input',function(e){
+      old_dimensions = $("#variant_"+variant_id+"_product_dimensions").html().split(" x ");
+      old_dimensions[1] = $(this).val();
+      new_dimensions = old_dimensions.join(" x ");
+      $("#variant_"+variant_id+"_product_dimensions").html(new_dimensions);
+
+      $("#variant_"+variant_id+"_product_width_actual").val($(this).val());
+    });
+
+    $('#variant_'+variant_id+'_product_depth').on('input',function(e){
+      old_dimensions = $("#variant_"+variant_id+"_product_dimensions").html().split(" x ");
+      old_dimensions[2] = $(this).val();
+      new_dimensions = old_dimensions.join(" x ");
+      $("#variant_"+variant_id+"_product_dimensions").html(new_dimensions);
+
+      $("#variant_"+variant_id+"_product_depth_actual").val($(this).val());
+    });
+  });
 });
