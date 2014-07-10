@@ -2,7 +2,19 @@
 $(function() {
 
   $('#state').val("Submitted for Publication");
-  
+
+  function hide_all_boards_except_submitted_for_publication(){
+    $(".board-tile").each( function( index, element ){
+      if( $(this).hasClass('submitted_for_publication' ) ){
+        $(this).show();
+      }
+      else{
+        $(this).hide();
+      }
+    });
+  }
+
+  hide_all_boards_except_submitted_for_publication();
 
   $('.modal').appendTo("body");
 

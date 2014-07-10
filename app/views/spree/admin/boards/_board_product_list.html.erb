@@ -1,10 +1,8 @@
 
+<div = "row">
   <% board.board_products.each do |board_product| %>
    <% if board_product.product %>
-      <% shipping_dimensions = "#{board_product.product.master.shipping_height} x #{board_product.product.master.shipping_width} x #{board_product.product.master.shipping_depth}" %>
-      <% shipping_dimensions = (shipping_dimensions == " x  x ") ? "0 x 0 x 0" : shipping_dimensions %>
-
-      <div class = "board_product_<%= board_product.id %> search-result board-product-tile row within-board index <%= board_product.product.supplier.name %> <%= board_product.status %>">
+      <div class = "board_product_<%= board_product.id %> search-result board-product-tile row index <%= board_product.product.supplier.name %> <%= board_product.status %>">
       <%= text_field_tag "board_product_#{board_product.id}_status", "", value: "#{board_product.status}", class: "hidden" %>
 
         <div class="actions col-md-1 tile-contents" >
@@ -38,36 +36,18 @@
           <%= small_image(board_product.product, class: "img-thumbnail") %>
         </div>
 
-        <% shipping_dimensions_inputs = text_field_tag("height") + text_field_tag("width") + text_field_tag("depth") %>
+      <% shipping_dimensions = "#{board_product.product.master.shipping_height} x #{board_product.product.master.shipping_width} x #{board_product.product.master.shipping_depth}" %>
+      <% shipping_dimensions = (shipping_dimensions == " x  x ") ? "0 x 0 x 0" : shipping_dimensions %>
+
+      <% product_dimensions = "#{board_product.product.master.height} x #{board_product.product.master.width} x #{board_product.product.master.depth}" %>
+      <% product_dimensions = (product_dimensions == " x  x ") ? "0 x 0 x 0" : product_dimensions %>
+
         <div class = "col-md-7 product-details tile-contents">
 
           <div class = "row">
             <div class = "col-md-3"><b>Name:</b><br/><%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.name, placeholder: "Name"  %></div>
             <div class = "col-md-3"><b>SKU:</b><br/> <%= text_field_tag "product_#{board_product.product.id}_sku", board_product.product.sku  %></div>
-            <div class = "col-md-3"><b>Shipping Dimensions:</b><br/> 
-              <%= button_tag shipping_dimensions, 
-                        data: { 
-                          title: "Shipping Dimensions", html: true, container: "body", toggle: "popover", placement: "right", 
-                          content: %Q{ 
-                                      Height: <input class = 'product_shipping_height' 
-                                                     id    = 'variant_#{board_product.product.master.id}_shipping_height' 
-                                                     type  = 'text' 
-                                                     >
-                                              </input><br/><br/> 
-                                      Width: <input class = 'product_shipping_width' id = 'variant_#{board_product.product.master.id}_shipping_width' type = 'text'></input><br/><br/> 
-                                      Depth: <input class = 'product_shipping_depth' id = 'variant_#{board_product.product.master.id}_shipping_depth' type = 'text'></input> 
-                                    }
-                        }, 
-                        class: "btn btn-default btn-primary dimension-button #{board_product.product.master.id}", 
-                        id: "variant_#{board_product.product.master.id}_dimensions" ,
-                        width: "500px"
-              %>
-            <p class = "hidden" id= "variant_<%= board_product.product.master.id %>_shipping_information">
-              Height: <input class = 'product_shipping_height' id = <%= "variant_#{board_product.product.master.id}_shipping_height_actual" %> type  = 'text' value = <%= "#{board_product.product.master.shipping_height}" %>></input><br/><br/> 
-              Width: <input class = 'product_shipping_width' id = <%= "variant_#{board_product.product.master.id}_shipping_width_actual" %> type = 'text' value = <%= "#{board_product.product.master.shipping_width}" %>></input><br/><br/> 
-              Depth: <input class = 'product_shipping_depth' id = <%= "variant_#{board_product.product.master.id}_shipping_depth_actual" %> type = 'text' value = <%= "#{board_product.product.master.shipping_depth}" %>></input> 
-            </p>
-           </div>
+            <%= render "shipping_dimensions_button", board_product: board_product, shipping_dimensions: shipping_dimensions %>
             <div class = "col-md-3">
               <b>Inventory:</b> <br/>
               <%= text_field_tag "variant_#{board_product.product.master.id}_inventory", board_product.product.master.stock_items.first.count_on_hand || "0", class: "inventory"  %>
@@ -77,32 +57,45 @@
           </div>
 
           <div class = "row">
-            <div class = "col-md-3">
-              <b>Cost:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_cost", board_product.product.master.cost_price %>
+            <div class = "col-md-2">
+              <b>Cost:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_cost", board_product.product.master.cost_price, class: "small-field" %>
             </div>
 
-            <div class = "col-md-3">
-              <b>Price:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_price", board_product.product.price %>
+            <div class = "col-md-2">
+              <b>Price:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_price", board_product.product.price, class: "small-field" %>
             </div>
 
-            <div class = "col-md-3">
-              <b>MSRP:</b> <br/><%= text_field_tag "variant_#{board_product.product.master.id}_msrp_price", board_product.product.master.msrp_price %>
+            <div class = "col-md-2">
+              <b>MSRP:</b> <br/><%= text_field_tag "variant_#{board_product.product.master.id}_msrp_price", board_product.product.master.msrp_price, class: "small-field" %>
             </div>
 
-            <div class = "col-md-3">
-              <b>MAP:</b> <br/><%= text_field_tag "variant_#{board_product.product.master.id}_map_price", board_product.product.master.map_price %>
+            <div class = "col-md-2">
+              <b>MAP:</b> <br/><%= text_field_tag "variant_#{board_product.product.master.id}_map_price", board_product.product.master.map_price, class: "small-field" %>
+            </div>
+
+            <div class = "col-md-2">
+              <b>Days to Ship:</b> <br/><%= text_field_tag "variant_#{board_product.product.master.id}_days_to_ship", board_product.product.master.days_to_ship, class: "small-field" %>
+            </div>
+
+            <div class = "col-md-2">
+              <b>Backorderable:</b> <br/><%= check_box_tag "variant_#{board_product.product.master.id}_backorderable", 'yes', board_product.product.master.stock_items.first.backorderable  %>
             </div>
           </div>
+
+          <div class = "row">
+            <%= render "dimensions_button", board_product: board_product, product_dimensions: product_dimensions %>
+          </div>
+
 
         </div>
 
         <div class = "col-md-2 img-thumbnail tile-contents board-image">
-          <%= board_image(board, :small) %>
+          <%= board_image(board_product.board, :small) %>
         </div>
 
       </div>
     <% end %>
   <% end %>
-
+</div>
 
 
