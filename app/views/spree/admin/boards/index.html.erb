@@ -2,8 +2,6 @@
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
-
-
 <%= render :partial => 'spree/admin/shared/boards_sub_menu' %>
 
 <div class = 'row'>
@@ -23,7 +21,9 @@
 
       <div class = "board row">
       <div class = "col-md-2">
-        <%= link_to "Expand/Collapse", "", class: "#{board.id} btn btn-default collapse-button", style: "color: white;" %>
+        <div class = "row">
+          <%= link_to "Expand/Collapse", "", class: "#{board.id} btn btn-default collapse-button", style: "color: white;" %>
+        </div>
       </div>
       <div class = "col-md-4 board-title"><%= board.name %> <small class="by"><b> by <%= board.designer_name %></b></small> 
         <small class ="help-block">
@@ -33,16 +33,25 @@
           <%= board.board_products.select {|bp| bp.status == "active" || bp.status == "pending" }.size %> pending
         </small>
       </div>
-      <div class = "col-md-2 board-title">Status:
-        <small class = "help-block">
-			<%= board.state.capitalize.gsub("_", " ") %>
-			(<%= board.status.capitalize.gsub("_", " ") %>)
-        </small>
+
+      <div class = "col-md-2 img-thumbnail">
+        <%= board_image(board, :small) %>
       </div>
+      
       <div class = "col-md-4 ">
-        <%= link_to "Publish","#", class: "btn btn-primary", data: {toggle: "modal", target: "#modal-publish-#{board.id}"} %>
-        <%= link_to "Request Revision","#", class: "btn btn-warning", data: {toggle: "modal", target: "#modal-revise-#{board.id}"}%>
-        <%= link_to "Delete","#", class: "btn btn-danger", data: {toggle: "modal", target: "#modal-delete-#{board.id}"}%>
+        <div class = "row">
+          <%= link_to "Publish","#", class: "btn btn-primary", data: {toggle: "modal", target: "#modal-publish-#{board.id}"} %>
+          <%= link_to "Request Revision","#", class: "btn btn-warning", data: {toggle: "modal", target: "#modal-revise-#{board.id}"}%>
+          <%= link_to "Delete","#", class: "btn btn-danger", data: {toggle: "modal", target: "#modal-delete-#{board.id}"}%>
+        </div>
+        <div class = "row">
+          <div class = "board-title status">
+            <small class = "help-block">
+              <%= board.state.capitalize.gsub("_", " ") %>
+             (<%= board.status.capitalize.gsub("_", " ") %>)
+            </small>
+          </div>
+        </div>
 
         <!-- Publish Modal -->
         <div class="modal fade" id="modal-publish-<%=board.id%>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

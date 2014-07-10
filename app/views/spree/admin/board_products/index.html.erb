@@ -98,27 +98,27 @@
           </div>
 
           <div class = "row">
-            <div class = "col-md-1">
-              <b>Cost:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_cost", board_product.product.master.cost_price %>
+            <div class = "col-md-2">
+              <b>Cost:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_cost", board_product.product.master.cost_price, class: "small-field" %>
             </div>
 
-            <div class = "col-md-1">
-              <b>Price:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_price", board_product.product.price %>
+            <div class = "col-md-2">
+              <b>Price:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_price", board_product.product.price, class: "small-field" %>
             </div>
 
-            <div class = "col-md-1">
-              <b>MSRP:</b> <br/><%= text_field_tag "variant_#{board_product.product.master.id}_msrp_price", board_product.product.master.msrp_price %>
+            <div class = "col-md-2">
+              <b>MSRP:</b> <br/><%= text_field_tag "variant_#{board_product.product.master.id}_msrp_price", board_product.product.master.msrp_price, class: "small-field" %>
             </div>
 
-            <div class = "col-md-1">
-              <b>MAP:</b> <br/><%= text_field_tag "variant_#{board_product.product.master.id}_map_price", board_product.product.master.map_price %>
+            <div class = "col-md-2">
+              <b>MAP:</b> <br/><%= text_field_tag "variant_#{board_product.product.master.id}_map_price", board_product.product.master.map_price, class: "small-field" %>
             </div>
 
-            <div class = "col-md-1">
-              <b>Days to Ship:</b> <br/><%= text_field_tag "variant_#{board_product.product.master.id}_days_to_ship", board_product.product.master.days_to_ship %>
+            <div class = "col-md-2">
+              <b>Days to Ship:</b> <br/><%= text_field_tag "variant_#{board_product.product.master.id}_days_to_ship", board_product.product.master.days_to_ship, class: "small-field" %>
             </div>
 
-            <div class = "col-md-1">
+            <div class = "col-md-2">
               <b>Backorderable:</b> <br/><%= check_box_tag "variant_#{board_product.product.master.id}_backorderable", 'yes', board_product.product.master.stock_items.first.backorderable  %>
             </div>
           </div>
