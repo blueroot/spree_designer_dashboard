@@ -16,7 +16,7 @@ class Spree::BoardsController < Spree::StoreController
     lroom, droom, broom = Spree::Taxon.find_by_permalink('rooms/living-room'), Spree::Taxon.find_by_permalink('rooms/dining-room'), Spree::Taxon.find_by_permalink('rooms/bedroom')
     @living_room_boards = Spree::Board.featured().by_room(lroom.id)
     @dining_room_boards = Spree::Board.featured().by_room(droom.id)
-    @bedroom_boards = Spree::Board.featured().by_room(broom.id)
+    @bedroom_room_boards = Spree::Board.featured().by_room(broom.id)
     @products = Spree::Product.featured()
     @product = Spree::Product.where("homepage_featured_starts_at <= ? and homepage_featured_ends_at >= ?", Date.today, Date.today).order("homepage_featured_starts_at desc").first
 
