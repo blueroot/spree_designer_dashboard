@@ -1,7 +1,7 @@
 class Spree::BoardsController < Spree::StoreController
   helper 'spree/taxons'
   helper 'spree/products'
-  before_filter :require_authentication
+  before_filter :require_authentication, :only => [:new, :design, :preview]
   before_filter :prep_search_collections, :only => [:index, :search, :edit, :new, :design]
   impressionist :actions=>[:show]
 
