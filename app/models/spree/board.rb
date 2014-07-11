@@ -2,6 +2,7 @@ class Spree::Board < ActiveRecord::Base
   include AASM
 
   aasm column: :state, whiny_transitions: false do
+
     state :draft, initial: true
     state :suspended_for_inactivity
     state :submitted_for_publication
@@ -21,10 +22,14 @@ class Spree::Board < ActiveRecord::Base
       transitions from: [:submitted_for_publication, :draft, :suspended_for_inactivity, :published, :unpublished], to: :deleted
     end
 
-    event :publish do
+    event :publish, before: :destroy_rejected_products do
       transitions from: :submitted_for_publication, to: :published
     end
 
+  end
+
+  def destroy_rejected_products
+    self.board_products.select {|bp| bp.status == "rejected" }.each(&:destroy)
   end
 
   def update_old_status
@@ -37,7 +42,7 @@ class Spree::Board < ActiveRecord::Base
     self.update_attributes!({current_state_label: "needs revision", status: "needs_revision"}, without_protection: true)
     
     # build message to the designer listing the rejected products - save it to the board
-    
+    self.destroy_rejected_products
     
     #remove rejected board_products
     self.board_products.marked_as_removed.each do |bp|
@@ -47,8 +52,6 @@ class Spree::Board < ActiveRecord::Base
     # 
     
   end
-  
-  
 
   def remove_all_products
     self.board_products.each(&:destroy!)
