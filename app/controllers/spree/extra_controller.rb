@@ -1,5 +1,5 @@
 class Spree::ExtraController < Spree::StoreController
-  before_filter :require_authentication
+  before_filter :require_authenticationm, :except => [:mission]
   
   def our_suppliers
     
@@ -11,6 +11,10 @@ class Spree::ExtraController < Spree::StoreController
   
   def video_tutorial
     
+  end
+  
+  def mission
+    #render :layout => "/spree/layouts/mission_layout"
   end
   
 end
