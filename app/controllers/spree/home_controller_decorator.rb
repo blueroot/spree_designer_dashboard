@@ -16,9 +16,7 @@ module Spree
         redirect_to "/"
       end
     end
-    def mission
-      render :layout => "/spree/layouts/mission_layout"
-    end 
+    
    
   end
 end

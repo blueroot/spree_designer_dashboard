@@ -1,5 +1,5 @@
 class Spree::DesignersController < Spree::StoreController
-  before_filter :require_authentication
+  before_filter :require_authentication, :only => [:update]
   before_filter :set_section 
   
   
@@ -40,16 +40,10 @@ class Spree::DesignersController < Spree::StoreController
 
   
   def show
-    
     @designer = Spree::User.is_active_designer().where(:username => params[:username]).first
-    
-    if @designer and spree_current_user and (spree_current_user.is_beta_user? or spree_current_user.id == @designer.id)
-      #@products = @designer.products.active
-      @products = @designer.products
-      render :action => "show"
-    else
-      redirect_to "/"
-    end
+    #@products = @designer.products.active
+    @products = @designer.products.available_through_published_boards
+    render :action => "show"
   end
   
   

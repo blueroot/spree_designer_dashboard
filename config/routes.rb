@@ -26,7 +26,8 @@ Spree::Core::Engine.routes.draw do
   #post "/designers/signup" => "designers#signup", :as => :create_designer_registration
   
   get "/dashboard" => "home#dashboard", :as => :designer_dashboard
-   get "/mission" => "home#mission" , :as => :mission
+  get "/mission" => "extra#mission" , :as => :mission
+  
   get "/home" => "boards#home", :as => :home
   post "/orders/add_to_cart" => "orders#add_to_cart", :as => :orders_add_to_cart
   get "/my_profile" => "home#profile", :as => :my_profile

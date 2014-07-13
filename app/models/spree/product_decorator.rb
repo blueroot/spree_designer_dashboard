@@ -14,6 +14,10 @@ Spree::Product.class_eval do
     includes(:boards).where('spree_boards.id' => Spree::Board.active.collect{|board| board.id})
   end
   
+  add_search_scope :available_through_published_boards do
+    includes(:boards).where('spree_boards.id' => Spree::Board.published.collect{|board| board.id})
+  end
+  
   add_search_scope :by_supplier do |supplier_id|
     where(supplier_id: supplier_id)
   end
