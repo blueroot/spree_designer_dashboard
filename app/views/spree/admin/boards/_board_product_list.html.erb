@@ -44,7 +44,7 @@
         </div>
 
         <div class = "col-md-2">
-          <!-- <%= small_image(board_product.product, class: "img-thumbnail") %> -->
+          <%= small_image(board_product.product, class: "img-thumbnail") %>
         </div>
 
       <% shipping_dimensions = "#{board_product.product.master.shipping_height} x #{board_product.product.master.shipping_width} x #{board_product.product.master.shipping_depth}" %>
@@ -107,7 +107,7 @@
         </div>
 
         <div class = "col-md-2 img-thumbnail tile-contents board-image">
-          <!-- <%= board_image(board_product.board, :small) %> -->
+          <%= board_image(board_product.board, :small) %>
         </div>
 
       </div>
