@@ -23,6 +23,7 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
     if params[:state] == "deleted"
       @board.delete_permanently
       # send deletion email with params[:email] if params[:email][:should_send]
+      # pass along params[:email][:reason] as the message of the email
     elsif params[:state] == "request_revision"
       @board.request_revision
       # send revision email with params[:email] if params[:email][:should_send]

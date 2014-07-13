@@ -85,7 +85,7 @@
                 <%= check_box_tag '', 'no', false, "data-board-id" => board.id, class: "notify-designer publication" %><br>
                 <%= label_tag :reason, "Message:" %><br>
 
-                <%= text_area_tag 'reason', '', placeholder: "(Optional)", style: "width: 555px; height: 160px;", "data-board-id" => board.id %>
+                <%= text_area_tag '', '', placeholder: "(Optional)", style: "width: 555px; height: 160px;", "data-board-id" => board.id, class: "publication-message" %>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -110,7 +110,7 @@
                 <%= check_box_tag '', 'no', false, "data-board-id" => board.id, class: "notify-designer deletion" %><br>
                 <%= label_tag :reason, "Reason:" %><br>
 
-                <%= text_area_tag 'reason', '', placeholder: "(Optional)", style: "width: 555px; height: 160px;", "data-board-id" => board.id %>
+                <%= text_area_tag 'reason', '', placeholder: "(Optional)", style: "width: 555px; height: 160px;", "data-board-id" => board.id, class: "deletion-reason" %>
 
               </div>
               <div class="modal-footer">
@@ -150,7 +150,7 @@
                 <%= check_box_tag '', 'no', false, "data-board-id" => board.id, class: "notify-designer revision" %><br>
                 <%= label_tag :reason, "Reason:" %><br>
 
-                <%= text_area_tag 'reason', '', placeholder: "(Optional)", style: "width: 555px; height: 160px;", "data-board-id" => board.id %>
+                <%= text_area_tag 'reason', '', placeholder: "(Optional)", style: "width: 555px; height: 160px;", "data-board-id" => board.id, class: "revision-reason" %>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

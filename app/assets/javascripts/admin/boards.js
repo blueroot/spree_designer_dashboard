@@ -34,7 +34,7 @@ $(function() {
         state: "deleted",
         email: {
           should_send: $(".deletion.notify-designer[data-board-id="+board_id+"]").prop("checked"),
-          reason: "Your board sucked."
+          reason: $("textarea.deletion-reason[data-board-id="+board_id+"]").val()
         }
       })
     }).done(function(data){
@@ -56,7 +56,7 @@ $(function() {
         state: "request_revision",
         email: {
           should_send: $(".revision.notify-designer[data-board-id="+board_id+"]").prop("checked"),
-          reason: "Your board sucked."
+          reason: $("textarea.revision-reason[data-board-id="+board_id+"]").val()
         }
       })
     }).done(function(data){
@@ -78,14 +78,15 @@ $(function() {
       contentType: "application/json",
       data: JSON.stringify({ 
         id: board_id, 
-        state: "published"
+        state: "published",
+        email: {
+          should_send: $(".publication.notify-designer[data-board-id="+board_id+"]").prop("checked"),
+          reason: $("textarea.publication-message[data-board-id="+board_id+"]").val()
+        }
       })
     }).done(function(data){
       console.log(data);
     });
-
-    $(".board-"+board_id).css("background-color", "#D9EDF7");
-    $(".board-"+board_id).css("color", "#5498DA");
     
   });
 
