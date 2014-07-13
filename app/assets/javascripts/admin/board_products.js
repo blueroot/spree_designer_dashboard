@@ -30,9 +30,12 @@ $(function() {
       //var new_stats = 
       var approved_count = $(".board-product-tile.approved[data-board-id="+board_id+"]").length;
       var rejected_count = $(".board-product-tile.rejected[data-board-id="+board_id+"]").length;
+      var deleted_count = $(".board-product-tile.marked-for-deletion[data-board-id="+board_id+"]").length;
+
       var pending_count  = $(".board-product-tile.pending[data-board-id="+board_id+"]").length;
       var active_count   = $(".board-product-tile.active[data-board-id="+board_id+"]").length
       var total_count    = $(".board-product-tile[data-board-id="+board_id+"]").length;
+      rejected_count += deleted_count;
       pending_count += active_count;
 
       $(".board-"+board_id+"-stats").html("contains "+total_count+" products: "+approved_count+" approved, "+rejected_count+" removed "+pending_count+" pending");
@@ -41,6 +44,7 @@ $(function() {
   $(".glyphicon-ok").click(function(e){
 
     board_product_id = $(this).attr("data-board-product-id");
+    product_id = $(this).attr("data-product-id");
 
     $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("pending");
     $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("rejected");
@@ -54,9 +58,11 @@ $(function() {
     $(this).css("color", "#5498da");
     $(this).css("background-color", "#D9EDF7");
 
+    $(".rejected.glyphicon-ban-circle[data-board-product-id="+board_product_id+"]").removeClass("rejected");
 
-    $(".glyphicon-remove[data-board-product-id="+board_product_id+"]").css("color","black");
-    $(".glyphicon-remove[data-board-product-id="+board_product_id+"]").css("background-color","#D9EDF7");
+
+    $(".glyphicon-ban-circle[data-board-product-id="+board_product_id+"]").css("color","black");
+    $(".glyphicon-ban-circle[data-board-product-id="+board_product_id+"]").css("background-color","#D9EDF7");
 
     $("#board_product_"+board_product_id+"_status").val("approved");
 
@@ -68,11 +74,14 @@ $(function() {
 
       console.log(board_id);
       calculate_board_stats(board_id);
+      $("li.publication[data-product-id="+product_id+"]").remove();
+      $("li.revision[data-product-id="+product_id+"]").remove();
+
     }
 
   });
 
-  $(".glyphicon-remove").click(function(e){
+  $(".glyphicon-ban-circle").click(function(e){
 
     board_product_id = $(this).attr("data-board-product-id");
     console.log("removing board_product with id == " + board_product_id);
@@ -82,12 +91,13 @@ $(function() {
     $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("approved");
     $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("active");
 
-
     $(".rejected").css("background-color", "#F2DEDE");
     $(".rejected").css("color", "#E82C0C");
 
     $(this).css("color", "#E82C0C");
     $(this).css("background-color", "#F2DEDE");
+
+    $(".approved.glyphicon-ok[data-board-product-id="+board_product_id+"]").removeClass("approved");
 
     $(".glyphicon-ok[data-board-product-id="+board_product_id+"]").css("color","black");
     $(".glyphicon-ok[data-board-product-id="+board_product_id+"]").css("background-color","#F2DEDE");
@@ -98,15 +108,55 @@ $(function() {
     
     if(document.URL.split('/')[4].split('#')[0] === "boards"){
 
-      board_id = $(this).attr("data-board-id");
+      var board_id = $(this).attr("data-board-id");
 
       console.log(board_id);
       calculate_board_stats(board_id);
+
+      // add the product to the list of removed products for publication and revision
+      //figure out the product tname
+      var name = $(".product-name[data-board-product-id="+board_product_id+"]").val();
+
+      $("ul.removed-on-publication[data-board-id="+board_id+"]").append("<li class = 'list-group-item publication' data-product-id='"+product_id+"'>"+name+"</li>")
+      $("ul.removed-on-revision[data-board-id="+board_id+"]").append("<li class = 'list-group-item revision' data-product-id='"+product_id+"'>"+name+"</li>")
     }
 
   });
 
+  $(".glyphicon-remove").click(function(e){
+    board_product_id = $(this).attr("data-board-product-id");
+    console.log("Completely deleting product associated with board product" + board_product_id);
 
+  //   board_product_id = $(this).attr("data-board-product-id");
+  //   console.log("removing board_product with id == " + board_product_id);
+
+  //   $(".board-product-tile[data-board-product-id="+board_product_id+"]").addClass("rejected");
+  //   $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("pending");
+  //   $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("approved");
+  //   $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("active");
+
+  //   $(".rejected").css("background-color", "#F2DEDE");
+  //   $(".rejected").css("color", "#E82C0C");
+
+  //   $(this).css("color", "#E82C0C");
+  //   $(this).css("background-color", "#F2DEDE");
+
+  //   $(".glyphicon-ok[data-board-product-id="+board_product_id+"]").css("color","black");
+  //   $(".glyphicon-ok[data-board-product-id="+board_product_id+"]").css("background-color","#F2DEDE");
+
+  //   $("#board_product_"+board_product_id+"_status").val("rejected");
+    
+  //   $(".glyphicon-floppy-disk[data-board-product-id="+board_product_id+"]").click();
+    
+  //   if(document.URL.split('/')[4].split('#')[0] === "boards"){
+
+  //     board_id = $(this).attr("data-board-id");
+
+  //     console.log(board_id);
+  //     calculate_board_stats(board_id);
+  //   }
+
+  });
 
   $(".glyphicon-floppy-disk").click(function(e){
     board_product_id =  $(this).attr("data-board-product-id");
@@ -171,7 +221,6 @@ $(function() {
       console.log(data);
     });
 
-    // display error or success messages
   });
 
 

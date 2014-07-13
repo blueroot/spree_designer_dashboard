@@ -22,9 +22,12 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
 
     if params[:state] == "deleted"
       @board.delete_permanently
+      # send deletion email with params[:email] if params[:email][:should_send]
     elsif params[:state] == "request_revision"
       @board.request_revision
+      # send revision email with params[:email] if params[:email][:should_send]
     elsif params[:state] == "published"
+      # send publication email with params[:email] if params[:email][:should_send]
       @board.publish
     end
     
@@ -35,11 +38,7 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
       else
         #format.html { render :action => ""}
       end
-    end
-    
-    
-    
-    
+    end 
   end
 
   def new
