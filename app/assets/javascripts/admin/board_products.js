@@ -23,6 +23,9 @@ $(function() {
   $(".rejected").css("background-color", "#F2DEDE");
   $(".rejected").css("color", "#E82C0C");
 
+  $(".marked_for_deletion").css("background-color", "#F2DEDE");
+  $(".marked_for_deletion").css("color", "#E82C0C");
+
   $(".approved").css("background-color", "#D9EDF7");
   $(".approved").css("color", "#5498DA");
 
@@ -30,7 +33,7 @@ $(function() {
       //var new_stats = 
       var approved_count = $(".board-product-tile.approved[data-board-id="+board_id+"]").length;
       var rejected_count = $(".board-product-tile.rejected[data-board-id="+board_id+"]").length;
-      var deleted_count = $(".board-product-tile.marked-for-deletion[data-board-id="+board_id+"]").length;
+      var deleted_count = $(".board-product-tile.marked_for_deletion[data-board-id="+board_id+"]").length;
 
       var pending_count  = $(".board-product-tile.pending[data-board-id="+board_id+"]").length;
       var active_count   = $(".board-product-tile.active[data-board-id="+board_id+"]").length
@@ -49,6 +52,7 @@ $(function() {
     $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("pending");
     $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("rejected");
     $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("active");
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("marked_for_deletion");
 
     $(".board-product-tile[data-board-product-id="+board_product_id+"]").addClass("approved");
 
@@ -60,9 +64,11 @@ $(function() {
 
     $(".rejected.glyphicon-ban-circle[data-board-product-id="+board_product_id+"]").removeClass("rejected");
 
-
     $(".glyphicon-ban-circle[data-board-product-id="+board_product_id+"]").css("color","black");
     $(".glyphicon-ban-circle[data-board-product-id="+board_product_id+"]").css("background-color","#D9EDF7");
+
+    $(".glyphicon-remove[data-board-product-id="+board_product_id+"]").css("color","black");
+    $(".glyphicon-remove[data-board-product-id="+board_product_id+"]").css("background-color","#D9EDF7");
 
     $("#board_product_"+board_product_id+"_status").val("approved");
 
@@ -90,6 +96,7 @@ $(function() {
     $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("pending");
     $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("approved");
     $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("active");
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("marked_for_deletion");
 
     $(".rejected").css("background-color", "#F2DEDE");
     $(".rejected").css("color", "#E82C0C");
@@ -101,6 +108,9 @@ $(function() {
 
     $(".glyphicon-ok[data-board-product-id="+board_product_id+"]").css("color","black");
     $(".glyphicon-ok[data-board-product-id="+board_product_id+"]").css("background-color","#F2DEDE");
+
+    $(".glyphicon-remove[data-board-product-id="+board_product_id+"]").css("color","black");
+    $(".glyphicon-remove[data-board-product-id="+board_product_id+"]").css("background-color","#F2DEDE");
 
     $("#board_product_"+board_product_id+"_status").val("rejected");
     
@@ -127,34 +137,37 @@ $(function() {
     board_product_id = $(this).attr("data-board-product-id");
     console.log("Completely deleting product associated with board product" + board_product_id);
 
-  //   board_product_id = $(this).attr("data-board-product-id");
-  //   console.log("removing board_product with id == " + board_product_id);
+    board_product_id = $(this).attr("data-board-product-id");
 
-  //   $(".board-product-tile[data-board-product-id="+board_product_id+"]").addClass("rejected");
-  //   $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("pending");
-  //   $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("approved");
-  //   $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("active");
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").addClass("marked_for_deletion");
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("rejected");
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("pending");
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("approved");
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("active");
 
-  //   $(".rejected").css("background-color", "#F2DEDE");
-  //   $(".rejected").css("color", "#E82C0C");
+    $(".marked_for_deletion").css("background-color", "#F2DEDE");
+    $(".marked_for_deletion").css("color", "#E82C0C");
 
-  //   $(this).css("color", "#E82C0C");
-  //   $(this).css("background-color", "#F2DEDE");
+    $(this).css("color", "#E82C0C");
+    $(this).css("background-color", "#F2DEDE");
 
-  //   $(".glyphicon-ok[data-board-product-id="+board_product_id+"]").css("color","black");
-  //   $(".glyphicon-ok[data-board-product-id="+board_product_id+"]").css("background-color","#F2DEDE");
+    $(".glyphicon-ok[data-board-product-id="+board_product_id+"]").css("background-color","#F2DEDE");
+    $(".glyphicon-ok[data-board-product-id="+board_product_id+"]").css("color","black");
 
-  //   $("#board_product_"+board_product_id+"_status").val("rejected");
+    $(".glyphicon-ban-circle[data-board-product-id="+board_product_id+"]").css("background-color","#F2DEDE");
+    $(".glyphicon-ban-circle[data-board-product-id="+board_product_id+"]").css("color","black");
+
+    $("#board_product_"+board_product_id+"_status").val("marked_for_deletion");
     
-  //   $(".glyphicon-floppy-disk[data-board-product-id="+board_product_id+"]").click();
+    $(".glyphicon-floppy-disk[data-board-product-id="+board_product_id+"]").click();
     
-  //   if(document.URL.split('/')[4].split('#')[0] === "boards"){
+    if(document.URL.split('/')[4].split('#')[0] === "boards"){
 
-  //     board_id = $(this).attr("data-board-id");
+      board_id = $(this).attr("data-board-id");
 
-  //     console.log(board_id);
-  //     calculate_board_stats(board_id);
-  //   }
+      console.log(board_id);
+      calculate_board_stats(board_id);
+    }
 
   });
 
