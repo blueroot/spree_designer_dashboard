@@ -28,22 +28,25 @@ $(function() {
 
   function calculate_board_stats(board_id){
       //var new_stats = 
-      var approved_count = $(".board_product.approved.board_"+board_id).length;
-      var rejected_count = $(".board_product.rejected.board_"+board_id).length;
-      var pending_count  = $(".board_product.pending.board_"+board_id).length;
-      var total_count    = $(".board_product.board_"+board_id).length;
-
+      var approved_count = $(".board-product-tile.approved[data-board-id="+board_id+"]").length;
+      var rejected_count = $(".board-product-tile.rejected[data-board-id="+board_id+"]").length;
+      var pending_count  = $(".board-product-tile.pending[data-board-id="+board_id+"]").length;
+      var active_count   = $(".board-product-tile.active[data-board-id="+board_id+"]").length
+      var total_count    = $(".board-product-tile[data-board-id="+board_id+"]").length;
+      pending_count += active_count;
 
       $(".board-"+board_id+"-stats").html("contains "+total_count+" products: "+approved_count+" approved, "+rejected_count+" removed "+pending_count+" pending");
   }
 
   $(".glyphicon-ok").click(function(e){
 
-    board_product_id = $(this).attr("class").split(" ")[2];
+    board_product_id = $(this).attr("data-board-product-id");
 
-    $(".board_product_"+board_product_id).removeClass("pending");
-    $(".board_product_"+board_product_id).removeClass("rejected");
-    $(".board_product_"+board_product_id).addClass("approved");
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("pending");
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("rejected");
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("active");
+
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").addClass("approved");
 
     $(".approved").css("background-color", "#D9EDF7");
     $(".approved").css("color", "#5498DA");
@@ -52,16 +55,16 @@ $(function() {
     $(this).css("background-color", "#D9EDF7");
 
 
-    $(".glyphicon-remove."+board_product_id).css("color","black");
-    $(".glyphicon-remove."+board_product_id).css("background-color","#D9EDF7");
+    $(".glyphicon-remove[data-board-product-id="+board_product_id+"]").css("color","black");
+    $(".glyphicon-remove[data-board-product-id="+board_product_id+"]").css("background-color","#D9EDF7");
 
     $("#board_product_"+board_product_id+"_status").val("approved");
 
-    $(".glyphicon-floppy-disk."+board_product_id).click();
+    $(".glyphicon-floppy-disk[data-board-product-id="+board_product_id+"]").click();
 
     if(document.URL.split('/')[4].split('#')[0] === "boards"){
 
-      board_id = parseInt($(this).attr("class").split(' ')[8])
+      board_id = $(this).attr("data-board-id");
 
       console.log(board_id);
       calculate_board_stats(board_id);
@@ -71,12 +74,14 @@ $(function() {
 
   $(".glyphicon-remove").click(function(e){
 
-    board_product_id = $(this).attr("class").split(" ")[2];
+    board_product_id = $(this).attr("data-board-product-id");
     console.log("removing board_product with id == " + board_product_id);
 
-    $(".board_product_"+board_product_id).addClass("rejected");
-    $(".board_product_"+board_product_id).removeClass("pending");
-    $(".board_product_"+board_product_id).removeClass("approved");
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").addClass("rejected");
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("pending");
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("approved");
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("active");
+
 
     $(".rejected").css("background-color", "#F2DEDE");
     $(".rejected").css("color", "#E82C0C");
@@ -84,16 +89,16 @@ $(function() {
     $(this).css("color", "#E82C0C");
     $(this).css("background-color", "#F2DEDE");
 
-    $(".glyphicon-ok."+board_product_id).css("color","black");
-    $(".glyphicon-ok."+board_product_id).css("background-color","#F2DEDE");
+    $(".glyphicon-ok[data-board-product-id="+board_product_id+"]").css("color","black");
+    $(".glyphicon-ok[data-board-product-id="+board_product_id+"]").css("background-color","#F2DEDE");
 
     $("#board_product_"+board_product_id+"_status").val("rejected");
     
-    $(".glyphicon-floppy-disk."+board_product_id).click();
+    $(".glyphicon-floppy-disk[data-board-product-id="+board_product_id+"]").click();
     
     if(document.URL.split('/')[4].split('#')[0] === "boards"){
 
-      board_id = parseInt($(this).attr("class").split(' ')[8])
+      board_id = $(this).attr("data-board-id");
 
       console.log(board_id);
       calculate_board_stats(board_id);
@@ -104,13 +109,11 @@ $(function() {
 
 
   $(".glyphicon-floppy-disk").click(function(e){
-    classes = $(this).attr("class").split(" ");
-
-    board_product_id = classes[2];
-    product_id       = classes[3];
-    board_id         = classes[4];
-    variant_id       = classes[5];
-    stock_item_id    = classes[6];
+    board_product_id =  $(this).attr("data-board-product-id");
+    product_id       =  $(this).attr("data-product-id");
+    board_id         =  $(this).attr("data-board-id");
+    variant_id       =  $(this).attr("data-variant-id");
+    stock_item_id    =  $(this).attr("data-stock-item-id");
 
     // create the necessary json objects
     var back_orderable = $("#variant_"+variant_id+"_backorderable").is(':checked')
@@ -145,6 +148,9 @@ $(function() {
     };
 
     console.log(board_product);
+    console.log(stock_item);
+    console.log(variant);
+    console.log(product);
 
     $.ajax({
       type: "PUT",

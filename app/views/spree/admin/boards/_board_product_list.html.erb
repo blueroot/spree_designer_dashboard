@@ -2,14 +2,13 @@
 <div = "row">
   <% board.board_products.each do |board_product| %>
    <% if board_product.product %>
-      <div class = "board_product_<%= board_product.id %> search-result board-product-tile row index <%= board_product.product.supplier.name %> <%= board_product.status %> board_<%= board_product.board.id %> board_product">
+      <div class = "search-result board-product-tile row index <%= board_product.status %>" data-board-product-id = '<%= board_product.id %>' data-supplier = '<%= board_product.product.supplier.name %>' data-board-id = '<%= board_product.board.id %>'>
       <%= text_field_tag "board_product_#{board_product.id}_status", "", value: "#{board_product.status}", class: "hidden" %>
 
         <div class="actions col-md-1 tile-contents" >
-
           <div>
             <a data-toggle ="tooltip" data-placement = "right" title = "Approve item for board" class = "ok">
-              <span class="glyphicon glyphicon-ok <%= board_product.id %> <%= board_product.product.id %> <%= board_product.board.id %> <%= board_product.product.master.id %> <%= board_product.product.master.stock_items.first.id %> <%= board_product.status if board_product.status == 'approved' %> <%= board_product.board.id %>"></span>
+              <span class="glyphicon glyphicon-ok  <%= board_product.status if board_product.status == "approved" %>" data-board-product-id = '<%= board_product.id %>' data-product-id = '<%= board_product.product.id %>' data-board-id = '<%= board_product.board.id %>' data-variant-id = '<%= board_product.product.master.id %>' data-stock-item-id = '<%= board_product.product.master.stock_items.first.id %>'></span>
             </a>
           </div>
 
@@ -17,16 +16,16 @@
           <br/>
 
           <div>
-            <a data-toggle ="tooltip" data-placement = "right" title = "Reject item from board" class = "remove-button" href = "#<%= board_product.id %>">
-              <span class="glyphicon glyphicon-remove <%= board_product.id %> <%= board_product.product.id %> <%= board_product.board.id %> <%= board_product.product.master.id %> <%= board_product.product.master.stock_items.first.id %> <%= board_product.status if board_product.status == "rejected" %> <%= board_product.board.id %>"></span>
+            <a data-toggle ="tooltip" data-placement = "right" title = "Reject item from board" class = "remove-button">
+              <span class="glyphicon glyphicon-remove <%= board_product.status if board_product.status == "rejected" %>" data-board-product-id = '<%= board_product.id %>' data-product-id = '<%= board_product.product.id %>' data-board-id = '<%= board_product.board.id %>' data-variant-id = '<%= board_product.product.master.id %>' data-stock-item-id = '<%= board_product.product.master.stock_items.first.id %>' ></span>
             </a>
           </div>
 
           <br/>
           <br/>
           <div>
-            <a data-toggle ="tooltip" data-placement = "right" title = "Save board information" class = "save" href = "#<%= board_product.id %>">
-              <span class="glyphicon glyphicon-floppy-disk <%= board_product.id %> <%= board_product.product.id %> <%= board_product.board.id %> <%= board_product.product.master.id %> <%= board_product.product.master.stock_items.first.id %> "></span><br/>
+            <a data-toggle ="tooltip" data-placement = "right" title = "Save board information" class = "save">
+              <span class="glyphicon glyphicon-floppy-disk" data-board-product-id = '<%= board_product.id %>' data-product-id = '<%= board_product.product.id %>' data-board-id = '<%= board_product.board.id %>' data-variant-id = '<%= board_product.product.master.id %>' data-stock-item-id = '<%= board_product.product.master.stock_items.first.id %>'></span><br/>
             </a>
           </div>
 
