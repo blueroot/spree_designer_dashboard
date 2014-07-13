@@ -21,14 +21,13 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
     @board = Spree::Board.find_by id: params[:id]
 
     if params[:state] == "deleted"
+      self.send_deletion_email(@board, params[:email][:reason]) if params[:email][:should_send]
       @board.delete_permanently
-      # send deletion email with params[:email] if params[:email][:should_send]
-      # pass along params[:email][:reason] as the message of the email
     elsif params[:state] == "request_revision"
+      self.send_revision_email(@board, params[:email][:reason]) if params[:email][:should_send]
       @board.request_revision
-      # send revision email with params[:email] if params[:email][:should_send]
     elsif params[:state] == "published"
-      # send publication email with params[:email] if params[:email][:should_send]
+      self.send_publication_email(@board, params[:email][:reason]) if params[:email][:should_send]
       @board.publish
     end
     
@@ -47,5 +46,84 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
     @board.designer = spree_current_user
     @board.save!
   end
+  
+  def send_deletion_email(board, message)
+   html_content = ''
+
+   m = Mandrill::API.new(MANDRILL_KEY)
+   message = {
+    :subject=> "Sorry, your board was deleted.",
+    :from_name=> "Jesse Bodine",
+    :text=>"#{message} \n\n The Scout & Nimble Team",
+    :to=>[
+     {
+       :email=> board.designer.email,
+       :name=> board.designer.full_name
+     }
+     ],
+     :from_email=>"designer@scoutandnimble.com",
+     :track_opens => true,
+     :track_clicks => true,
+     :url_strip_qs => false,
+     :signing_domain => "scoutandnimble.com"
+   }
+
+   sending = m.messages.send_template('board_deletion', [{:name => 'main', :content => html_content}], message, true)
+
+   logger.info sending
+
+ end
+
+ def send_revision_email(board, message)
+   html_content = ''
+
+   m = Mandrill::API.new(MANDRILL_KEY)
+   message = {
+    :subject=> "Your room needs revision before it can be published.",
+    :from_name=> "Jesse Bodine",
+    :text=>"#{message} \n\n The Scout & Nimble Team",
+    :to=>[
+     {
+       :email=> board.designer.email,
+       :name=> board.designer.full_name
+     }
+     ],
+     :from_email=>"designer@scoutandnimble.com",
+     :track_opens => true,
+     :track_clicks => true,
+     :url_strip_qs => false,
+     :signing_domain => "scoutandnimble.com"
+   }
+
+   sending = m.messages.send_template('board_revision', [{:name => 'main', :content => html_content}], message, true)
+
+   logger.info sending   
+ end
+
+ def send_publication_email(board, message)
+  html_content = ''
+
+  m = Mandrill::API.new(MANDRILL_KEY)
+  message = {
+    :subject=> "Your room was published!",
+    :from_name=> "Jesse Bodine",
+    :text=>"#{message} \n\n The Scout & Nimble Team",
+    :to=>[
+     {
+       :email=> board.designer.email,
+       :name=> board.designer.full_name
+     }
+     ],
+     :from_email=>"designer@scoutandnimble.com",
+     :track_opens => true,
+     :track_clicks => true,
+     :url_strip_qs => false,
+     :signing_domain => "scoutandnimble.com"
+   }
+
+   sending = m.messages.send_template('board_publication', [{:name => 'main', :content => html_content}], message, true)
+
+   logger.info sending   
+ end
 
 end
