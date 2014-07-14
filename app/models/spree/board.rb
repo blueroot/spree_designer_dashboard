@@ -18,18 +18,34 @@ class Spree::Board < ActiveRecord::Base
       transitions from: :draft, to: :submitted_for_publication
     end
 
-    event :delete_permanently, before: :remove_all_products do
+    event :delete_permanently, before: :handle_deletion do
       transitions from: [:submitted_for_publication, :draft, :suspended_for_inactivity, :published, :unpublished], to: :deleted
     end
 
-    event :publish, before: :destroy_rejected_products do
+    event :publish, before: :handle_publication do
       transitions from: :submitted_for_publication, to: :published
     end
 
   end
 
-  def destroy_rejected_products
+  def handle_publication
+    self.update_attributes!({status: "published"}, without_protection: true )
+    self.delete_removed_board_products
+    self.delete_marked_products
+  end
+
+  def handle_deletion
+    self.update_attributes!({status: "deleted"}, without_protection: true )
+    self.delete_removed_board_products
+    self.delete_marked_products
+  end
+
+  def delete_removed_board_products
     self.board_products.select {|bp| bp.status == "rejected" }.each(&:destroy)
+  end
+
+  def delete_marked_products
+    self.board_products.select {|bp| bp.status == "marked_for_deletion"}.collect(&:product).each(&:destroy)
   end
 
   def update_old_status

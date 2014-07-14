@@ -20,7 +20,10 @@ $(function() {
   $('.modal').appendTo("body");
 
   $(".delete-board").click(function(e){ 
-    board_id = parseInt($(this).attr("class").split(" ")[1])
+
+    board_id = $(this).attr("data-board-id");
+
+    $(".help-block[data-board-id="+board_id+"]").html("Deleted");
 
     $.ajax({
       type: "PUT",
@@ -28,7 +31,11 @@ $(function() {
       contentType: "application/json",
       data: JSON.stringify({ 
         id: board_id, 
-        state: "deleted"
+        state: "deleted",
+        email: {
+          should_send: $(".deletion.notify-designer[data-board-id="+board_id+"]").prop("checked"),
+          reason: $("textarea.deletion-reason[data-board-id="+board_id+"]").val()
+        }
       })
     }).done(function(data){
       console.log(data);
@@ -38,13 +45,19 @@ $(function() {
   $(".revise-board").click(function(e){ 
     board_id = parseInt($(this).attr("class").split(" ")[1])
 
+    $(".help-block[data-board-id="+board_id+"]").html("Needs Revision");
+
     $.ajax({
       type: "PUT",
       url: "/admin/boards/"+board_id+".json",
       contentType: "application/json",
       data: JSON.stringify({ 
         id: board_id, 
-        state: "request_revision"
+        state: "request_revision",
+        email: {
+          should_send: $(".revision.notify-designer[data-board-id="+board_id+"]").prop("checked"),
+          reason: $("textarea.revision-reason[data-board-id="+board_id+"]").val()
+        }
       })
     }).done(function(data){
       console.log(data);
@@ -57,20 +70,23 @@ $(function() {
   $(".publish-board").click(function(e){ 
     board_id = parseInt($(this).attr("class").split(" ")[1])
 
+    $(".help-block[data-board-id="+board_id+"]").html("Published");
+
     $.ajax({
       type: "PUT",
       url: "/admin/boards/"+board_id+".json",
       contentType: "application/json",
       data: JSON.stringify({ 
         id: board_id, 
-        state: "published"
+        state: "published",
+        email: {
+          should_send: $(".publication.notify-designer[data-board-id="+board_id+"]").prop("checked"),
+          reason: $("textarea.publication-message[data-board-id="+board_id+"]").val()
+        }
       })
     }).done(function(data){
       console.log(data);
     });
-
-    $(".board-"+board_id).css("background-color", "#D9EDF7");
-    $(".board-"+board_id).css("color", "#5498DA");
     
   });
 
@@ -113,5 +129,4 @@ $(function() {
     }
   });
 
-  //$('#state').change();
 });
