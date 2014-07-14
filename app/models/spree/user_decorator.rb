@@ -10,7 +10,7 @@ Spree::User.class_eval do
   is_impressionable
   
   def self.designers
-    where(:is_designer => 1)
+    where("can_add_boards = 1 or is_discount_eligible = 1")
   end
   
   def self.published_designers
