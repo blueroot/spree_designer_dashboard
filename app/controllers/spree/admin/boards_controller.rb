@@ -21,13 +21,13 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
     @board = Spree::Board.find_by id: params[:id]
 
     if params[:state] == "deleted"
-      self.send_deletion_email(@board, params[:email][:reason]) if params[:email][:should_send]
+      # self.send_deletion_email(@board, params[:email][:reason]) if params[:email][:should_send]
       @board.delete_permanently
     elsif params[:state] == "request_revision"
-      self.send_revision_email(@board, params[:email][:reason]) if params[:email][:should_send]
+      # self.send_revision_email(@board, params[:email][:reason]) if params[:email][:should_send]
       @board.request_revision
     elsif params[:state] == "published"
-      self.send_publication_email(@board, params[:email][:reason]) if params[:email][:should_send]
+      # self.send_publication_email(@board, params[:email][:reason]) if params[:email][:should_send]
       @board.publish
     end
     

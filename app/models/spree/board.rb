@@ -1,7 +1,7 @@
 class Spree::Board < ActiveRecord::Base
   include AASM
 
-  aasm column: :state, whiny_transitions: false do
+  aasm column: :state, whiny_transitions: true do
 
     state :draft, initial: true
     state :suspended_for_inactivity
@@ -30,14 +30,14 @@ class Spree::Board < ActiveRecord::Base
 
   def handle_publication
     self.update_attributes!({status: "published"}, without_protection: true )
-    self.delete_removed_board_products
-    self.delete_marked_products
+    delete_removed_board_products
+    delete_marked_products
   end
 
   def handle_deletion
     self.update_attributes!({status: "deleted"}, without_protection: true )
-    self.delete_removed_board_products
-    self.delete_marked_products
+    delete_removed_board_products
+    delete_marked_products
   end
 
   def delete_removed_board_products
@@ -46,6 +46,7 @@ class Spree::Board < ActiveRecord::Base
 
   def delete_marked_products
     self.board_products.select {|bp| bp.status == "marked_for_deletion"}.collect(&:product).each(&:destroy)
+    self.board_products.select {|bp| bp.status == "marked_for_deletion"}.each(&:destroy)
   end
 
   def update_old_status
@@ -110,12 +111,6 @@ class Spree::Board < ActiveRecord::Base
     #where(:featured => 1)
     where("featured_starts_at <= ? and featured_expires_at >= ?", Date.today, Date.today)
   end
-  
-  #this is called when an admin is trying to publish a board from the backend
-  def publish
-    self.update_attribute("status", "published")
-  end
-  
   
   def room_and_style
     rs = []

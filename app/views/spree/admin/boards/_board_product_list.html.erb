@@ -38,7 +38,7 @@
           <br/>
           <div>
             <a data-toggle ="tooltip" data-placement = "right" title = "Delete product entirely" class = "save">
-              <span class="glyphicon glyphicon-remove" data-board-product-id = '<%= board_product.id %>' data-product-id = '<%= board_product.product.id %>' data-board-id = '<%= board_product.board.id %>' data-variant-id = '<%= board_product.product.master.id %>' data-stock-item-id = '<%= board_product.product.master.stock_items.first.id %>'></span><br/>
+              <span class="glyphicon glyphicon-remove <%= board_product.status if board_product.status == 'marked_for_deletion' %>" data-board-product-id = '<%= board_product.id %>' data-product-id = '<%= board_product.product.id %>' data-board-id = '<%= board_product.board.id %>' data-variant-id = '<%= board_product.product.master.id %>' data-stock-item-id = '<%= board_product.product.master.stock_items.first.id %>'></span><br/>
             </a>
           </div>
         </div>
