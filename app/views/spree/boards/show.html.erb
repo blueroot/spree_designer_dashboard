@@ -104,10 +104,11 @@
 				<span class='st_googleplus' displayText=''></span>
 				<span class='st_email' displayText=''></span>
 			</div>
+			<% if false %>
 			<div class="board-sharing-tools">
 				<% if @board.status == "published" %>
 				<span class="share-label"><a href="javascript:void(0);" id="embed-room" data-toggle="popover" data-placement="bottom" data-container="body" data-html="true">Add a Scout & Nimble widget to your site</a></span> 
-			
+				
 				<div id="room-widget" class="hidden">
 					<div class="embed-widget-instructions" style="width: 320px; margin-bottom: 20px;">
 						Copy the code below and paste it wherever you want the widget to appear.
@@ -125,7 +126,7 @@
 				
 			</div>
 			
-			
+			<% end %>
 			
 			
 			<% unless @board.colors.blank? %>

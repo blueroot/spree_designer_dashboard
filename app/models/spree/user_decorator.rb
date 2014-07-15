@@ -9,6 +9,9 @@ Spree::User.class_eval do
   accepts_nested_attributes_for :user_images, :logo_image, :marketing_images
   is_impressionable
   
+  def self.designers
+    where("can_add_boards = 1 or is_discount_eligible = 1")
+  end
   
   def self.published_designers
     where(:show_designer_profile => 1)

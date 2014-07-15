@@ -1,5 +1,5 @@
 class Spree::ExtraController < Spree::StoreController
-  before_filter :require_authenticationm, :except => [:mission]
+  before_filter :require_authentication, :except => [:mission]
   
   def our_suppliers
     
