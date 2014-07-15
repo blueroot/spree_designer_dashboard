@@ -1,7 +1,7 @@
 
 <div = "row">
   <% board.board_products.each do |board_product| %>
-   <% if board_product.product %>
+   <% if board_product.product and board_product.product.deleted_at == nil %>
       <div class = "search-result board-product-tile row index <%= board_product.status %>" data-board-product-id = '<%= board_product.id %>' data-supplier = '<%= board_product.product.supplier.name %>' data-board-id = '<%= board_product.board.id %>'>
       <%= text_field_tag "board_product_#{board_product.id}_status", "", value: "#{board_product.status}", class: "hidden" %>
 
