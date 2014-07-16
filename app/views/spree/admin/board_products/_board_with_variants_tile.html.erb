@@ -6,38 +6,47 @@
         <div class="actions col-md-1 tile-contents" >
           <div>
    
-
-
           <div>
-            <a data-toggle ="tooltip" data-placement = "right" title = "Save board information" class = "save">
-              <span class="glyphicon glyphicon-floppy-disk" data-board-product-id = '<%= board_product.id %>' data-product-id = '<%= board_product.product.id %>' data-board-id = '<%= board_product.board.id %>' data-variant-id = '<%= board_product.product.master.id %>' data-stock-item-id = '<%= board_product.product.master.stock_items.first.id %>'></span><br/>
-            </a>
+
+            <% board_product.product.variants.each do |v| %>
+              <a data-toggle ="tooltip" data-placement = "right" title = "Save board information" class = "save">
+                <span class="glyphicon glyphicon-floppy-disk" data-board-product-id = '<%= board_product.id %>' data-product-id = '<%= board_product.product.id %>' data-board-id = '<%= board_product.board.id %>' data-variant-id = '<%= v.id %>' data-stock-item-id = '<%= v.stock_items.first.id %>'></span><br/>
+              </a>
+            <% end %>
+
           </div>
           <br/>
           <br/>
 
-
-            <a data-toggle ="tooltip" data-placement = "right" title = "Approve item for board" class = "ok">
-              <span class="glyphicon glyphicon-ok  <%= board_product.status if board_product.status == "approved" %>" data-board-product-id = '<%= board_product.id %>' data-product-id = '<%= board_product.product.id %>' data-board-id = '<%= board_product.board.id %>' data-variant-id = '<%= board_product.product.master.id %>' data-stock-item-id = '<%= board_product.product.master.stock_items.first.id %>'></span>
-            </a>
+            <% board_product.product.variants.each do |v| %>
+              <a data-toggle ="tooltip" data-placement = "right" title = "Approve item for board" class = "ok">
+                <span class="glyphicon glyphicon-ok  <%= board_product.status if board_product.status == "approved" %>" data-board-product-id = '<%= board_product.id %>' data-product-id = '<%= board_product.product.id %>' data-board-id = '<%= board_product.board.id %>' data-variant-id = '<%= v.id %>' data-stock-item-id = '<%= v.stock_items.first.id %>'></span>
+              </a>
+            <% end %>
           </div>
 
           <br/>
           <br/>
 
           <div>
-            <a data-toggle ="tooltip" data-placement = "right" title = "Reject item from board" class = "remove-button">
-              <span class="glyphicon glyphicon-ban-circle <%= board_product.status if board_product.status == "rejected" %>" data-board-product-id = '<%= board_product.id %>' data-product-id = '<%= board_product.product.id %>' data-board-id = '<%= board_product.board.id %>' data-variant-id = '<%= board_product.product.master.id %>' data-stock-item-id = '<%= board_product.product.master.stock_items.first.id %>' ></span>
-            </a>
+            <% board_product.product.variants.each do |v| %>
+
+              <a data-toggle ="tooltip" data-placement = "right" title = "Reject item from board" class = "remove-button">
+                <span class="glyphicon glyphicon-ban-circle <%= board_product.status if board_product.status == "rejected" %>" data-board-product-id = '<%= board_product.id %>' data-product-id = '<%= board_product.product.id %>' data-board-id = '<%= board_product.board.id %>' data-variant-id = '<%= v.id %>' data-stock-item-id = '<%= v.stock_items.first.id %>' ></span>
+              </a>
+            <% end %>
           </div>
 
 
           <br/>
           <br/>
           <div>
-            <a data-toggle ="tooltip" data-placement = "right" title = "Delete product entirely" class = "save">
-              <span class="glyphicon glyphicon-remove <%= board_product.status if board_product.status == 'marked_for_deletion' %>" data-board-product-id = '<%= board_product.id %>' data-product-id = '<%= board_product.product.id %>' data-board-id = '<%= board_product.board.id %>' data-variant-id = '<%= board_product.product.master.id %>' data-stock-item-id = '<%= board_product.product.master.stock_items.first.id %>'></span><br/>
-            </a>
+            <% board_product.product.variants.each do |v| %>
+
+              <a data-toggle ="tooltip" data-placement = "right" title = "Delete product entirely" class = "save">
+                <span class="glyphicon glyphicon-remove <%= board_product.status if board_product.status == 'marked_for_deletion' %>" data-board-product-id = '<%= board_product.id %>' data-product-id = '<%= board_product.product.id %>' data-board-id = '<%= board_product.board.id %>' data-variant-id = '<%= v.id %>' data-stock-item-id = '<%= v.stock_items.first.id %>'></span><br/>
+              </a>
+            <% end %>
           </div>
         </div>
 
@@ -45,65 +54,83 @@
           <%= small_image(board_product.product, class: "img-thumbnail") %>
         </div>
 
-      <% shipping_dimensions = "#{board_product.product.master.shipping_height} x #{board_product.product.master.shipping_width} x #{board_product.product.master.shipping_depth}" %>
-      <% shipping_dimensions = (shipping_dimensions == " x  x ") ? "0 x 0 x 0" : shipping_dimensions %>
+        <% shipping_dimensions = [] %>
+        <% product_dimensions = [] %>
 
-      <% product_dimensions = "#{board_product.product.master.height} x #{board_product.product.master.width} x #{board_product.product.master.depth}" %>
-      <% product_dimensions = (product_dimensions == " x  x ") ? "0 x 0 x 0" : product_dimensions %>
+        <% board_product.product.variants.each_with_index do |v,i| %>
+          <% shipping_dimensions[i] = "#{v.shipping_height} x #{v.shipping_width} x #{v.shipping_depth}" %>
+          <% shipping_dimensions[i] = (shipping_dimensions[i] == " x  x ") ? "0 x 0 x 0" : shipping_dimensions[i] %>
+
+          <% product_dimensions[i] = "#{v.height} x #{v.width} x #{v.depth}" %>
+          <% product_dimensions[i] = (product_dimensions[i] == " x  x ") ? "0 x 0 x 0" : product_dimensions[i] %>
+        <% end %>
 
         <div class = "col-md-7 product-details tile-contents">
 
           <div class = "row">
             <div class = "col-md-3"><b>Name:</b><br/><%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.name, placeholder: "Name"  %></div>
-            <div class = "col-md-3"><b>SKU:</b><br/> <%= text_field_tag "product_#{board_product.product.id}_sku", board_product.product.sku  %></div>
-            <%= render "shipping_dimensions_button", board_product: board_product, shipping_dimensions: shipping_dimensions %>
-            <div class = "col-md-3">
-              <b>Inventory:</b> <br/>
-              <%= text_field_tag "variant_#{board_product.product.master.id}_inventory", board_product.product.master.stock_items.first.count_on_hand || "0", class: "inventory"  %>
-              <span> of </span>
-              <%= text_field_tag "variant_#{board_product.product.master.id}_supplier_inventory", board_product.product.master.stock_items.first.supplier_count_on_hand || "0", class: "inventory" %>
-            </div>
-          </div>
 
-          <div class = "row">
-            <div class = "col-md-2">
-              <b>Cost:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_cost", board_product.product.master.cost_price, class: "small-field" %>
-            </div>
+            <% board_product.product.variants.each_with_index do |v,i| %>
+              <div class = "col-md-3"><b>SKU:</b><br/> <%= text_field_tag "product_#{v.id}_sku", v.sku, "data-product-id" => v.product.id, "data-variant-id" => v.id %></div>
+              <!-- put the shipping dimensions calculations inside the partial -->
+              <%= render "shipping_dimensions_button", board_product: board_product, shipping_dimensions: shipping_dimensions[i], variant: v %>
 
-            <div class = "col-md-2">
-              <b>Price:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_price", board_product.product.price, class: "small-field" %>
-            </div>
-
-            <div class = "col-md-2">
-              <b>MSRP:</b> <br/><%= text_field_tag "variant_#{board_product.product.master.id}_msrp_price", board_product.product.master.msrp_price, class: "small-field" %>
-            </div>
-
-            <div class = "col-md-2">
-              <b>MAP:</b> <br/><%= text_field_tag "variant_#{board_product.product.master.id}_map_price", board_product.product.master.map_price, class: "small-field" %>
-            </div>
-
-            <div class = "col-md-2">
-              <b>Days to Ship:</b> <br/><%= text_field_tag "variant_#{board_product.product.master.id}_days_to_ship", board_product.product.master.days_to_ship, class: "small-field" %>
-            </div>
-
-            <div class = "col-md-2">
-              <b>Backorderable:</b> <br/>
-              <div class='togglebox'>
-                <%= check_box_tag "variant_#{board_product.product.master.id}_backorderable", 'yes', board_product.product.master.stock_items.first.backorderable  %>
-                <%= label_tag "variant_#{board_product.product.master.id}_backorderable", "" %>
+              <div class = "col-md-3">
+                <b>Inventory:</b> <br/>
+                <%= text_field_tag "variant_#{v.id}_inventory", v.stock_items.first.count_on_hand || "0", class: "inventory", "data-product-id" => v.product.id, "data-variant-id" => v.id   %>
+                <span> of </span>
+                <%= text_field_tag "variant_#{v.id}_supplier_inventory", v.stock_items.first.supplier_count_on_hand || "0", class: "inventory", "data-product-id" => v.product.id, "data-variant-id" => v.id  %>
               </div>
-            </div>
+            <% end %>
 
           </div>
 
           <div class = "row">
-            <%= render "dimensions_button", board_product: board_product, product_dimensions: product_dimensions %>
+
+
+            <% board_product.product.variants.each_with_index do |v,i| %>
+              <div class = "col-md-2">
+                <b>Cost:</b> <br/><%= text_field_tag "variant_#{v.id}_cost", v.cost_price, class: "small-field", "data-product-id" => v.product.id, "data-variant-id" => v.id %>
+              </div>
+
+              <div class = "col-md-2">
+                <b>Price:</b> <br/><%= text_field_tag "product_#{v.id}_price", v.price, class: "small-field", "data-product-id" => v.product.id, "data-variant-id" => v.id %>
+              </div>
+
+              <div class = "col-md-2">
+                <b>MSRP:</b> <br/><%= text_field_tag "variant_#{v.id}_msrp_price", v.msrp_price, class: "small-field", "data-product-id" => v.product.id, "data-variant-id" => v.id %>
+              </div>
+
+              <div class = "col-md-2">
+                <b>MAP:</b> <br/><%= text_field_tag "variant_#{v.id}_map_price", v.map_price, class: "small-field", "data-product-id" => v.product.id, "data-variant-id" => v.id  %>
+              </div>
+
+              <div class = "col-md-2">
+                <b>Days to Ship:</b> <br/><%= text_field_tag "variant_#{v.id}_days_to_ship", v.days_to_ship, class: "small-field", "data-product-id" => v.product.id, "data-variant-id" => v.id %>
+              </div>
+
+              <div class = "col-md-2">
+                <b>Backorderable:</b> <br/>
+                <div class='togglebox'>
+                  <%= check_box_tag "variant_#{v.id}_backorderable", 'yes', v.stock_items.first.backorderable, "data-product-id" => v.product.id, "data-variant-id" => v.id    %>
+                  <%= label_tag "variant_#{v.id}_backorderable", "" %>
+                </div>
+              </div>
+
+            <% end %>
+
+
+
+          </div>
+
+          <div class = "row">
+            <% board_product.product.variants.each_with_index do |v,i| %>
+              <%= render "dimensions_button", board_product: board_product, product_dimensions: product_dimensions[i], v: v %>
+            <% end %>
 
             <div class = "col-md-2">
-              <% unless board_product.product.variants.empty? %>
                 <b>Variants:</b> <br/>
-                <%= select_tag :variants, options_for_select(board_product.product.variants.collect(&:sku), board_product.product.variants.first.sku), class: "form-control", style: "width: 100px;" %>
-              <% end %>
+                <%= select_tag :variants, options_for_select(board_product.product.variants.collect(&:sku), board_product.product.variants.first.sku), class: "form-control", style: "width: 100px;", "data-product-id" => board_product.product.id %>
             </div>
           </div>
         </div>

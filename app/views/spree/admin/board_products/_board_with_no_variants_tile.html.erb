@@ -56,7 +56,7 @@
           <div class = "row">
             <div class = "col-md-3"><b>Name:</b><br/><%= text_field_tag "product_#{board_product.product.id}_name", board_product.product.name, placeholder: "Name"  %></div>
             <div class = "col-md-3"><b>SKU:</b><br/> <%= text_field_tag "product_#{board_product.product.id}_sku", board_product.product.sku  %></div>
-            <%= render "shipping_dimensions_button", board_product: board_product, shipping_dimensions: shipping_dimensions %>
+            <%= render "shipping_dimensions_button", board_product: board_product, shipping_dimensions: shipping_dimensions, variant: board_product.product.master %>
             <div class = "col-md-3">
               <b>Inventory:</b> <br/>
               <%= text_field_tag "variant_#{board_product.product.master.id}_inventory", board_product.product.master.stock_items.first.count_on_hand || "0", class: "inventory"  %>
@@ -97,7 +97,7 @@
           </div>
 
           <div class = "row">
-            <%= render "dimensions_button", board_product: board_product, product_dimensions: product_dimensions %>
+            <%= render "dimensions_button", board_product: board_product, product_dimensions: product_dimensions, v: board_product.product.master %>
           </div>
         </div>
 

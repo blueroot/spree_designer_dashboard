@@ -5,21 +5,24 @@
     data: { 
       title: "Product Dimensions", html: true, container: "body", toggle: "popover", placement: "right", 
       content: %Q{ 
-          Height: <input class = 'product_height' id = 'variant_#{board_product.product.master.id}_product_height' type  = 'text' ></input>
+          Height: <input class = 'product_height' id = 'variant_#{v.id}_product_height' type  = 'text' data-product-id = '#{v.product.id}' ></input>
           <br/>
           <br/> 
-          Width: <input class = 'product_width' id = 'variant_#{board_product.product.master.id}_product_width' type = 'text'></input>
+          Width: <input class = 'product_width' id = 'variant_#{v.id}_product_width' type = 'text' data-product-id = '#{v.product.id}' ></input>
           <br/>
           <br/> 
-          Depth: <input class = 'product_depth' id = 'variant_#{board_product.product.master.id}_product_depth' type = 'text'></input>
+          Depth: <input class = 'product_depth' id = 'variant_#{v.id}_product_depth' type = 'text' data-product-id = '#{v.product.id}' ></input>
         }
     }, 
-    class: "btn btn-default btn-primary product-dimension-button #{board_product.product.master.id}", 
-    id: "variant_#{board_product.product.master.id}_product_dimensions", width: "500px"
+    class: "btn btn-default btn-primary product-dimension-button #{v.id}", 
+    id: "variant_#{v.id}_product_dimensions", width: "500px",
+    "data-product-id" => v.product.id
   %>
-  <p class = "hidden" id= "variant_<%= board_product.product.master.id %>_product_information">
-    Height: <input class = 'product_height' id = <%= "variant_#{board_product.product.master.id}_product_height_actual" %> type = 'text' value = <%= "#{board_product.product.master.height}" %>></input><br/><br/> 
-    Width: <input class = 'product_width' id = <%= "variant_#{board_product.product.master.id}_product_width_actual" %> type = 'text' value = <%= "#{board_product.product.master.width}" %>></input><br/><br/> 
-    Depth: <input class = 'product_depth' id = <%= "variant_#{board_product.product.master.id}_product_depth_actual" %> type = 'text' value = <%= "#{board_product.product.master.depth}" %>></input> 
+  <p class = "hidden" id= "variant_<%= v.id %>_product_information">
+    Height: <input class = 'product_height' id = <%= "variant_#{v.id}_product_height_actual" %> type = 'text' value = <%= "#{v.height}" %> data-product-id = <%= v.product.id %> >
+            </input>
+    <br/><br/> 
+    Width: <input class = 'product_width' id = <%= "variant_#{v.id}_product_width_actual" %> type = 'text' value = <%= "#{v.width}" %> data-product-id = <%= v.product.id %> ></input><br/><br/> 
+    Depth: <input class = 'product_depth' id = <%= "variant_#{v.id}_product_depth_actual" %> type = 'text' value = <%= "#{v.depth}" %>data-product-id = <%= v.product.id %> ></input> 
   </p>
 </div>
