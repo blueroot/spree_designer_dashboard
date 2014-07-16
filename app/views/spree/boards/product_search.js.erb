@@ -1,3 +1,4 @@
+$('#products-preloader').addClass('hidden')
 $('#select-products-box').html('<%= escape_javascript(raw render(:partial => "product_results", :locals => {:products => @products})) %>')
 $('#select-products-pagination').html('<%= escape_javascript(raw render(:partial => "product_results_pagination", :locals => {:products => @all_products})) %>')
 

@@ -163,9 +163,9 @@
 </div>
 
 
-<div style="background-color: #eee; padding: 60px 0;">
+<div class="home-featured-designers">
 	<div class="container">
-		<h2 style="margin: 0 0 20px 0; padding: 0">Meet some the industry's top designers</h2>
+		<h2>Meet some the industry's top designers</h2>
 		
 <div id="carousel">
 	<% if false %>
@@ -178,16 +178,11 @@
 
     
     <div class="clear"></div>
-    <div id="slides" style="left:100px;"> 
+    <div id="slides"> 
 		<ul class="ch-grid" >
-			    
-			    
 			<% @designers.each do |designer| %>
-				
 						<% if designer.user_images.blank? %>
-						
 						<li>
-				
 					        <div class="ch-item ch-img-default">
 					          <a href="/<%=designer.username%>" >
 					             <div class="ch-info">
@@ -196,7 +191,6 @@
 					             </div>
 					          </a>
 					        </div>
-					        
 					    </li>
 					<% else %>
 						<style>
@@ -228,13 +222,13 @@
     </div>
 </div>
 
-<% if false %>
+<% if true %>
 <script type="text/javascript">
 
        $(document).ready(function() {
         //rotation speed and timer
         var speed = 5000;
-        var run = setInterval('rotate()', speed);    
+        //var run = setInterval('rotate()', speed);    
         
         //grab the width and calculate left value
         var item_width = $('#slides li').outerWidth();

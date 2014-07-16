@@ -3,7 +3,9 @@ function initializeProductSearchForm(){
 	$("#product_search_form").submit(function(event) {
 		/* stop form from submitting normally */
 		event.preventDefault();
-
+		
+		$('#products-preloader').removeClass('hidden')
+		$('#select-products-box').html('')
 		/* get some values from elements on the page: */
 		var $form = $( this ),
 		term = $form.find( 'input[name="product_keywords"]' ).val(),
@@ -18,6 +20,7 @@ function initializeProductSearchForm(){
 
 		/* Put the results in a div */
 		posting.done(function( data ) {
+			
 			//var content = $( data ).find( '#content' );
 			//$( "#result" ).empty().append( content );
 		});
