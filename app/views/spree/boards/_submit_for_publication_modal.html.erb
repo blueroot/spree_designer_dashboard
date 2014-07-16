@@ -1,8 +1,10 @@
+<% # this is super ugly, but was the quickest way to do it. %>
+<% board.messages.new(:sender_id => spree_current_user.id, :recipient_id => 0, :subject => "Publication Submission")%>
 
-<div id="publish-board-modal" class="modal">
+<div id="publish-board-modal-<%= board.id%>" class="modal">
   <div class="modal-dialog">
     <div class="modal-content">
-	<%= form_for @board, {:url => room_path(@board)} do |f| %>
+	<%= form_for board, {:url => room_path(board)} do |f| %>
 	<%= f.hidden_field :status, :value => "submitted_for_publication"%>
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -12,7 +14,7 @@
       </div>
 		
       <div class="modal-body">
-		<p>When you submit your board to be published, it goes to the Scout & Nimble staff to review it for product availability.    We might make suggestions for substitutions if we find an item does not have sufficient inventory.</p>
+		<p style="font-weight: normal;">When you submit your board to be published, it goes to the Scout & Nimble staff to review it for product availability. We might make suggestions for substitutions if we find an item does not have sufficient inventory.</p>
 		<%= f.fields_for :messages do |message| %>
 		<% if message.object.new_record? %>
 		<div class="form-group">

@@ -132,7 +132,7 @@
 	</div>	
 </div>
 <div class="container">
-	<h2>Featured Living Rooms</h2>
+	<h2 class="home">Featured Living Rooms</h2>
 	<div class="boards-list-main">
 		<% unless @living_room_boards.blank? %>
 			<%= render :partial => "home_boards_list", :locals => {:boards => @living_room_boards}%>
@@ -142,7 +142,7 @@
 	</div>
 </div>
 <div class="container">
-	<h2>Featured Dining Rooms</h2>
+	<h2 class="home">Featured Dining Rooms</h2>
 	<div class="boards-list-main">
 		<% unless @dining_room_boards.blank? %>
 			<%= render :partial => "home_boards_list", :locals => {:boards => @dining_room_boards}%>
@@ -152,7 +152,7 @@
 	</div>
 </div>
 <div class="container">
-	<h2>Featured Bedrooms</h2>
+	<h2 class="home">Featured Bedrooms</h2>
 	<div class="boards-list-main">
 		<% unless @bedroom_room_boards.blank? %>
 			<%= render :partial => "home_boards_list", :locals => {:boards => @bedroom_room_boards}%>
