@@ -14,6 +14,21 @@ $(function() {
     });
   }
 
+  function calculate_board_stats(board_id){
+      //var new_stats = 
+      var approved_count = $(".board-product-tile.approved[data-board-id="+board_id+"]").length;
+      var rejected_count = $(".board-product-tile.rejected[data-board-id="+board_id+"]").length;
+      var deleted_count = $(".board-product-tile.marked_for_deletion[data-board-id="+board_id+"]").length;
+
+      var pending_count  = $(".board-product-tile.pending[data-board-id="+board_id+"]").length;
+      var active_count   = $(".board-product-tile.active[data-board-id="+board_id+"]").length
+      var total_count    = $(".board-product-tile[data-board-id="+board_id+"]").length;
+      rejected_count += deleted_count;
+      pending_count += active_count;
+
+      $(".board-"+board_id+"-stats").html("contains "+total_count+" products: "+approved_count+" approved, "+rejected_count+" removed "+pending_count+" pending");
+  }
+
   hide_all_boards_except_submitted_for_publication();
 
 
@@ -62,10 +77,12 @@ $(function() {
     }).done(function(data){
       console.log(data);
     });
-  });
 
-  $(".published").css("background-color", "#D9EDF7");
-  $(".published").css("color", "#5498DA");
+    $(".board-product-tile.marked_for_deletion[data-board-id="+board_id+"]").remove();
+    $(".board-product-tile.rejected[data-board-id="+board_id+"]").remove();
+    calculate_board_stats(board_id);
+
+  });
 
   $(".publish-board").click(function(e){ 
     board_id = parseInt($(this).attr("class").split(" ")[1])
