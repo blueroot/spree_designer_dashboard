@@ -22,8 +22,7 @@ class Spree::BoardProduct < ActiveRecord::Base
   end
   
   def self.marked_as_removed
-    where(:status => "rejected")
-    
+    where(:status => ["rejected", "marked_for_deletion"])
   end
   
 end

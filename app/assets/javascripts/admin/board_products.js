@@ -167,6 +167,12 @@ $(function() {
 
       console.log(board_id);
       calculate_board_stats(board_id);
+
+      var name = $(".product-name[data-board-product-id="+board_product_id+"]").val();
+
+      $("ul.removed-on-publication[data-board-id="+board_id+"]").append("<li class = 'list-group-item publication' data-product-id='"+product_id+"'>"+name+"</li>")
+      $("ul.removed-on-revision[data-board-id="+board_id+"]").append("<li class = 'list-group-item revision' data-product-id='"+product_id+"'>"+name+"</li>")
+
     }
 
   });

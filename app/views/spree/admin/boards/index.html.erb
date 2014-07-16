@@ -17,7 +17,7 @@
 </div>
 
   <% @boards.each do |board| %>
-    <div class = "row search-result col-md-12 board-tile board-<%=board.id %> <%= board.state %> <%= board.coded_designer_name %>">
+    <div class = "row search-result col-md-12 board-tile board-<%=board.id %> <%= board.state %> <%= board.coded_designer_name %>" data-board-id = '<%= board.id %>'>
       <div class = "board row">
       <div class = "col-md-2">
         <div class = "row">
@@ -141,10 +141,11 @@
                       </li>
           					 <% end %>
                     </ul>
-          				<% else %>
-          				  <div class="empty-state">No products are marked to be removed from the room.</div>
-          				<% end %>
-                </p>
+                    <% else %>
+                      <ul class = "list-group removed-on-publication" data-board-id = "<%= board.id %>">
+                      </ul>
+                    <% end %>
+                  </p>
                 <br>
                 <%= label_tag :notify, "Notify designer?" %>
                 <%= check_box_tag '', 'no', false, "data-board-id" => board.id, class: "notify-designer revision" %><br>

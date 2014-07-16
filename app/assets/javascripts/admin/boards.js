@@ -55,6 +55,8 @@ $(function() {
     }).done(function(data){
       console.log(data);
     });
+
+    $(".board-tile[data-board-id="+board_id+"]").remove();
   });
 
   $(".revise-board").click(function(e){ 
@@ -104,7 +106,10 @@ $(function() {
     }).done(function(data){
       console.log(data);
     });
-    
+
+    $(".board-product-tile.marked_for_deletion[data-board-id="+board_id+"]").remove();
+    $(".board-product-tile.rejected[data-board-id="+board_id+"]").remove();
+    calculate_board_stats(board_id);
   });
 
 

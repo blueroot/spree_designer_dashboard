@@ -7,7 +7,6 @@
   <%= Spree.t(:products_on_boards) %>
 <% end %>
 
-
 <div class = 'row '>
   <div class = "form-group col-md-4 left" id = "product-search">
     <b><%= label_tag "Show only products for supplier:" %></b>
@@ -19,6 +18,7 @@
     <%= select_tag :status, options_for_select(["All products","Pending", "Approved", "Rejected"], "All Products"), class: "form-control" %>
   </div>
 </div>
+
 <%= render "board_product_list" %>
 
 <%= paginate @board_products %>
