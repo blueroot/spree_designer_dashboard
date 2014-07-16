@@ -14,7 +14,7 @@ class Spree::Board < ActiveRecord::Base
       transitions from: :submitted_for_publication, to: :draft
     end
 
-    event :submit_for_publication, before: :update_old_status do
+    event :submit_for_publication, before: :update_submitted_for_publication_status do
       transitions from: :draft, to: :submitted_for_publication
     end
 
@@ -38,6 +38,7 @@ class Spree::Board < ActiveRecord::Base
     self.update_attributes!({status: "deleted"}, without_protection: true )
     delete_removed_board_products
     delete_marked_products
+    self.destroy
   end
 
   def delete_removed_board_products
@@ -45,29 +46,18 @@ class Spree::Board < ActiveRecord::Base
   end
 
   def delete_marked_products
-    self.board_products.select {|bp| bp.status == "marked_for_deletion"}.collect(&:product).each(&:destroy)
+    self.board_products.select {|bp| bp.status == "marked_for_deletion"}.collect(&:product).compact.each(&:destroy)
     self.board_products.select {|bp| bp.status == "marked_for_deletion"}.each(&:destroy)
   end
 
-  def update_old_status
-    self.update_attributes!({status: "published"}, without_protection: true )
+  def update_submitted_for_publication_status
+    self.update_attributes!({status: "submitted_for_publication"}, without_protection: true )
   end
   
-  def process_revision_request
-    
-    #update state label
+  def process_revision_request    
     self.update_attributes!({current_state_label: "needs revision", status: "needs_revision"}, without_protection: true)
-    
-    # build message to the designer listing the rejected products - save it to the board
-    self.destroy_rejected_products
-    
-    #remove rejected board_products
-    self.board_products.marked_as_removed.each do |bp|
-      bp.destroy
-    end
-    
-    # 
-    
+    delete_removed_board_products
+    delete_marked_products
   end
 
   def remove_all_products
