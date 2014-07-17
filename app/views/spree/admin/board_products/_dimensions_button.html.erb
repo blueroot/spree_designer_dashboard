@@ -14,15 +14,15 @@
           Depth: <input class = 'product_depth' id = 'variant_#{v.id}_product_depth' type = 'text' data-product-id = '#{v.product.id}' ></input>
         }
     }, 
-    class: "btn btn-default btn-primary product-dimension-button #{v.id}", 
+    class: "btn btn-default btn-primary product-dimension-button", 
     id: "variant_#{v.id}_product_dimensions", width: "500px",
-    "data-product-id" => v.product.id
+    "data-product-id" => v.product.id, "data-variant-id" => v.id
   %>
   <p class = "hidden" id= "variant_<%= v.id %>_product_information">
-    Height: <input class = 'product_height' id = <%= "variant_#{v.id}_product_height_actual" %> type = 'text' value = <%= "#{v.height}" %> data-product-id = <%= v.product.id %> >
+    Height: <input class = 'product_height' id = <%= "variant_#{v.id}_product_height_actual" %> type = 'text' value = '<%= "#{v.height}" %>' data-product-id = <%= v.product.id %> >
             </input>
     <br/><br/> 
-    Width: <input class = 'product_width' id = <%= "variant_#{v.id}_product_width_actual" %> type = 'text' value = <%= "#{v.width}" %> data-product-id = <%= v.product.id %> ></input><br/><br/> 
-    Depth: <input class = 'product_depth' id = <%= "variant_#{v.id}_product_depth_actual" %> type = 'text' value = <%= "#{v.depth}" %>data-product-id = <%= v.product.id %> ></input> 
+    Width: <input class = 'product_width' id = <%= "variant_#{v.id}_product_width_actual" %> type = 'text' value = '<%= "#{v.width}" %>' data-product-id = <%= v.product.id %> ></input><br/><br/> 
+    Depth: <input class = 'product_depth' id = <%= "variant_#{v.id}_product_depth_actual" %> type = 'text' value = '<%= "#{v.depth}" %>' data-product-id = <%= v.product.id %> ></input> 
   </p>
 </div>

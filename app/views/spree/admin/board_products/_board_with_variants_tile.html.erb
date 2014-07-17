@@ -82,11 +82,11 @@
         <div class = "row">
 
           <div class = "col-md-2">
-            <b>Cost:</b> <br/><%= text_field_tag "variant_#{v.id}_cost", v.cost_price, class: "small-field cost-price", "data-product-id" => v.product.id, "data-variant-id" => v.id %>
+            <b>Cost:</b> <br/><%= text_field_tag "variant_#{v.id}_cost_price", v.cost_price, class: "small-field cost-price", "data-product-id" => v.product.id, "data-variant-id" => v.id %>
           </div>
 
           <div class = "col-md-2">
-            <b>Price:</b> <br/><%= text_field_tag "product_#{v.id}_price", v.price, class: "small-field price", "data-product-id" => v.product.id, "data-variant-id" => v.id %>
+            <b>Price:</b> <br/><%= text_field_tag "variant_#{v.id}_price", v.price, class: "small-field price", "data-product-id" => v.product.id, "data-variant-id" => v.id %>
           </div>
 
           <div class = "col-md-2">

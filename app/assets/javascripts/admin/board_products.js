@@ -204,14 +204,15 @@ $(function() {
       height: $("#variant_"+variant_id+"_product_height_actual").val(),
       width: $("#variant_"+variant_id+"_product_width_actual").val(),
       depth: $("#variant_"+variant_id+"_product_depth_actual").val(),
-      days_to_ship: $("#variant_"+variant_id+"_days_to_ship").val()
+      days_to_ship: $("#variant_"+variant_id+"_days_to_ship").val(),
+      price:      $("#variant_"+variant_id+"_price").val(),
+      cost_price: $("#variant_"+variant_id+"_cost_price").val(),
     };
 
-    product =  {
+    product = {
       name:       $("#product_"+product_id+"_name").val(),
       sku:        $("#product_"+product_id+"_sku").val(),
-      price:      $("#product_"+product_id+"_price").val(),
-      cost_price: $("#product_"+product_id+"_cost_price").val(),
+     
     };
     
     board_product = {
@@ -301,9 +302,7 @@ $(function() {
 /
 */
   $(".shipping-dimension-button").click(function(){
-    variant_id = $(this).attr("class").split(" ")[4];
-
-    console.log(variant_id);
+    variant_id = $(this).attr("data-variant-id");
 
     $("#variant_"+variant_id+"_shipping_height").val( $("#variant_"+variant_id+"_shipping_height_actual").val() );
     $("#variant_"+variant_id+"_shipping_width").val( $("#variant_"+variant_id+"_shipping_width_actual").val() );
@@ -342,7 +341,7 @@ $(function() {
 
 
   $(".product-dimension-button").click(function(){
-    variant_id = $(this).attr("class").split(" ")[4];
+    variant_id = $(this).attr("data-variant-id");
 
     console.log(variant_id);
 
@@ -380,4 +379,5 @@ $(function() {
       $("#variant_"+variant_id+"_product_depth_actual").val($(this).val());
     });
   });
+
 });

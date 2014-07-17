@@ -12,7 +12,7 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
 
     @suppliers     = products.map(&:supplier).compact.uniq
 
-    designers       = @boards.collect(&:designer).collect { |d| "#{d.first_name} #{d.last_name}"}.uniq
+    designers      = @boards.collect(&:designer).collect { |d| "#{d.first_name} #{d.last_name}"}.uniq
 
     @designer_names = ["All designers"] + designers
   end

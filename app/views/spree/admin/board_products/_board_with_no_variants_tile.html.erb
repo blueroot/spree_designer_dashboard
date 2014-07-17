@@ -67,11 +67,11 @@
 
           <div class = "row">
             <div class = "col-md-2">
-              <b>Cost:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_cost", board_product.product.master.cost_price, class: "small-field" %>
+              <b>Cost:</b> <br/><%= text_field_tag "variant_#{board_product.product.master.id}_cost_price", board_product.product.master.cost_price, class: "small-field" %>
             </div>
 
             <div class = "col-md-2">
-              <b>Price:</b> <br/><%= text_field_tag "product_#{board_product.product.id}_price", board_product.product.price, class: "small-field" %>
+              <b>Price:</b> <br/><%= text_field_tag "variant_#{board_product.product.master.id}_price", board_product.product.price, class: "small-field" %>
             </div>
 
             <div class = "col-md-2">
