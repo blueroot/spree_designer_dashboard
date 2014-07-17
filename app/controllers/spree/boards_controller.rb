@@ -179,7 +179,7 @@ class Spree::BoardsController < Spree::StoreController
     @board = Spree::Board.find(params[:id])
     #respond_to do |format|
       if @board.update_attributes(params[:board])
-        @board.submit_for_publication!
+        @board.submit_for_publication! if params[:board][:status] == "submitted_for_publication"
         redirect_to designer_dashboard_path(@board, :notice => 'Your board was updated.')
       else
         puts @board.errors.collect{|e| e.to_s}
