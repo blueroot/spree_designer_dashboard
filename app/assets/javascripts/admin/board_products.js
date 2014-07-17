@@ -15,6 +15,8 @@ $(function() {
   $(".btn").popover();
 
   $(".sixteen").removeClass("sixteen");
+
+
 /*
 /
 /  APPROVE AND REJECT BUTTONS
@@ -277,6 +279,21 @@ $(function() {
 		}
     
 
+  });
+
+
+  $("select.variant-select").change(function(e){
+    variant_id = $(this).val();
+    product_id = $(this).attr("data-product-id");
+
+    //hide everything that isn't this tile
+    $(".variant-tile[data-variant-id!="+variant_id+"][data-product-id="+product_id+"]").hide();
+
+    //show this one
+    $(".variant-tile[data-variant-id="+variant_id+"][data-product-id="+product_id+"]").show();
+
+    //this allows you to change all the values of the selects for a certain product to the same thing
+     $("select.variant-select[data-product-id="+product_id+"]").val(variant_id);
   });
 /*
 /
