@@ -217,6 +217,8 @@
 			
 			
 			<% if @board.board_products.any? %>
+			<%= render :partial => 'spree/shared/products', :locals => { :products => @board.board_products.collect{|bp| bp.product} } %>
+				<% if false %>
 				<% @board.products.in_groups_of(4, false) do |row_products| %>
 				<div id="products" class="row products-row">
 					<% for product in row_products %>
@@ -233,6 +235,7 @@
 					</div>
 					<% end %>
 				</div>
+				<% end %>
 				<% end %>
 			<% end %>
 			</div>
