@@ -68,11 +68,17 @@
 
                     <ul class = "list-group removed-on-publication" data-board-id = "<%= board.id %>">
 
+
+
                      <% board.board_products.marked_as_removed.each do |bp|%>
-                      <li class = "list-group-item publication" data-product-id = '<%= bp.product.id%>'>
-                        <%= bp.product.name%>
-                      </li>
-                     <% end %>
+                       <% if bp.product %>
+                         <li class = "list-group-item publication" data-product-id = '<%= bp.product.id%>'>
+                           <%= bp.product.name%>
+                        </li>
+                      <% end %>
+                    <% end %>
+
+
                     </ul>
                   <% else %>
                     <ul class = "list-group removed-on-publication" data-board-id = "<%= board.id %>">
