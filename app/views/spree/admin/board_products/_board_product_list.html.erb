@@ -1,11 +1,11 @@
 
 <div = "row">
-  <% @board_products.each do |board_product| %>
+  <% board_products.each do |board_product| %>
   	<% if board_product.product %>
 	    <% if board_product.product.variants.empty? %>
-	      <%= render "board_with_no_variants_tile", board_product: board_product %>
+	      <%= render "spree/admin/board_products/board_product_with_no_variants_tile", board_product: board_product %>
 	    <% else %>
-	      <%= render "board_with_variants_tile", board_product: board_product %>
+	      <%= render "spree/admin/board_products/board_product_with_variants_tile", board_product: board_product %>
 	    <% end %>
 	  <% end %>
   <% end %>
