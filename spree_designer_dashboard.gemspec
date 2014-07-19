@@ -3,7 +3,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_designer_dashboard'
 
-  s.version     = '1.2.107'
+  s.version     = '1.2.108'
 
   s.summary     = 'Designer Dashboard Functionality for Scout & Nimble'
   s.description = ''
