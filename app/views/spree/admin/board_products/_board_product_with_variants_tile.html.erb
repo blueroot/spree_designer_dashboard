@@ -67,7 +67,7 @@
 
           <div class = "col-md-3"><b>SKU:</b><br/> <%= text_field_tag "product_#{v.id}_sku", v.sku, "data-product-id" => v.product.id, "data-variant-id" => v.id %></div>
           <!-- put the shipping dimensions calculations inside the partial -->
-          <%= render "shipping_dimensions_button", board_product: board_product, shipping_dimensions: shipping_dimensions[i], variant: v %>
+          <%= render "spree/admin/board_products/shipping_dimensions_button", board_product: board_product, shipping_dimensions: shipping_dimensions[i], variant: v %>
 
           <div class = "col-md-3">
             <b>Inventory:</b> <br/>
@@ -112,7 +112,7 @@
         </div>
 
         <div class = "row">
-          <%= render "dimensions_button", board_product: board_product, product_dimensions: product_dimensions[i], v: v %>
+          <%= render "spree/admin/board_products/dimensions_button", board_product: board_product, product_dimensions: product_dimensions[i], v: v %>
 
           <div class = "col-md-2">
             <b>Variants:</b> <br/>
