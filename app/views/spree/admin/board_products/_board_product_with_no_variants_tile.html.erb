@@ -98,6 +98,12 @@
 
           <div class = "row">
             <%= render "spree/admin/board_products/dimensions_button", board_product: board_product, product_dimensions: product_dimensions, v: board_product.product.master %>
+
+            <div class = "col-md-3">
+            <b>Shipping Method:</b> <br/>
+            <%= select_tag :shipping_methods, options_for_select([["LTL",2],["FTL", 1]], (board_product.product.shipping_category_id == 2) ? ["LTL",2] : ["FTL",1]), class: "form-control shipping-method-select", style: "width: 100px;", "data-product-id" => board_product.product.id %>
+          </div>
+
           </div>
         </div>
 

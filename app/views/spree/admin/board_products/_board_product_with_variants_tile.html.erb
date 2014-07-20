@@ -118,6 +118,10 @@
             <b>Variants:</b> <br/>
             <%= select_tag :variants, options_for_select(board_product.product.variants.collect(&:sku).zip(board_product.product.variants.collect(&:id)), board_product.product.variants.first.sku), class: "form-control variant-select", style: "width: 100px;", "data-product-id" => board_product.product.id %>
           </div>
+          <div class = "col-md-3">
+            <b>Shipping Method:</b> <br/>
+            <%= select_tag :shipping_methods, options_for_select([["LTL",2],["FTL", 1]], (board_product.product.shipping_category_id == 2) ? ["LTL",2] : ["FTL",1]), class: "form-control shipping-method-select", style: "width: 100px;", "data-product-id" => board_product.product.id %>
+          </div>
         </div>
       </div>
 

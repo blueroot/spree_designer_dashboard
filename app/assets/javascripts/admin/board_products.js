@@ -212,7 +212,7 @@ $(function() {
     product = {
       name:       $("#product_"+product_id+"_name").val(),
       sku:        $("#product_"+product_id+"_sku").val(),
-     
+      shipping_category_id: $(".shipping-method-select[data-product-id="+product_id+"]").val(),
     };
     
     board_product = {
@@ -295,6 +295,11 @@ $(function() {
 
     //this allows you to change all the values of the selects for a certain product to the same thing
      $("select.variant-select[data-product-id="+product_id+"]").val(variant_id);
+  });
+
+  $(".shipping-method-select").change(function(e){
+    product_id = $(this).attr("data-product-id");
+    $(".shipping-method-select[data-product-id="+product_id+"]").val($(this).val());
   });
 /*
 /
