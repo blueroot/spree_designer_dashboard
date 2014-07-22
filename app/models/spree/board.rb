@@ -11,11 +11,11 @@ class Spree::Board < ActiveRecord::Base
     state :unpublished
 
     event :request_revision, before: :process_revision_request do
-      transitions from: :submitted_for_publication, to: :draft
+      transitions from: [:submitted_for_publication, :published, :draft, :suspended_for_inactivity, :unpublished], to: :draft
     end
 
     event :submit_for_publication, before: :update_submitted_for_publication_status do
-      transitions from: :draft, to: :submitted_for_publication
+      transitions from: [:draft, :suspended_for_inactivity, :published, :unpublished], to: :submitted_for_publication
     end
 
     event :delete_permanently, before: :handle_deletion do
@@ -23,7 +23,7 @@ class Spree::Board < ActiveRecord::Base
     end
 
     event :publish, before: :handle_publication do
-      transitions from: :submitted_for_publication, to: :published
+      transitions from: [:submitted_for_publication, :draft, :published], to: :published
     end
 
   end
