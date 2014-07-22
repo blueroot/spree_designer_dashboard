@@ -101,7 +101,18 @@
 
             <div class = "col-md-3">
             <b>Shipping Method:</b> <br/>
-            <%= select_tag :shipping_methods, options_for_select([["LTL",2],["FTL", 1]], (board_product.product.shipping_category_id == 2) ? ["LTL",2] : ["FTL",1]), class: "form-control shipping-method-select", style: "width: 100px;", "data-product-id" => board_product.product.id %>
+            <% shipping_cateogry = ["US - Parcel",1] if board_product.product.shipping_category_id == 1 %>
+            <% shipping_cateogry = ["Gift Card", 2] if board_product.product.shipping_category_id == 2 %>
+            <% shipping_cateogry = ["US - Freight", 3] if board_product.product.shipping_category_id == 3 %>
+            <% shipping_cateogry = ["US - Ground", 4] if board_product.product.shipping_category_id == 4 %>
+
+            <%= select_tag :shipping_methods, options_for_select([
+              ["US - Parcel",1],
+              ["Gift Card", 2],
+              ["US - Freight", 3],
+              ["US - Ground", 4]
+            ],
+            shipping_cateogry), class: "form-control shipping-method-select", style: "width: 100px;", "data-product-id" => board_product.product.id %>
           </div>
 
           </div>
