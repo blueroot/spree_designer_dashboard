@@ -100,12 +100,15 @@
             <%= render "spree/admin/board_products/dimensions_button", board_product: board_product, product_dimensions: product_dimensions, v: board_product.product.master %>
 
             <div class = "col-md-3">
-            <b>Shipping Method:</b> <br/>
+            <b>Shipping Category:</b> <br/>
+			<%#= collection_select :product, :shipping_category_id, Spree::ShippingCategory.all(), :id, :name %>
+
+			<% if false %>
             <% shipping_cateogry = ["US - Parcel",1] if board_product.product.shipping_category_id == 1 %>
             <% shipping_cateogry = ["Gift Card", 2] if board_product.product.shipping_category_id == 2 %>
             <% shipping_cateogry = ["US - Freight", 3] if board_product.product.shipping_category_id == 3 %>
             <% shipping_cateogry = ["US - Ground", 4] if board_product.product.shipping_category_id == 4 %>
-
+			
             <%= select_tag :shipping_methods, options_for_select([
               ["US - Parcel",1],
               ["Gift Card", 2],
@@ -113,6 +116,8 @@
               ["US - Ground", 4]
             ],
             shipping_cateogry), class: "form-control shipping-method-select", style: "width: 100px;", "data-product-id" => board_product.product_id %>
+
+			<% end %>
           </div>
 
           </div>

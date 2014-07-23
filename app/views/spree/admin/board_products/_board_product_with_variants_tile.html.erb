@@ -120,7 +120,9 @@
             <%= select_tag :variants, options_for_select(board_product.product.variants.collect(&:sku).zip(board_product.product.variants.collect(&:id)), board_product.product.variants.first.sku), class: "form-control variant-select", style: "width: 100px;", "data-product-id" => board_product.product_id %>
           </div>
           <div class="col-md-3">
-            <b>Shipping Method:</b> <br/>
+            <b>Shipping Category:</b> <br/>
+			<%#= collection_select :product, :shipping_category_id, Spree::ShippingCategory.all(), :id, :name %>
+			<% if false %>
             <% shipping_cateogry = ["US - Parcel",1] if board_product.product.shipping_category_id == 1 %>
             <% shipping_cateogry = ["Gift Card", 2] if board_product.product.shipping_category_id == 2 %>
             <% shipping_cateogry = ["US - Freight", 3] if board_product.product.shipping_category_id == 3 %>
@@ -133,6 +135,8 @@
               ["US - Ground", 4]
             ],
             shipping_cateogry), class: "form-control shipping-method-select", style: "width: 120px;", "data-product-id" => board_product.product.id %>
+
+			<% end %>
 
           </div>
         </div>
