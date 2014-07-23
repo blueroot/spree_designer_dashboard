@@ -1,15 +1,15 @@
 module Spree
-  class BoardImage < Asset
+  class FeatureImage < Asset
     
-
     attr_accessible :alt, :attachment, :position, :viewable_type, :viewable_id
 
     has_attached_file :attachment,
-                      styles: { mini: '88x50>', small: '175x100>', featured: '360x206>', primary: '300x170>', large: '630x360>' },
+                      styles: { mini: '48x48>', small: '100x100>', primary: '360x206#', primary_aspect: '360x206>',large: '600x600>', banner: '1200x1200>' },
                       default_style: :primary,
-                      url: '/spree/board_image/:id/:style/:basename.:extension',
-                      path: 'board_image/:id/:style/:basename.:extension',
+                      url: '/spree/feature_images/:id/:style/:basename.:extension',
+                      path: 'feature_images/:id/:style/:basename.:extension',
                       convert_options: { all: '-strip -auto-orient -colorspace RGB' }
+
     validates_attachment_presence :attachment
     validate :no_attachment_errors
 
@@ -26,7 +26,7 @@ module Spree
     Spree::Image.attachment_definitions[:attachment][:default_url] = Spree::Config[:attachment_default_url]
     Spree::Image.attachment_definitions[:attachment][:default_style] = Spree::Config[:attachment_default_style]
 
-    #used by admin board_image autocomplete
+    #used by admin user_images autocomplete
     def mini_url
       attachment.url(:mini, false)
     end

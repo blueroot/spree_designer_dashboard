@@ -78,13 +78,15 @@
 			<div class="row">
 				<div class="col-md-4">
 					<div class="home-product">
-					  <% if false and  !@designer.blank? %>  
-						    <a href="/<%=@designer.username%>">
-								 <div style="height: 212px; width: 360px; background: #eee url(<%=@designer.user_images.first.attachment(:primary)%>) 60px -25px no-repeat"> 
-									<% unless @designer.user_images.blank? %>
-										<%#= link_to image_tag(@designer.user_images.first.attachment(:primary), :style => "background: #eee;width:100%;height:212px;"), "/#{@designer.username}" %>
-									<%end%>
+					  <% if !@featured_designer.blank? %>  
+						    <a href="/<%=@featured_designer.username%>">
+								<%= image_tag(@featured_designer.feature_image.attachment(:primary))%>
+								<% if false %> 
+								<div style="height: 206px; width: 360px; background: #eee url(<%=@featured_designer.feature_image.attachment(:primary)%>) 60px -25px no-repeat"> 
+								
+									
 								</div>
+								<% end %>
 							</a>
 						<% else %>
 									    <%= image_tag('store/home/designer.png')%>
@@ -96,10 +98,10 @@
 				</div>
 				<div class="col-md-4">
 					<div class="home-product">
-					<div>
-					<% unless @product.blank? %>
-					 <a href="/products/<%=@product.permalink%>" class="add-to-board-link" data-product-id="<%=@product.permalink %>">
-					   <%= large_image(@product, :itemprop => 'image', :style => "width:100%;height:300px;") %>
+					<div style="width:100%; height:206px; background-color: #fff;">
+					<% unless @fetaured_product.blank? %>
+					 <a href="/products/<%=@fetaured_product.permalink%>" class="add-to-board-link" data-product-id="<%=@fetaured_product.permalink %>">
+					   <%= large_image(@fetaured_product, :itemprop => 'image', :style => "width:100%;height:206px; background-color: #fff;") %>
 					 </a>  
 					<%else%>
 					<%= image_tag('store/home/product.png')%>
@@ -111,15 +113,14 @@
 				</div>
 				<div class="col-md-4">
 					<div class="home-product" >
-					<div style="width:100%;height:212px;">
+					<div style="width:100%; height:206px;">
 					
-					<% unless @board.blank? %>
-					<% unless board_image(@board, :large).blank? %>
-						<%= link_to board_image(@board, :large), room_path(@board)%>
-							<%end%>
+					<% unless @featured_room.blank? %>
+						<% unless board_image(@featured_room, :featured).blank? %>
+							<%= link_to board_image(@featured_room, :large), room_path(@featured_room)%>
+						<%end%>
 					<% else %>
-					  <%= image_tag('store/home/board.png')%>
-				
+						<%= image_tag('store/home/board.png')%>
 					<%end%>
 					
 					</div>

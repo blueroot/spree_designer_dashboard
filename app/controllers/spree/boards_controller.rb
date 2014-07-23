@@ -18,11 +18,14 @@ class Spree::BoardsController < Spree::StoreController
     @dining_room_boards = Spree::Board.featured().by_room(droom.id)
     @bedroom_room_boards = Spree::Board.featured().by_room(broom.id)
     @products = Spree::Product.featured()
-    @product = Spree::Product.where("homepage_featured_starts_at <= ? and homepage_featured_ends_at >= ?", Date.today, Date.today).order("homepage_featured_starts_at desc").first
+    #@product = Spree::Product.where("homepage_featured_starts_at <= ? and homepage_featured_ends_at >= ?", Date.today, Date.today).order("homepage_featured_starts_at desc").first
 
     @selected_section = "home"
     @designers = Spree::User.published_designers().order("created_at desc").limit(4)
-    @designer =  Spree::User.where("designer_featured_starts_at <= ? and designer_featured_ends_at >= ?", Date.today, Date.today).order("designer_featured_starts_at desc").first
+    
+    @featured_designer = Spree::User.where("designer_featured_starts_at <= ? and designer_featured_ends_at >= ?", Date.today, Date.today).order("designer_featured_starts_at desc").first || Spree::User.published_designers.first
+    @featured_room = @featured_designer.boards.published().featured().first
+    @fetaured_product = @featured_room.products.first
     puts @designer.inspect
     render :layout => "/spree/layouts/spree_home"
   end
