@@ -6,7 +6,7 @@
   <% product_dimensions = [] %>
 
   <% board_product.product.variants.each_with_index do |v,i| %>
-    <div class="search-result board-product-tile variant-tile row index <%= board_product.status %> " data-board-product-id='<%= board_product.id %>' data-supplier='<%= board_product.product.supplier.name %>', data-product-id='<%= board_product.product_id %>', data-variant-id='<%= v.id %>' style=<%= board_product.product.variants.first != v ? "display:none;" : "" %> >
+    <div class="search-result board-product-tile variant-tile row index <%= board_product.status %> " data-board-product-id='<%= board_product.id %>' data-supplier='<%= board_product.product.supplier.name %>', data-product-id='<%= board_product.product_id %>', data-board-id='<%= board_product.board.id if board_product.product.variants.first == v  %>', data-variant-id='<%= v.id %>' style=<%= board_product.product.variants.first != v ? "display:none;" : "" %> >
 
 
       <div class="actions col-md-1 tile-contents " >

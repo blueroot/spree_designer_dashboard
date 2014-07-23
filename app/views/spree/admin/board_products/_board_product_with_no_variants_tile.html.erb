@@ -2,7 +2,7 @@
    <% if board_product.product %>
       <%= text_field_tag "board_product_#{board_product.id}_status", "", value: "#{board_product.status}", class: "hidden" %>
 
-      <div class = "search-result board-product-tile row index <%= board_product.status %>" data-board-product-id = '<%= board_product.id %>' data-supplier = '<%= board_product.product.supplier.name %>'>
+      <div class = "search-result board-product-tile row index <%= board_product.status %>" data-board-product-id = '<%= board_product.id %>' data-supplier = '<%= board_product.product.supplier.name %>' data-product-id = '<%= board_product.product.id %>' data-board-id = '<%= board_product.board.id %>'>
         <div class="actions col-md-1 tile-contents" >
           <div>
    
