@@ -1,70 +1,70 @@
 <% if false %>
 <style type="text/css">
-      #carousel {
-        width:1200px;
-        height:290px;    
-        margin:0 auto;
-    }
-    #slides {
-        overflow:hidden;
-        /* fix ie overflow issue */
-        position:relative;
-        width:1200px;
-        height:290px;
-       // border:1px solid #ccc;
-    }
-    /* remove the list styles, width : item width * total items */    
-    #slides ul {
-       // position:relative;
-        left:0;
-        top:0;
-        list-style:none;
-        margin:0;
-        padding:0;    
-        width:1200px;            
-    }
-    /* width of the item, in this case I put 250x250x gif */
-    #slides li {
-        //width:250px;
-        //height:250px;    
-        float:left;
-    }
-    #slides li img {
-        padding:5px;
-    }
-    /* Styling for prev and next buttons */
-    #buttons {
-      //  padding:0 0 5px 0;    
-      //  float:right;
-    }
-    #buttons a {
-        display:block;
-        height: 52px;
-	    margin-top: 60%;
-	    outline: 0 none;
-	    position: absolute;
-	    text-indent: -9999px;
-	    top: 49%;
-	    width: 28px;
-	    z-index: 9999;
-    }
-	#buttons a:hover
-	{
-	 text-decoration:none;
-	}
-	.clear {clear:both}
-    #prev
-    {
-        left:240px;
-        background: url("/assets/left_arrow.png") repeat scroll 0 0 transparent;
-    }
-    
-    #next
-    {
- 
-    right:150px;
-    background: url("/assets/right_arrow.png") repeat scroll 0 0 transparent;
-    }
+#carousel {
+	width:1200px;
+	height:290px;    
+	margin:0 auto;
+}
+#slides {
+	overflow:hidden;
+	/* fix ie overflow issue */
+	position:relative;
+	width:1200px;
+	height:290px;
+	// border:1px solid #ccc;
+}
+/* remove the list styles, width : item width * total items */    
+#slides ul {
+	// position:relative;
+	left:0;
+	top:0;
+	list-style:none;
+	margin:0;
+	padding:0;    
+	width:1200px;            
+}
+/* width of the item, in this case I put 250x250x gif */
+#slides li {
+	//width:250px;
+	//height:250px;    
+	float:left;
+}
+#slides li img {
+	padding:5px;
+}
+/* Styling for prev and next buttons */
+#buttons {
+	//  padding:0 0 5px 0;    
+	//  float:right;
+}
+#buttons a {
+	display:block;
+	height: 52px;
+	margin-top: 60%;
+	outline: 0 none;
+	position: absolute;
+	text-indent: -9999px;
+	top: 49%;
+	width: 28px;
+	z-index: 9999;
+}
+#buttons a:hover
+{
+	text-decoration:none;
+}
+.clear {clear:both}
+#prev
+{
+	left:240px;
+	background: url("/assets/left_arrow.png") repeat scroll 0 0 transparent;
+}
+
+#next
+{
+
+	right:150px;
+	background: url("/assets/right_arrow.png") repeat scroll 0 0 transparent;
+}
 
 </style>
 <% end %>
@@ -77,55 +77,50 @@
 		<div class="room-highlights">
 			<div class="row">
 				<div class="col-md-4">
-					<div class="home-product">
-					  <% if !@featured_designer.blank? %>  
-						    <a href="/<%=@featured_designer.username%>">
-								<%= image_tag(@featured_designer.feature_image.attachment(:primary))%>
-								<% if false %> 
-								<div style="height: 206px; width: 360px; background: #eee url(<%=@featured_designer.feature_image.attachment(:primary)%>) 60px -25px no-repeat"> 
-								
-									
-								</div>
-								<% end %>
-							</a>
+					<div class="home-feature-section">
+						<div class="home-feature-image home-feature-designer">
+						<% if !@featured_designer.blank? %>  
+						<a href="/<%=@featured_designer.username%>">
+							<%= image_tag(@featured_designer.feature_image.attachment(:primary))%>
+						</a>
 						<% else %>
-									    <%= image_tag('store/home/designer.png')%>
+						<%= image_tag('store/home/designer.png')%>
 						<%end%>
-					
+						</div>
 						<h4>Exceptional Designers</h4>
 						<p></p>
 					</div>
 				</div>
 				<div class="col-md-4">
-					<div class="home-product">
-					<div style="width:100%; height:206px; background-color: #fff;">
-					<% unless @fetaured_product.blank? %>
-					 <a href="/products/<%=@fetaured_product.permalink%>" class="add-to-board-link" data-product-id="<%=@fetaured_product.permalink %>">
-					   <%= large_image(@fetaured_product, :itemprop => 'image', :style => "width:100%;height:206px; background-color: #fff;") %>
-					 </a>  
-					<%else%>
-					<%= image_tag('store/home/product.png')%>
-					<%end%>
-					</div>
-					<h4>Unique Products</h4>
-					<p></p>
+					<div class="home-feature-section">
+						<div class="home-feature-image home-feature-product">
+							<% unless @fetaured_product.blank? %>
+							<a href="/products/<%=@fetaured_product.permalink%>" class="add-to-board-link" data-product-id="<%=@fetaured_product.permalink %>">
+								<%= large_image(@fetaured_product, :itemprop => 'image') %>
+							</a>  
+							<%else%>
+							<%= image_tag('store/home/product.png')%>
+							<%end%>
+						</div>
+						<h4>Unique Products</h4>
+						<p></p>
 					</div>
 				</div>
 				<div class="col-md-4">
-					<div class="home-product" >
-					<div style="width:100%; height:206px;">
-					
-					<% unless @featured_room.blank? %>
-						<% unless board_image(@featured_room, :featured).blank? %>
+					<div class="home-feature-section">
+						<div class="home-feature-image home-feature-room">
+
+							<% unless @featured_room.blank? %>
+							<% unless board_image(@featured_room, :featured).blank? %>
 							<%= link_to board_image(@featured_room, :large), room_path(@featured_room)%>
-						<%end%>
-					<% else %>
-						<%= image_tag('store/home/board.png')%>
-					<%end%>
-					
-					</div>
-					<h4>Beautiful Rooms</h4>
-					<p></p>
+							<%end%>
+							<% else %>
+							<%= image_tag('store/home/board.png')%>
+							<%end%>
+
+						</div>
+						<h4>Beautiful Rooms</h4>
+						<p></p>
 					</div>
 				</div>
 			</div>
@@ -136,9 +131,9 @@
 	<h2 class="home">Featured Living Rooms</h2>
 	<div class="boards-list-main">
 		<% unless @living_room_boards.blank? %>
-			<%= render :partial => "home_boards_list", :locals => {:boards => @living_room_boards}%>
+		<%= render :partial => "home_boards_list", :locals => {:boards => @living_room_boards}%>
 		<% else %>
-			<div class="empty-state">There aren't any featured living rooms at this time.</div>
+		<div class="empty-state">There aren't any featured living rooms at this time.</div>
 		<% end %>
 	</div>
 </div>
@@ -146,9 +141,9 @@
 	<h2 class="home">Featured Dining Rooms</h2>
 	<div class="boards-list-main">
 		<% unless @dining_room_boards.blank? %>
-			<%= render :partial => "home_boards_list", :locals => {:boards => @dining_room_boards}%>
+		<%= render :partial => "home_boards_list", :locals => {:boards => @dining_room_boards}%>
 		<% else %>
-			<div class="empty-state">There aren't any featured dining rooms at this time.</div>
+		<div class="empty-state">There aren't any featured dining rooms at this time.</div>
 		<% end %>
 	</div>
 </div>
@@ -156,9 +151,9 @@
 	<h2 class="home">Featured Bedrooms</h2>
 	<div class="boards-list-main">
 		<% unless @bedroom_room_boards.blank? %>
-			<%= render :partial => "home_boards_list", :locals => {:boards => @bedroom_room_boards}%>
+		<%= render :partial => "home_boards_list", :locals => {:boards => @bedroom_room_boards}%>
 		<% else %>
-			<div class="empty-state">There aren't any featured dining rooms at this time.</div>
+		<div class="empty-state">There aren't any featured dining rooms at this time.</div>
 		<% end %>
 	</div>
 </div>
@@ -167,130 +162,130 @@
 <div class="home-featured-designers">
 	<div class="container">
 		<h2>Meet some the industry's top designers</h2>
-		
-<div id="carousel">
-	<% if false %>
-<div id="buttons">
-        <a href="#" id="prev"><</a>
-        <a href="#" id="next" style="margin-left:20px;">></a>
-        <div class="clear"></div>
-    </div>
-<% end %>
 
-    
-    <div class="clear"></div>
-    <div id="slides"> 
-		<ul class="ch-grid" >
-			<% @designers.each do |designer| %>
-						<% if designer.user_images.blank? %>
-						<li>
-					        <div class="ch-item ch-img-default">
-					          <a href="/<%=designer.username%>" >
-					             <div class="ch-info">
-					                <h3><%=designer.full_name %></h3>
-					                <p><%= designer.full_name%></p>
-					             </div>
-					          </a>
-					        </div>
-					    </li>
-					<% else %>
-						<style>
-							.ch-img-<%=designer.id %> { 
-							    background-image: url(<%=designer.user_images.first.attachment(:primary)%>);
-							}
-						</style>
-						<li>
-						
-			
-					        <div class="ch-item ch-img-<%=designer.id %>">
-					          <a href="/<%=designer.username%>" >
-					             <div class="ch-info">
-					                <h3><%= designer.full_name%></h3>
-									<p><%= designer.location%></p>
-					             </div>
-					           </a>
-					        </div>
-					        </a>
-					    </li>
-					<% end %>
-				
-					
-			  
-			
+		<div id="carousel">
+			<% if false %>
+			<div id="buttons">
+				<a href="#" id="prev"><</a>
+				<a href="#" id="next" style="margin-left:20px;">></a>
+				<div class="clear"></div>
+			</div>
 			<% end %>
+
+
+			<div class="clear"></div>
+			<div id="slides"> 
+				<ul class="ch-grid" >
+					<% @designers.each do |designer| %>
+					<% if designer.user_images.blank? %>
+					<li>
+						<div class="ch-item ch-img-default">
+							<a href="/<%=designer.username%>" >
+								<div class="ch-info">
+									<h3><%=designer.full_name %></h3>
+									<p><%= designer.full_name%></p>
+								</div>
+							</a>
+						</div>
+					</li>
+					<% else %>
+					<style>
+					.ch-img-<%=designer.id %> { 
+						background-image: url(<%=designer.user_images.first.attachment(:primary)%>);
+					}
+					</style>
+					<li>
+
+
+						<div class="ch-item ch-img-<%=designer.id %>">
+							<a href="/<%=designer.username%>" >
+								<div class="ch-info">
+									<h3><%= designer.full_name%></h3>
+									<p><%= designer.location%></p>
+								</div>
+							</a>
+						</div>
+					</a>
+				</li>
+				<% end %>
+
+
+
+
+				<% end %>
 			</ul>
- <div class="clear"></div>
-    </div>
-</div>
+			<div class="clear"></div>
+		</div>
+	</div>
 
-<% if true %>
-<script type="text/javascript">
+	<% if true %>
+	<script type="text/javascript">
 
-       $(document).ready(function() {
-        //rotation speed and timer
-        var speed = 5000;
-        //var run = setInterval('rotate()', speed);    
-        
-        //grab the width and calculate left value
-        var item_width = $('#slides li').outerWidth();
-        var left_value = item_width * (-1);
-    //move the last item before first item, just in case user click prev button
-        $('#slides li:first').before($('#slides li:last'));
-        
-        //set the default item to the correct position
-        $('#slides ul').css({'left' : left_value});
-    //if user clicked on prev button
-        $('#prev').click(function() {
-            //get the right position
-            var left_indent = parseInt($('#slides ul').css('left')) + item_width;
-            //slide the item
-            $('#slides ul').animate({'left' : left_indent}, 200,function(){
-    //move the last item and put it as first item     
-                $('#slides li:first').before($('#slides li:last'));
-                //set the default item to correct position
-                $('#slides ul').css({'left' : left_value});
-            
-            });
-            //cancel the link behavior
-            return false;
-        });
-    //if user clicked on next button
-        $('#next').click(function() {
-            
-            //get the right position
-            var left_indent = parseInt($('#slides ul').css('left')) - item_width;
-            
-            //slide the item
-            $('#slides ul').animate({'left' : left_indent}, 200, function () {
-    //move the first item and put it as last item
-                $('#slides li:last').after($('#slides li:first'));     
-                
-                //set the default item to correct position
-                $('#slides ul').css({'left' : left_value});
-            
-            });
-            
-            //cancel the link behavior
-            return false;
-            
-        });
-        
-        //if mouse hover, pause the auto rotation, otherwise rotate it
-        $('#slides').hover(
-            
-            function() {
-                clearInterval(run);
-            },
-            function() {
-                run = setInterval('rotate()', speed);    
-            }
-        );
-    });
-    //a simple function to click next link
-    //a timer will call this function, and the rotation will begin :)
-    function rotate() {
-        $('#next').click();
-    }
+	$(document).ready(function() {
+		//rotation speed and timer
+		var speed = 5000;
+		//var run = setInterval('rotate()', speed);    
 
-</script>
-<% end %>
+		//grab the width and calculate left value
+		var item_width = $('#slides li').outerWidth();
+		var left_value = item_width * (-1);
+		//move the last item before first item, just in case user click prev button
+		$('#slides li:first').before($('#slides li:last'));
+
+		//set the default item to the correct position
+		$('#slides ul').css({'left' : left_value});
+		//if user clicked on prev button
+		$('#prev').click(function() {
+			//get the right position
+			var left_indent = parseInt($('#slides ul').css('left')) + item_width;
+			//slide the item
+			$('#slides ul').animate({'left' : left_indent}, 200,function(){
+				//move the last item and put it as first item     
+				$('#slides li:first').before($('#slides li:last'));
+				//set the default item to correct position
+				$('#slides ul').css({'left' : left_value});
+
+			});
+			//cancel the link behavior
+			return false;
+		});
+		//if user clicked on next button
+		$('#next').click(function() {
+
+			//get the right position
+			var left_indent = parseInt($('#slides ul').css('left')) - item_width;
+
+			//slide the item
+			$('#slides ul').animate({'left' : left_indent}, 200, function () {
+				//move the first item and put it as last item
+				$('#slides li:last').after($('#slides li:first'));     
+
+				//set the default item to correct position
+				$('#slides ul').css({'left' : left_value});
+
+			});
+
+			//cancel the link behavior
+			return false;
+
+		});
+
+		//if mouse hover, pause the auto rotation, otherwise rotate it
+		$('#slides').hover(
+
+			function() {
+				clearInterval(run);
+			},
+			function() {
+				run = setInterval('rotate()', speed);    
+			}
+		);
+	});
+	//a simple function to click next link
+	//a timer will call this function, and the rotation will begin :)
+	function rotate() {
+		$('#next').click();
+	}
+
+	</script>
+	<% end %>
