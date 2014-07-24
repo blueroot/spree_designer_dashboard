@@ -6,6 +6,7 @@
   <% product_dimensions = [] %>
 
   <% board_product.product.variants.each_with_index do |v,i| %>
+	<% if !v.stock_items.blank? %>
     <div class="search-result board-product-tile variant-tile row index <%= board_product.status %> " data-board-product-id='<%= board_product.id %>' data-supplier='<%= board_product.product.supplier.name %>', data-product-id='<%= board_product.product_id %>', data-board-id='<%= board_product.board.id if board_product.product.variants.first == v  %>', data-variant-id='<%= v.id %>' style=<%= board_product.product.variants.first != v ? "display:none;" : "" %> >
 
 
@@ -133,5 +134,8 @@
       </div>
 
     </div>
+	<% else %>
+		This product was deleted, but is still coming up.  We need to fix it so that it doesn't come up but for now you will see this message.  Product: <%= board_product.product.name %>
+	<% end %>
   <% end %>
 <% end %>
