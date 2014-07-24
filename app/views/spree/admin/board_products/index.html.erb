@@ -1,14 +1,36 @@
+
+<%= javascript_include_tag 'admin/board_products' %>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<%= render :partial => 'spree/admin/shared/boards_sub_menu' %>
+
+<% content_for :page_title do %>
+  <%= Spree.t(:products_on_boards) %>
+<% end %>
+
+<div class = 'row '>
+  <div class = "form-group col-md-4 left" id = "product-search">
+    <b><%= label_tag "Show only products for supplier:" %></b>
+    <%= select_tag :suppliers, options_for_select(@supplier_names, @supplier_names.first), class: "form-control" %>
+  </div>
+
+  <div class = "form-group col-md-4 col-md-offset-4 right" id = "product-search">
+    <b><%= label_tag "Show products that are :" %></b>
+    <%= select_tag :status, options_for_select(["All products","Pending", "Approved", "Rejected"], "All Products"), class: "form-control" %>
+  </div>
+</div>
+
+<%= render "board_product_list", board_products: @board_products %>
+
+<%= paginate @board_products %>
+
 <script>
 
-
-$(function() {
-
-
-/*
-/
-/  PAGE SETUP
-/
-*/
+  /*
+  /
+  /  PAGE SETUP
+  /
+  */
   $(".ok").tooltip();
   $(".remove-button").tooltip();
   $(".save").tooltip();
@@ -18,11 +40,11 @@ $(function() {
   $(".sixteen").removeClass("sixteen");
 
 
-/*
-/
-/  APPROVE AND REJECT BUTTONS
-/
-*/
+  /*
+  /
+  /  APPROVE AND REJECT BUTTONS
+  /
+  */
   $(".rejected").css("background-color", "#F2DEDE");
   $(".rejected").css("color", "#E82C0C");
 
@@ -33,62 +55,62 @@ $(function() {
   $(".approved").css("color", "#5498DA");
 
   function calculate_board_stats(board_id){
-      //var new_stats = 
-      var approved_count = $(".board-product-tile.approved[data-board-id="+board_id+"]").length;
-      var rejected_count = $(".board-product-tile.rejected[data-board-id="+board_id+"]").length;
-      var deleted_count = $(".board-product-tile.marked_for_deletion[data-board-id="+board_id+"]").length;
+        //var new_stats = 
+        var approved_count = $(".board-product-tile.approved[data-board-id="+board_id+"]").length;
+        var rejected_count = $(".board-product-tile.rejected[data-board-id="+board_id+"]").length;
+        var deleted_count = $(".board-product-tile.marked_for_deletion[data-board-id="+board_id+"]").length;
 
-      var pending_count  = $(".board-product-tile.pending[data-board-id="+board_id+"]").length;
-      var active_count   = $(".board-product-tile.active[data-board-id="+board_id+"]").length
-      var total_count    = $(".board-product-tile[data-board-id="+board_id+"]").length;
-      rejected_count += deleted_count;
-      pending_count += active_count;
+        var pending_count  = $(".board-product-tile.pending[data-board-id="+board_id+"]").length;
+        var active_count   = $(".board-product-tile.active[data-board-id="+board_id+"]").length
+        var total_count    = $(".board-product-tile[data-board-id="+board_id+"]").length;
+        rejected_count += deleted_count;
+        pending_count += active_count;
 
-      $(".board-"+board_id+"-stats").html("contains "+total_count+" products: "+approved_count+" approved, "+rejected_count+" removed "+pending_count+" pending");
-  }
+        $(".board-"+board_id+"-stats").html("contains "+total_count+" products: "+approved_count+" approved, "+rejected_count+" removed "+pending_count+" pending");
+      }
 
-  $(".glyphicon-ok").click(function(e){
+      $(".glyphicon-ok").click(function(e){
 
-    board_product_id = $(this).attr("data-board-product-id");
-    product_id = $(this).attr("data-product-id");
+        board_product_id = $(this).attr("data-board-product-id");
+        product_id = $(this).attr("data-product-id");
 
-    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("pending");
-    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("rejected");
-    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("active");
-    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("marked_for_deletion");
+        $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("pending");
+        $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("rejected");
+        $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("active");
+        $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("marked_for_deletion");
 
-    $(".board-product-tile[data-board-product-id="+board_product_id+"]").addClass("approved");
+        $(".board-product-tile[data-board-product-id="+board_product_id+"]").addClass("approved");
 
-    $(".approved").css("background-color", "#D9EDF7");
-    $(".approved").css("color", "#5498DA");
+        $(".approved").css("background-color", "#D9EDF7");
+        $(".approved").css("color", "#5498DA");
 
-    $(this).css("color", "#5498da");
-    $(this).css("background-color", "#D9EDF7");
+        $(this).css("color", "#5498da");
+        $(this).css("background-color", "#D9EDF7");
 
-    $(".rejected.glyphicon-ban-circle[data-board-product-id="+board_product_id+"]").removeClass("rejected");
+        $(".rejected.glyphicon-ban-circle[data-board-product-id="+board_product_id+"]").removeClass("rejected");
 
-    $(".glyphicon-ban-circle[data-board-product-id="+board_product_id+"]").css("color","black");
-    $(".glyphicon-ban-circle[data-board-product-id="+board_product_id+"]").css("background-color","#D9EDF7");
+        $(".glyphicon-ban-circle[data-board-product-id="+board_product_id+"]").css("color","black");
+        $(".glyphicon-ban-circle[data-board-product-id="+board_product_id+"]").css("background-color","#D9EDF7");
 
-    $(".glyphicon-remove[data-board-product-id="+board_product_id+"]").css("color","black");
-    $(".glyphicon-remove[data-board-product-id="+board_product_id+"]").css("background-color","#D9EDF7");
+        $(".glyphicon-remove[data-board-product-id="+board_product_id+"]").css("color","black");
+        $(".glyphicon-remove[data-board-product-id="+board_product_id+"]").css("background-color","#D9EDF7");
 
-    $("#board_product_"+board_product_id+"_status").val("approved");
+        $("#board_product_"+board_product_id+"_status").val("approved");
 
-    $(".glyphicon-floppy-disk[data-board-product-id="+board_product_id+"]").click();
+        $(".glyphicon-floppy-disk[data-board-product-id="+board_product_id+"]").click();
 
-    if(document.URL.split('/')[4].split('#')[0] === "boards"){
+        if(document.URL.split('/')[4].split('#')[0] === "boards"){
 
-      board_id = $(this).attr("data-board-id");
+          board_id = $(this).attr("data-board-id");
 
-      console.log(board_id);
-      calculate_board_stats(board_id);
-      $("li.publication[data-product-id="+product_id+"]").remove();
-      $("li.revision[data-product-id="+product_id+"]").remove();
+          console.log(board_id);
+          calculate_board_stats(board_id);
+          $("li.publication[data-product-id="+product_id+"]").remove();
+          $("li.revision[data-product-id="+product_id+"]").remove();
 
-    }
+        }
 
-  });
+      });
 
   $(".glyphicon-ban-circle").click(function(e){
 
@@ -116,9 +138,9 @@ $(function() {
     $(".glyphicon-remove[data-board-product-id="+board_product_id+"]").css("background-color","#F2DEDE");
 
     $("#board_product_"+board_product_id+"_status").val("rejected");
-    
+
     $(".glyphicon-floppy-disk[data-board-product-id="+board_product_id+"]").click();
-    
+
     if(document.URL.split('/')[4].split('#')[0] === "boards"){
 
       var board_id = $(this).attr("data-board-id");
@@ -126,15 +148,15 @@ $(function() {
       console.log(board_id);
       calculate_board_stats(board_id);
 
-      // add the product to the list of removed products for publication and revision
-      //figure out the product tname
-      var name = $(".product-name[data-board-product-id="+board_product_id+"]").val();
+        // add the product to the list of removed products for publication and revision
+        //figure out the product tname
+        var name = $(".product-name[data-board-product-id="+board_product_id+"]").val();
 
-      $("ul.removed-on-publication[data-board-id="+board_id+"]").append("<li class = 'list-group-item publication' data-product-id='"+product_id+"'>"+name+"</li>")
-      $("ul.removed-on-revision[data-board-id="+board_id+"]").append("<li class = 'list-group-item revision' data-product-id='"+product_id+"'>"+name+"</li>")
-    }
+        $("ul.removed-on-publication[data-board-id="+board_id+"]").append("<li class = 'list-group-item publication' data-product-id='"+product_id+"'>"+name+"</li>")
+        $("ul.removed-on-revision[data-board-id="+board_id+"]").append("<li class = 'list-group-item revision' data-product-id='"+product_id+"'>"+name+"</li>")
+      }
 
-  });
+    });
 
   $(".glyphicon-remove").click(function(e){
     board_product_id = $(this).attr("data-board-product-id");
@@ -161,9 +183,9 @@ $(function() {
     $(".glyphicon-ban-circle[data-board-product-id="+board_product_id+"]").css("color","black");
 
     $("#board_product_"+board_product_id+"_status").val("marked_for_deletion");
-    
+
     $(".glyphicon-floppy-disk[data-board-product-id="+board_product_id+"]").click();
-    
+
     if(document.URL.split('/')[4].split('#')[0] === "boards"){
 
       board_id = $(this).attr("data-board-id");
@@ -187,71 +209,71 @@ $(function() {
     variant_id       =  $(this).attr("data-variant-id");
     stock_item_id    =  $(this).attr("data-stock-item-id");
 
-    // create the necessary json objects
-    var back_orderable = $("#variant_"+variant_id+"_backorderable").is(':checked')
+      // create the necessary json objects
+      var back_orderable = $("#variant_"+variant_id+"_backorderable").is(':checked')
 
-    stock_item = {
-      count_on_hand: $("#variant_"+variant_id+"_inventory").val(),
-      supplier_count_on_hand: $("#variant_"+variant_id+"_supplier_inventory").val(),
-      backorderable: back_orderable
-    }
+      stock_item = {
+        count_on_hand: $("#variant_"+variant_id+"_inventory").val(),
+        supplier_count_on_hand: $("#variant_"+variant_id+"_supplier_inventory").val(),
+        backorderable: back_orderable
+      }
 
-    variant = {
-      map_price:       $("#variant_"+variant_id+"_map_price").val(),
-      msrp_price:      $("#variant_"+variant_id+"_msrp_price").val(),
-      shipping_height: $("#variant_"+variant_id+"_shipping_height_actual").val(),
-      shipping_width:  $("#variant_"+variant_id+"_shipping_width_actual").val(),
-      shipping_depth:  $("#variant_"+variant_id+"_shipping_depth_actual").val(),
-      height: $("#variant_"+variant_id+"_product_height_actual").val(),
-      width: $("#variant_"+variant_id+"_product_width_actual").val(),
-      depth: $("#variant_"+variant_id+"_product_depth_actual").val(),
-      days_to_ship: $("#variant_"+variant_id+"_days_to_ship").val(),
-      price:      $("#variant_"+variant_id+"_price").val(),
-      cost_price: $("#variant_"+variant_id+"_cost_price").val(),
-    };
+      variant = {
+        map_price:       $("#variant_"+variant_id+"_map_price").val(),
+        msrp_price:      $("#variant_"+variant_id+"_msrp_price").val(),
+        shipping_height: $("#variant_"+variant_id+"_shipping_height_actual").val(),
+        shipping_width:  $("#variant_"+variant_id+"_shipping_width_actual").val(),
+        shipping_depth:  $("#variant_"+variant_id+"_shipping_depth_actual").val(),
+        height: $("#variant_"+variant_id+"_product_height_actual").val(),
+        width: $("#variant_"+variant_id+"_product_width_actual").val(),
+        depth: $("#variant_"+variant_id+"_product_depth_actual").val(),
+        days_to_ship: $("#variant_"+variant_id+"_days_to_ship").val(),
+        price:      $("#variant_"+variant_id+"_price").val(),
+        cost_price: $("#variant_"+variant_id+"_cost_price").val(),
+      };
 
-    product = {
-      name:       $("#product_"+product_id+"_name").val(),
-      sku:        $("#product_"+product_id+"_sku").val(),
-      shipping_category_id: $(".shipping-method-select[data-product-id="+product_id+"]").val(),
-    };
-    
-    board_product = {
-      status: $("#board_product_"+board_product_id+"_status").val(),
-    };
+      product = {
+        name:       $("#product_"+product_id+"_name").val(),
+        sku:        $("#product_"+product_id+"_sku").val(),
+        shipping_category_id: $(".shipping-method-select[data-product-id="+product_id+"]").val(),
+      };
+      
+      board_product = {
+        status: $("#board_product_"+board_product_id+"_status").val(),
+      };
 
-    console.log(board_product);
-    console.log(stock_item);
-    console.log(variant);
-    console.log(product);
+      console.log(board_product);
+      console.log(stock_item);
+      console.log(variant);
+      console.log(product);
 
-    $.ajax({
-      type: "PUT",
-      url: "/admin/board_products.json",
-      contentType: "application/json",
-      data: JSON.stringify({ 
-        id: board_product_id, 
-        product_id: product_id, 
-        variant_id: variant_id,
-        stock_item_id: stock_item_id,
-        board_product: board_product,
-        product: product,
-        variant: variant,
-        stock_item: stock_item
+      $.ajax({
+        type: "PUT",
+        url: "/admin/board_products.json",
+        contentType: "application/json",
+        data: JSON.stringify({ 
+          id: board_product_id, 
+          product_id: product_id, 
+          variant_id: variant_id,
+          stock_item_id: stock_item_id,
+          board_product: board_product,
+          product: product,
+          variant: variant,
+          stock_item: stock_item
+        })
       })
-    })
-    .done(function(data){
-      console.log(data);
+      .done(function(data){
+        console.log(data);
+      });
+
     });
 
-  });
 
-
-/*
-/
-/  FILTERS
-/
-*/
+  /*
+  /
+  /  FILTERS
+  /
+  */
 
   $("select#status").change(function(e){
     status = $(this).val();
@@ -273,13 +295,13 @@ $(function() {
 
   $("select#suppliers").change(function(e){
     supplier_id = $(this).val();
-		if (supplier_id == "0"){
-			window.location.href = "/admin/board_products"
-		}
-		else{
-			window.location.href = "/admin/board_products?supplier_id="+supplier_id;
-		}
-    
+    if (supplier_id == "0"){
+     window.location.href = "/admin/board_products"
+   }
+   else{
+     window.location.href = "/admin/board_products?supplier_id="+supplier_id;
+   }
+
 
   });
 
@@ -288,25 +310,25 @@ $(function() {
     variant_id = $(this).val();
     product_id = $(this).attr("data-product-id");
 
-    //hide everything that isn't this tile
-    $(".variant-tile[data-variant-id!="+variant_id+"][data-product-id="+product_id+"]").hide();
+      //hide everything that isn't this tile
+      $(".variant-tile[data-variant-id!="+variant_id+"][data-product-id="+product_id+"]").hide();
 
-    //show this one
-    $(".variant-tile[data-variant-id="+variant_id+"][data-product-id="+product_id+"]").show();
+      //show this one
+      $(".variant-tile[data-variant-id="+variant_id+"][data-product-id="+product_id+"]").show();
 
-    //this allows you to change all the values of the selects for a certain product to the same thing
-     $("select.variant-select[data-product-id="+product_id+"]").val(variant_id);
-  });
+      //this allows you to change all the values of the selects for a certain product to the same thing
+      $("select.variant-select[data-product-id="+product_id+"]").val(variant_id);
+    });
 
   $(".shipping-method-select").change(function(e){
     product_id = $(this).attr("data-product-id");
     $(".shipping-method-select[data-product-id="+product_id+"]").val($(this).val());
   });
-/*
-/
-/  SHIPPING DIMENSIONS
-/
-*/
+  /*
+  /
+  /  SHIPPING DIMENSIONS
+  /
+  */
   $(".shipping-dimension-button").click(function(){
     variant_id = $(this).attr("data-variant-id");
 
@@ -386,30 +408,8 @@ $(function() {
     });
   });
 
-});
 
 </script>
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
-<%= render :partial => 'spree/admin/shared/boards_sub_menu' %>
 
-<% content_for :page_title do %>
-  <%= Spree.t(:products_on_boards) %>
-<% end %>
 
-<div class = 'row '>
-  <div class = "form-group col-md-4 left" id = "product-search">
-    <b><%= label_tag "Show only products for supplier:" %></b>
-    <%= select_tag :suppliers, options_for_select(@supplier_names, @supplier_names.first), class: "form-control" %>
-  </div>
-
-  <div class = "form-group col-md-4 col-md-offset-4 right" id = "product-search">
-    <b><%= label_tag "Show products that are :" %></b>
-    <%= select_tag :status, options_for_select(["All products","Pending", "Approved", "Rejected"], "All Products"), class: "form-control" %>
-  </div>
-</div>
-
-<%= render "board_product_list", board_products: @board_products %>
-
-<%= paginate @board_products %>
