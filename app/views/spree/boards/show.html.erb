@@ -186,9 +186,6 @@
 				<% end %>
 			</div>
 			<% end %>
-			
-			
-		
 		</div>
 	</div>
 </div>
@@ -196,49 +193,9 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="board-section board-products-section">
-			<h3>Buy Products from this Room</h3>
-			<% if false and @board.board_products.any? %>
-				<div id="board-products">
-					<% for product in @board.products %>
-					<li>
-						<div class="product-listing">
-							<div class="product-image" style="min-height">
-					        	<%= link_to raw("<span class=\"helper\"></span>#{small_image(product, :itemprop => 'image')}"), product, :itemprop => 'url' %>
-					      	</div>
-					      	<%= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => product.name %>
-					      	<span class="price selling" itemprop="price"><%= display_price(product) %></span>
-							<div><% if product.images.first %>
-								<a href="javascript:void(0);" class="add-to-cart-button" data-product-name="<%=product.name%>" data-product-price="<%= display_price(product) %>" data-product-image-url="<%=product.images.first.attachment.url(:mini)%>" data-product-id="<%= product.id %>" data-variant-number="1">Add to Cart</a><% end %></div>
-						</div>
-					</li>
-					<% end %>
-				</div>
-			<% end %>
-			
-			
-			<% if @board.board_products.any? %>
-			<%= render :partial => 'spree/shared/products', :locals => { :products => @board.board_products.collect{|bp| bp.product} } %>
-				<% if false %>
-				<% @board.products.in_groups_of(4, false) do |row_products| %>
-				<div id="products" class="row products-row">
-					<% for product in row_products %>
-					<div class="col-md-3">
-						<div class="product-listing">
-							<div class="product-image board-product-image" style="min-height">
-					        	<%= link_to raw("<span class=\"helper\"></span>#{product_image(product, :itemprop => 'image')}"), product, :itemprop => 'url' %>
-					      	</div>
-					      	<%= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => product.name %>
-					      	<span class="price selling" itemprop="price"><%= display_price(product) %></span>
-							<% if false %><div><% if product.images.first %>
-								<a href="javascript:void(0);" class="add-to-cart-button" data-product-name="<%=product.name%>" data-product-price="<%= display_price(product) %>" data-product-image-url="<%=product.images.first.attachment.url(:mini)%>" data-product-id="<%= product.id %>" data-variant-number="1">Add to Cart</a><% end %></div><% end %>
-						</div>
-					</div>
-					<% end %>
-				</div>
-				<% end %>
-				<% end %>
-			<% end %>
-			</div>
+			<h3>Buy Products from this Room</h3>	
+			<%= render :partial => "spree/designers/products_list", :locals => {:products => @board.products}%>
+		</div>
 	</div>
 </div>
 

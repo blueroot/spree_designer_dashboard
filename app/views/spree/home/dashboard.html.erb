@@ -63,7 +63,7 @@
                 </td>
                 <td class="stat align-center"><%= board.board_products.size %></td>
                 <td class="stat align-center"><%= board.impressionist_count %></td>
-                <td class="stat align-center">$0<%#= board.board_commission.to_s %></td>
+                <td class="stat align-center"><%= board.board_commission.to_s %></td>
 
 
               </tr>
@@ -72,7 +72,7 @@
         </table>
         <%- if spree_current_user.designer_commission.present?  %>
         <div class="board-title designer_commission_style">
-          <%#= "Your commission #{spree_current_user.designer_commission.to_s} $" %>
+          <%= "Your commission #{spree_current_user.designer_commission.to_s} $" %>
         </div>
         <%- end%>
     <% else %>

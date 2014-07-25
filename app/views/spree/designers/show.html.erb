@@ -146,6 +146,7 @@
 <h2>Featured Products</h2>
 <div class="designer-boards">
 	<% unless @products.blank? %>
+		<%#= render :partial => 'spree/shared/products', :locals => { :products => @products } %>
 		<%= render :partial => "products_list", :locals => {:products => @products}%>
 	
 		

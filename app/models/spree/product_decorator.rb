@@ -11,7 +11,12 @@ Spree::Product.class_eval do
   end
   
   add_search_scope :available_through_boards do
-    includes(:boards).where('spree_boards.id' => Spree::Board.active.collect{|board| board.id})
+    includes(:boards).where('spree_boards.id' => Spree::Board.active.collect{|board| board.id}).includes(:master => [:images])
+  end
+  
+  #same as available_through_boards, but also adds those that have been handpicked
+  add_search_scope :available_sans_boards do
+    where(available_sans_board: 1).includes(:master => [:images])
   end
   
   add_search_scope :available_through_published_boards do
@@ -26,7 +31,19 @@ Spree::Product.class_eval do
     includes(:board_products).where(:spree_board_products => { :id => nil })
   end
   
+  def promoted_board
+    if self.boards and self.boards.first
+      self.boards.first
+    else
+      false
+    end
+  end
+  
   #scope :not_on_a_board, includes(:board_products).where(:spree_board_products => { :id => nil })
+  
+  def self.available_available_for_public
+    
+  end
   
   def other_board_products
     self.boards.first().products
