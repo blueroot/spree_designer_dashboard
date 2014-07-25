@@ -76,7 +76,7 @@ class Spree::Board < ActiveRecord::Base
 	belongs_to :room, :foreign_key => "room_id", :class_name => "Spree::Taxon"
 	belongs_to :style, :foreign_key => "style_id", :class_name => "Spree::Taxon"
 	
-	attr_accessible :name, :description, :style_id, :room_id, :status, :message, :featured, :featured_starts_at, :featured_expires_at
+	attr_accessible :name, :description, :style_id, :room_id, :status, :message, :featured, :featured_starts_at, :featured_expires_at, :board_commission
 	
 	has_one :board_image, as: :viewable, order: :position, dependent: :destroy, class_name: "Spree::BoardImage"
   attr_accessible :board_image_attributes, :messages_attributes
