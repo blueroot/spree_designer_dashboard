@@ -258,7 +258,7 @@ class Spree::Board < ActiveRecord::Base
   
   def generate_image
     white_canvas = Magick::Image.new(630,360){ self.background_color = "white" }
-    self.board_products(:order => "z_index asc").reload.collect
+    self.board_products(:order => "z_index asc").includes(:product => {:master => [:images]}).reload.collect
 
     self.board_products.each do |bp|
       top_left_x, top_left_y = bp.top_left_x, bp.top_left_y

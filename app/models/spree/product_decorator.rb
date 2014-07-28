@@ -31,6 +31,11 @@ Spree::Product.class_eval do
     includes(:board_products).where(:spree_board_products => { :id => nil })
   end
   
+  add_search_scope :available_for_public do
+    includes(:boards).where('spree_boards.id' => Spree::Board.published.collect{|board| board.id}).includes(:master => [:images])
+  end
+  
+  
   def promoted_board
     if self.boards and self.boards.first
       self.boards.first
@@ -40,10 +45,6 @@ Spree::Product.class_eval do
   end
   
   #scope :not_on_a_board, includes(:board_products).where(:spree_board_products => { :id => nil })
-  
-  def self.available_available_for_public
-    
-  end
   
   def other_board_products
     self.boards.first().products
