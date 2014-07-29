@@ -31,7 +31,7 @@ class Spree::BoardProductsController < Spree::StoreController
   end
   
   def create
-    if @board_product = Spree::BoardProduct.find_by_product_id_and_board_id(params[:board_product][:product_id], params[:board_product][:board_id]).includes(:board)
+    if @board_product = Spree::BoardProduct.find_by_product_id_and_board_id(params[:board_product][:product_id], params[:board_product][:board_id])
       @board_product.attributes = params[:board_product]
     else
       @board_product = Spree::BoardProduct.new(params[:board_product])
