@@ -25,7 +25,7 @@ class Spree::BoardsController < Spree::StoreController
     
     @featured_designer = Spree::User.where("designer_featured_starts_at <= ? and designer_featured_ends_at >= ?", Date.today, Date.today).order("designer_featured_starts_at desc").first || Spree::User.published_designers.first
     @featured_room = @featured_designer.boards.published().featured().last
-    @fetaured_product = @featured_room.products.last
+    @featured_products = @featured_room.products.limit(4)
     puts @designer.inspect
     render :layout => "/spree/layouts/spree_home"
   end

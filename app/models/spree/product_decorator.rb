@@ -1,5 +1,5 @@
 Spree::Product.class_eval do
-  has_many :board_products, dependent: :destroy
+  has_many :board_products
   has_many :boards, :through => :board_products
   has_many :bookmarks
   
@@ -32,9 +32,8 @@ Spree::Product.class_eval do
   end
   
   add_search_scope :available_for_public do
-    includes(:boards).where('spree_boards.id' => Spree::Board.published.collect{|board| board.id}).includes(:master => [:images])
+    where('is_published = 1').includes(:master => [:images])
   end
-  
   
   def promoted_board
     if self.boards and self.boards.first
@@ -59,7 +58,20 @@ Spree::Product.class_eval do
     includes(:boards).where('spree_boards.id' => Spree::Board.all().collect{|board| board.id})
   end
     
+  # making a product available on the site depends on a number of things
+  # - available_at is <= Now
+  # - it's on a board OR it's available manually (available_sans_board)
+  # So it is a UNION operation that, one part of which relies on a join.  
+  # Really slow when done in ActiveRecord.  
+  # Could be optimized in custom SQL, but probably just faster to just cache in a single "is_published" field on the product
+  def published?
+    self.is_published
+  end
   
+  # discontinued is for when items are published and should stay on the site as "sold out" instead of being deleted
+  def discontinued?
+    !!discontinued_at
+  end
   
   def is_on_board?
     !self.board_products.blank?

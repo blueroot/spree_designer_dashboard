@@ -4,7 +4,7 @@ module Spree
     attr_accessible :alt, :attachment, :position, :viewable_type, :viewable_id
 
     has_attached_file :attachment,
-                      styles: { mini: '48x48>', small: '100x100>', primary: '360x206#', primary_aspect: '360x206>',large: '600x600>', banner: '1200x1200>' },
+                      styles: { mini: '48x48>', small: '100x100>', primary: '360x206#', primary_aspect: '360x206>', home: '540x300>', large: '600x600>', banner: '1200x1200>' },
                       default_style: :primary,
                       url: '/spree/feature_images/:id/:style/:basename.:extension',
                       path: 'feature_images/:id/:style/:basename.:extension',

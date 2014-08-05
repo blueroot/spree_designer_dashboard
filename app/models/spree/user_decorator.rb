@@ -19,7 +19,7 @@ Spree::User.class_eval do
   end
   
   def is_designer?
-    self.is_designer || self.can_add_boards
+    self.is_discount_eligible || self.can_add_boards
   end
 
   def is_affiliate?

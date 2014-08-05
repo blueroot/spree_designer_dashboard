@@ -70,21 +70,62 @@
 <% end %>
 <div class="container">					
 	<div class="prime">
+		<% if false %>
 		<div class="tagline">
 			<h1 class="home-header">Removing the guesswork from home design.</h1>
 			<p class="home-subheader">Browse room designs from the industry's top designers for a room you'll love.</p>
 		</div>	
+		<% end %>
 		<div class="room-highlights">
+			<div class="row">
+				<div class="col-md-6">
+					<% if !@featured_designer.blank? %>  
+						<a href="/<%=@featured_designer.username%>">
+							<%= image_tag(@featured_designer.feature_image.attachment(:home))%>
+						</a>
+					<% else %>
+						<%= image_tag('store/home/designer.png')%>
+					<%end%>
+				</div>
+				
+				<div class="col-md-6">
+					<% if !@featured_designer.blank? %>
+						<h2 class="home-featured"><%= @featured_room.featured_headline %></h2>
+						<div style="margin-bottom: 15px;"><%= @featured_room.featured_copy %></div>
+						<div class="row">
+							<%#= @featured_room.products.limit(4).size %>
+							<% if !@featured_products.blank? %>
+							
+								<% @featured_products.each do |product|%>
+								<div class="col-md-3">
+									<div class="featured-product-listing">
+										
+								        	<%= link_to raw("<span class=\"featured-product-listing-helper\"></span>#{small_image(product, :itemprop => 'image')}"), product, :itemprop => 'url' %>
+									</div>
+								</div>
+								<% end %>
+							<% end %>
+						</div>
+						
+					<% else %>
+					
+					<% end %>
+				</div>
+			</div>
+			
+			
+			
+			<% if false %>
 			<div class="row">
 				<div class="col-md-4">
 					<div class="home-feature-section">
 						<div class="home-feature-image home-feature-designer">
 						<% if !@featured_designer.blank? %>  
-						<a href="/<%=@featured_designer.username%>">
-							<%= image_tag(@featured_designer.feature_image.attachment(:primary))%>
-						</a>
+							<a href="/<%=@featured_designer.username%>">
+								<%= image_tag(@featured_designer.feature_image.attachment(:primary))%>
+							</a>
 						<% else %>
-						<%= image_tag('store/home/designer.png')%>
+							<%= image_tag('store/home/designer.png')%>
 						<%end%>
 						</div>
 						<h4>Exceptional Designers</h4>
@@ -124,6 +165,7 @@
 					</div>
 				</div>
 			</div>
+			<% end %>
 		</div>
 	</div>	
 </div>

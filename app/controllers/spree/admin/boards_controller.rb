@@ -16,6 +16,10 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
 
     @designer_names = ["All designers"] + designers
   end
+  
+  def list
+    @boards = Spree::Board.all().order("created_at desc").page(params[:page] || 1).per(params[:per_page] || 50)
+  end
 
   def update
     @board = Spree::Board.find_by id: params[:id]

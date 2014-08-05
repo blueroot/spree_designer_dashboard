@@ -28,12 +28,12 @@ class Spree::DesignerRegistration < ActiveRecord::Base
     user = self.user
     case self.status
       when "pending" || "declined"
-        user.update_attributes({:is_discount_eligible => 0, :is_designer => 0})
+        user.update_attributes({:is_discount_eligible => 0, :can_add_boards => 0})
       when "accepted-designer"
-        user.update_attributes({:is_discount_eligible => 1, :is_designer => 1})
+        user.update_attributes({:is_discount_eligible => 1, :can_add_boards => 1})
         self.send_room_designer_approval
       when "accepted-affiliate"
-        user.update_attributes({:is_discount_eligible => 1, :is_designer => 0})
+        user.update_attributes({:is_discount_eligible => 1, :can_add_boards => 0})
         self.send_trade_designer_approval
     end
   end

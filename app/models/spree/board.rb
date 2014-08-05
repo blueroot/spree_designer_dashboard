@@ -76,15 +76,31 @@ class Spree::Board < ActiveRecord::Base
 	belongs_to :room, :foreign_key => "room_id", :class_name => "Spree::Taxon"
 	belongs_to :style, :foreign_key => "style_id", :class_name => "Spree::Taxon"
 	
-	attr_accessible :name, :description, :style_id, :room_id, :status, :message, :featured, :featured_starts_at, :featured_expires_at, :board_commission
+	attr_accessible :name, :description, :style_id, :room_id, :status, :message, :featured, :featured_starts_at, :featured_expires_at, :board_commission, :featured_copy, :featured_headline
 	
 	has_one :board_image, as: :viewable, order: :position, dependent: :destroy, class_name: "Spree::BoardImage"
   attr_accessible :board_image_attributes, :messages_attributes
   accepts_nested_attributes_for :board_image, :messages
   is_impressionable
   
+  after_save :update_product_publish_status
   
   default_scope  { where("#{Spree::Board.quoted_table_name}.deleted_at IS NULL or #{Spree::Board.quoted_table_name}.deleted_at >= ?", Time.zone.now) }
+  
+  
+  def update_product_publish_status
+    if self.status =="published"
+      self.products.update_all(:is_published => 1)
+    else
+      self.products.each do |product|
+        if product.available_sans_board == true
+          product.update_attribute("is_published", 1)
+        else
+          product.update_attribute("is_published", 0)
+        end
+      end
+    end
+  end
   
   # use deleted? rather than checking the attribute directly. this
   # allows extensions to override deleted? if they want to provide
