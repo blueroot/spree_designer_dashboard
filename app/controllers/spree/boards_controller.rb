@@ -1,14 +1,50 @@
 class Spree::BoardsController < Spree::StoreController
   helper 'spree/taxons'
   helper 'spree/products'
-  before_filter :require_authentication, :only => [:new, :design, :preview]
+  before_filter :require_authentication, :only => [:new, :design, :preview, :dashboard, :my_profile]
   before_filter :prep_search_collections, :only => [:index, :search, :edit, :new, :design]
+  before_filter :load_board, :only => [:preview, :design, :destroy]
+  before_filter :require_board_designer, :only => [:dashboard]
+  
   impressionist :actions=>[:show]
+
+  def require_board_designer
+    if !(spree_current_user and spree_current_user.is_board_designer?)
+      if spree_current_user.is_affiliate?
+        redirect_to my_profile_path
+      else
+        redirect_to root_path
+      end
+    end
+  end
+  
+  def load_board
+    unless @board = spree_current_user.boards.find(params[:id])
+      redirect_to root_path
+    end
+  end
 
   def index
     @boards = Spree::Board.published().order("created_at desc")
     #@products = Spree::Product.featured()
   end
+  
+  def dashboard
+    @boards = spree_current_user.boards
+  end
+  
+  def profile
+    @user = spree_current_user
+    if spree_current_user and (spree_current_user.is_beta_user? or spree_current_user.is_designer?)
+      
+      @user.user_images.new if @user.user_images.blank?
+      @user.marketing_images.new if @user.marketing_images.blank?
+      @user.build_logo_image if @user.logo_image.blank?
+    else
+      redirect_to "/"
+    end
+  end
+  
   
   def home
     @boards = Spree::Board.featured().limit(3)
@@ -95,7 +131,6 @@ class Spree::BoardsController < Spree::StoreController
   end
   
   def preview
-    @board = Spree::Board.find(params[:id])
     render :action => "show"
   end
   
@@ -228,7 +263,6 @@ class Spree::BoardsController < Spree::StoreController
   
   def design
     
-    @board = Spree::Board.find(params[:id])
     @board.messages.new(:sender_id => spree_current_user.id, :recipient_id => 0, :subject => "Publication Submission")
     @products = Spree::Product.all()
     @bookmarked_products = spree_current_user.bookmarks.collect{|bookmark| bookmark.product}
@@ -254,7 +288,7 @@ class Spree::BoardsController < Spree::StoreController
   end
   
   def destroy
-    @board = spree_current_user.boards.find(params[:id])
+    
     if @board and @board.destroy
       flash[:notice] = "The room has been deleted."
     else

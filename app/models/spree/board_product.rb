@@ -20,8 +20,10 @@ class Spree::BoardProduct < ActiveRecord::Base
   def destroy
     board = self.board
     self.update_attribute('deleted_at', Time.zone.now)    
-    board.board_products.reload
-    board.queue_image_generation
+    if board
+      board.board_products.reload
+      board.queue_image_generation
+    end
   end
   
   def self.marked_as_removed

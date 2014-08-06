@@ -55,7 +55,6 @@
                     <% elsif ["submitted_for_publication"].include?(board.status)  %>
                         <%= link_to "Preview", preview_board_path(board), :class => "btn btn-default btn-sm"%>
                     <% elsif board.status == "published" %>
-                        <%= link_to "Share", design_board_path(board), :class => "btn btn-default btn-sm"%>
                         <%= link_to "View Public Page", room_path(board), :class => "btn btn-default btn-sm"%>
                         <%= link_to "Widget", "#", :class => "btn btn-default btn-sm widget-link", data: {container: "body", toggle: "popover", placement: "bottom", :'room-id' => board.id} %>
                     <% end %>

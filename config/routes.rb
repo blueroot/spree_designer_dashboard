@@ -25,12 +25,12 @@ Spree::Core::Engine.routes.draw do
   get "/designers/signup" => "designer_registrations#new", :as => :designer_signup
   #post "/designers/signup" => "designers#signup", :as => :create_designer_registration
   
-  get "/dashboard" => "home#dashboard", :as => :designer_dashboard
+  get "/dashboard" => "boards#dashboard", :as => :designer_dashboard
   get "/mission" => "extra#mission" , :as => :mission
   
   get "/home" => "boards#home", :as => :home
   post "/orders/add_to_cart" => "orders#add_to_cart", :as => :orders_add_to_cart
-  get "/my_profile" => "home#profile", :as => :my_profile
+  get "/my_profile" => "boards#profile", :as => :my_profile
   patch "/designers" => "designers#update", :as => :update_designer
   get "/my_rooms" => "boards#my_rooms", :as => :my_rooms
 

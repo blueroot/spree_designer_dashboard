@@ -26,6 +26,10 @@ Spree::User.class_eval do
     self.is_discount_eligible
   end
   
+  def is_board_designer?
+    self.can_add_boards
+  end
+  
   def self.is_active_designer
     where(:can_add_boards => 1)
   end
