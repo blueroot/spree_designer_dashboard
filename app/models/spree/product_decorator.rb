@@ -32,7 +32,7 @@ Spree::Product.class_eval do
   end
   
   add_search_scope :available_for_public do
-    where('is_published = 1').includes(:master => [:images])
+    where('is_published = 1 or available_sans_board = 1').includes(:master => [:images])
   end
   
   def promoted_board
