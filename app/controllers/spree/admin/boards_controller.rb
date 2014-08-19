@@ -21,6 +21,63 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
     @boards = Spree::Board.all().order("created_at desc").page(params[:page] || 1).per(params[:per_page] || 50)
   end
 
+  def products
+    @products_pending_approval_count = Spree::Product.pending_approval.count > 0 ? "(#{Spree::Product.pending_approval.count})" : ""
+    @products_marked_approval_count = Spree::Product.marked_approval.count > 0 ? "(#{Spree::Product.marked_approval.count})" : ""
+    @products_marked_removal_count = Spree::Product.marked_removal.count > 0 ? "(#{Spree::Product.marked_removal.count})" : ""
+    @products_published_count = Spree::Product.published.count > 0 ? "(#{Spree::Product.published.count})" : ""
+    @products_discontinued_count = Spree::Product.discontinued.count > 0 ? "(#{Spree::BoardProduct.discontinued.count})" : ""
+    
+    if params[:product] and params[:product][:supplier_id]
+      @supplier = Spree::Supplier.find(params[:product][:supplier_id])      
+    else
+      @supplier = nil
+    end
+    
+    @status = params[:status] || "pending_approval"
+    
+    case @status
+      when "pending_approval"
+        if @supplier
+          @products = @supplier.products.pending_approval.page(params[:page] || 1).per(params[:per_page] || 50)
+        else
+          @products = Spree::Product.pending_approval.page(params[:page] || 1).per(params[:per_page] || 50)
+        end
+      when "marked_approval"
+        if @supplier
+          @products = @supplier.products.marked_approval.page(params[:page] || 1).per(params[:per_page] || 50)
+        else
+          @products = Spree::Product.marked_approval.page(params[:page] || 1).per(params[:per_page] || 50)
+        end
+      when "marked_removal"
+        if @supplier
+          @products = @supplier.products.marked_removal.page(params[:page] || 1).per(params[:per_page] || 50)
+        else
+          @products = Spree::Product.marked_removal.page(params[:page] || 1).per(params[:per_page] || 50)
+        end
+      when "discontinued"
+        if @supplier
+          @products = @supplier.products.discontinued.page(params[:page] || 1).per(params[:per_page] || 50)
+        else
+          @products = Spree::Product.discontinued.page(params[:page] || 1).per(params[:per_page] || 50)
+        end
+      when "published"
+        if @supplier
+          @products = @supplier.products.published.page(params[:page] || 1).per(params[:per_page] || 50)
+        else
+          @products = Spree::Product.published.page(params[:page] || 1).per(params[:per_page] || 50)
+        end
+      else
+        if @supplier
+          @products = @supplier.products.pending_approval.page(params[:page] || 1).per(params[:per_page] || 50)
+        else
+          @products = Spree::Product.pending_approval.page(params[:page] || 1).per(params[:per_page] || 50)
+        end
+    end
+    
+    @suppliers_select = Spree::Supplier.select_options_by_status(@status, @supplier, false)
+  end
+
   def update
     @board = Spree::Board.find_by id: params[:id]
     if params[:state] == "deleted"

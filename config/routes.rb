@@ -57,6 +57,7 @@ Spree::Core::Engine.routes.draw do
   namespace :admin do
     match "/board_products", to: "board_products#update", via: :put
     get  "boards/list" => "boards#list", :as => :boards_list
+    match  "boards/products(/:status)" => "boards#products", :as => :boards_products, :via =>[:get, :post]
     resources :boards
     resources :board_products
     resources :designer_registrations

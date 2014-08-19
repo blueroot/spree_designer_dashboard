@@ -32,8 +32,30 @@ Spree::Product.class_eval do
   end
   
   add_search_scope :available_for_public do
-    where('is_published = 1 or available_sans_board = 1').includes(:master => [:images])
+    where('is_published = 1').includes(:master => [:images])
   end
+  
+  # exactly the same as the "available_for_public" search scope, but is a basic product scope and doesn't include the master variant by defaults, so possibly faster
+  def self.published
+    where('is_published = 1')
+  end
+  
+  def self.discontinued 
+    where('not isnull(discontinued_at)')
+  end
+  
+  def self.marked_removal
+    includes(:board_products).where("spree_board_products.status in ('rejected', 'marked_for_deletion')")
+  end
+  
+  def self.marked_approval
+    includes(:board_products).where("spree_board_products.status in ('approved')")
+  end
+  
+  def self.pending_approval
+    includes(:board_products, :boards).where("spree_boards.state = 'submitted_for_publication' and spree_products.is_published = 0 and isnull(spree_products.deleted_at) and isnull(spree_products.discontinued_at) and isnull(spree_board_products.approved_at) and isnull(spree_board_products.removed_at)")
+  end
+  
   
   def promoted_board
     if self.boards and self.boards.first

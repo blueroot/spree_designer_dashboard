@@ -1,0 +1,73 @@
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+<div class="row">
+	<div class="col-md-3">
+		<ul class="nav nav-stacked nav-pills">
+			<li class="<%= "active" if @status == "pending_approval" %>"><%= link_to "Pending Approval #{@products_pending_approval_count}", admin_boards_products_path(:status => "pending_approval")%></li>
+			<li class="<%= "active" if @status == "marked_approval" %>"><%= link_to "Marked for Approval #{@products_marked_approval_count}", admin_boards_products_path(:status => "marked_approval")%></li>
+			<li class="<%= "active" if @status == "marked_removal" %>"><%= link_to "Marked for Removal #{@products_marked_removal_count}", admin_boards_products_path(:status => "marked_removal")%></li>
+			<li class="<%= "active" if @status == "published" %>"><%= link_to "Published #{@products_published_count}", admin_boards_products_path(:status => "published")%></li>
+			<li class="<%= "active" if @status == "discontinued" %>"><%= link_to "Discontinued #{@products_discontinued_count}", admin_boards_products_path(:status => "discontinued")%></li>
+		</ul>
+	</div>
+	<div class="col-md-9">
+		<div>
+			<h3><%= @products.total_count %> <%= @supplier.name if @supplier %> <%= "product".pluralize(@products.total_count) %> <%= params[:status] ? params[:status].humanize.downcase : "waiting approval" %></h3>
+		</div>
+		<div>
+			<%= form_tag '', :method => :get, :id => 'sidebar_products_search' do %>
+			<p><%= select :product, :supplier_id, options_for_select(@suppliers_select, selected: @supplier ? @supplier.id : ""), {include_blank: 'All Suppliers'}%> <%= submit_tag "Filter", :class => "btn btn-primary btn-sm"%></p>
+			<% end %>
+		</div>
+
+		<% if !@products.blank? %>
+
+
+		<%= paginate @products %>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>&nbsp;</th>
+					<th>Name</th>
+					<% if ["pending_approval", "marked_approval", "marked_removal"].include?(@status) %>
+						<th>Room</th>
+					<% else %>
+					
+					<% end %>
+					
+				</tr>
+			</thead>
+			<tbody>
+				<% @products.each do |product| %>
+				<%if product %>
+				<tr>
+					<td><%= mini_image(product, class: "img-thumbnail") %></td>
+					<td><%= link_to product.name, edit_admin_product_path(product) %></td>
+					
+					<% if ["pending_approval", "marked_approval", "marked_removal"].include?(@status) %>
+						<% if product.boards and product.boards.first %>
+							<td><p><%= link_to board_image(product.boards.first, :small), edit_admin_board_path(product.boards.first) %></p>
+							<%= product.boards.first.designer.profile_display_name %></td>
+						<% else %>
+							<td><%#= product.boards.first.designer.profile_display_name %></td>
+						<% end %>
+					<% else %>
+					
+					<% end %>
+					
+				</tr>
+
+				<% end %>
+				<% end %>
+			</tbody>
+		</table>
+		<%= paginate @products %>
+
+		<% else %>
+		<div class="empty-state">You did it! There are no products awaiting approval.</div>
+
+		<% end%>
+	</div>
+
+</div>
