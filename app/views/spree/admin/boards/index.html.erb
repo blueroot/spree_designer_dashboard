@@ -63,7 +63,7 @@
               <div class="modal-body">
                 <h4><%= board.designer_name %> will be notified of the publication of their board.</h4>
                   <p>
-                  <% if !board.board_products.marked_as_removed.blank? %>
+                  <% if false and !board.board_products.marked_as_removed.blank? %>
                     The following products will be removed from the room:
 
                     <ul class = "list-group removed-on-publication" data-board-id = "<%= board.id %>">
@@ -138,7 +138,7 @@
               <div class="modal-body">
                   <p>
                   The following products will be removed from the room:
-          				<% if !board.board_products.marked_as_removed.blank? %>
+          				<% if false and !board.board_products.marked_as_removed.blank? %>
                     <ul class = "list-group removed-on-revision" data-board-id = '<%= board.id %>'>
 
           					 <% board.board_products.marked_as_removed.each do |bp|%>
