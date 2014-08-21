@@ -43,18 +43,41 @@
 				<%if product %>
 				<tr>
 					<td><%= mini_image(product, class: "img-thumbnail") %></td>
-					<td><%= link_to product.name, edit_admin_product_path(product) %></td>
+					<td><%= link_to product.name, edit_admin_product_path(product), {:target => "_blank"} %></td>
 					
 					<% if ["pending_approval", "marked_approval", "marked_removal"].include?(@status) %>
-						<% if product.boards and product.boards.first %>
-							<td><p><%= link_to board_image(product.boards.first, :small), edit_admin_board_path(product.boards.first) %></p>
-							<%= product.boards.first.designer.profile_display_name %></td>
+						<% if !product.board_products.pending_approval.blank? %>
+							<td>
+								<% product.board_products.pending_approval.each do |bp|%>
+									<div class="row">
+										<div class="col-md-6">
+											<div style="">
+												<div><%= link_to bp.board.name, edit_admin_board_path(product.boards.first) %></div>
+												<div><%= bp.board.designer.profile_display_name %></div>
+											</div>
+										</div>	
+										<div class="col-md-6">
+											<% if false %>
+											<button class="btn btn-success btn-sm btn-approve" data-product-id="<%=product.id%>" data-board-product-id="<%=bp.id%>"  data-target=".modal-bp-approve">Approve</button> 
+											<button class="btn btn-danger btn-sm btn-remove" data-product-id="<%=product.id%>" data-board-product-id="<%=bp.id%>"  data-target=".modal-bp-approve">Remove</button>
+											<% end %>
+										</div>
+									</div>	
+									
+									
+								<% end %>
+								
+							</td>
+							
+							
 						<% else %>
 							<td><%#= product.boards.first.designer.profile_display_name %></td>
 						<% end %>
 					<% else %>
 					
 					<% end %>
+					
+					
 					
 				</tr>
 
@@ -64,10 +87,41 @@
 		</table>
 		<%= paginate @products %>
 
+		
+
+	
+
+
+
 		<% else %>
-		<div class="empty-state">You did it! There are no products awaiting approval.</div>
+		<div class="empty-state">No products for you!</div>
 
 		<% end%>
 	</div>
 
 </div>
+
+	
+
+	<div class="modal fade bs-example-modal-lg" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	  	<div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+		      </div>
+		      <div class="modal-body">
+		        ...
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        <button type="button" class="btn btn-primary">Save changes</button>
+		      </div>
+		    </div>
+		  </div>
+	</div>
+
+<script>
+	
+</script>
+
