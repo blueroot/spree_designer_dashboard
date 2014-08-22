@@ -31,7 +31,7 @@
 					<th>&nbsp;</th>
 					<th>Name</th>
 					<% if ["pending_approval", "marked_approval", "marked_removal"].include?(@status) %>
-						<th>Room</th>
+						<th>Approve/Remove Products from each room they appear in</th>
 					<% else %>
 					
 					<% end %>
@@ -57,9 +57,9 @@
 											</div>
 										</div>	
 										<div class="col-md-6">
-											<% if false %>
+											<% if true %>
 											<button class="btn btn-success btn-sm btn-approve" data-product-id="<%=product.id%>" data-board-product-id="<%=bp.id%>"  data-target=".modal-bp-approve">Approve</button> 
-											<button class="btn btn-danger btn-sm btn-remove" data-product-id="<%=product.id%>" data-board-product-id="<%=bp.id%>"  data-target=".modal-bp-approve">Remove</button>
+											<button class="btn btn-danger btn-sm btn-remove" data-product-id="<%=product.id%>" data-board-product-id="<%=bp.id%>"  data-target=".modal-bp-remove">Remove</button>
 											<% end %>
 										</div>
 									</div>	
@@ -103,15 +103,21 @@
 
 	
 
-	<div class="modal fade bs-example-modal-lg" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<div class="modal fade modal-bp-remove" id="remove_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 	  	<div class="modal-dialog">
 		    <div class="modal-content">
 		      <div class="modal-header">
 		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-		        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+		        <h4 class="modal-title" id="myModalLabel">Remove Product from Room</h4>
 		      </div>
 		      <div class="modal-body">
-		        ...
+				This will remove the product from the room when the room is returned to the designer.
+				<h4>What do you want to do with this product?</h4>
+				
+				<label>
+					
+					
+				</label>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -122,6 +128,21 @@
 	</div>
 
 <script>
+
+
+$( document ).ready(function() {
+	$(".btn-remove").click(function(e){
+	    e.preventDefault();
+	    //$('#remove_modal').appendTo("body").modal('show');
+		
+		// disable buttons
+		// tell the server to disable
+		// give feedback after changed
+		
+	});
+});
+
+
 	
 </script>
 
