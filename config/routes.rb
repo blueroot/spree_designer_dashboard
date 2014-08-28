@@ -49,10 +49,16 @@ Spree::Core::Engine.routes.draw do
   
 
   get '/widget/room/:id' => "widget#room", :as => :room_widget
+
   
   devise_scope :spree_user do
-
     post '/registration_subscribers' => 'user_registrations#registration_subscribers', :as => :registration_subscribers
+  end
+  resources :subscribers, :only => [:new, :create] do
+    collection do
+      post :login_or_create
+      post :login_user
+    end
   end
   
   #get "/boards/product_search" => "boards#product_search", :as => :board_product_search
