@@ -5,7 +5,7 @@
 		<div class="col-md-3">
 			<div class="product-listing">
 				<div class="product-image board-product-image" style="min-height">
-		        	<%= link_to raw("<span class=\"helper\"></span>#{product_image(product, :itemprop => 'image')}"), product, :itemprop => 'url' %>
+		        	<%= link_to raw("<span class=\"helper\"></span>#{listing_image(product, :itemprop => 'image')}"), product, :itemprop => 'url' %>
 		      	</div>
 		      	<%= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => product.name %>
 		      	<div class="row">
