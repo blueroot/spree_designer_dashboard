@@ -52,7 +52,7 @@ Spree::Core::Engine.routes.draw do
 
   
   devise_scope :spree_user do
-    post '/registration_subscribers' => 'user_registrations#registration_subscribers', :as => :registration_subscribers
+    post '/registration_subscribers' => 'user_registrations#registration_subscribers', :as => :registration_subscribers, :constraints => { :protocol => "https"}
   end
   resources :subscribers, :only => [:new, :create] do
     collection do
