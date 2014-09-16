@@ -51,9 +51,9 @@ Spree::Core::Engine.routes.draw do
   get '/widget/room/:id' => "widget#room", :as => :room_widget
 
   post '/registration_subscribers' => 'user_registrations#registration_subscribers', :as => :registration_subscribers, :constraints => { :protocol => "https"}
-  devise_scope :spree_user do
-    post '/registration_subscribers' => 'user_registrations#registration_subscribers', :as => :registration_subscribers, :constraints => { :protocol => "https"}
-  end
+  #devise_scope :spree_user do
+  #  post '/registration_subscribers' => 'user_registrations#registration_subscribers', :as => :registration_subscribers, :constraints => { :protocol => "https"}
+  #end
   resources :subscribers, :only => [:new, :create] do
     collection do
       post :login_or_create
