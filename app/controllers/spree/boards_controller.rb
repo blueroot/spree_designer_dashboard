@@ -302,7 +302,7 @@ class Spree::BoardsController < Spree::StoreController
       @room_taxons = Spree::Taxonomy.where(:name => 'Rooms').first().root.children.select{|child| Spree::Board.available_room_taxons.include?(child.name) }
       @style_taxons = Spree::Taxonomy.where(:name => 'Styles').first().root.children
       @colors = Spree::Color.order(:position)
-      @designers = Spree::User.is_active_designer
+      @designers = Spree::User.published_designers().order("created_at desc")
     end
   # redirect to the edit action after create
   #create.response do |wants|
