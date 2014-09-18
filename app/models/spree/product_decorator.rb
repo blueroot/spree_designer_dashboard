@@ -3,6 +3,16 @@ Spree::Product.class_eval do
   has_many :boards, :through => :board_products
   has_many :bookmarks
   
+  before_save :update_product_publish_status
+  
+  def update_product_publish_status
+    if self.boards.any?{|board| board.status == "published"} or self.available_sans_board == true
+      self.is_published = 1
+    else
+      self.is_published = 0
+    end
+  end
+  
   add_search_scope :in_all_taxons do |*taxons|
     taxons = get_taxons(taxons)
     id = arel_table[:id]
