@@ -1,7 +1,7 @@
 module Spree
   class FeatureImage < Asset
     
-    attr_accessible :alt, :attachment, :position, :viewable_type, :viewable_id
+    #attr_accessible :alt, :attachment, :position, :viewable_type, :viewable_id
 
     has_attached_file :attachment,
                       styles: { mini: '48x48>', small: '100x100>', primary: '360x206#', primary_aspect: '360x206>', home: '540x300>', large: '600x600>', banner: '1200x1200>' },
@@ -17,14 +17,14 @@ module Spree
     # we need to look at the write-queue for images which have not been saved yet
     after_post_process :find_dimensions
 
-    include Spree::Core::S3Support
-    supports_s3 :attachment
+#    include Spree::Core::S3Support
+#    supports_s3 :attachment
 
-    Spree::Image.attachment_definitions[:attachment][:styles] = ActiveSupport::JSON.decode(Spree::Config[:attachment_styles]).symbolize_keys!
-    Spree::Image.attachment_definitions[:attachment][:path] = Spree::Config[:attachment_path]
-    Spree::Image.attachment_definitions[:attachment][:url] = Spree::Config[:attachment_url]
-    Spree::Image.attachment_definitions[:attachment][:default_url] = Spree::Config[:attachment_default_url]
-    Spree::Image.attachment_definitions[:attachment][:default_style] = Spree::Config[:attachment_default_style]
+    #Spree::Image.attachment_definitions[:attachment][:styles] = ActiveSupport::JSON.decode(Spree::Config[:attachment_styles]).symbolize_keys!
+    #Spree::Image.attachment_definitions[:attachment][:path] = Spree::Config[:attachment_path]
+    #Spree::Image.attachment_definitions[:attachment][:url] = Spree::Config[:attachment_url]
+    #Spree::Image.attachment_definitions[:attachment][:default_url] = Spree::Config[:attachment_default_url]
+    #Spree::Image.attachment_definitions[:attachment][:default_style] = Spree::Config[:attachment_default_style]
 
     #used by admin user_images autocomplete
     def mini_url

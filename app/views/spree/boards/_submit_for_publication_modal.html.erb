@@ -1,5 +1,5 @@
 <% # this is super ugly, but was the quickest way to do it. %>
-<% board.messages.new(:sender_id => spree_current_user.id, :recipient_id => 0, :subject => "Publication Submission")%>
+<% board.messages.build(:sender_id => spree_current_user.id, :recipient_id => 0, :subject => "Publication Submission")%>
 
 <div id="publish-board-modal-<%= board.id%>" class="modal">
   <div class="modal-dialog">
@@ -16,7 +16,7 @@
       <div class="modal-body">
 		<p style="font-weight: normal;">When you submit your board to be published, it goes to the Scout & Nimble staff to review it for product availability. We might make suggestions for substitutions if we find an item does not have sufficient inventory.</p>
 		<%= f.fields_for :messages do |message| %>
-		<% if message.object.new_record? %>
+		<%# if message.object.new_record? %>
 		<div class="form-group">
 			
 			<%= f.label :body, "Would you like to include any questions or comments about this board?" %>
@@ -26,7 +26,7 @@
 			<%= message.hidden_field :subject %>
 			<%= f.error_message_on :description %>
 		</div>
-		<% end %>
+		<%# end %>
 		<% end %>
       </div>
 	<div class="modal-footer">

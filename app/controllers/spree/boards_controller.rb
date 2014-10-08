@@ -31,6 +31,7 @@ class Spree::BoardsController < Spree::StoreController
   
   def dashboard
     @boards = spree_current_user.boards
+    
   end
   
   def profile
@@ -205,7 +206,7 @@ class Spree::BoardsController < Spree::StoreController
   end
   
   def create
-    @board = Spree::Board.new(params[:board])
+    @board = Spree::Board.new(board_params)
     @board.designer = spree_current_user
     if @board.save
       redirect_to build_board_path(@board)
@@ -216,7 +217,7 @@ class Spree::BoardsController < Spree::StoreController
   def update
     @board = Spree::Board.find(params[:id])
     #respond_to do |format|
-      if @board.update_attributes(params[:board])
+      if @board.update_attributes(board_params)
         @board.submit_for_publication! if params[:board][:status] == "submitted_for_publication"
         redirect_to designer_dashboard_path(@board, :notice => 'Your board was updated.')
       else
@@ -303,6 +304,11 @@ class Spree::BoardsController < Spree::StoreController
       @style_taxons = Spree::Taxonomy.where(:name => 'Styles').first().root.children
       @colors = Spree::Color.order(:position)
       @designers = Spree::User.published_designers().order("created_at desc")
+    end
+    
+    def board_params
+      params.require(:board).permit(:name, :description, :style_id, :room_id, :status, :message, :featured, :featured_starts_at, :featured_expires_at, :board_commission, :featured_copy, :featured_headline)
+      
     end
   # redirect to the edit action after create
   #create.response do |wants|

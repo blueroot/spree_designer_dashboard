@@ -3,11 +3,12 @@ Spree::User.class_eval do
   has_many :products, :through => :boards
   has_many :bookmarks
   has_many :designer_registrations
-  has_many :user_images, as: :viewable, dependent: :destroy, class_name: "Spree::UserImage"
+  #has_many :user_images, as: :viewable, dependent: :destroy, class_name: "Spree::UserImage"
+  has_many :user_images, -> { order(:position) }, as: :viewable, dependent: :destroy, class_name: "Spree::UserImage"
   has_many :marketing_images, as: :viewable, dependent: :destroy, class_name: "Spree::MarketingImage"
   has_one :logo_image, as: :viewable, dependent: :destroy, class_name: "Spree::LogoImage"
   has_one :feature_image, as: :viewable, dependent: :destroy, class_name: "Spree::FeatureImage"
-  accepts_nested_attributes_for :user_images, :logo_image, :marketing_images, :feature_image
+  #accepts_nested_attributes_for :user_images, :logo_image, :marketing_images, :feature_image
   is_impressionable
   
   def self.designers

@@ -120,7 +120,7 @@ function buildImageLayer(canvas, bp){
 		    });
 		oImg.set('id', bp.id)
 		//console.log('build image: '+ bp.id)
-		oImg.set('product_permalink', bp.product.permalink)
+		oImg.set('product_permalink', bp.product.slug)
 		oImg.set('current_x', bp.top_left_x)
 		oImg.set('current_y', bp.top_left_y)
 		canvas.add(oImg);
@@ -164,7 +164,7 @@ function addProductToBoard(event, ui){
 				xhr.setRequestHeader("Accept", "application/json")
 	     },
 	     success : function(board_product){
-				//console.log(board_product.product.permalink)
+				//console.log(board_product.product.slug)
 		
 				buildImageLayer(canvas, board_product);
 				//alert(board_product.product.id)
@@ -176,7 +176,7 @@ function addProductToBoard(event, ui){
 				//	$('#board_options_preloader').removeClass('hidden')
 				//	$('#room_variant_options_container').addClass('hidden')
 				//	
-				//	var url = '/products/'+board_product.product.permalink+'/product_with_variants'
+				//	var url = '/products/'+board_product.product.slug+'/product_with_variants'
 				//	
 				//	
 				//	

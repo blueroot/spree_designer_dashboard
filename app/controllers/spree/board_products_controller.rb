@@ -20,7 +20,7 @@ class Spree::BoardProductsController < Spree::StoreController
   def update
     @board_product = Spree::BoardProduct.find(params[:id])
     
-    if @board_product.update_attributes(params[:board_product])
+    if @board_product.update_attributes(board_product_params)
       @board_product.board.queue_image_generation
       
       respond_to do |format|
@@ -34,7 +34,7 @@ class Spree::BoardProductsController < Spree::StoreController
     if @board_product = Spree::BoardProduct.find_by_product_id_and_board_id(params[:board_product][:product_id], params[:board_product][:board_id])
       @board_product.attributes = params[:board_product]
     else
-      @board_product = Spree::BoardProduct.new(params[:board_product])
+      @board_product = Spree::BoardProduct.new(board_product_params)
     end
     
     if @board_product.save
@@ -61,6 +61,11 @@ class Spree::BoardProductsController < Spree::StoreController
       #format.xml  { render :xml => @booking, :status => :created, :location => @booking }
     end
   end
+  
+  private
+    def board_product_params
+      params.require(:board_product).permit(:board_id, :product_id, :top_left_x, :top_left_y, :z_index, :status, :width, :height, :rotation_offset)
+    end
     
   
 end

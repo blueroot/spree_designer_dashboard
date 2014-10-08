@@ -1,0 +1,6 @@
+<% if ["published"].include?(board.state) %>
+<%= link_to "Unpublish", "", :class => "btn btn-default btn-small" %>
+<% else %>
+<%= link_to "Request Revision", "", :class => "btn btn-default btn-small" %>
+<%= link_to "Publish", "", :class => "btn btn-default btn-small" %>
+<% end %>

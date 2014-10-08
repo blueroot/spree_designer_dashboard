@@ -136,7 +136,7 @@
 					<div class="home-feature-section">
 						<div class="home-feature-image home-feature-product">
 							<% unless @fetaured_product.blank? %>
-							<a href="/products/<%=@fetaured_product.permalink%>" class="add-to-board-link" data-product-id="<%=@fetaured_product.permalink %>">
+							<a href="/products/<%=@fetaured_product.slug%>" class="add-to-board-link" data-product-id="<%=@fetaured_product.slug %>">
 								<%= large_image(@fetaured_product, :itemprop => 'image') %>
 							</a>  
 							<%else%>

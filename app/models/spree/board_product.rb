@@ -2,9 +2,36 @@ class Spree::BoardProduct < ActiveRecord::Base
   
   belongs_to :board
   belongs_to :product	
-	attr_accessible :board_id, :product_id, :top_left_x, :top_left_y, :z_index, :status, :width, :height, :rotation_offset
   before_create :set_z_index
   default_scope  { where("#{Spree::BoardProduct.quoted_table_name}.deleted_at IS NULL or #{Spree::BoardProduct.quoted_table_name}.deleted_at >= ?", Time.zone.now) }
+  
+  state_machine :state, :initial => :draft do
+    event :mark_for_approval do
+      transition [:draft, :marked_for_deletion] => :marked_for_approval
+    end
+    
+    event :approve do
+      transition [:draft, :marked_for_deletion, :marked_for_approval] => :approved
+    end
+    
+    event :remove do
+      transition :marked_for_removal => :removed, :unless => :published_on_site
+    end
+    
+    event :mark_for_removal do
+      transition [:draft, :marked_for_approval, :approved] => :marked_for_removal, :unless => :published_on_site
+    end
+    
+    event :delete do
+      transition [:draft, :marked_for_approval, :approved] => :deleted, :unless => :published_on_site
+    end
+    
+    event :mark_for_deletion do
+      transition [:draft, :marked_for_approval, :approved] => :marked_for_deletion, :unless => :published_on_site
+    end
+    
+  end
+  
   
   def self.by_supplier(supplier_id)
     includes(:product).where("products.supplier_id = #{supplier_id}").references(:product)
@@ -24,11 +51,19 @@ class Spree::BoardProduct < ActiveRecord::Base
   end
   
   def self.marked_removal
-    where(:status => ["rejected", "marked_for_deletion"])
+    where(:state => "marked_for_removal")
+  end
+  
+  def self.marked_deletion
+    where(:state => "marked_for_deletion")
   end
   
   def self.marked_approval
-    where(:status => ["approved"])
+    where(:state => "marked_for_approval")
+  end
+  
+  def self.approved
+    where(:state => "approved")
   end
   
   def self.pending_approval

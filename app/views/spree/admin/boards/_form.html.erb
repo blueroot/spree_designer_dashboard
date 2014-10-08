@@ -22,9 +22,11 @@
 	      <%= f.text_area :featured_copy, {:class => 'fullwidth'} %>
 	      <%= f.error_message_on :featured_copy %>
 	    <% end %>
+		<% if false %>
 		<%= f.field_container :status do %>
 			<%= f.label :status, "Status" %><br />
 			<%= f.select :status, Spree::Board.status_options, :class => 'field' %>
+		<% end %>
 		<% end %>
 		<% if false%>
 		<%= f.field_container :featured do %>
