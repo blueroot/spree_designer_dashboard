@@ -101,6 +101,7 @@
 
 <h2>Featured Rooms</h2>
 <div class="designer-boards">
+  <% if @designer.present? %>
 	<% unless @designer.boards.active.blank? %>
 		<% @designer.boards.active.in_groups_of(3, false) do |row_boards| %>
 		<div class="row">
@@ -130,8 +131,10 @@
 		This designer doesn't have any boards at this time.
 	</div>
 	<% end%>
+<% end %>
 </div>
-	
+
+<% if @designer.present? %>
 <div class="quote-divider-wrapper">
 	<div class="quote-divider-content">
 		<% if !@designer.designer_quote.blank?%>
@@ -141,7 +144,7 @@
 		<% end %>
 	</div>
 </div>
-	
+<% end %>
 	
 
 <h2>Featured Products</h2>
