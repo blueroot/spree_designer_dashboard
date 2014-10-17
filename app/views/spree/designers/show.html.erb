@@ -1,6 +1,7 @@
 <% content_for :page_header do %>
 <div class="row">
 	<div class="col-md-12">
+  <% if @designer.present? %>
   <div class="designer-header">
 	<div class="designer-header-band">&nbsp;</div>
 	<div class="row">
@@ -94,8 +95,8 @@
 	</div>
 	</div>
 	</div>
-</div>
 
+  <% end %>
 <% end %>
 
 <h2>Featured Rooms</h2>
