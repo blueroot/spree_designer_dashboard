@@ -81,8 +81,10 @@
 				<div class="col-md-6">
 					<% if !@featured_designer.blank? %>  
 						<a href="/<%=@featured_designer.username%>">
-							<%= image_tag(@featured_designer.feature_image.attachment(:home))%>
-						</a>
+                          <% if @featured_designer.feature_image.present? %>
+                            <%= image_tag(@featured_designer.feature_image.attachment(:home))%>
+                          <%end%>
+                        </a>
 					<% else %>
 						<%= image_tag('store/home/designer.png')%>
 					<%end%>
