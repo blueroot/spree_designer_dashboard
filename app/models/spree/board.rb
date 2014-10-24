@@ -3,6 +3,8 @@ class Spree::Board < ActiveRecord::Base
 
   state_machine :state, :initial => :new do
     
+    after_transition :on => :publish, :do => :handle_publication
+    
     event :submit_for_publication do
       transition :new => :submitted_for_publication, :in_revision => :submitted_for_publication
     end
@@ -12,7 +14,7 @@ class Spree::Board < ActiveRecord::Base
     end
     
     event :publish do
-      transition :submitted_for_publication => :published
+      transition all => :published
     end
     
     event :suspend do
@@ -35,14 +37,16 @@ class Spree::Board < ActiveRecord::Base
       end
     end
     
-    def handle_publication
-      delete_removed_board_products
-      delete_marked_products
-    end
+    
    
   end
 
-
+  def handle_publication
+    delete_removed_board_products
+    delete_deleted_board_products
+    self.generate_image
+  end
+  
   #aasm column: :state, whiny_transitions: true do
   #
   #  state :draft, initial: true
@@ -77,21 +81,21 @@ class Spree::Board < ActiveRecord::Base
   #end
 
   def handle_deletion
-    self.update_attributes!({status: "deleted"}, without_protection: true )
-    delete_removed_board_products
-    delete_marked_products
-    self.destroy
+    #self.update_attributes!({status: "deleted"}, without_protection: true )
+    #delete_removed_board_products
+    #delete_marked_products
+    #self.destroy
   end
 
   def delete_removed_board_products
-    self.board_products.select {|bp| bp.status == "rejected" }.each(&:destroy)
+    self.board_products.marked_removal.each(&:destroy)
   end
-
-  def delete_marked_products
-    self.board_products.select {|bp| bp.status == "marked_for_deletion"}.collect(&:product).compact.each(&:destroy)
-    self.board_products.select {|bp| bp.status == "marked_for_deletion"}.each(&:destroy)
+  
+  def delete_deleted_board_products
+    self.board_products.marked_deletion.collect(&:product).compact.each(&:destroy)
+    self.board_products.marked_deletion.each(&:destroy)
   end
-
+  
   def update_submitted_for_publication_status
     self.update_attributes!({status: "submitted_for_publication"}, without_protection: true )
   end
@@ -354,7 +358,9 @@ class Spree::Board < ActiveRecord::Base
     white_canvas.format = 'jpeg'
     file = Tempfile.new("room_#{self.id}.jpg")
     white_canvas.write(file.path)
+    #self.board_image.destroy if self.board_image
     self.build_board_image if self.board_image.blank?
+    self.board_image.reload
     self.board_image.attachment = file      
 
     # set it to be clean again 

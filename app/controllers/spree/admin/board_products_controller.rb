@@ -42,6 +42,23 @@ class Spree::Admin::BoardProductsController < Spree::Admin::ResourceController
       format.json { render json: { status: 200 } }
     end
   end
+  
+  def mark_approved
+    @board_product  = Spree::BoardProduct.find_by id: params[:id]
+    @board_product.mark_for_approval
+    respond_to do |format|
+      format.js {  }
+    end
+  end
+  
+  def mark_rejected
+    @board_product  = Spree::BoardProduct.find_by id: params[:id]
+    @board_product.mark_for_removal
+    respond_to do |format|
+      format.js {  }
+    end
+  end
+  
 
   private
     def board_product_params

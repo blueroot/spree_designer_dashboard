@@ -1,5 +1,5 @@
 <% unless designer.user_images.blank? %>
 	<%= link_to image_tag(designer.user_images.first.attachment(:primary), :style => "width: 100%;", :class=>"img-circle"), "/#{designer.username}" %>
 <% else %>
-	<%= link_to image_tag("/assets/store/profile_default_primary.jpg", :style => "width: 100%;", :class=>"img-circle"), "/#{designer.username}" %>
+	<%= link_to image_tag("/assets/frontend/profile_default_primary.jpg", :style => "width: 100%;", :class=>"img-circle"), "/#{designer.username}" %>
 <% end %>

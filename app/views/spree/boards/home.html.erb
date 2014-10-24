@@ -84,7 +84,7 @@
 							<%= image_tag(@featured_designer.feature_image.attachment(:home))%>
 						</a>
 					<% else %>
-						<%= image_tag('store/home/designer.png')%>
+						<%= image_tag('frontend/home/designer.png')%>
 					<%end%>
 				</div>
 				
@@ -125,7 +125,7 @@
 								<%= image_tag(@featured_designer.feature_image.attachment(:primary))%>
 							</a>
 						<% else %>
-							<%= image_tag('store/home/designer.png')%>
+							<%= image_tag('frontend/home/designer.png')%>
 						<%end%>
 						</div>
 						<h4>Exceptional Designers</h4>
@@ -140,7 +140,7 @@
 								<%= large_image(@fetaured_product, :itemprop => 'image') %>
 							</a>  
 							<%else%>
-							<%= image_tag('store/home/product.png')%>
+							<%= image_tag('frontend/home/product.png')%>
 							<%end%>
 						</div>
 						<h4>Unique Products</h4>
@@ -156,7 +156,7 @@
 							<%= link_to board_image(@featured_room, :large), room_path(@featured_room)%>
 							<%end%>
 							<% else %>
-							<%= image_tag('store/home/board.png')%>
+							<%= image_tag('frontend/home/board.png')%>
 							<%end%>
 
 						</div>

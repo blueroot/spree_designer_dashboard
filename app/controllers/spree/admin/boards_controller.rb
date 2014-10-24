@@ -100,6 +100,39 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
       end
     end 
   end
+  
+  def approve
+    @board  = Spree::Board.find_by id: params[:board][:id]
+    @board.publish
+    respond_to do |format|
+      format.js {  }
+    end
+  end
+  
+  def request_revision
+    @board  = Spree::Board.find_by id: params[:board][:id]
+    @board.request_designer_revision
+    if params[:revision_message]
+    end
+    respond_to do |format|
+      format.js {  }
+    end
+  end
+  
+  def approval_form
+    @board  = Spree::Board.find_by id: params[:id]
+    respond_to do |format|
+      format.js {  }
+    end
+  end
+  
+  def revision_form
+    @board  = Spree::Board.find_by id: params[:id]
+    respond_to do |format|
+      format.js {  }
+    end
+  end
+  
 
   def new
     @board = Spree::Board.new(:name => "Untitled Room")

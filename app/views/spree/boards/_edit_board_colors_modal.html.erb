@@ -12,12 +12,12 @@
 			<% @color_collections.each do |cc| %>
 		
 				<% if cc.name == "Sherwin Williams" %>
-					<a href="javascript:void(0);" class="swatch-vendor" data-vendor-id="<%=cc.id%>"><%= image_tag("store/colorvendors/sw.png")%></a>
+					<a href="javascript:void(0);" class="swatch-vendor" data-vendor-id="<%=cc.id%>"><%= image_tag("frontend/colorvendors/sw.png")%></a>
 				
 					<input type="hidden" id="colorfrom" name="colorfrom" /> 
 				
 				<% elsif cc.name == "Benjamin Moore" %>
-					<span style="margin-left:20px;"><a href="javascript:void(0);" class="swatch-vendor" data-vendor-id="<%=cc.id%>"><%= image_tag("store/colorvendors/bm.png")%></a>
+					<span style="margin-left:20px;"><a href="javascript:void(0);" class="swatch-vendor" data-vendor-id="<%=cc.id%>"><%= image_tag("frontend/colorvendors/bm.png")%></a>
 					</span>
 				
 				<% end %>	

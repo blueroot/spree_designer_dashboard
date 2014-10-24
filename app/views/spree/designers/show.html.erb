@@ -11,7 +11,7 @@
 						<% if !@designer.user_images.blank? %>
 						<%=image_tag(@designer.user_images.first.attachment(:primary), :class => "img-circle")%>
 						<% else %>
-							<%=image_tag("/assets/store/profile_default_primary.jpg", :class => "img-circle")%>
+							<%=image_tag("/assets/frontend/profile_default_primary.jpg", :class => "img-circle")%>
 						<% end %>
 					</div>
 				</div>

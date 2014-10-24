@@ -1,6 +1,6 @@
 <% @board.messages.new(:sender_id => spree_current_user.id, :recipient_id => @board.designer.id, :subject => "Your Board") %>
 
-		<%= board_image(@board,"primary")%>
+		
 
 	    <%= f.field_container :name do %>
 	      <%= f.label :name %> <span class="required">*</span><br />
