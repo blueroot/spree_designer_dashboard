@@ -4,16 +4,16 @@
 <div class="row">
 	<div class="col-md-3">
 		<ul class="nav nav-stacked nav-pills">
-			<li class="<%= "active" if @status == "pending_approval" %>"><%= link_to "Pending Approval #{@products_pending_approval_count}", admin_boards_products_path(:status => "pending_approval")%></li>
-			<li class="<%= "active" if @status == "marked_approval" %>"><%= link_to "Marked for Approval #{@products_marked_approval_count}", admin_boards_products_path(:status => "marked_approval")%></li>
-			<li class="<%= "active" if @status == "marked_removal" %>"><%= link_to "Marked for Removal #{@products_marked_removal_count}", admin_boards_products_path(:status => "marked_removal")%></li>
-			<li class="<%= "active" if @status == "published" %>"><%= link_to "Published #{@products_published_count}", admin_boards_products_path(:status => "published")%></li>
-			<li class="<%= "active" if @status == "discontinued" %>"><%= link_to "Discontinued #{@products_discontinued_count}", admin_boards_products_path(:status => "discontinued")%></li>
+			<li class="<%= "active" if @state == "pending_approval" %>"><%= link_to "Pending Approval #{@products_pending_approval_count}", admin_boards_products_path(:state => "pending_approval")%></li>
+			<li class="<%= "active" if @state == "marked_for_approval" %>"><%= link_to "Marked for Approval #{@products_marked_approval_count}", admin_boards_products_path(:state => "marked_approval")%></li>
+			<li class="<%= "active" if @state == "marked_for_removal" %>"><%= link_to "Marked for Removal #{@products_marked_removal_count}", admin_boards_products_path(:state => "marked_removal")%></li>
+			<li class="<%= "active" if @state == "published" %>"><%= link_to "Published #{@products_published_count}", admin_boards_products_path(:state => "published")%></li>
+			<li class="<%= "active" if @state == "discontinued" %>"><%= link_to "Sold Out #{@products_discontinued_count}", admin_boards_products_path(:state => "discontinued")%></li>
 		</ul>
 	</div>
 	<div class="col-md-9">
 		<div>
-			<h3><%= @products.total_count %> <%= @supplier.name if @supplier %> <%= "product".pluralize(@products.total_count) %> <%= params[:status] ? params[:status].humanize.downcase : "waiting approval" %></h3>
+			<h3><%= @products.total_count %> <%= @supplier.name if @supplier %> <%= "product".pluralize(@products.total_count) %> <%= params[:state] ? params[:state].humanize.downcase : "waiting approval" %></h3>
 		</div>
 		<div>
 			<%= form_tag '', :method => :get, :id => 'sidebar_products_search' do %>
@@ -26,18 +26,7 @@
 
 		<%= paginate @products %>
 		<table class="table">
-			<thead>
-				<tr>
-					<th>&nbsp;</th>
-					<th>Name</th>
-					<% if ["pending_approval", "marked_approval", "marked_removal"].include?(@status) %>
-						<th>Approve/Remove Products from each room they appear in</th>
-					<% else %>
-					
-					<% end %>
-					
-				</tr>
-			</thead>
+			
 			<tbody>
 				<% @products.each do |product| %>
 				<%if product %>
@@ -45,25 +34,31 @@
 					<td><%= mini_image(product, class: "img-thumbnail") %></td>
 					<td><%= link_to product.name, edit_admin_product_path(product), {:target => "_blank"} %></td>
 					
-					<% if ["pending_approval", "marked_approval", "marked_removal"].include?(@status) %>
+					<% if ["pending_approval", "marked_for_approval", "marked_for_removal", "marked_for_deletion"].include?(@state) %>
 						<% if !product.board_products.pending_approval.blank? %>
-							<td>
+							<td style="width: 400px;">
 								<% product.board_products.pending_approval.each do |bp|%>
 									<div class="row">
-										<div class="col-md-6">
+										<div class="col-md-2">
+											<div id="board_product_state_<%=bp.id%>" class="board_product_state">
+												<%= glyph_for_state(bp.state) %>
+											</div>
+											
+										</div>
+										<div class="col-md-5">
 											<div style="">
+												<% if bp.board %>
 												<div><%= link_to bp.board.name, edit_admin_board_path(product.boards.first) %></div>
 												<div><%= bp.board.designer.profile_display_name %></div>
+												<% end %>
 											</div>
 										</div>	
-										<div class="col-md-6">
-											<% if true %>
-											<button class="btn btn-success btn-sm btn-approve" data-product-id="<%=product.id%>" data-board-product-id="<%=bp.id%>"  data-target=".modal-bp-approve">Approve</button> 
-											<button class="btn btn-danger btn-sm btn-remove" data-product-id="<%=product.id%>" data-board-product-id="<%=bp.id%>"  data-target=".modal-bp-remove">Remove</button>
-											<% end %>
+										<div class="col-md-5" style="text-align: right;">
+											<%= render :partial => "product_actions", :locals => {:board_product => bp}%>
+											
 										</div>
 									</div>	
-									
+										
 									
 								<% end %>
 								

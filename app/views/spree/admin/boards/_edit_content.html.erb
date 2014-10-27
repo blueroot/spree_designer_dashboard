@@ -1,0 +1,101 @@
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+<% content_for :page_title do %>
+	<%= Spree.t("designer_board.boards_title") %> <i class="icon-arrow-right"></i> <%= Spree.t("designer_board.editing_board") %> "<%= @board.name%>"
+	<% end %>
+
+	<% content_for :page_actions do %>
+	<li><%= button_link_to Spree.t(:back_to_boards_list), spree.admin_boards_url, :icon => 'icon-arrow-left' %></li>
+	<% end %>
+	<div class="container">
+		<%= render "spree/shared/error_messages", :target => @board %>
+		<div class="row">
+			<div class="col-md-5">
+				<%= board_image(@board,"primary")%>
+				<div class="form-box clearfix">
+					<%= form_for [:admin, @board] do |f| %>
+					<fieldset class="no-border-top">
+						<%= render :partial => 'form', :locals => { :f => f } %>
+						<%= render :partial => 'spree/admin/shared/edit_resource_links' %>
+					</fieldset>
+					<% end %>
+				</div>
+			</div>
+			<div class="col-md-7">
+				<div class="board-actions clearfix">
+					<div class="row" style="margin-bottom: 0;">
+						<div class="col-md-6">
+							Status: <%= @board.human_state_name %>
+						</div>
+						<div class="col-md-6" style="text-align: right;">
+							<%= link_to "Approve and Publish", "javascript:void(0);", :class => "js-btn-board-approve btn btn-sm btn-success", :"data-board-id" => @board.id %>
+							<%= link_to "Request Revisions", "javascript:void(0);", :class => "js-btn-board-revise btn btn-sm btn-default", :"data-board-id" => @board.id %>
+						</div>
+					</div>
+				</div>
+				<h4>Products on This Board</h4>
+				<div id="board_products">
+					<%= render :partial => "board_products", :locals => {:board => @board}%>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<% content_for :modals do %>
+
+	<div id="board_modal" class="modal fade">
+		<div class="modal-dialog">
+			<div id="board_modal_content" class="modal-content">
+
+
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+	<% end %>
+
+
+
+
+
+
+
+	<script>
+	$('.js-btn-board-approve').click(function() {
+		var board_id = $(this).data('boardId')
+		//$('#board_product_id').val($(this).data('boardProductId'));
+		//$('#modal_product_name').html($(this).data('boardProductName'));
+		//$('#modal_product_image').attr("src",$(this).data('boardProductImageUrl'));
+
+		$('#board_modal').modal('show');
+		$('#board_modal_content').html('loading...');
+		$.ajax({
+			type: "GET",
+			url: "/admin/boards/approval_form.js?id="+board_id,
+			contentType: "application/json"
+		}).done(function(data){
+			console.log(data);
+		});
+
+	});
+
+	$('.js-btn-board-revise').click(function() {
+		var board_id = $(this).data('boardId')
+		$('#board_modal').modal('show');
+		$('#board_modal_content').html('loading...');
+		$.ajax({
+			type: "GET",
+			url: "/admin/boards/revision_form.js?id="+board_id,
+			contentType: "application/json"
+		}).done(function(data){
+			console.log(data);
+		});
+
+	});
+	</script>
+
+
+
+

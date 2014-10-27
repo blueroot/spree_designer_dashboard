@@ -36,9 +36,6 @@ class Spree::Board < ActiveRecord::Base
         true
       end
     end
-    
-    
-   
   end
 
   def handle_publication
@@ -124,7 +121,7 @@ class Spree::Board < ActiveRecord::Base
 
   has_one :board_image, as: :viewable, order: :position, dependent: :destroy, class_name: "Spree::BoardImage"
   #attr_accessible :board_image_attributes, :messages_attributes
-  #accepts_nested_attributes_for :board_image, :messages
+  accepts_nested_attributes_for :board_image, :messages
   is_impressionable
 
   after_save :update_product_publish_status
@@ -362,7 +359,7 @@ class Spree::Board < ActiveRecord::Base
     self.build_board_image if self.board_image.blank?
     self.board_image.reload
     self.board_image.attachment = file      
-
+    self.board_image.save
     # set it to be clean again 
     self.is_dirty = 0
     self.save
@@ -380,5 +377,37 @@ class Spree::Board < ActiveRecord::Base
   def coded_designer_name
     "#{self.designer.first_name.downcase}_#{self.designer.last_name.downcase}"
   end
+  
+  def to_url
+    "https://scoutandnimble.com/rooms/#{self.id}"
+  end
+  
+  def send_publication_email(message_content="")
+    
+    html_content = "Hi #{self.designer.full_name}, <br />Your room <strong>#{self.name}</strong> has been approved and published.  You can <a href=\"#{self.to_url}\">visit your room here</a> to check it out."
+    
+    m = Mandrill::API.new(MANDRILL_KEY)
+    message = {
+      :subject=> "Your room has been approved!",
+      :from_name=> "Jesse Bodine",
+      :text=>"#{message_content} \n\n The Scout & Nimble Team",
+      :to=>[
+       {
+         :email=> self.designer.email,
+         :name=> self.designer.full_name
+       }
+       ],
+       :from_email=>"designer@scoutandnimble.com",
+       :track_opens => true,
+       :track_clicks => true,
+       :url_strip_qs => false,
+       :signing_domain => "scoutandnimble.com"
+     }
+
+     sending = m.messages.send_template('simple-template', [{:name => 'main', :content => html_content}, {:name => 'extra-message', :content => message_content}], message, true)
+
+     logger.info sending   
+   end
+  
 
 end

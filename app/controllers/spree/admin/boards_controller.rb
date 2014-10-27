@@ -22,11 +22,11 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
   end
 
   def products
-    @products_pending_approval_count = Spree::Product.pending_approval.count > 0 ? "(#{Spree::Product.pending_approval.count})" : ""
-    @products_marked_approval_count = Spree::Product.marked_approval.count > 0 ? "(#{Spree::Product.marked_approval.count})" : ""
-    @products_marked_removal_count = Spree::Product.marked_removal.count > 0 ? "(#{Spree::Product.marked_removal.count})" : ""
-    @products_published_count = Spree::Product.published.count > 0 ? "(#{Spree::Product.published.count})" : ""
-    @products_discontinued_count = Spree::Product.discontinued.count > 0 ? "(#{Spree::BoardProduct.discontinued.count})" : ""
+    @products_pending_approval_count  = Spree::Product.pending_approval.count > 0 ? "(#{Spree::Product.pending_approval.count})" : ""
+    @products_marked_approval_count   = Spree::Product.marked_approval.count > 0 ? "(#{Spree::Product.marked_approval.count})" : ""
+    @products_marked_removal_count    = Spree::Product.marked_removal.count > 0 ? "(#{Spree::Product.marked_removal.count})" : ""
+    @products_published_count         = Spree::Product.published.count > 0 ? "(#{Spree::Product.published.count})" : ""
+    @products_discontinued_count      = Spree::Product.discontinued.count > 0 ? "(#{Spree::BoardProduct.discontinued.count})" : ""
     
     if params[:product] and params[:product][:supplier_id]
       @supplier = Spree::Supplier.find(params[:product][:supplier_id])      
@@ -34,22 +34,22 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
       @supplier = nil
     end
     
-    @status = params[:status] || "pending_approval"
+    @state = params[:state] || "pending_approval"
     
-    case @status
+    case @state
       when "pending_approval"
         if @supplier
           @products = @supplier.products.pending_approval.page(params[:page] || 1).per(params[:per_page] || 50)
         else
           @products = Spree::Product.pending_approval.page(params[:page] || 1).per(params[:per_page] || 50)
         end
-      when "marked_approval"
+      when "marked_for_approval"
         if @supplier
           @products = @supplier.products.marked_approval.page(params[:page] || 1).per(params[:per_page] || 50)
         else
           @products = Spree::Product.marked_approval.page(params[:page] || 1).per(params[:per_page] || 50)
         end
-      when "marked_removal"
+      when "marked_for_removal"
         if @supplier
           @products = @supplier.products.marked_removal.page(params[:page] || 1).per(params[:per_page] || 50)
         else
@@ -74,9 +74,13 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
           @products = Spree::Product.pending_approval.page(params[:page] || 1).per(params[:per_page] || 50)
         end
     end
-    
-    @suppliers_select = Spree::Supplier.select_options_by_status(@status, @supplier, false)
+    @suppliers_select = Spree::Supplier.select_options_by_status(@state, @supplier, false)
   end
+  
+  #def edit
+  #  @board = Spree::Board.find(params[:id])
+    
+  #end
 
   def update
     @board = Spree::Board.find_by id: params[:id]
@@ -104,6 +108,9 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
   def approve
     @board  = Spree::Board.find_by id: params[:board][:id]
     @board.publish
+    if params[:board][:send_message] == "on"
+      @board.send_publication_email(params[:board][:message_content])
+    end
     respond_to do |format|
       format.js {  }
     end
@@ -112,6 +119,7 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
   def request_revision
     @board  = Spree::Board.find_by id: params[:board][:id]
     @board.request_designer_revision
+
     if params[:revision_message]
     end
     respond_to do |format|
@@ -121,6 +129,7 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
   
   def approval_form
     @board  = Spree::Board.find_by id: params[:id]
+    @board.messages.build
     respond_to do |format|
       format.js {  }
     end
@@ -128,6 +137,7 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
   
   def revision_form
     @board  = Spree::Board.find_by id: params[:id]
+    @board.messages.build
     respond_to do |format|
       format.js {  }
     end
@@ -193,30 +203,5 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
    logger.info sending   
  end
 
- def send_publication_email(board, message)
-  html_content = ''
-
-  m = Mandrill::API.new(MANDRILL_KEY)
-  message = {
-    :subject=> "Your room was published!",
-    :from_name=> "Jesse Bodine",
-    :text=>"#{message} \n\n The Scout & Nimble Team",
-    :to=>[
-     {
-       :email=> board.designer.email,
-       :name=> board.designer.full_name
-     }
-     ],
-     :from_email=>"designer@scoutandnimble.com",
-     :track_opens => true,
-     :track_clicks => true,
-     :url_strip_qs => false,
-     :signing_domain => "scoutandnimble.com"
-   }
-
-   sending = m.messages.send_template('board_publication', [{:name => 'main', :content => html_content}], message, true)
-
-   logger.info sending   
- end
-
+ 
 end
