@@ -1,7 +1,7 @@
 class Spree::BoardsController < Spree::StoreController
   helper 'spree/taxons'
   helper 'spree/products'
-  before_filter :require_authentication, :only => [:new, :design, :preview, :dashboard, :my_profile]
+  before_filter :require_authentication, :only => [:new, :design, :preview, :dashboard, :my_profile, :store_credit]
   before_filter :prep_search_collections, :only => [:index, :search, :edit, :new, :design]
   before_filter :load_board, :only => [:preview, :design, :destroy]
   before_filter :require_board_designer, :only => [:dashboard]
@@ -31,7 +31,6 @@ class Spree::BoardsController < Spree::StoreController
   
   def dashboard
     @boards = spree_current_user.boards
-    
   end
   
   def profile
@@ -44,6 +43,10 @@ class Spree::BoardsController < Spree::StoreController
     else
       redirect_to "/"
     end
+  end
+
+  def store_credit
+    @user = spree_current_user
   end
   
   

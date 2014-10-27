@@ -35,6 +35,7 @@ Spree::Core::Engine.routes.draw do
   # designer dashboard links
   get "/dashboard" => "boards#dashboard", :as => :designer_dashboard
   get "/my_profile" => "boards#profile", :as => :my_profile
+  get "/my_store_credit" => "boards#store_credit", :as => :my_store_credit
   get "/my_rooms" => "boards#my_rooms", :as => :my_rooms
   resources :bookmarks
   post "/bookmarks/remove" => "bookmarks#destroy", :as => :remove_bookmark

@@ -1,0 +1,28 @@
+<div class="row">
+  <div class="col-md-3">
+    <%= render :partial => "dashboard_menu", :locals => {:selected => "profile"} %>
+  </div>
+
+
+  <div class="col-md-9">
+    <% if @user.has_store_credit? %>
+        <div class="account-my-affiliates" data-hook="affiliates">
+
+          <h3><%= t(:affiliates_signed_up) %></h3>
+        </div>
+
+        <strong>
+          <%= t('affiliate_link') %>
+          <%= link_to_referral_url(@user) %>
+        </strong>
+        <br/>
+
+
+        <h3><%= Spree.t("store_credits") %></h3>
+
+        <p>
+          <%= Spree.t('current_store_credit') %>: <strong><%= number_to_currency @user.store_credits_total %></strong>
+        </p>
+    <% end %>
+  </div>
+</div>
