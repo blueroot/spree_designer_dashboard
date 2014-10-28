@@ -1,0 +1,16 @@
+<% content_for :page_actions do %>  
+<li><%= button_link_to Spree.t("new_slide"), new_object_url, :icon => 'icon-plus' %></li>
+<% end %>
+<% content_for :page_title do %>
+<%= Spree.t(:home_page_slides) %>
+<% end %>
+
+
+<h4>Current Slides</h4>
+<%= render :partial => "list", :locals => {:slides => @current_slides}%>
+
+<h4>Upcoming Slides</h4>
+<%= render :partial => "list", :locals => {:slides => @upcoming_slides}%>
+
+<h4>Expired Slides</h4>
+<%= render :partial => "list", :locals => {:slides => @expired_slides}%>

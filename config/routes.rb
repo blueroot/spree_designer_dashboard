@@ -86,7 +86,7 @@ Spree::Core::Engine.routes.draw do
     resources :boards
     resources :board_products
     resources :designer_registrations
-    
+    resources :slides
     
     get  "designers" => "users#designers", :as => :designers
     
