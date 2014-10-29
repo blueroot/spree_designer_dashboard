@@ -1,6 +1,6 @@
 class Spree::BoardProductsController < Spree::StoreController
-  require 'RMagick'
-  include Magick 
+  #require 'RMagick'
+  #include Magick 
   before_filter :require_authentication
   def index
     if params[:room_id] and @board = Spree::Board.find(params[:room_id])      

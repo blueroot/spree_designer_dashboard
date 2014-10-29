@@ -109,6 +109,19 @@ fabric.Object.prototype.setCenterToOrigin = function () {
 
 
 function buildImageLayer(canvas, bp){
+	if(parseInt(bp.rotation_offset) == 90){
+		real_left =  bp.height + bp.top_left_x
+		real_top = bp.top_left_y
+		//alert(real_left + " " + real_top)
+	}else	if(parseInt(bp.rotation_offset) == 270){
+		real_left = bp.top_left_x
+		real_top =  bp.top_left_y + bp.width
+		//alert(real_left + " " + real_top)
+	}else{
+		real_left = bp.top_left_x
+		real_top = bp.top_left_y
+	}
+	
 	fabric.Image.fromURL(bp.product.image_url, function(oImg) {
 		oImg.scale(1).set({
 		      left: bp.top_left_x,
@@ -126,6 +139,14 @@ function buildImageLayer(canvas, bp){
 		canvas.add(oImg);
 		canvas.setActiveObject(oImg);
 		rotateObject(bp.rotation_offset);
+		//oImg.set('current_x', bp.top_left_x)
+		//oImg.set('current_y', bp.top_left_y)
+		//canvas.add(oImg);
+		if(parseInt(bp.rotation_offset) == 90 || parseInt(bp.rotation_offset) == 270){
+		oImg.set({
+			left: real_left,
+    	top: real_top})
+		}
 		canvas.discardActiveObject();
 	});
 }
@@ -295,8 +316,10 @@ function getSavedProducts(board_id){
 				}, false);
 				document.getElementById('bp-rotate-left').addEventListener('click', function() {
 					activeObject = canvas.getActiveObject()
-					x = activeObject.get('current_x')
-					y = activeObject.get('current_y')
+					//x = activeObject.get('current_x')
+					//y = activeObject.get('current_y')
+					x = getCurrentLeft(activeObject)
+					y = getCurrentTop(activeObject)
 					rotateObject(90);	
 					
 					updateBoardProduct(activeObject.get('id'), {id: activeObject.get('id'), top_left_x: x, top_left_y: y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)})

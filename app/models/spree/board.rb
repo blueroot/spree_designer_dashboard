@@ -357,7 +357,7 @@ class Spree::Board < ActiveRecord::Base
     white_canvas.write(file.path)
     #self.board_image.destroy if self.board_image
     self.build_board_image if self.board_image.blank?
-    self.board_image.reload
+    #self.board_image.reload
     self.board_image.attachment = file      
     self.board_image.save
     # set it to be clean again 
