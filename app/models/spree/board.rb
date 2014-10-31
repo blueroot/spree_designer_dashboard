@@ -3,14 +3,14 @@ class Spree::Board < ActiveRecord::Base
 
   state_machine :state, :initial => :new do
     
-    after_transition :on => :publish, :do => :handle_publication
+    after_transition :on => [:publish, :request_designer_revision], :do => :remove_marked_products
     
     event :submit_for_publication do
       transition :new => :submitted_for_publication, :in_revision => :submitted_for_publication
     end
     
     event :request_designer_revision do
-      transition :submitted_for_publication => :in_revision
+      transition all => :in_revision
     end
     
     event :publish do
@@ -38,7 +38,7 @@ class Spree::Board < ActiveRecord::Base
     end
   end
 
-  def handle_publication
+  def remove_marked_products
     delete_removed_board_products
     delete_deleted_board_products
     self.generate_image
@@ -389,7 +389,7 @@ class Spree::Board < ActiveRecord::Base
     m = Mandrill::API.new(MANDRILL_KEY)
     message = {
       :subject=> "Your room has been approved!",
-      :from_name=> "Jesse Bodine",
+      :from_name=> "Scout & Nimble",
       :text=>"#{message_content} \n\n The Scout & Nimble Team",
       :to=>[
        {
@@ -407,7 +407,34 @@ class Spree::Board < ActiveRecord::Base
      sending = m.messages.send_template('simple-template', [{:name => 'main', :content => html_content}, {:name => 'extra-message', :content => message_content}], message, true)
 
      logger.info sending   
-   end
+  end
+  
+  def send_revision_request_email(message_content="")
+    
+    html_content = "Hi #{self.designer.full_name}, <br /> Your room, \"#{self.name}\" has been reviewed and needs revision before publishing.  Please visit the <a href=\"#{self.to_url}/design\">design page</a> to make any revisions. "
+    
+    m = Mandrill::API.new(MANDRILL_KEY)
+    message = {
+      :subject=> "Your room status has changed: needs revision",
+      :from_name=> "Scout & Nimble",
+      :text=>"#{message_content} \n\n The Scout & Nimble Team",
+      :to=>[
+       {
+         :email=> self.designer.email,
+         :name=> self.designer.full_name
+       }
+       ],
+       :from_email=>"designer@scoutandnimble.com",
+       :track_opens => true,
+       :track_clicks => true,
+       :url_strip_qs => false,
+       :signing_domain => "scoutandnimble.com"
+     }
+
+     sending = m.messages.send_template('simple-template', [{:name => 'main', :content => html_content}, {:name => 'extra-message', :content => message_content}], message, true)
+
+     logger.info sending   
+  end
   
 
 end

@@ -65,10 +65,6 @@
 	<script>
 	$('.js-btn-board-approve').click(function() {
 		var board_id = $(this).data('boardId')
-		//$('#board_product_id').val($(this).data('boardProductId'));
-		//$('#modal_product_name').html($(this).data('boardProductName'));
-		//$('#modal_product_image').attr("src",$(this).data('boardProductImageUrl'));
-
 		$('#board_modal').modal('show');
 		$('#board_modal_content').html('loading...');
 		$.ajax({

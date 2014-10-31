@@ -119,6 +119,7 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
   def request_revision
     @board  = Spree::Board.find_by id: params[:board][:id]
     @board.request_designer_revision
+    @board.send_revision_request_email(params[:board][:message_content])
 
     if params[:revision_message]
     end

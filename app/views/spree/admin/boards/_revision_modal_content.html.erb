@@ -5,22 +5,26 @@
 <%= form_for(board, :url => "/admin/boards/request_revision", method: "post", :remote => true) do |f| %>
 	<%= f.hidden_field :id %>
 	<div class="modal-body">
-		<h4>Send a Message with this revision request?</h4>
-		<textarea id="board_approval_message" name="board[approval_message]" style="width: 100%;"></textarea>
-		
 		<% if !board.board_products.marked_removal.blank? %>
-			<h4>The following products will be removed upon saving revision request</h4>
-			<table class="table">
+		<h4>The following products will be removed upon saving revision request</h4>
+		<table class="table">
 			<% board.board_products.marked_removal.each do |board_product| %>
-				<tr>
-					<td><%= link_to raw("<span class=\"helper\"></span>#{mini_image(board_product.product, :itemprop => 'image')}"), board_product.product, :itemprop => 'url' %></td>
-					<td><%= link_to truncate(board_product.product.name, :length => 50), edit_admin_product_path(board_product.product), :class => 'info', :itemprop => "name", :title => board_product.product.name, :target => "_new" %></td>
-				</tr>
+			<tr>
+				<td><%= link_to raw("<span class=\"helper\"></span>#{mini_image(board_product.product, :itemprop => 'image')}"), board_product.product, :itemprop => 'url' %></td>
+				<td><%= link_to truncate(board_product.product.name, :length => 50), edit_admin_product_path(board_product.product), :class => 'info', :itemprop => "name", :title => board_product.product.name, :target => "_new" %></td>
+			</tr>
 			<% end %>
-			</table>
+		</table>
+		<% else%>
+			<div class="empty-state">
+				No products are being removed from this board.
+			</div>
 		<% end%>
 		
-	
+		<strong>Include a message about the revisions to be made</strong>
+		<div id="message_notification_box" >
+			<textarea id="board_message_content" name="board[message_content]" rows="5" class="fullwidth"></textarea>
+		</div>
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
