@@ -14,7 +14,11 @@
 
 
 									<%#= image_tag product.images.first.attachment.url(:thumb), {:style => "width: 100%; height: auto;", :class => 'board-lightbox-product-img cloudzoom', :"data-cloudzoom" => "zoomImage: '#{product.images.first.attachment.url(:original)}'"}%>
+									<% if product.images.first %>
 									<%= image_tag product.images.first.attachment.url(:thumb), {:class => 'board-lightbox-product-img'}%>
+									<% elsif product.master.images.first%>
+										<%= image_tag product.master.images.first.attachment.url(:thumb), {:class => 'board-lightbox-product-img'}%>
+									<% end %>
 									<%#= thumb_image(product, :itemprop => 'image', :class => "board-lightbox-product-img") %></a>
 									
 								</div>
