@@ -176,9 +176,13 @@ class Spree::BoardsController < Spree::StoreController
       taxon = Spree::Taxon.find(params[:department_taxon_id])
       taxons << taxon.id
     end
-    
-  
-    
+
+
+    Rails.logger.info "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    Rails.logger.info "I am in"
+    Rails.logger.info "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    Rails.logger.info "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+
     
     unless taxons.empty? 
       @searcher = build_searcher(params.merge(:taxon => taxons))
@@ -193,6 +197,11 @@ class Spree::BoardsController < Spree::StoreController
       @all_products = @searcher.retrieve_products( {includes: :board_products}, {where: "spree_board_products.product_id is NULL"})
     end
     @products = @all_products
+
+    Rails.logger.info "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    Rails.logger.info @products.inspect
+    Rails.logger.info "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    Rails.logger.info "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     
     #@products = @all_products.select { |product| product.not_on_a_board? }
     #if params[:supplier_id]
