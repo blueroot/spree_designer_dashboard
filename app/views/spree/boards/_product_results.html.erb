@@ -1,4 +1,11 @@
+<% Rails.logger.info "----------------------" %>
+<% Rails.logger.info "In a view" %><% Rails.logger.info products.inspect %>
+<% Rails.logger.info "In a view" %>
+<% Rails.logger.info "-----------------" %>
+
+
 <% unless products.blank? %>
+
 	<div class="select-products-box-inner">
 		<% products.in_groups_of(3, false) do |row_products| %>
 			<div class="row">
