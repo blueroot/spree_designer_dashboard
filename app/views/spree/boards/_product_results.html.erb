@@ -3,6 +3,7 @@
 		<% products.in_groups_of(3, false) do |row_products| %>
 			<div class="row">
 			<% for product in row_products %>
+			<% if product.not_on_a_board?%>
 			<% is_bookmarked = product.is_bookmarked_by?(spree_current_user) %>
 				<div class="col-md-4">
 					<div id="board-product-select-<%= product.id %>" class="board-product-select">
@@ -74,6 +75,7 @@
 						<% end %>
 					</div>
 				</div>
+			<% end %>
 			<% end %>
 			</div>
 		<% end%>
