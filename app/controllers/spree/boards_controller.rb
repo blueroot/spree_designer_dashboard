@@ -196,7 +196,7 @@ class Spree::BoardsController < Spree::StoreController
       # @all_products = @searcher.retrieve_products.not_on_a_board
       @all_products = @searcher.retrieve_products( {includes: :board_products}, {where: "spree_board_products.product_id is NULL"})
     end
-    @products = @all_products
+    @products = @all_products.all
 
     Rails.logger.info "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     Rails.logger.info @products.inspect
