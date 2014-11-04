@@ -39,7 +39,7 @@
 								<% if product.master.made_to_order?%>
 									<div title="Made to Order" class="product-results-meta"><i class="fa fa-truck"></i> <%= product.master.display_made_to_order %> Made to Order</div>
 								<% else %>
-									<div title="Available Inventory" class="product-results-meta"><i class="fa fa-archive"></i> <% #= product.master.display_inventory %></div>
+									<div title="Available Inventory" class="product-results-meta"><i class="fa fa-archive"></i> <%#= product.master.display_inventory %></div>
 								<% end %>
 								<% end %>
 								<% if false and product.variants.size > 0 %>
