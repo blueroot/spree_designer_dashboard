@@ -1,22 +1,10 @@
-<% Rails.logger.info "----------------------" %>
-<% Rails.logger.info "In a view" %><% Rails.logger.info products.inspect %>
-<% Rails.logger.info "In a view" %>
-<% Rails.logger.info "-----------------" %>
-<% Rails.logger.info "products.blank? #{products.blank?}" %>
-<% Rails.logger.info "-----------------" %>
-
-
 <% unless products.blank? %>
-    <% Rails.logger.info "--------1---------" %>
 	<div class="select-products-box-inner">
 		<% products.in_groups_of(3, false) do |row_products| %>
-          <% Rails.logger.info "--------2---------" %>
 			<div class="row">
 			<% for product in row_products %>
-                  <% Rails.logger.info "---------3--------" %>
 			<%# if product.not_on_a_board?%>
 			<% is_bookmarked = product.is_bookmarked_by?(spree_current_user) %>
-                  <% Rails.logger.info "-------4----------" %>
 				<div class="col-md-4">
 					<div id="board-product-select-<%= product.id %>" class="board-product-select">
 						<div class="board-product-select-image">
@@ -25,7 +13,6 @@
 								<div style="position: relative;">
 									<a href="javascript:void(0);" class="button-remove-product" style="font-family: helvetica; font-size: 12px; line-height: 12px; font-weight: bold; background-color: #fff; padding: 4px 7px; border-width: 0 0 1px 1px; border-style: none; border-color: #ccc; right: 0px; top: 0; position: absolute; display: none;">x</a>
 									<a href="javascript:void(0);" class="add-to-board-link" data-product-id="<%=product.slug %>">
-                                      <% Rails.logger.info "--------5---------" %>
 
 									<%#= image_tag product.images.first.attachment.url(:thumb), {:style => "width: 100%; height: auto;", :class => 'board-lightbox-product-img cloudzoom', :"data-cloudzoom" => "zoomImage: '#{product.images.first.attachment.url(:original)}'"}%>
 									<% if product.images.first %>
@@ -34,7 +21,6 @@
 										<%= image_tag product.master.images.first.attachment.url(:thumb), {:class => 'board-lightbox-product-img'}%>
 									<% end %>
 									<%#= thumb_image(product, :itemprop => 'image', :class => "board-lightbox-product-img") %></a>
-                                  <% Rails.logger.info "--------6--------" %>
 									
 								</div>
 								
@@ -45,19 +31,17 @@
 								
 								<div title="Remove Bookmark for this Product" class="product-results-meta unbookmark-product-container <%= "hidden" unless is_bookmarked %>"><a href="javascript:void(0);" class="remove-bookmark-product unbookmark-link unbookmark-link-<%= product.id %>" data-product-id="<%= product.id %>"><i class="fa fa-bookmark"></i> Bookmarked</a></div>
 								
-								<div title="Available Inventory" class="product-results-meta available-inventory"><i class="fa fa-cubes"></i> Inventory: <%= product.total_on_hand %> 
-									
-								</div><% Rails.logger.info "--------7---------" %>
+								<div title="Available Inventory" class="product-results-meta available-inventory"><i class="fa fa-cubes"></i> Inventory: <%"0" #= product.total_on_hand %>
+
 								
 								<div title="Days to Ship" class="product-results-meta"><i class="fa fa-truck"></i> <%= product.master.display_days_to_ship %></div>
 								<% if false %>
 								<% if product.master.made_to_order?%>
 									<div title="Made to Order" class="product-results-meta"><i class="fa fa-truck"></i> <%= product.master.display_made_to_order %> Made to Order</div>
 								<% else %>
-									<div title="Available Inventory" class="product-results-meta"><i class="fa fa-archive"></i> <%= product.master.display_inventory %></div>
+									<div title="Available Inventory" class="product-results-meta"><i class="fa fa-archive"></i> <%"0" #= product.master.display_inventory %></div>
 								<% end %>
 								<% end %>
-                              <% Rails.logger.info "-------8----------" %>
 								<% if false and product.variants.size > 0 %>
 								<div class="product-results-meta">
 									<a href="javascript:void(0);" class="has-variant-options" data-container="body" data-toggle="popover" data-title="There are <%= product.variants.size %> options for <%= product.name %>" data-placement="left" data-variant-popover-container="variant-popver-<%= product.id %>"><i class="fa fa-star"></i> Show Options</a>						</div>
