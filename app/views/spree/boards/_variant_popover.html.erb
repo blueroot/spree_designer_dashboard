@@ -1,0 +1,20 @@
+<% if false and product.variants.size > 0 %>
+<div class="product-results-meta">
+	<a href="javascript:void(0);" class="has-variant-options" data-container="body" data-toggle="popover" data-title="There are <%= product.variants.size %> options for <%= product.name %>" data-placement="left" data-variant-popover-container="variant-popver-<%= product.id %>"><i class="fa fa-star"></i> Show Options</a>						</div>
+	<div id="variant-popver-<%= product.id %>" class="hidden">
+		<% product.variants.in_groups_of(3, false) do |row_variants| %>
+			<div class="row">
+				<% for variant in row_variants %>
+					<div class="col-md-4">
+					<p><%= thumb_image(variant, :itemprop => 'image', :class => "") %></p>
+					<div>
+						<% variant.option_values.each do |ov| %>
+						<div style="margin-bottom: 5px;"><%= ov.name %></div>
+						<% end %>
+					</div>
+					</div>
+				<% end %>
+			</div>
+		<% end %>										
+	</div>
+<% end %>
