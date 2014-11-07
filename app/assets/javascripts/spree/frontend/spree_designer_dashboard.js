@@ -16,7 +16,7 @@ function initializeProductSearchForm(){
 		
 		//alert(taxon);
 		/* Send the data using post */
-		var posting = $.post( url, { keywords: term, department_taxon_id: department_taxon, supplier_id: supplier_id, per_page: 100, board_id: bid } );
+		var posting = $.post( url, { keywords: term, department_taxon_id: department_taxon, supplier_id: supplier_id, per_page: 50, board_id: bid } );
 
 		/* Put the results in a div */
 		posting.done(function( data ) {

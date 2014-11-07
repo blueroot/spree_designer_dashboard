@@ -176,9 +176,7 @@ class Spree::BoardsController < Spree::StoreController
       taxon = Spree::Taxon.find(params[:department_taxon_id])
       taxons << taxon.id
     end
-    
-  
-    
+
     
     unless taxons.empty? 
       @searcher = build_searcher(params.merge(:taxon => taxons))
@@ -186,12 +184,11 @@ class Spree::BoardsController < Spree::StoreController
       @searcher = build_searcher(params)
     end
     if params[:supplier_id] and params[:supplier_id].to_i > 0
-      #@all_products = @searcher.retrieve_products.by_supplier(params[:supplier_id]).not_on_a_board
-      #@all_products = @searcher.retrieve_products(where: "spree_products.supplier_id = #{params[:supplier_id]}", includes: :board_products, where: "spree_board_products.id is NULL")
-      @all_products = @searcher.retrieve_products(where: "spree_products.supplier_id = #{params[:supplier_id]}", includes: :board_products)
+      # @all_products = @searcher.retrieve_products.by_supplier(params[:supplier_id]).not_on_a_board
+      @all_products =  @searcher.retrieve_products({where: "supplier_id = #{params[:supplier_id]}"}, {includes: :board_products}, {where: "spree_board_products.product_id is NULL"})
     else
       # @all_products = @searcher.retrieve_products.not_on_a_board
-      @all_products = @searcher.retrieve_products(includes: :board_products, where: "board_products.id is NULL")
+      @all_products = @searcher.retrieve_products( {includes: :board_products}, {where: "spree_board_products.product_id is NULL"})
     end
     @products = @all_products
     

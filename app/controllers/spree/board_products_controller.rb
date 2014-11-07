@@ -36,17 +36,12 @@ class Spree::BoardProductsController < Spree::StoreController
     else
       @board_product = Spree::BoardProduct.new(board_product_params)
     end
-    
     if @board_product.save
       @board_product.board.queue_image_generation
-
       respond_to do |format|
         format.js   { render :action => "show" }
         format.json   {render :action => "show", :layout => false}
-        #format.html { redirect_to([:admin, @booking], :notice => 'Booking was successfully created.') }
-        #format.xml  { render :xml => @booking, :status => :created, :location => @booking }
       end
-    else
     end
   end
   
