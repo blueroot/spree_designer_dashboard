@@ -1,28 +1,733 @@
+<%= javascript_include_tag 'admin/board_products' %>
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-<% if !@boards.blank? %>
-	<table class="table">
-		<thead>
-			<tr>
-				<th>&nbsp;</th>
-				<th>Name</th>
-				<th>Designer</th>
-				<th>State</th>
-				<!--<th>Action</th>-->
-			</tr>
-		</thead>
-		<tbody>
-			<% @boards.each do |board| %>
-			<tr>
-				<td><%= link_to board_image(board, :mini), edit_admin_board_path(board) %></td>
-				<td><%= link_to board.name, edit_admin_board_path(board) %></td>
-				<td><%= board.designer.profile_display_name if board.designer%></td>
-				<td><%= board.human_state_name %></td>
-				<!-- 
-				<td><%#= render :partial => "actions", :locals => {:board => board} %></td>-->
-			</tr>
-			<% end %>
-		</tbody>
-	</table>
-	<%= paginate @boards %>
+
+<%= render :partial => 'spree/admin/shared/boards_sub_menu' %>
+
+<div class = 'row'>
+  <div class = "form-group col-md-4 left designer-dropdown" id = "">
+    <b><%= label_tag "Show only boards for:" %></b>
+    <%= select_tag :designers, options_for_select(@designer_names, @designer_names.first), class: "form-control" %>
+  </div>
+
+  <div class = "form-group col-md-4 col-md-offset-4 right board-state-dropdown" id = "">
+    <b><%= label_tag "Show boards that are :" %></b>
+    <%= select_tag :state, options_for_select(["All boards", "Draft", "Deleted", "Submitted for Publication", "Published"], "All Products"), class: "form-control" %>
+  </div>
+</div>
+
+  <% @boards.each do |board| %>
+    <div class = "row search-result col-md-12 board-tile board-<%=board.id %> <%= board.state %> <%= board.coded_designer_name %>" data-board-id = '<%= board.id %>'>
+      <div class = "board row">
+      <div class = "col-md-2">
+        <div class = "row">
+          <%= link_to "Expand/Collapse", "", class: "#{board.id} btn btn-default collapse-button", style: "color: white;" %>
+        </div>
+      </div>
+      <div class = "col-md-4 board-title"><%= board.name %> <small class="by"><b> by <%= board.designer_name %></b></small> 
+        <small class ="help-block board-<%= board.id %>-stats">
+          contains <%= board.board_products.size %> products: 
+          <%= board.board_products.select {|bp| bp.status == "approved"}.size %> approved, 
+          <%= board.board_products.select {|bp| bp.status == "rejected" || bp.status == "marked_for_deletion"}.size %> removed, 
+          <%= board.board_products.select {|bp| bp.status == "active" || bp.status == "pending" }.size %> pending
+        </small>
+      </div>
+
+      <div class = "col-md-2 img-thumbnail">
+        <%= link_to board_image(board, :small), edit_admin_board_path(board) %>
+      </div>
+      
+      <div class = "col-md-4 ">
+        <div class = "row">
+          <%= link_to "Publish","#", class: "btn btn-primary", data: {toggle: "modal", target: "#modal-publish-#{board.id}"} %>
+          <%= link_to "Request Revision","#", class: "btn btn-warning", data: {toggle: "modal", target: "#modal-revise-#{board.id}"}%>
+          <%= link_to "Delete","#", class: "btn btn-danger", data: {toggle: "modal", target: "#modal-delete-#{board.id}"}%>
+        </div>
+        <div class = "row">
+          <div class = "board-title status">
+            <small class = "help-block" data-board-id = '<%= board.id %>'>
+              <%= board.state.capitalize.gsub("_", " ") %>
+             (<%= board.status.capitalize.gsub("_", " ") %>)
+            </small>
+          </div>
+        </div>
+
+        <!-- Publish Modal -->
+        <div class="modal fade" id="modal-publish-<%=board.id%>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Publishing <%= board.name %> </h4>
+              </div>
+              <div class="modal-body">
+                <h4><%= board.designer_name %> will be notified of the publication of their board.</h4>
+                  <p>
+                  <% if false and !board.board_products.marked_as_removed.blank? %>
+                    The following products will be removed from the room:
+
+                    <ul class = "list-group removed-on-publication" data-board-id = "<%= board.id %>">
+
+
+
+                     <% board.board_products.marked_as_removed.each do |bp|%>
+                       <% if bp.product %>
+                         <li class = "list-group-item publication" data-product-id = '<%= bp.product.id%>'>
+                           <%= bp.product.name%>
+                        </li>
+                      <% end %>
+                    <% end %>
+
+
+                    </ul>
+                  <% else %>
+                    <ul class = "list-group removed-on-publication" data-board-id = "<%= board.id %>">
+                    </ul>
+
+                  <% end %>
+                </p>
+                <br>
+                <%= label_tag :notify, "Notify designer?" %>
+                <%= check_box_tag '', 'no', false, "data-board-id" => board.id, class: "notify-designer publication" %><br>
+                <%= label_tag :reason, "Message:" %><br>
+
+                <%= text_area_tag '', '', placeholder: "(Optional)", style: "width: 555px; height: 160px;", "data-board-id" => board.id, class: "publication-message" %>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="publish-board <%= board.id %> btn btn-primary"data-dismiss="modal">Confirm</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delete Modal -->
+        <div class="modal fade" id="modal-delete-<%=board.id%>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Deleting <%= board.name %> </h4>
+              </div>
+              <div class="modal-body">
+                <h4>Are you sure you want to delete <%= board.name %>?</h4>
+                <br>
+                <%= label_tag :notify, "Notify designer?" %>
+                <%= check_box_tag '', 'no', false, "data-board-id" => board.id, class: "notify-designer deletion" %><br>
+                <%= label_tag :reason, "Reason:" %><br>
+
+                <%= text_area_tag 'reason', '', placeholder: "(Optional)", style: "width: 555px; height: 160px;", "data-board-id" => board.id, class: "deletion-reason" %>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="delete-board btn btn-danger" data-board-id = '<%= board.id %>' data-dismiss="modal">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Revision Modal -->
+        <div class="modal fade" id="modal-revise-<%=board.id%>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Requesting Revision of <%= board.name %> </h4>
+              </div>
+              <div class="modal-body">
+                  <p>
+                  The following products will be removed from the room:
+          				<% if false and !board.board_products.marked_as_removed.blank? %>
+                    <ul class = "list-group removed-on-revision" data-board-id = '<%= board.id %>'>
+
+          					 <% board.board_products.marked_as_removed.each do |bp|%>
+                      <li class = "list-group-item revision" data-product-id = '<%= bp.product.id%>'>
+                        <%= bp.product.name%>
+                      </li>
+          					 <% end %>
+                    </ul>
+                    <% else %>
+                      <ul class = "list-group removed-on-publication" data-board-id = "<%= board.id %>">
+                      </ul>
+                    <% end %>
+                  </p>
+                <br>
+                <%= label_tag :notify, "Notify designer?" %>
+                <%= check_box_tag '', 'no', false, "data-board-id" => board.id, class: "notify-designer revision" %><br>
+                <%= label_tag :reason, "Reason:" %><br>
+
+                <%= text_area_tag 'reason', '', placeholder: "(Optional)", style: "width: 555px; height: 160px;", "data-board-id" => board.id, class: "revision-reason" %>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="revise-board <%= board.id %> btn btn-primary" data-dismiss="modal">Confirm</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class = "row collapsable <%= board.id %> hidden">
+      <%= render "spree/admin/board_products/board_product_list", board_products: board.board_products %>
+    </div>
+
+  </div>
 <% end %>
+
+<script>
+$(".collapse-button").click(function(e){
+    e.preventDefault();
+    board_id = $(this).attr("class").split(" ")[0];
+
+    $board_products_row = $(".collapsable." + board_id);
+
+    if($board_products_row.hasClass("hidden")){
+      $board_products_row.removeClass("hidden");
+    }
+    else{
+      $board_products_row.addClass("hidden");
+    }
+
+});
+
+  /*
+  /
+  /  PAGE SETUP
+  /
+  */
+  $(".ok").tooltip();
+  $(".remove-button").tooltip();
+  $(".save").tooltip();
+
+  $(".btn").popover();
+
+  $(".sixteen").removeClass("sixteen");
+
+
+  /*
+  /
+  /  APPROVE AND REJECT BUTTONS
+  /
+  */
+  $(".rejected").css("background-color", "#F2DEDE");
+  $(".rejected").css("color", "#E82C0C");
+
+  $(".marked_for_deletion").css("background-color", "#F2DEDE");
+  $(".marked_for_deletion").css("color", "#E82C0C");
+
+  $(".approved").css("background-color", "#D9EDF7");
+  $(".approved").css("color", "#5498DA");
+
+  function calculate_board_stats(board_id){
+        //var new_stats = 
+        var approved_count = $(".board-product-tile.approved[data-board-id="+board_id+"]").length;
+        var rejected_count = $(".board-product-tile.rejected[data-board-id="+board_id+"]").length;
+        var deleted_count = $(".board-product-tile.marked_for_deletion[data-board-id="+board_id+"]").length;
+
+        var pending_count  = $(".board-product-tile.pending[data-board-id="+board_id+"]").length;
+        var active_count   = $(".board-product-tile.active[data-board-id="+board_id+"]").length
+        var total_count    = $(".board-product-tile[data-board-id="+board_id+"]").length;
+        rejected_count += deleted_count;
+        pending_count += active_count;
+
+        $(".board-"+board_id+"-stats").html("contains "+total_count+" products: "+approved_count+" approved, "+rejected_count+" removed "+pending_count+" pending");
+      }
+
+      $(".glyphicon-ok").click(function(e){
+
+        board_product_id = $(this).attr("data-board-product-id");
+        product_id = $(this).attr("data-product-id");
+
+        $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("pending");
+        $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("rejected");
+        $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("active");
+        $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("marked_for_deletion");
+
+        $(".board-product-tile[data-board-product-id="+board_product_id+"]").addClass("approved");
+
+        $(".approved").css("background-color", "#D9EDF7");
+        $(".approved").css("color", "#5498DA");
+
+        $(this).css("color", "#5498da");
+        $(this).css("background-color", "#D9EDF7");
+
+        $(".rejected.glyphicon-ban-circle[data-board-product-id="+board_product_id+"]").removeClass("rejected");
+
+        $(".glyphicon-ban-circle[data-board-product-id="+board_product_id+"]").css("color","black");
+        $(".glyphicon-ban-circle[data-board-product-id="+board_product_id+"]").css("background-color","#D9EDF7");
+
+        $(".glyphicon-remove[data-board-product-id="+board_product_id+"]").css("color","black");
+        $(".glyphicon-remove[data-board-product-id="+board_product_id+"]").css("background-color","#D9EDF7");
+
+        $("#board_product_"+board_product_id+"_status").val("approved");
+
+        $(".glyphicon-floppy-disk[data-board-product-id="+board_product_id+"]").click();
+
+        if(document.URL.split('/')[4].split('#')[0] === "boards"){
+
+          board_id = $(this).attr("data-board-id");
+
+          console.log(board_id);
+          calculate_board_stats(board_id);
+          $("li.publication[data-product-id="+product_id+"]").remove();
+          $("li.revision[data-product-id="+product_id+"]").remove();
+
+        }
+
+      });
+
+  $(".glyphicon-ban-circle").click(function(e){
+
+    board_product_id = $(this).attr("data-board-product-id");
+    console.log("removing board_product with id == " + board_product_id);
+
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").addClass("rejected");
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("pending");
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("approved");
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("active");
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("marked_for_deletion");
+
+    $(".rejected").css("background-color", "#F2DEDE");
+    $(".rejected").css("color", "#E82C0C");
+
+    $(this).css("color", "#E82C0C");
+    $(this).css("background-color", "#F2DEDE");
+
+    $(".approved.glyphicon-ok[data-board-product-id="+board_product_id+"]").removeClass("approved");
+
+    $(".glyphicon-ok[data-board-product-id="+board_product_id+"]").css("color","black");
+    $(".glyphicon-ok[data-board-product-id="+board_product_id+"]").css("background-color","#F2DEDE");
+
+    $(".glyphicon-remove[data-board-product-id="+board_product_id+"]").css("color","black");
+    $(".glyphicon-remove[data-board-product-id="+board_product_id+"]").css("background-color","#F2DEDE");
+
+    $("#board_product_"+board_product_id+"_status").val("rejected");
+
+    $(".glyphicon-floppy-disk[data-board-product-id="+board_product_id+"]").click();
+
+    if(document.URL.split('/')[4].split('#')[0] === "boards"){
+
+      var board_id = $(this).attr("data-board-id");
+
+      console.log(board_id);
+      calculate_board_stats(board_id);
+
+        // add the product to the list of removed products for publication and revision
+        //figure out the product tname
+        var name = $(".product-name[data-board-product-id="+board_product_id+"]").val();
+
+        $("ul.removed-on-publication[data-board-id="+board_id+"]").append("<li class = 'list-group-item publication' data-product-id='"+product_id+"'>"+name+"</li>")
+        $("ul.removed-on-revision[data-board-id="+board_id+"]").append("<li class = 'list-group-item revision' data-product-id='"+product_id+"'>"+name+"</li>")
+      }
+
+    });
+
+  $(".glyphicon-remove").click(function(e){
+    board_product_id = $(this).attr("data-board-product-id");
+    console.log("Completely deleting product associated with board product" + board_product_id);
+
+    board_product_id = $(this).attr("data-board-product-id");
+
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").addClass("marked_for_deletion");
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("rejected");
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("pending");
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("approved");
+    $(".board-product-tile[data-board-product-id="+board_product_id+"]").removeClass("active");
+
+    $(".marked_for_deletion").css("background-color", "#F2DEDE");
+    $(".marked_for_deletion").css("color", "#E82C0C");
+
+    $(this).css("color", "#E82C0C");
+    $(this).css("background-color", "#F2DEDE");
+
+    $(".glyphicon-ok[data-board-product-id="+board_product_id+"]").css("background-color","#F2DEDE");
+    $(".glyphicon-ok[data-board-product-id="+board_product_id+"]").css("color","black");
+
+    $(".glyphicon-ban-circle[data-board-product-id="+board_product_id+"]").css("background-color","#F2DEDE");
+    $(".glyphicon-ban-circle[data-board-product-id="+board_product_id+"]").css("color","black");
+
+    $("#board_product_"+board_product_id+"_status").val("marked_for_deletion");
+
+    $(".glyphicon-floppy-disk[data-board-product-id="+board_product_id+"]").click();
+
+    if(document.URL.split('/')[4].split('#')[0] === "boards"){
+
+      board_id = $(this).attr("data-board-id");
+
+      console.log(board_id);
+      calculate_board_stats(board_id);
+
+      var name = $(".product-name[data-board-product-id="+board_product_id+"]").val();
+
+      $("ul.removed-on-publication[data-board-id="+board_id+"]").append("<li class = 'list-group-item publication' data-product-id='"+product_id+"'>"+name+"</li>")
+      $("ul.removed-on-revision[data-board-id="+board_id+"]").append("<li class = 'list-group-item revision' data-product-id='"+product_id+"'>"+name+"</li>")
+
+    }
+
+  });
+
+  $(".glyphicon-floppy-disk").click(function(e){
+    board_product_id =  $(this).attr("data-board-product-id");
+    product_id       =  $(this).attr("data-product-id");
+    board_id         =  $(this).attr("data-board-id");
+    variant_id       =  $(this).attr("data-variant-id");
+    stock_item_id    =  $(this).attr("data-stock-item-id");
+
+      // create the necessary json objects
+      var back_orderable = $("#variant_"+variant_id+"_backorderable").is(':checked')
+
+      stock_item = {
+        count_on_hand: $("#variant_"+variant_id+"_inventory").val(),
+        supplier_count_on_hand: $("#variant_"+variant_id+"_supplier_inventory").val(),
+        backorderable: back_orderable
+      }
+
+      variant = {
+        map_price:       $("#variant_"+variant_id+"_map_price").val(),
+        msrp_price:      $("#variant_"+variant_id+"_msrp_price").val(),
+        shipping_height: $("#variant_"+variant_id+"_shipping_height_actual").val(),
+        shipping_width:  $("#variant_"+variant_id+"_shipping_width_actual").val(),
+        shipping_depth:  $("#variant_"+variant_id+"_shipping_depth_actual").val(),
+        height: $("#variant_"+variant_id+"_product_height_actual").val(),
+        width: $("#variant_"+variant_id+"_product_width_actual").val(),
+        depth: $("#variant_"+variant_id+"_product_depth_actual").val(),
+        days_to_ship: $("#variant_"+variant_id+"_days_to_ship").val(),
+        price:      $("#variant_"+variant_id+"_price").val(),
+        cost_price: $("#variant_"+variant_id+"_cost_price").val(),
+      };
+
+      product = {
+        name:       $("#product_"+product_id+"_name").val(),
+        sku:        $("#product_"+product_id+"_sku").val(),
+        shipping_category_id: $(".shipping-method-select[data-product-id="+product_id+"]").val(),
+      };
+      
+      board_product = {
+        status: $("#board_product_"+board_product_id+"_status").val(),
+      };
+
+      console.log(board_product);
+      console.log(stock_item);
+      console.log(variant);
+      console.log(product);
+
+      $.ajax({
+        type: "PUT",
+        url: "/admin/board_products.json",
+        contentType: "application/json",
+        data: JSON.stringify({ 
+          id: board_product_id, 
+          product_id: product_id, 
+          variant_id: variant_id,
+          stock_item_id: stock_item_id,
+          board_product: board_product,
+          product: product,
+          variant: variant,
+          stock_item: stock_item
+        })
+      })
+      .done(function(data){
+        console.log(data);
+      });
+
+    });
+
+
+  /*
+  /
+  /  FILTERS
+  /
+  */
+
+  $("select#status").change(function(e){
+    status = $(this).val();
+    if( status == "All products"){
+      $(".board-product-tile").show();
+    }
+    else{
+      $(".board-product-tile").each( function( index, element ){
+        if($(this).hasClass(status.toLowerCase())){
+          $(this).show();
+        }
+        else{
+          $(this).hide();
+        }
+
+      });
+    }
+  });
+
+  $("select#suppliers").change(function(e){
+    supplier_id = $(this).val();
+    if (supplier_id == "0"){
+     window.location.href = "/admin/board_products"
+   }
+   else{
+     window.location.href = "/admin/board_products?supplier_id="+supplier_id;
+   }
+
+
+  });
+
+
+  $("select.variant-select").change(function(e){
+    variant_id = $(this).val();
+    product_id = $(this).attr("data-product-id");
+
+      //hide everything that isn't this tile
+      $(".variant-tile[data-variant-id!="+variant_id+"][data-product-id="+product_id+"]").hide();
+
+      //show this one
+      $(".variant-tile[data-variant-id="+variant_id+"][data-product-id="+product_id+"]").show();
+
+      //this allows you to change all the values of the selects for a certain product to the same thing
+      $("select.variant-select[data-product-id="+product_id+"]").val(variant_id);
+    });
+
+  $(".shipping-method-select").change(function(e){
+    product_id = $(this).attr("data-product-id");
+    $(".shipping-method-select[data-product-id="+product_id+"]").val($(this).val());
+  });
+  /*
+  /
+  /  SHIPPING DIMENSIONS
+  /
+  */
+  $(".shipping-dimension-button").click(function(){
+    variant_id = $(this).attr("data-variant-id");
+
+    $("#variant_"+variant_id+"_shipping_height").val( $("#variant_"+variant_id+"_shipping_height_actual").val() );
+    $("#variant_"+variant_id+"_shipping_width").val( $("#variant_"+variant_id+"_shipping_width_actual").val() );
+    $("#variant_"+variant_id+"_shipping_depth").val( $("#variant_"+variant_id+"_shipping_depth_actual").val() );
+
+    $('#variant_'+variant_id+'_shipping_height').on('input',function(e){
+      old_dimensions = $("#variant_"+variant_id+"_shipping_dimensions").html().split(" x ");
+      console.log("old dimensions: " + old_dimensions);
+
+      old_dimensions[0] = $(this).val();
+      new_dimensions = old_dimensions.join(" x ");
+
+      $("#variant_"+variant_id+"_shipping_dimensions").html(new_dimensions);
+
+      $("#variant_"+variant_id+"_shipping_height_actual").val($(this).val());
+    });
+
+    $('#variant_'+variant_id+'_shipping_width').on('input',function(e){
+      old_dimensions = $("#variant_"+variant_id+"_shipping_dimensions").html().split(" x ");
+      old_dimensions[1] = $(this).val();
+      new_dimensions = old_dimensions.join(" x ");
+      $("#variant_"+variant_id+"_shipping_dimensions").html(new_dimensions);
+
+      $("#variant_"+variant_id+"_shipping_width_actual").val($(this).val());
+    });
+
+    $('#variant_'+variant_id+'_shipping_depth').on('input',function(e){
+      old_dimensions = $("#variant_"+variant_id+"_shipping_dimensions").html().split(" x ");
+      old_dimensions[2] = $(this).val();
+      new_dimensions = old_dimensions.join(" x ");
+      $("#variant_"+variant_id+"_shipping_dimensions").html(new_dimensions);
+
+      $("#variant_"+variant_id+"_shipping_depth_actual").val($(this).val());
+    });
+  });
+
+
+  $(".product-dimension-button").click(function(){
+    variant_id = $(this).attr("data-variant-id");
+
+    console.log(variant_id);
+
+    $("#variant_"+variant_id+"_product_height").val( $("#variant_"+variant_id+"_product_height_actual").val() );
+    $("#variant_"+variant_id+"_product_width").val( $("#variant_"+variant_id+"_product_width_actual").val() );
+    $("#variant_"+variant_id+"_product_depth").val( $("#variant_"+variant_id+"_product_depth_actual").val() );
+
+    $('#variant_'+variant_id+'_product_height').on('input',function(e){
+      old_dimensions = $("#variant_"+variant_id+"_product_dimensions").html().split(" x ");
+      console.log("old dimensions: " + old_dimensions);
+
+      old_dimensions[0] = $(this).val();
+      new_dimensions = old_dimensions.join(" x ");
+
+      $("#variant_"+variant_id+"_product_dimensions").html(new_dimensions);
+
+      $("#variant_"+variant_id+"_product_height_actual").val($(this).val());
+    });
+
+    $('#variant_'+variant_id+'_product_width').on('input',function(e){
+      old_dimensions = $("#variant_"+variant_id+"_product_dimensions").html().split(" x ");
+      old_dimensions[1] = $(this).val();
+      new_dimensions = old_dimensions.join(" x ");
+      $("#variant_"+variant_id+"_product_dimensions").html(new_dimensions);
+
+      $("#variant_"+variant_id+"_product_width_actual").val($(this).val());
+    });
+
+    $('#variant_'+variant_id+'_product_depth').on('input',function(e){
+      old_dimensions = $("#variant_"+variant_id+"_product_dimensions").html().split(" x ");
+      old_dimensions[2] = $(this).val();
+      new_dimensions = old_dimensions.join(" x ");
+      $("#variant_"+variant_id+"_product_dimensions").html(new_dimensions);
+
+      $("#variant_"+variant_id+"_product_depth_actual").val($(this).val());
+    });
+  });
+
+
+  $('#state').val("Submitted for Publication");
+
+  function hide_all_boards_except_submitted_for_publication(){
+    $(".board-tile").each( function( index, element ){
+      if( $(this).hasClass('submitted_for_publication' ) ){
+        $(this).show();
+      }
+      else{
+        $(this).hide();
+      }
+    });
+  }
+
+  function calculate_board_stats(board_id){
+      //var new_stats = 
+      var approved_count = $(".board-product-tile.approved[data-board-id="+board_id+"]").length;
+      var rejected_count = $(".board-product-tile.rejected[data-board-id="+board_id+"]").length;
+      var deleted_count = $(".board-product-tile.marked_for_deletion[data-board-id="+board_id+"]").length;
+
+      var pending_count  = $(".board-product-tile.pending[data-board-id="+board_id+"]").length;
+      var active_count   = $(".board-product-tile.active[data-board-id="+board_id+"]").length
+      var total_count    = $(".board-product-tile[data-board-id="+board_id+"]").length;
+      rejected_count += deleted_count;
+      pending_count += active_count;
+
+      $(".board-"+board_id+"-stats").html("contains "+total_count+" products: "+approved_count+" approved, "+rejected_count+" removed "+pending_count+" pending");
+  }
+
+  hide_all_boards_except_submitted_for_publication();
+
+
+  $('.modal').appendTo("body");
+
+  $(".delete-board").click(function(e){ 
+
+    board_id = $(this).attr("data-board-id");
+
+    $(".help-block[data-board-id="+board_id+"]").html("Deleted");
+
+    $.ajax({
+      type: "PUT",
+      url: "/admin/boards/"+board_id+".json",
+      contentType: "application/json",
+      data: JSON.stringify({ 
+        id: board_id, 
+        state: "deleted",
+        email: {
+          should_send: $(".deletion.notify-designer[data-board-id="+board_id+"]").prop("checked"),
+          reason: $("textarea.deletion-reason[data-board-id="+board_id+"]").val()
+        }
+      })
+    }).done(function(data){
+      console.log(data);
+    });
+
+    $(".board-tile[data-board-id="+board_id+"]").remove();
+  });
+
+  $(".revise-board").click(function(e){ 
+    board_id = parseInt($(this).attr("class").split(" ")[1])
+
+    $(".help-block[data-board-id="+board_id+"]").html("Needs Revision");
+
+    $.ajax({
+      type: "PUT",
+      url: "/admin/boards/"+board_id+".json",
+      contentType: "application/json",
+      data: JSON.stringify({ 
+        id: board_id, 
+        state: "request_revision",
+        email: {
+          should_send: $(".revision.notify-designer[data-board-id="+board_id+"]").prop("checked"),
+          reason: $("textarea.revision-reason[data-board-id="+board_id+"]").val()
+        }
+      })
+    }).done(function(data){
+      console.log(data);
+    });
+
+    $(".board-product-tile.marked_for_deletion[data-board-id="+board_id+"]").remove();
+    $(".board-product-tile.rejected[data-board-id="+board_id+"]").remove();
+    calculate_board_stats(board_id);
+
+  });
+
+  $(".publish-board").click(function(e){ 
+    board_id = parseInt($(this).attr("class").split(" ")[1])
+
+    $(".help-block[data-board-id="+board_id+"]").html("Published");
+
+    $.ajax({
+      type: "PUT",
+      url: "/admin/boards/"+board_id+".json",
+      contentType: "application/json",
+      data: JSON.stringify({ 
+        id: board_id, 
+        state: "published",
+        email: {
+          should_send: $(".publication.notify-designer[data-board-id="+board_id+"]").prop("checked"),
+          reason: $("textarea.publication-message[data-board-id="+board_id+"]").val()
+        }
+      })
+    }).done(function(data){
+      console.log(data);
+    });
+
+    $(".board-product-tile.marked_for_deletion[data-board-id="+board_id+"]").remove();
+    $(".board-product-tile.rejected[data-board-id="+board_id+"]").remove();
+    calculate_board_stats(board_id);
+  });
+
+
+
+  $("select#state").change(function(e){
+    state = $(this).val();
+
+    if( state == "All boards"){
+      $(".board-tile").show();
+    }
+    else{
+      $(".board-tile").each( function( index, element ){
+        if( $(this).hasClass( state.toLowerCase().split(' ').join('_') ) ){
+          $(this).show();
+        }
+        else{
+          $(this).hide();
+        }
+      });
+    }
+
+  });
+
+  $("select#designers").change(function(e){
+    designer = $(this).val();
+    if( designer == "All designers"){
+      $(".board-tile").show();
+    }
+    else{
+      $(".board-tile").each( function( index, element ){
+        if($(this).hasClass(designer.toLowerCase().split(' ').join('_'))){
+          $(this).show();
+        }
+        else{
+          $(this).hide();
+        }
+
+      });
+    }
+  });
+
+
+
+</script>
+<%= paginate @boards %>
+

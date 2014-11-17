@@ -1,0 +1,20 @@
+<% if !board.board_state_transitions.blank? %>
+<table class="table">
+	<tr>
+		<th>Action</th>
+		<th>User</th>
+		<th>Message</th>
+		<th>Date</th>
+	</tr>
+	<% board.board_state_transitions.each do |transition| %>
+		<tr>
+			<td><%= transition.display_transition_event %></td>
+			<td><%= transition.display_transition_user %></td>
+			<td><%= transition.state_message %></td>
+			<td nowrap><%= transition.created_at.to_s(:short) %></td>
+		</tr>
+	<% end %>
+</table>
+<% else%>
+<div class="empty-state">There is no history for this room.</div>
+<% end %>

@@ -1,6 +1,6 @@
 class Spree::Admin::BoardsController < Spree::Admin::ResourceController
-
-  def index
+  before_filter :get_room_manager
+  def list
     #@boards = Spree::Board.includes({:board_products => {:product => [{:master => :stock_items}, :supplier]}}, :board_image, :designer).page(params[:page]).per(params[:per_page] || 10)
     @boards = Spree::Board.includes({:board_products => {:product => [{:master => [:stock_items, :images, :prices]}, :supplier, :variants => [:stock_items, :prices, :images]]}}, :board_image, :designer).page(params[:page] || 1).per(params[:per_page] || 3)
     
@@ -17,7 +17,7 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
     @designer_names = ["All designers"] + designers
   end
   
-  def list
+  def index
     @boards = Spree::Board.all().order("created_at desc").page(params[:page] || 1).per(params[:per_page] || 50)
   end
 
@@ -107,10 +107,10 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
   
   def approve
     @board  = Spree::Board.find_by id: params[:board][:id]
+    @board.set_state_transition_context(params[:board][:state_message], spree_current_user)
     @board.publish
-    if params[:board][:send_message] == "on"
-      @board.send_publication_email(params[:board][:message_content])
-    end
+    @board.send_publication_email(params[:board][:state_message]) if params[:board][:send_message] == "on"
+    
     respond_to do |format|
       format.js {  }
     end
@@ -118,11 +118,10 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
   
   def request_revision
     @board  = Spree::Board.find_by id: params[:board][:id]
+    @board.set_state_transition_context(params[:board][:state_message], spree_current_user)
     @board.request_designer_revision
-    @board.send_revision_request_email(params[:board][:message_content])
+    @room_manager.send_message(@board.designer, "Your room needs revisions.", "Please revise your room.")
 
-    if params[:revision_message]
-    end
     respond_to do |format|
       format.js {  }
     end
@@ -130,7 +129,6 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
   
   def approval_form
     @board  = Spree::Board.find_by id: params[:id]
-    @board.messages.build
     respond_to do |format|
       format.js {  }
     end
@@ -138,7 +136,6 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
   
   def revision_form
     @board  = Spree::Board.find_by id: params[:id]
-    @board.messages.build
     respond_to do |format|
       format.js {  }
     end
@@ -150,6 +147,8 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
     @board.designer = spree_current_user
     @board.save!
   end
+  
+  
   
   def send_deletion_email(board, message)
    html_content = ''

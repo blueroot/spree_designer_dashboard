@@ -34,9 +34,16 @@
 						</div>
 					</div>
 				</div>
+				
+				
 				<h4>Products on This Board</h4>
 				<div id="board_products">
 					<%= render :partial => "board_products", :locals => {:board => @board}%>
+				</div>
+				
+				<h4>History</h4>
+				<div id="board_products">
+					<%= render :partial => "board_history", :locals => {:board => @board}%>
 				</div>
 
 			</div>
@@ -66,7 +73,7 @@
 	$('.js-btn-board-approve').click(function() {
 		var board_id = $(this).data('boardId')
 		$('#board_modal').modal('show');
-		$('#board_modal_content').html('loading...');
+		$('#board_modal_content').html('<div style="padding: 20px;">loading...</div>');
 		$.ajax({
 			type: "GET",
 			url: "/admin/boards/approval_form.js?id="+board_id,

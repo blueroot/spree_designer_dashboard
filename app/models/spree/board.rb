@@ -1,12 +1,40 @@
 class Spree::Board < ActiveRecord::Base
-  #include AASM
 
+  
+  belongs_to :designer, :class_name => "User", :foreign_key => "designer_id"
+  belongs_to :room, :foreign_key => "room_id", :class_name => "Spree::Taxon"
+  belongs_to :style, :foreign_key => "style_id", :class_name => "Spree::Taxon"
+
+  has_many :board_products, :order => "z_index", dependent: :destroy
+  has_many :products, :through => :board_products  
+  has_many :color_matches
+  has_many :colors, :through => :color_matches
+  has_many :conversations, as: :conversationable, class_name: "::Mailboxer::Conversation"
+
+  has_one :board_image, as: :viewable, order: :position, dependent: :destroy, class_name: "Spree::BoardImage"
+  has_one :conversation, :class_name => "Mailboxer::Conversation"
+  
+  # state machine audit trail requires that there are fields on the model being audited.  We're creating them virtually since they don't need to be persisted here.
+  attr_accessor :state_message
+  attr_accessor :transition_user_id
+  
+  #attr_accessible :board_image_attributes
+  accepts_nested_attributes_for :board_image
+  is_impressionable
+  
+  validates_presence_of :name
+  
+  after_save :update_product_publish_status
+
+  default_scope  { where("#{Spree::Board.quoted_table_name}.deleted_at IS NULL or #{Spree::Board.quoted_table_name}.deleted_at >= ?", Time.zone.now) }
+  
   state_machine :state, :initial => :new do
+    store_audit_trail :context_to_log => [:state_message, :transition_user_id]
     
     after_transition :on => [:publish, :request_designer_revision], :do => :remove_marked_products
     
     event :submit_for_publication do
-      transition :new => :submitted_for_publication, :in_revision => :submitted_for_publication
+      transition all => :submitted_for_publication, :in_revision => :submitted_for_publication
     end
     
     event :request_designer_revision do
@@ -38,38 +66,16 @@ class Spree::Board < ActiveRecord::Base
     end
   end
 
+  def set_state_transition_context(message, user)
+    self.state_message = message
+    self.transition_user_id = user.id
+  end
+
   def remove_marked_products
     delete_removed_board_products
     delete_deleted_board_products
-    self.generate_image
+    self.queue_image_generation
   end
-  
-  #aasm column: :state, whiny_transitions: true do
-  #
-  #  state :draft, initial: true
-  #  state :suspended_for_inactivity
-  #  state :submitted_for_publication
-  #  state :deleted
-  #  state :published
-  #  state :unpublished
-  #
-  #  event :request_revision, before: :process_revision_request do
-  #    transitions from: [:submitted_for_publication, :published, :draft, :suspended_for_inactivity, :unpublished], to: :draft
-  #  end
-  #
-  #  event :submit_for_publication, before: :update_submitted_for_publication_status do
-  #    transitions from: [:draft, :suspended_for_inactivity, :published, :unpublished], to: :submitted_for_publication
-  #  end
-  #
-  #  event :delete_permanently, before: :handle_deletion do
-  #    transitions from: [:submitted_for_publication, :draft, :suspended_for_inactivity, :published, :unpublished], to: :deleted
-  #  end
-  #
-  #  event :publish, before: :handle_publication do
-  #    transitions from: [:submitted_for_publication, :draft, :published], to: :published
-  #  end
-  #
-  #end
 
   #def handle_publication
   #  self.update_attributes!({status: "published"}, without_protection: true )
@@ -106,28 +112,6 @@ class Spree::Board < ActiveRecord::Base
   def remove_all_products
     self.board_products.each(&:destroy!)
   end
-
-  validates_presence_of :name
-
-  has_many :board_products, :order => "z_index", dependent: :destroy
-  has_many :products, :through => :board_products
-  belongs_to :designer, :class_name => "User", :foreign_key => "designer_id"
-  has_many :color_matches
-  has_many :colors, :through => :color_matches
-  has_many :messages
-
-  belongs_to :room, :foreign_key => "room_id", :class_name => "Spree::Taxon"
-  belongs_to :style, :foreign_key => "style_id", :class_name => "Spree::Taxon"
-
-  has_one :board_image, as: :viewable, order: :position, dependent: :destroy, class_name: "Spree::BoardImage"
-  #attr_accessible :board_image_attributes, :messages_attributes
-  accepts_nested_attributes_for :board_image, :messages
-  is_impressionable
-
-  after_save :update_product_publish_status
-
-  default_scope  { where("#{Spree::Board.quoted_table_name}.deleted_at IS NULL or #{Spree::Board.quoted_table_name}.deleted_at >= ?", Time.zone.now) }
-
 
   def update_product_publish_status
     if self.status =="published"
@@ -179,7 +163,7 @@ class Spree::Board < ActiveRecord::Base
   end
 
   def display_short_status
-    case self.status
+    case self.state
 
     when "new"
       "Draft"
@@ -195,8 +179,8 @@ class Spree::Board < ActiveRecord::Base
       "Unpublished"
     when "retired"
       "Retired"  
-    when "needs_revision"
-      "Draft"
+    when "in_revision"
+      "In Revision"
     else
       "N/A"
     end
@@ -204,7 +188,7 @@ class Spree::Board < ActiveRecord::Base
   end
 
   def display_status
-    case self.status
+    case self.state
 
     when "new"
       "Draft - Not Published"
@@ -220,7 +204,7 @@ class Spree::Board < ActiveRecord::Base
       "Unpublished"
     when "retired"
       "Retired"  
-    when "needs_revision"
+    when "in_revision"
       "Pending - Revisions Requested"
     else
       "status not available"
@@ -304,13 +288,20 @@ class Spree::Board < ActiveRecord::Base
   end
 
   def queue_image_generation
+    
+    if !self.dirty_at or self.dirty_at < 10.seconds.ago
+      self.update_attribute("dirty_at",Time.now)
+      #self.delay(run_at: 3.seconds.from_now).generate_image
+      self.generate_image
+    end
+    
     # the board is marked as dirty whenever it is added to the delayed job queue.  That way we don't have to make countless updates but instead can just queue them all up
     # so skip this if it is already dirty...that means it has already been added to the queue
-    unless self.is_dirty?
-      self.update_attribute("is_dirty",1)
-      self.delay(run_at: 3.seconds.from_now).generate_image
-      #self.generate_image
-    end
+    #   unless self.is_dirty?
+    #     self.update_attribute("is_dirty",1)
+    #     self.delay(run_at: 3.seconds.from_now).generate_image
+    #     #self.generate_image
+    #   end
   end
 
   def generate_image
@@ -328,30 +319,26 @@ class Spree::Board < ActiveRecord::Base
         bp.height == 5 * bp.height
       end
       product_image = bp.product.image_for_board
-      if bp.rotation_offset and bp.rotation_offset > 0
 
-        # set the rotation
-        product_image.rotate!(bp.rotation_offset)
+      # set the rotation
+      product_image.rotate!(bp.rotation_offset)
 
-        # if turned sideways, then swap the width and height when scaling
-        if [90,270].include?(bp.rotation_offset)
-          product_image.scale!(bp.height, bp.width)
-          centerX = bp.top_left_x + bp.width/2
-          centerY = bp.top_left_y + bp.height/2
-          top_left_x = centerX - bp.height/2
-          top_left_y = centerY - bp.width/2
-
-          # original width and height work if it is just rotated 180  
-        else
-          product_image.rotate!(bp.rotation_offset)
-          product_image.scale!(bp.width, bp.height)
-        end
+      # if turned sideways, then swap the width and height when scaling
+      if [90,270].include?(bp.rotation_offset)
+        product_image.scale!(bp.height, bp.width)
+        top_left_x = bp.center_point_x - bp.height/2
+        top_left_y = bp.center_point_y - bp.width/2
+      
+      # original width and height work if it is just rotated 180  
       else
         product_image.scale!(bp.width, bp.height)
+        top_left_x = bp.center_point_x - bp.width/2
+        top_left_y = bp.center_point_y - bp.height/2
       end
 
       white_canvas.composite!(product_image, Magick::NorthWestGravity, top_left_x, top_left_y, Magick::OverCompositeOp)
     end
+    
     white_canvas.format = 'jpeg'
     file = Tempfile.new("room_#{self.id}.jpg")
     white_canvas.write(file.path)
@@ -361,7 +348,8 @@ class Spree::Board < ActiveRecord::Base
     self.board_image.attachment = file      
     self.board_image.save
     # set it to be clean again 
-    self.is_dirty = 0
+    #self.is_dirty = 0
+    self.dirty_at = nil
     self.save
   end
 

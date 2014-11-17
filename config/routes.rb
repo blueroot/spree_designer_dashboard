@@ -51,6 +51,10 @@ Spree::Core::Engine.routes.draw do
   
   get '/widget/room/:id' => "widget#room", :as => :room_widget
 
+  get '/inbox' => "mailbox#inbox", :as => :mailbox_inbox
+  get '/sentbox' => "mailbox#sentbox", :as => :mailbox_sentbox
+  get '/conversation/:id' => 'mailbox#conversation', :as => :mailbox_conversation
+
   #post '/registration_subscribers' => 'user_registrations#registration_subscribers', :as => :registration_subscribers
   devise_scope :spree_user do
     post '/registration_subscribers' => 'user_registrations#registration_subscribers', :as => :registration_subscribers
@@ -65,7 +69,8 @@ Spree::Core::Engine.routes.draw do
   
   #get "/boards/product_search" => "boards#product_search", :as => :board_product_search
    
- 
+
+  match "/boards/submit_for_publication/:id", to: "boards#submit_for_publication", :as => "submit_for_publication", via: :patch
   namespace :admin do
     
     

@@ -5,6 +5,7 @@ class Spree::BoardsController < Spree::StoreController
   before_filter :prep_search_collections, :only => [:index, :search, :edit, :new, :design]
   before_filter :load_board, :only => [:preview, :design, :destroy]
   before_filter :require_board_designer, :only => [:dashboard]
+  before_filter :get_room_manager, :only => [:submit_for_publication]
   
   impressionist :actions=>[:show]
 
@@ -229,7 +230,18 @@ class Spree::BoardsController < Spree::StoreController
         #format.html { render :action => "design"}
       end
     #end
+  end
+  
+  def submit_for_publication
     
+    @board  = Spree::Board.find_by id: params[:id]
+    @board.set_state_transition_context(params[:board][:state_message], spree_current_user)
+    @board.submit_for_publication
+    html_content = "There is a new room for you to review."
+    html_content << "<br /><br />Message from Designer:<br /><br />#{params[:board][:state_message]}" if params[:board] and params[:board][:state_message] and !params[:board][:state_message].blank?
+    
+    @board.designer.send_message(@room_manager, "Room Submitted by #{@board.designer.full_name}", html_content, true, nil, Time.now, @board)
+    redirect_to designer_dashboard_path
   end
   
   def build
@@ -268,7 +280,7 @@ class Spree::BoardsController < Spree::StoreController
   
   def design
     
-    @board.messages.new(:sender_id => spree_current_user.id, :recipient_id => 0, :subject => "Publication Submission")
+    #@board.messages.new(:sender_id => spree_current_user.id, :recipient_id => 0, :subject => "Publication Submission")
     @products = Spree::Product.all()
     @bookmarked_products = spree_current_user.bookmarks.collect{|bookmark| bookmark.product}
     @department_taxons = Spree::Taxonomy.where(:name => 'Department').first().root.children

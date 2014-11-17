@@ -59,7 +59,7 @@ class Spree::BoardProductsController < Spree::StoreController
   
   private
     def board_product_params
-      params.require(:board_product).permit(:board_id, :product_id, :top_left_x, :top_left_y, :z_index, :status, :width, :height, :rotation_offset)
+      params.require(:board_product).permit(:board_id, :product_id, :top_left_x, :top_left_y, :center_point_x, :center_point_y, :z_index, :status, :width, :height, :rotation_offset)
     end
     
   
