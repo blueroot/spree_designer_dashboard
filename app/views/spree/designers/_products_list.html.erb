@@ -19,13 +19,26 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div>
-							<span class="price" itemprop="price"><%= display_price(product.master) %></span>
-							<% if !product.master.msrp_price.nil? %>
-							<span class="msrp"><%= display_msrp(product.master) %></span>
-							<span class="price-percentage-off">
-								 <%= display_percentage_off(product.master) %>
-							</span>
-							<% end%>
+							<span class="price" itemprop="price">
+							<%= display_price_range(product)%>
+							<%#= display_price(product.master) %></span>
+							
+							<% if product.has_variants?%>
+								<% variants = product.variants.order(:msrp_price)%>
+								<% if variants.first and variants.last and !variants.first.msrp_price.nil? and variants.first.msrp_price > 0 and !variants.last.msrp_price.nil? and variants.last.msrp_price > 0 and variants.first.price != variants.last.price %>
+									<span class="msrp"><%= display_msrp(variants.first) %> - <%= display_msrp(variants.last) %></span>
+									<span class="price-percentage-off">
+										 <%= display_range_percentage_off(product) %>
+									</span>
+								<% end %>
+							<% else %>
+								<% if !product.master.msrp_price.nil? %>
+								<span class="msrp"><%= display_msrp(product.master) %></span>
+								<span class="price-percentage-off">
+									 <%= display_percentage_off(product.master) %>
+								</span>
+								<% end%>
+							<% end %>
 						</div>
 						<div>
 							<% if FREE_SHIPPING_CATEGORY_IDS.include?(product.shipping_category_id) %>
