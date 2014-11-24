@@ -67,6 +67,10 @@ Spree::Product.class_eval do
     #includes(:board_products, :boards).where("spree_boards.state = 'submitted_for_publication' and spree_products.is_published = 0 and isnull(spree_products.deleted_at) and isnull(spree_products.discontinued_at) and isnull(spree_board_products.approved_at) and isnull(spree_board_products.removed_at)")
   end
   
+  def self.bookmarked
+    includes(:bookmarks)
+  end
+  
   
   def promoted_board
     if self.boards and self.boards.first
