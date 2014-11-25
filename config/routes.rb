@@ -28,7 +28,7 @@ Spree::Core::Engine.routes.draw do
   #post "/designers/signup" => "designers#signup", :as => :create_designer_registration
   
   get "/mission" => "extra#mission" , :as => :mission
-  
+  get "/share-to-earn" => "extra#share_to_earn" , :as => :share_to_earn
   get "/home" => "boards#home", :as => :home
   post "/orders/add_to_cart" => "orders#add_to_cart", :as => :orders_add_to_cart
   

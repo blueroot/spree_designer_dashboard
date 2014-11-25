@@ -61,7 +61,7 @@ class Spree::BoardsController < Spree::StoreController
     @selected_section = "home"
     @designers = Spree::User.published_designers().order("created_at desc").limit(4)
     
-    @slides = Spree::Slide.current || Spree::Slide.defaults
+    @slides = Spree::Slide.current.order("created_at desc") || Spree::Slide.defaults
     
     
     #@featured_designer = Spree::User.where("designer_featured_starts_at <= ? and designer_featured_ends_at >= ?", Date.today, Date.today).order("designer_featured_starts_at desc").first || Spree::User.published_designers.first
