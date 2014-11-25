@@ -28,14 +28,14 @@
 								<% if variants.first and variants.last and !variants.first.msrp_price.nil? and variants.first.msrp_price > 0 and !variants.last.msrp_price.nil? and variants.last.msrp_price > 0 and variants.first.msrp_price != variants.last.msrp_price %>
 									<span class="msrp"><%= display_msrp(variants.first) %> - <%= display_msrp(variants.last) %></span>
 									<span class="price-percentage-off">
-										 <%= display_range_percentage_off(product) %>
+										 <%= display_percentage_off(product) %>
 									</span>
 								<% end %>
 							<% else %>
 								<% if !product.master.msrp_price.nil? %>
 								<span class="msrp"><%= display_msrp(product.master) %></span>
 								<span class="price-percentage-off">
-									 <%= display_percentage_off(product.master) %>
+									 <%= display_percentage_off(product) %>
 								</span>
 								<% end%>
 							<% end %>
