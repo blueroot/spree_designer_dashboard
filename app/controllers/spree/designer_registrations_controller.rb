@@ -82,7 +82,7 @@ class Spree::DesignerRegistrationsController < Spree::StoreController
 
     # Only allow a trusted parameter "white list" through.
     def designer_registration_params
-      params.require(:designer_registration).permit(:company_name, :address1, :address2, :city, :state, :postal_code, :phone, :website, :tin)
+      params.require(:designer_registration).permit(:company_name, :address1, :address2, :city, :state, :postal_code, :phone, :website, :resale_certificate_number, :tin)
     end
     
 end
