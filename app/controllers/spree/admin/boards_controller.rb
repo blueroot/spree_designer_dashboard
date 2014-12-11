@@ -96,7 +96,7 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
     end
     
     respond_to do |format|
-      if @board.update_attributes(params[:board])
+      if @board.update_attributes(board_params)
         format.html {redirect_to edit_admin_board_path(@board, :notice => 'Your board was updated.')}
         format.json {render json: @board}
       else
@@ -202,6 +202,13 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
 
    logger.info sending   
  end
-
+ 
+ 
+ private
+  def board_params
+    params.require(:board).permit(:name, :description, :style_id, :room_id, :status, :message, :featured, :featured_starts_at, :featured_expires_at, :board_commission, :featured_copy, :featured_headline)
+    
+  end
+  
  
 end
