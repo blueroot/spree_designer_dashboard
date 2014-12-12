@@ -1,5 +1,21 @@
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<%= render :partial => 'spree/admin/shared/boards_sub_menu' %>
+
+<% if @user %>
+
+	<%= render 'spree/admin/shared/designer_menu' %>
+
+	  <% content_for :page_title do %>
+		Rooms for <%= @user.full_name%>
+	  <% end %>
+
+	  <% content_for :page_actions do %>
+	    <li>
+	      <%= button_link_to Spree.t(:back_to_users_list), spree.admin_users_path, :icon => 'icon-arrow-left' %>
+	    </li>
+	  <% end %>
+<% end %>
 <% if !@boards.blank? %>
 	<table class="table">
 		<thead>
@@ -25,4 +41,9 @@
 		</tbody>
 	</table>
 	<%= paginate @boards %>
+<% else %>
+<div class="empty-state">
+No rooms available.	
+</div>
+
 <% end %>

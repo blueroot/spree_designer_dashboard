@@ -18,13 +18,18 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
   end
   
   def index
-    @boards = Spree::Board.all().order("created_at desc").page(params[:page] || 1).per(params[:per_page] || 50)
+    if params[:user_id]
+      @user = Spree::User.find(params[:user_id])
+      @boards = Spree::Board.by_designer(params[:user_id]).order("created_at desc").page(params[:page] || 1).per(params[:per_page] || 50)
+    else  
+      @boards = Spree::Board.all().order("created_at desc").page(params[:page] || 1).per(params[:per_page] || 50)
+    end
   end
 
   def products
     @products_pending_approval_count  = Spree::Product.pending_approval.count > 0 ? "(#{Spree::Product.pending_approval.count})" : ""
-    @products_marked_approval_count   = Spree::Product.marked_approval.count > 0 ? "(#{Spree::Product.marked_approval.count})" : ""
-    @products_marked_removal_count    = Spree::Product.marked_removal.count > 0 ? "(#{Spree::Product.marked_removal.count})" : ""
+    @products_marked_for_approval_count   = Spree::Product.marked_for_approval.count > 0 ? "(#{Spree::Product.marked_for_approval.count})" : ""
+    @products_marked_for_removal_count    = Spree::Product.marked_for_removal.count > 0 ? "(#{Spree::Product.marked_for_removal.count})" : ""
     @products_published_count         = Spree::Product.published.count > 0 ? "(#{Spree::Product.published.count})" : ""
     @products_discontinued_count      = Spree::Product.discontinued.count > 0 ? "(#{Spree::Product.discontinued.count})" : ""
     
@@ -45,15 +50,15 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
         end
       when "marked_for_approval"
         if @supplier
-          @products = @supplier.products.marked_approval.page(params[:page] || 1).per(params[:per_page] || 50)
+          @products = @supplier.products.marked_for_approval.page(params[:page] || 1).per(params[:per_page] || 50)
         else
-          @products = Spree::Product.marked_approval.page(params[:page] || 1).per(params[:per_page] || 50)
+          @products = Spree::Product.marked_for_approval.page(params[:page] || 1).per(params[:per_page] || 50)
         end
       when "marked_for_removal"
         if @supplier
-          @products = @supplier.products.marked_removal.page(params[:page] || 1).per(params[:per_page] || 50)
+          @products = @supplier.products.marked_for_removal.page(params[:page] || 1).per(params[:per_page] || 50)
         else
-          @products = Spree::Product.marked_removal.page(params[:page] || 1).per(params[:per_page] || 50)
+          @products = Spree::Product.marked_for_removal.page(params[:page] || 1).per(params[:per_page] || 50)
         end
       when "discontinued"
         if @supplier

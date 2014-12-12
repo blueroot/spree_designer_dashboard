@@ -54,15 +54,15 @@ class Spree::BoardProduct < ActiveRecord::Base
     end
   end
   
-  def self.marked_removal
+  def self.marked_for_removal
     where(:state => "marked_for_removal")
   end
   
-  def self.marked_deletion
+  def self.marked_for_deletion
     where(:state => "marked_for_deletion")
   end
   
-  def self.marked_approval
+  def self.marked_for_approval
     where(:state => "marked_for_approval")
   end
   

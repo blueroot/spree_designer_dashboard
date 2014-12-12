@@ -54,11 +54,11 @@ Spree::Product.class_eval do
     where('not isnull(discontinued_at)')
   end
   
-  def self.marked_removal
+  def self.marked_for_removal
     includes(:board_products).where("spree_board_products.state in ('marked_for_removal', 'marked_for_deletion')")
   end
   
-  def self.marked_approval
+  def self.marked_for_approval
     includes(:board_products).where("spree_board_products.state in ('marked_for_approval')")
   end
   

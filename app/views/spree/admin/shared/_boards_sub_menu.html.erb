@@ -1,7 +1,9 @@
 <% content_for :sub_menu do %>
   <ul id="sub_nav" data-hook="admin_boards_sub_tabs" class="inline-menu">
     <%= tab :boards, :match_path => '/boards' %>
-    <%= tab :board_products %>
+	<li>
+        <%= link_to_with_icon 'products', Spree.t(:product_approval), "/admin/boards/products" %>
+      </li>
     <%#= tab :prototypes %>
     <%#= tab :taxonomies %>
     <%#= tab :taxons %>
