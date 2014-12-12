@@ -26,7 +26,7 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
     @products_marked_approval_count   = Spree::Product.marked_approval.count > 0 ? "(#{Spree::Product.marked_approval.count})" : ""
     @products_marked_removal_count    = Spree::Product.marked_removal.count > 0 ? "(#{Spree::Product.marked_removal.count})" : ""
     @products_published_count         = Spree::Product.published.count > 0 ? "(#{Spree::Product.published.count})" : ""
-    @products_discontinued_count      = Spree::Product.discontinued.count > 0 ? "(#{Spree::BoardProduct.discontinued.count})" : ""
+    @products_discontinued_count      = Spree::Product.discontinued.count > 0 ? "(#{Spree::Product.discontinued.count})" : ""
     
     if params[:product] and params[:product][:supplier_id]
       @supplier = Spree::Supplier.find(params[:product][:supplier_id])      
