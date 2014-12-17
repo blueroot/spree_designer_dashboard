@@ -3,7 +3,7 @@ class Spree::BoardsController < Spree::StoreController
   helper 'spree/products'
   before_filter :require_authentication, :only => [:new, :design, :preview, :dashboard, :my_profile]
   before_filter :prep_search_collections, :only => [:index, :search, :edit, :new, :design]
-  before_filter :load_board, :only => [:preview, :design, :destroy]
+  before_filter :load_board, :only => [:preview, :design, :destroy, :update]
   before_filter :require_board_designer, :only => [:dashboard]
   before_filter :get_room_manager, :only => [:submit_for_publication]
   
@@ -20,7 +20,7 @@ class Spree::BoardsController < Spree::StoreController
   end
   
   def load_board
-    unless @board = spree_current_user.boards.find(params[:id])
+    unless @board = spree_current_user.boards.friendly.find(params[:id])
       redirect_to root_path
     end
   end
@@ -132,7 +132,7 @@ class Spree::BoardsController < Spree::StoreController
   end
   
   def show
-    @board = Spree::Board.find(params[:id])
+    @board = Spree::Board.friendly.find(params[:id])
     impressionist(@board)
   end
   
@@ -220,7 +220,7 @@ class Spree::BoardsController < Spree::StoreController
   end
   
   def update
-    @board = Spree::Board.find(params[:id])
+    @board.slug = nil
     #respond_to do |format|
       if @board.update_attributes(board_params)
         @board.submit_for_publication! if params[:board][:status] == "submitted_for_publication"

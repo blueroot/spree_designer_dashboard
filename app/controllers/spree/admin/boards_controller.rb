@@ -1,5 +1,10 @@
 class Spree::Admin::BoardsController < Spree::Admin::ResourceController
   before_filter :get_room_manager
+  def load_resource
+    @board = Spree::Board.friendly.find(params[:id])
+  end
+  
+  
   def list
     #@boards = Spree::Board.includes({:board_products => {:product => [{:master => :stock_items}, :supplier]}}, :board_image, :designer).page(params[:page]).per(params[:per_page] || 10)
     @boards = Spree::Board.includes({:board_products => {:product => [{:master => [:stock_items, :images, :prices]}, :supplier, :variants => [:stock_items, :prices, :images]]}}, :board_image, :designer).page(params[:page] || 1).per(params[:per_page] || 3)
@@ -83,12 +88,12 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
   end
   
   #def edit
-  #  @board = Spree::Board.find(params[:id])
-    
+  #  @board = Spree::Board.friendly.find(params[:id])
+
   #end
 
   def update
-    @board = Spree::Board.find_by id: params[:id]
+    @board = Spree::Board.friendly.find_by id: params[:id]
     if params[:state] == "deleted"
       # self.send_deletion_email(@board, params[:email][:reason]) if params[:email][:should_send]
       @board.delete_permanently!
@@ -111,7 +116,7 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
   end
   
   def approve
-    @board  = Spree::Board.find_by id: params[:board][:id]
+    @board  = Spree::Board.friendly.find_by id: params[:board][:id]
     @board.set_state_transition_context(params[:board][:state_message], spree_current_user)
     @board.publish
     @board.send_publication_email(params[:board][:state_message]) if params[:board][:send_message] == "on"
@@ -122,7 +127,7 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
   end
   
   def request_revision
-    @board  = Spree::Board.find_by id: params[:board][:id]
+    #@board  = Spree::Board.find_by id: params[:board][:id]
     @board.set_state_transition_context(params[:board][:state_message], spree_current_user)
     @board.request_designer_revision
     @room_manager.send_message(@board.designer, "Your room needs revisions.", "Please revise your room.")

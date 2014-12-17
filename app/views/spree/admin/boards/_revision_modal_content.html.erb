@@ -5,10 +5,10 @@
 <%= form_for(board, :url => "/admin/boards/request_revision", method: "post", :remote => true) do |f| %>
 	<%= f.hidden_field :id %>
 	<div class="modal-body">
-		<% if !board.board_products.marked_removal.blank? %>
+		<% if !board.board_products.marked_for_removal.blank? %>
 		<h4>The following products will be removed upon saving revision request</h4>
 		<table class="table">
-			<% board.board_products.marked_removal.each do |board_product| %>
+			<% board.board_products.marked_for_removal.each do |board_product| %>
 			<tr>
 				<td><%= link_to raw("<span class=\"helper\"></span>#{mini_image(board_product.product, :itemprop => 'image')}"), board_product.product, :itemprop => 'url' %></td>
 				<td><%= link_to truncate(board_product.product.name, :length => 50), edit_admin_product_path(board_product.product), :class => 'info', :itemprop => "name", :title => board_product.product.name, :target => "_new" %></td>

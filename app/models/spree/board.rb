@@ -14,6 +14,9 @@ class Spree::Board < ActiveRecord::Base
   has_one :board_image, as: :viewable, order: :position, dependent: :destroy, class_name: "Spree::BoardImage"
   has_one :conversation, :class_name => "Mailboxer::Conversation"
   
+  extend FriendlyId
+  friendly_id :name, use: :slugged
+  
   # state machine audit trail requires that there are fields on the model being audited.  We're creating them virtually since they don't need to be persisted here.
   attr_accessor :state_message
   attr_accessor :transition_user_id
@@ -65,7 +68,7 @@ class Spree::Board < ActiveRecord::Base
       end
     end
   end
-
+  
   def set_state_transition_context(message, user)
     self.state_message = message
     self.transition_user_id = user.id
