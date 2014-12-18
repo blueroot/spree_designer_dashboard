@@ -1,7 +1,7 @@
 class Spree::Admin::BoardsController < Spree::Admin::ResourceController
   before_filter :get_room_manager
   def load_resource
-    @board = Spree::Board.friendly.find(params[:id])
+    #@board = Spree::Board.friendly.find(params[:id])
   end
   
   

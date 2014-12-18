@@ -15,7 +15,15 @@ class Spree::Board < ActiveRecord::Base
   has_one :conversation, :class_name => "Mailboxer::Conversation"
   
   extend FriendlyId
-  friendly_id :name, use: :slugged
+  friendly_id :slug_candidates, use: :slugged
+  #friendly_id [:name, :room_style, :room_type], use: :slugged
+  
+  def slug_candidates
+      [
+
+        [:name, :room_style, :room_type]
+      ]
+    end
   
   # state machine audit trail requires that there are fields on the model being audited.  We're creating them virtually since they don't need to be persisted here.
   attr_accessor :state_message
@@ -28,6 +36,7 @@ class Spree::Board < ActiveRecord::Base
   validates_presence_of :name
   
   after_save :update_product_publish_status
+  before_save :cache_style_and_room_type
 
   default_scope  { where("#{Spree::Board.quoted_table_name}.deleted_at IS NULL or #{Spree::Board.quoted_table_name}.deleted_at >= ?", Time.zone.now) }
   
@@ -354,6 +363,11 @@ class Spree::Board < ActiveRecord::Base
     #self.is_dirty = 0
     self.dirty_at = nil
     self.save
+  end
+  
+  def cache_style_and_room_type
+    self.room_type = self.room.name.parameterize if self.room
+    self.room_style = self.style.name.parameterize if self.style
   end
 
   def destroy
