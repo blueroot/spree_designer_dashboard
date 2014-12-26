@@ -24,7 +24,7 @@
 				<th>Name</th>
 				<th>Designer</th>
 				<th>State</th>
-				<!--<th>Action</th>-->
+				<th>Action</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -34,8 +34,8 @@
 				<td><%= link_to board.name, edit_admin_board_path(board) %></td>
 				<td><%= board.designer.profile_display_name if board.designer%></td>
 				<td><%= board.human_state_name %></td>
-				<!-- 
-				<td><%#= render :partial => "actions", :locals => {:board => board} %></td>-->
+				<td><%= link_to 'Delete',  admin_board_path(board),  method: :delete, data: { confirm: 'Are you sure you want to do this?' } %>
+				</td>
 			</tr>
 			<% end %>
 		</tbody>

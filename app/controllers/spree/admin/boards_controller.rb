@@ -9,6 +9,14 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
     @board = Spree::Board.friendly.find(params[:id])
   end
   
+  def destroy
+    @board = Spree::Board.friendly.find(params[:id])
+    if @board.destroy
+      redirect_to admin_boards_path
+    end
+      
+  end
+  
   def list
     #@boards = Spree::Board.includes({:board_products => {:product => [{:master => :stock_items}, :supplier]}}, :board_image, :designer).page(params[:page]).per(params[:per_page] || 10)
     @boards = Spree::Board.includes({:board_products => {:product => [{:master => [:stock_items, :images, :prices]}, :supplier, :variants => [:stock_items, :prices, :images]]}}, :board_image, :designer).page(params[:page] || 1).per(params[:per_page] || 3)

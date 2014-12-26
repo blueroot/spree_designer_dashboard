@@ -371,8 +371,8 @@ class Spree::Board < ActiveRecord::Base
   end
 
   def destroy
-    self.update_attribute('deleted_at', Time.zone.now)
     self.board_products.destroy_all
+    self.update_attribute('deleted_at', Time.zone.now)
   end
 
   def designer_name
