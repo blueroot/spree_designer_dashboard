@@ -1,0 +1,5 @@
+<% if @board.currently_promoted? %>
+	<div class="board-promotion-code-banner">
+		Use the code <span><%= @board.current_promotion.code%></span> to get a discount until <%=@board.current_promotion.expires_at.strftime('%B %e')%>
+	</div>
+<% end %>

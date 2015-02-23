@@ -11,6 +11,12 @@ class Spree::Board < ActiveRecord::Base
   has_many :colors, :through => :color_matches
   has_many :conversations, as: :conversationable, class_name: "::Mailboxer::Conversation"
 
+  has_and_belongs_to_many :promotion_rules, 
+      class_name: '::Spree::PromotionRule', 
+      join_table: 'spree_boards_promotion_rules', 
+      foreign_key: 'board_id'
+  has_many :promotions, :through => :promotion_rules
+
   has_one :board_image, as: :viewable, order: :position, dependent: :destroy, class_name: "Spree::BoardImage"
   has_one :conversation, :class_name => "Mailboxer::Conversation"
   
@@ -153,6 +159,19 @@ class Spree::Board < ActiveRecord::Base
   def self.featured
     #where(:featured => 1)
     where("featured_starts_at <= ? and featured_expires_at >= ?", Date.today, Date.today)
+  end
+  
+  def self.promoted
+    includes(promotion_rules: [:promotion]).where("spree_promotions.starts_at <= ? and spree_promotions.expires_at >= ?", Date.today, Date.today)
+  end
+  
+  def currently_promoted?
+    self.current_promotion
+  end
+  
+  def current_promotion
+    p = self.promotions.where("spree_promotions.starts_at <= ? and spree_promotions.expires_at >= ?", Date.today, Date.today)
+    p.empty? ? nil : p.first
   end
 
   def room_and_style

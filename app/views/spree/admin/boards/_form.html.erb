@@ -8,6 +8,13 @@
 	      <%= f.text_area :description, {:class => 'fullwidth'} %>
 	      <%= f.error_message_on :description %>
 	    <% end %>
+	
+		<%= f.field_container :promotion_rule do %>
+	      <%= f.label :promotion_rule %>
+	      <%= f.select :status, Spree::PromotionRule.all().collect{|promotion_rule| [promotion_rule.promotion.name, promotion_rule.id]}, :class => 'field' %>
+	      <%= f.error_message_on :description %>
+	    <% end %>
+	
 		<%= f.field_container :featured_headline do %>
 	      <%= f.label :featured_headline %> <span class="required">*</span><br />
 	      <%= f.text_field :featured_headline, :class => 'fullwidth title' %>

@@ -1,0 +1,36 @@
+
+<div class="container">		
+	<% if !@slides.blank?%>			
+	<div class="prime">
+		<div id="homeCarousel" class="carousel slide" data-ride="carousel" data-interval="5000">
+			<!-- Indicators -->
+			<ol class="carousel-indicators">
+				<% @slides.each_with_index do |slide, i| %>
+				<li data-target="#homeCarousel" data-slide-to="<%=i%>" class="<%= "active" if i == 0 %>"></li>
+				<% end %>
+			</ol>
+
+			<div class="carousel-inner">
+				<% @slides.current.each_with_index do |slide, i| %>
+				<div class="item <%= "active" if i == 0 %>">
+					<%= link_to image_tag(slide.slider_image.attachment(:banner)), slide.path %>
+				</div>
+				<% end %>
+			</div><!-- /.carousel -->
+			<a class="left carousel-control" href="#homeCarousel" role="button" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+			<a class="right carousel-control" href="#homeCarousel" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+		</div>	
+	</div>
+	<% end %>
+	<div class="container">
+		<h2 class="home">Shop Rooms</h2>
+		<div class="boards-list-main">
+			<% unless @promoted_rooms.blank? %>
+			<%= render :partial => "promoted_rooms", :locals => {:boards => @promoted_rooms}%>
+			<% else %>
+			<div class="empty-state">There aren't any available rooms at this time.</div>
+			<% end %>
+		</div>
+	</div>
+	
+	

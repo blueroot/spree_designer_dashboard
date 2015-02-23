@@ -30,6 +30,7 @@ Spree::Core::Engine.routes.draw do
   get "/mission" => "extra#mission" , :as => :mission
   get "/share-to-earn" => "extra#share_to_earn" , :as => :share_to_earn
   get "/home" => "boards#home", :as => :home
+  get "/home2" => "home#home2", :as => :home2
   post "/orders/add_to_cart" => "orders#add_to_cart", :as => :orders_add_to_cart
   
   # designer dashboard links
@@ -85,6 +86,8 @@ Spree::Core::Engine.routes.draw do
     match "/boards/approve", to: "boards#approve", via: :post
     match "/boards/request_revision", to: "boards#request_revision", via: :post
 
+    get "/boards/search" => "boards#search", :as => :board_search
+    
     
     get  "boards/list" => "boards#list", :as => :boards_list
     match  "boards/products(/:status)" => "boards#products", :as => :boards_products, :via =>[:get, :post]

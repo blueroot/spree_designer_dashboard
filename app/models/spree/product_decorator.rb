@@ -37,6 +37,10 @@ Spree::Product.class_eval do
     where(supplier_id: supplier_id)
   end
   
+  add_search_scope :by_board do |board_id|
+    includes(:board_products).where(:spree_board_products => { :board_id => board_id })
+  end
+  
   add_search_scope :not_on_a_board do
     includes(:board_products).where(:spree_board_products => { :id => nil })
   end
