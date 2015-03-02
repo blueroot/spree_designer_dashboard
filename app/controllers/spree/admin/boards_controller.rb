@@ -241,7 +241,7 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
  
  private
   def board_params
-    params.require(:board).permit(:name, :description, :style_id, :room_id, :status, :message, :featured, :featured_starts_at, :featured_expires_at, :board_commission, :featured_copy, :featured_headline)
+    params.require(:board).permit(:name, :description, :style_id, :room_id, :status, :message, :featured, :featured_starts_at, :featured_expires_at, :board_commission, :featured_copy, :featured_headline, :promotion_rule_ids => [])
     
   end
   

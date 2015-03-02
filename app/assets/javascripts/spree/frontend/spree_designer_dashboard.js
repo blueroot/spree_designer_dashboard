@@ -151,8 +151,8 @@ function addProductToBoard(event, ui){
 	center_y = cloned.position().top + parseFloat(cloned.height())/2.0
 	
 	//hide the image of the product in the search results to indicate that it is no longer available to others.
-	selector = '#board-product-select-' + cloned.data('productId')
-	$(selector).hide();
+	//selector = '#board-product-select-' + cloned.data('productId')
+	//$(selector).hide();
 	
 	//alert(cloned.position().left + ':' + cloned.position().top)
 	//saveProductToBoard($('#board-canvas').data('boardId'),cloned.data('productId'), cloned.position().left, cloned.position().top, 0, cloned.width(), cloned.height(), cloned.data('rotationOffset'));

@@ -10,9 +10,12 @@
 	    <% end %>
 	
 		<%= f.field_container :promotion_rule do %>
-	      <%= f.label :promotion_rule %>
-	      <%= f.select :status, Spree::PromotionRule.all().collect{|promotion_rule| [promotion_rule.promotion.name, promotion_rule.id]}, :class => 'field' %>
-	      <%= f.error_message_on :description %>
+	      <%= f.label :promotion_rule %><br />
+		  <%#= f.collection_select :promotion_rule_ids, Spree::PromotionRule.all(), :id, :name, {}, 
+			    {:multiple => true} %>
+	
+	
+	      <%= f.select :promotion_rule_ids, Spree::PromotionRule.all().collect{|promotion_rule| [promotion_rule.promotion.name, promotion_rule.id]}, {}, {:multiple => true, :style => "width: 100%;"} %>
 	    <% end %>
 	
 		<%= f.field_container :featured_headline do %>
@@ -48,3 +51,8 @@
 	      <%= f.text_field :featured_expires_at, :value => datepicker_field_value(@board.featured_expires_at), :class => 'datepicker datepicker-to fullwidth' %>
 	    </div>
 	
+	
+	
+<script>
+$('#board_promotion_rule_ids').chosen()
+</script>
