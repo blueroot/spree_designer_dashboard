@@ -69,9 +69,15 @@
           </tbody>
         </table>
         <%- if spree_current_user.designer_commission.present?  %>
-        <div class="board-title designer_commission_style">
-          <%= "Your commission #{spree_current_user.designer_commission.to_s} $" %>
-        </div>
+            <div class="board-title designer_commission_style">
+              <%=  "Total earned: #{number_to_currency(spree_current_user.designer_commission)}" %>
+            </div>
+            <div class="board-title designer_commission_style">
+              <%= "Total paid: #{number_to_currency(spree_current_user.total_affiliate_payments_amount)}" %>
+            </div>
+            <div class="board-title designer_commission_style">
+              <%= "Total due: #{number_to_currency(spree_current_user.afilliate_balance_due)}" %>
+            </div>
         <%- end%>
     <% else %>
         <div class="empty-state">You have not created any rooms yet.</div>
