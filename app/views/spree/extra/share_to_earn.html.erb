@@ -1,0 +1,48 @@
+<div id="page_content">
+	<h1>Share to Earn</h1>
+	<div class="row" style="margin-bottom: 40px;">
+		<% if !spree_current_user %>
+			<div class="col-md-12">
+				<h3>How does it work?</h3>
+				<p style="font-size: 16px;">For every friend who registers with Scout &amp; Nimble through your unique Share to Earn Invite Link you will earn $1 (up to $50) in Scout &amp; Nimble Store Credit.&nbsp; Once logged into your account, visit the&nbsp; <a href="http://www.scoutandnimble.com/account">Account Details</a> section to retrieve your Invite Link and to track the Credits that you&rsquo;ve earned.&nbsp; The &ldquo;Share to Earn&rdquo; promotion is not combinable with any other offer or promotion.</p>
+			</div>
+		<% else %>
+		
+		<div class="col-md-6">
+			<h3>How does it work?</h3>
+			<p style="font-size: 16px;">For every friend who registers with Scout &amp; Nimble through your unique Share to Earn Invite Link you will earn $1 (up to $50) in Scout &amp; Nimble Store Credit. Just share your link with your friends and we will track them as they sign up.</p>
+		</div>
+		<div class="col-md-6">
+			<div class="highlight-state">
+				<h3>Your Share Link</h3>
+				<p>http://scoutandnimble.com/r/<%=spree_current_user.ref_id%></p>
+			</div>
+		</div>
+		<% end %>
+	</div>
+	
+	<h3>Share to Earn Rules</h3>	
+	<div class="row">
+		<div class="col-md-6">
+			<h4>Who's eligible?</h4>
+			<p>Anyone who is a registered customer with Scout &amp; Nimble can participate in Share to Earn.</p>
+
+			<h4>What constitutes an eligible friend?</h4>
+			<p>Please review carefully:You can refer anyone who lives in the Contiguous United States. Credits will only be given for NEW Scout &amp; Nimble customers that were installed as a direct result of your Invite Link. No more than 2 registrants allowed per IP Address.&nbsp; Store Credit will only be given for registrants who provide a valid email address.</p>
+
+			<h4>Do I need to be a Scout &amp; Nimble registered customer to receive credit?</h4>
+			<p> Yes. Only a registered Scout &amp; Nimble customers can retrieve their Invite Link and participate in Share to Earn.. The incentive to Share to Earn is available in the form of a Scout &amp; Nimble store credit only. It cannot be cashed out.</p>
+		</div>
+		<div class="col-md-6">
+			<h4>Am I limited to the number of referrals or credits I can have?</h4>
+			<p>Yes. You can Share with as many friends as you like.&nbsp; You can accumulate up to $50 of store credit.</p>
+
+			<h4>How and when do I get my credit?</h4>
+			<p>Credits are applied to your account as soon as someone registers using your link.&nbsp; Your credits can be viewed here: <a href="http://www.scoutandnimble.com/account">Account Details</a></p>
+			<h4>What if I need help?</h4>
+			<p>Please contact Scout &amp; Nimble <a href="mailto:support@scoutandnimble.com?subject=Share%20to%20Earn">Customer Care</a>.</p>
+
+			<p>By virtue of participating in the Scout &amp; Nimble Share to Earn program, you agree to the following rules and restrictions.&nbsp; At any time and without notice, Scout &amp; Nimble reserves the right to modify these rules, to suspend participation from any customer whose actions are deemed to be abusive, to change the offer, or to cancel this program completely. Other restrictions may apply.</p>
+		</div>
+	</div>
+</div>

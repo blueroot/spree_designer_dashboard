@@ -5,13 +5,13 @@ class Spree::BoardProduct < ActiveRecord::Base
   before_create :set_z_index
   default_scope  { where("#{Spree::BoardProduct.quoted_table_name}.deleted_at IS NULL") }
   
-  state_machine :state, :initial => :new do
+  state_machine :state, :initial => :pending_approval do
     event :mark_for_approval do
-      transition [:new, :marked_for_deletion, :marked_for_removal] => :marked_for_approval
+      transition [:pending_approval, :marked_for_deletion, :marked_for_removal] => :marked_for_approval
     end
     
     event :approve do
-      transition [:new, :marked_for_deletion, :marked_for_approval] => :approved
+      transition [:pending_approval, :marked_for_deletion, :marked_for_approval] => :approved
     end
     
     event :remove do
@@ -19,15 +19,15 @@ class Spree::BoardProduct < ActiveRecord::Base
     end
     
     event :mark_for_removal do
-      transition [:new, :marked_for_approval, :approved] => :marked_for_removal, :unless => :published_on_site
+      transition [:pending_approval, :marked_for_approval, :approved] => :marked_for_removal, :unless => :published_on_site
     end
     
     event :delete do
-      transition [:new, :marked_for_approval, :approved] => :deleted, :unless => :published_on_site
+      transition [:pending_approval, :marked_for_approval, :approved] => :deleted, :unless => :published_on_site
     end
     
     event :mark_for_deletion do
-      transition [:new, :marked_for_approval, :approved] => :marked_for_deletion, :unless => :published_on_site
+      transition [:pending_approval, :marked_for_approval, :approved] => :marked_for_deletion, :unless => :published_on_site
     end
     
   end
@@ -54,15 +54,15 @@ class Spree::BoardProduct < ActiveRecord::Base
     end
   end
   
-  def self.marked_removal
+  def self.marked_for_removal
     where(:state => "marked_for_removal")
   end
   
-  def self.marked_deletion
+  def self.marked_for_deletion
     where(:state => "marked_for_deletion")
   end
   
-  def self.marked_approval
+  def self.marked_for_approval
     where(:state => "marked_for_approval")
   end
   
@@ -71,7 +71,8 @@ class Spree::BoardProduct < ActiveRecord::Base
   end
   
   def self.pending_approval
-    includes(:product).where("isnull(spree_products.deleted_at) and isnull(spree_board_products.approved_at) and isnull(spree_board_products.removed_at)")
+    where(:state => "pending_approval")
+    #includes(:product).where("isnull(spree_products.deleted_at) and isnull(spree_board_products.approved_at) and isnull(spree_board_products.removed_at)")
   end
   
 end

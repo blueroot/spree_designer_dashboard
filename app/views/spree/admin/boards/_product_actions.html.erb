@@ -1,0 +1,56 @@
+
+
+<% if board_product.state == "pending_approval" %>
+	<%= link_to "Reject", "javascript:void(0);", :class => "js-btn-reject btn btn-xs btn-danger", :"data-board-product-id" => board_product.id %>
+	<%= link_to "Approve", "javascript:void(0);", :class => "js-btn-approve btn btn-xs btn-success", :"data-board-product-id" => board_product.id %>
+
+<% elsif board_product.state == "marked_for_approval" %>
+	<%= link_to "Reject", "javascript:void(0);", :class => "js-btn-reject btn btn-xs btn-danger", :"data-board-product-id" => board_product.id %>
+
+<% elsif board_product.state == "marked_for_removal" %>
+	<%= link_to "Approve", "javascript:void(0);", :class => "js-btn-approve btn btn-xs btn-success", :"data-board-product-id" => board_product.id %>
+
+<% elsif board_product.state == "discontinued" %>
+	
+
+<% elsif board_product.state == "published" %>
+
+<% end %>
+
+
+
+<script>
+$('.js-btn-reject').click(function() {
+	var board_product_id = $(this).data('boardProductId')
+	var state_container_id = '#board_product_state_' +  board_product_id
+	$.ajax({
+      type: "POST",
+      url: "/admin/board_products/mark_rejected.js",
+      contentType: "application/json",
+      data: JSON.stringify({ 
+        id: board_product_id
+      })
+    }).done(function(data){
+      console.log(data);
+		$(state_container_id).html('<i class="glyphicon glyphicon-remove icon-rejected"></i>')
+    });
+
+});
+
+$('.js-btn-approve').click(function() {
+	var board_product_id = $(this).data('boardProductId')
+	var state_container_id = '#board_product_state_' +  board_product_id
+	$.ajax({
+      type: "POST",
+      url: "/admin/board_products/mark_approved.js",
+      contentType: "application/json",
+      data: JSON.stringify({ 
+        id: board_product_id
+      })
+    }).done(function(data){
+      console.log(data);
+	$(state_container_id).html('<i class="glyphicon glyphicon-ok icon-approved"></i>')
+    });
+
+});
+</script>

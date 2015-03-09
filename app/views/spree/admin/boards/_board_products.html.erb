@@ -8,7 +8,7 @@
 		<td><%= link_to raw("<span class=\"helper\"></span>#{mini_image(board_product.product, :itemprop => 'image')}"), board_product.product, :itemprop => 'url' %></td>
 		<td><%= link_to truncate(board_product.product.name, :length => 50), edit_admin_product_path(board_product.product), :class => 'info', :itemprop => "name", :title => board_product.product.name, :target => "_new" %></td>
 		<td>
-			<%=board_product.product.master.stock_items.first.count_on_hand%> in stock
+			<%#=board_product.product.master.stock_items.first.count_on_hand%> in stock
 		</td>
 		<td style="width: 250px; text-align: right;">
 			<%= link_to "Reject", "javascript:void(0);", :class => "js-btn-reject btn btn-xs btn-danger", :"data-board-product-id" => board_product.id %>

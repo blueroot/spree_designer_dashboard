@@ -5,9 +5,6 @@
 <%= form_for(board, :url => "/admin/boards/approve", method: "post", :remote => true) do |f| %>
 	<%= f.hidden_field :id %>
 	<div class="modal-body">
-		<h4>Send a Message with this approval?</h4>
-		<textarea id="board_approval_message" name="board[approval_message]" style="width: 100%;"></textarea>
-		
 		<% if !board.board_products.marked_removal.blank? %>
 			<h4>The following products will be removed upon approval</h4>
 			<table class="table">
@@ -18,13 +15,39 @@
 				</tr>
 			<% end %>
 			</table>
+		
+		<% else%>
+		<div class="empty-state">
+			No products are being removed from this board.
+		</div>
+		
 		<% end%>
 		
-	
+		<div class="checkbox">
+			<label>
+				<input type="checkbox" id="send_message" name="board[send_message]"> Send an email notification to <%= board.designer.full_name %>
+			</label>
+		</div>
+		
+		<div id="message_notification_box" style="display: none;">
+			<textarea id="board_message_content" name="board[state_message]" rows="5" class="fullwidth"></textarea>
+
+		</div>
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-		<input type="submit" class="btn btn-primary" value="Approve Board">
+		<input type="submit" class="btn btn-primary" value="Approve and Publish">
 	</div>
 <% end %>
 
+<script>
+$('#send_message').click(function() {
+	if ($('#send_message').is(":checked")){
+		$('#message_notification_box').show();
+	}else{
+		$('#message_notification_box').hide();
+	}
+	
+
+});
+</script>

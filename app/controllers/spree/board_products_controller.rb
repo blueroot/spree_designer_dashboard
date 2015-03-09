@@ -1,6 +1,6 @@
 class Spree::BoardProductsController < Spree::StoreController
-  require 'RMagick'
-  include Magick 
+  #require 'RMagick'
+  #include Magick 
   before_filter :require_authentication
   def index
     if params[:room_id] and @board = Spree::Board.find(params[:room_id])      
@@ -36,17 +36,12 @@ class Spree::BoardProductsController < Spree::StoreController
     else
       @board_product = Spree::BoardProduct.new(board_product_params)
     end
-    
     if @board_product.save
       @board_product.board.queue_image_generation
-
       respond_to do |format|
         format.js   { render :action => "show" }
         format.json   {render :action => "show", :layout => false}
-        #format.html { redirect_to([:admin, @booking], :notice => 'Booking was successfully created.') }
-        #format.xml  { render :xml => @booking, :status => :created, :location => @booking }
       end
-    else
     end
   end
   
@@ -64,7 +59,7 @@ class Spree::BoardProductsController < Spree::StoreController
   
   private
     def board_product_params
-      params.require(:board_product).permit(:board_id, :product_id, :top_left_x, :top_left_y, :z_index, :status, :width, :height, :rotation_offset)
+      params.require(:board_product).permit(:board_id, :product_id, :top_left_x, :top_left_y, :center_point_x, :center_point_y, :z_index, :status, :width, :height, :rotation_offset)
     end
     
   

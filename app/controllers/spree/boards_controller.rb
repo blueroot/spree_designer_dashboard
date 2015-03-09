@@ -3,8 +3,9 @@ class Spree::BoardsController < Spree::StoreController
   helper 'spree/products'
   before_filter :require_authentication, :only => [:new, :design, :preview, :dashboard, :my_profile, :store_credit]
   before_filter :prep_search_collections, :only => [:index, :search, :edit, :new, :design]
-  before_filter :load_board, :only => [:preview, :design, :destroy]
+  before_filter :load_board, :only => [:preview, :design, :destroy, :update]
   before_filter :require_board_designer, :only => [:dashboard]
+  before_filter :get_room_manager, :only => [:submit_for_publication]
   
   impressionist :actions=>[:show]
 
@@ -19,7 +20,7 @@ class Spree::BoardsController < Spree::StoreController
   end
   
   def load_board
-    unless @board = spree_current_user.boards.find(params[:id])
+    unless @board = spree_current_user.boards.friendly.find(params[:id])
       redirect_to root_path
     end
   end
@@ -63,11 +64,14 @@ class Spree::BoardsController < Spree::StoreController
     @selected_section = "home"
     @designers = Spree::User.published_designers().order("created_at desc").limit(4)
     
-    @featured_designer = Spree::User.where("designer_featured_starts_at <= ? and designer_featured_ends_at >= ?", Date.today, Date.today).order("designer_featured_starts_at desc").first || Spree::User.published_designers.first
-    @featured_room = @featured_designer.boards.published().featured().last
-    @featured_products = []
-    @featured_products = @featured_room.products.limit(4) if @featured_room
-    puts @designer.inspect
+    @slides = Spree::Slide.current.order("created_at desc") || Spree::Slide.defaults
+    
+    
+    #@featured_designer = Spree::User.where("designer_featured_starts_at <= ? and designer_featured_ends_at >= ?", Date.today, Date.today).order("designer_featured_starts_at desc").first || Spree::User.published_designers.first
+    #@featured_room = @featured_designer.boards.published().featured().last
+    #@featured_products = []
+    #@featured_products = @featured_room.products.limit(4) if @featured_room
+    #puts @designer.inspect
     render :layout => "/spree/layouts/spree_home"
   end
   
@@ -131,7 +135,7 @@ class Spree::BoardsController < Spree::StoreController
   end
   
   def show
-    @board = Spree::Board.find(params[:id])
+    @board = Spree::Board.friendly.find(params[:id])
     impressionist(@board)
   end
   
@@ -176,9 +180,7 @@ class Spree::BoardsController < Spree::StoreController
       taxon = Spree::Taxon.find(params[:department_taxon_id])
       taxons << taxon.id
     end
-    
-  
-    
+
     
     unless taxons.empty? 
       @searcher = build_searcher(params.merge(:taxon => taxons))
@@ -186,9 +188,13 @@ class Spree::BoardsController < Spree::StoreController
       @searcher = build_searcher(params)
     end
     if params[:supplier_id] and params[:supplier_id].to_i > 0
-      @all_products = @searcher.retrieve_products.by_supplier(params[:supplier_id]).not_on_a_board
+      # @all_products = @searcher.retrieve_products.by_supplier(params[:supplier_id]).not_on_a_board
+      #@all_products =  @searcher.retrieve_products({where: "supplier_id = #{params[:supplier_id]}"}, {includes: :board_products}, {where: "spree_board_products.product_id is NULL"})
+      @all_products =  @searcher.retrieve_products({where: "supplier_id = #{params[:supplier_id]}"})
     else
-      @all_products = @searcher.retrieve_products.not_on_a_board
+      # @all_products = @searcher.retrieve_products.not_on_a_board
+      #@all_products = @searcher.retrieve_products( {includes: :board_products}, {where: "spree_board_products.product_id is NULL"})
+      @all_products = @searcher.retrieve_products()
     end
     @products = @all_products
     
@@ -219,7 +225,7 @@ class Spree::BoardsController < Spree::StoreController
   end
   
   def update
-    @board = Spree::Board.find(params[:id])
+    @board.slug = nil
     #respond_to do |format|
       if @board.update_attributes(board_params)
         @board.submit_for_publication! if params[:board][:status] == "submitted_for_publication"
@@ -229,7 +235,18 @@ class Spree::BoardsController < Spree::StoreController
         #format.html { render :action => "design"}
       end
     #end
+  end
+  
+  def submit_for_publication
     
+    @board  = Spree::Board.find_by id: params[:id]
+    @board.set_state_transition_context(params[:board][:state_message], spree_current_user)
+    @board.submit_for_publication
+    html_content = "There is a new room for you to review."
+    html_content << "<br /><br />Message from Designer:<br /><br />#{params[:board][:state_message]}" if params[:board] and params[:board][:state_message] and !params[:board][:state_message].blank?
+    
+    @board.designer.send_message(@room_manager, "Room Submitted by #{@board.designer.full_name}", html_content, true, nil, Time.now, @board)
+    redirect_to designer_dashboard_path
   end
   
   def build
@@ -268,7 +285,7 @@ class Spree::BoardsController < Spree::StoreController
   
   def design
     
-    @board.messages.new(:sender_id => spree_current_user.id, :recipient_id => 0, :subject => "Publication Submission")
+    #@board.messages.new(:sender_id => spree_current_user.id, :recipient_id => 0, :subject => "Publication Submission")
     @products = Spree::Product.all()
     @bookmarked_products = spree_current_user.bookmarks.collect{|bookmark| bookmark.product}
     @department_taxons = Spree::Taxonomy.where(:name => 'Department').first().root.children

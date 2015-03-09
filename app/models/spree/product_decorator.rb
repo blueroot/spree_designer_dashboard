@@ -37,6 +37,10 @@ Spree::Product.class_eval do
     where(supplier_id: supplier_id)
   end
   
+  add_search_scope :by_board do |board_id|
+    includes(:board_products).where(:spree_board_products => { :board_id => board_id })
+  end
+  
   add_search_scope :not_on_a_board do
     includes(:board_products).where(:spree_board_products => { :id => nil })
   end
@@ -54,16 +58,21 @@ Spree::Product.class_eval do
     where('not isnull(discontinued_at)')
   end
   
-  def self.marked_removal
-    includes(:board_products).where("spree_board_products.status in ('rejected', 'marked_for_deletion')")
+  def self.marked_for_removal
+    includes(:board_products).where("spree_board_products.state in ('marked_for_removal', 'marked_for_deletion')")
   end
   
-  def self.marked_approval
-    includes(:board_products).where("spree_board_products.status in ('approved')")
+  def self.marked_for_approval
+    includes(:board_products).where("spree_board_products.state in ('marked_for_approval')")
   end
   
   def self.pending_approval
-    includes(:board_products, :boards).where("spree_boards.state = 'submitted_for_publication' and spree_products.is_published = 0 and isnull(spree_products.deleted_at) and isnull(spree_products.discontinued_at) and isnull(spree_board_products.approved_at) and isnull(spree_board_products.removed_at)")
+    includes(:board_products).where("spree_board_products.state in ('pending_approval')")
+    #includes(:board_products, :boards).where("spree_boards.state = 'submitted_for_publication' and spree_products.is_published = 0 and isnull(spree_products.deleted_at) and isnull(spree_products.discontinued_at) and isnull(spree_board_products.approved_at) and isnull(spree_board_products.removed_at)")
+  end
+  
+  def self.bookmarked
+    includes(:bookmarks)
   end
   
   

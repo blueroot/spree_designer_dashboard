@@ -1,32 +1,21 @@
-<% # this is super ugly, but was the quickest way to do it. %>
-<% board.messages.build(:sender_id => spree_current_user.id, :recipient_id => 0, :subject => "Publication Submission")%>
-
 <div id="publish-board-modal-<%= board.id%>" class="modal">
   <div class="modal-dialog">
     <div class="modal-content">
-	<%= form_for board, {:url => room_path(board)} do |f| %>
-	<%= f.hidden_field :status, :value => "submitted_for_publication"%>
+	<%= form_for board, {:url => submit_for_publication_path(board)} do |f| %>
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         
-		<h4 class="modal-title">Publish Your Board</h4>
+		<h4 class="modal-title">Publish Your Room</h4>
 		
       </div>
 		
       <div class="modal-body">
-		<p style="font-weight: normal;">When you submit your board to be published, it goes to the Scout & Nimble staff to review it for product availability. We might make suggestions for substitutions if we find an item does not have sufficient inventory.</p>
+		<p style="font-weight: normal;">When you submit your room to be published, it goes to the Scout & Nimble staff to review it for product availability. We might make suggestions for substitutions if we find an item does not have sufficient inventory.</p>
 		<%= f.fields_for :messages do |message| %>
-		<%# if message.object.new_record? %>
 		<div class="form-group">
-			
-			<%= f.label :body, "Would you like to include any questions or comments about this board?" %>
-			<%= message.text_area :body, {:class => 'form-control', :rows => 5} %>
-			<%= message.hidden_field :sender_id %>
-			<%= message.hidden_field :recipient_id %>
-			<%= message.hidden_field :subject %>
-			<%= f.error_message_on :description %>
+			<label>Would you like to include any questions or comments?</label>
+			<textarea id="board_message_content" name="board[state_message]" rows="5" class="form-control" rows="5"></textarea>
 		</div>
-		<%# end %>
 		<% end %>
       </div>
 	<div class="modal-footer">

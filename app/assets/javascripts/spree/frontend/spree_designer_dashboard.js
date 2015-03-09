@@ -16,7 +16,7 @@ function initializeProductSearchForm(){
 		
 		//alert(taxon);
 		/* Send the data using post */
-		var posting = $.post( url, { keywords: term, department_taxon_id: department_taxon, supplier_id: supplier_id, per_page: 100, board_id: bid } );
+		var posting = $.post( url, { keywords: term, department_taxon_id: department_taxon, supplier_id: supplier_id, per_page: 50, board_id: bid } );
 
 		/* Put the results in a div */
 		posting.done(function( data ) {
@@ -78,51 +78,51 @@ function updateBoardProduct(id, product_options){
 }
 
 
-fabric.Object.prototype.setOriginToCenter = function () {
-    this._originalOriginX = this.originX;
-    this._originalOriginY = this.originY;
-
-    var center = this.getCenterPoint();
-
-    this.set({
-        originX: 'center',
-        originY: 'center',
-        left: center.x,
-        top: center.y
-    });
-};
-
-fabric.Object.prototype.setCenterToOrigin = function () {
-    var originPoint = this.translateToOriginPoint(
-    this.getCenterPoint(),
-    this._originalOriginX,
-    this._originalOriginY);
-
-    this.set({
-        originX: this._originalOriginX,
-        originY: this._originalOriginY,
-        left: originPoint.x,
-        top: originPoint.y
-    });
-};
+//fabric.Object.prototype.setOriginToCenter = function () {
+//    this._originalOriginX = this.originX;
+//    this._originalOriginY = this.originY;
+//
+//    var center = this.getCenterPoint();
+//
+//    this.set({
+//        originX: 'center',
+//        originY: 'center',
+//        left: center.x,
+//        top: center.y
+//    });
+//};
+//
+//fabric.Object.prototype.setCenterToOrigin = function () {
+//    var originPoint = this.translateToOriginPoint(
+//    this.getCenterPoint(),
+//    this._originalOriginX,
+//    this._originalOriginY);
+//
+//    this.set({
+//        originX: this._originalOriginX,
+//        originY: this._originalOriginY,
+//        left: originPoint.x,
+//        top: originPoint.y
+//    });
+//};
 
 
 
 function buildImageLayer(canvas, bp){
 	fabric.Image.fromURL(bp.product.image_url, function(oImg) {
 		oImg.scale(1).set({
-		      left: bp.top_left_x,
-		      top: bp.top_left_y,
-		      width : bp.width,
-			    height : bp.height,
-					lockUniScaling: true,
-					hasRotatingPoint: false
-		    });
+      left: bp.center_point_x,
+      top: bp.center_point_y,
+			originX: 'center',
+			originY: 'center',
+      width : bp.width,
+	    height : bp.height,
+			lockUniScaling: true,
+			minScaleLimit: 0.25,
+			hasRotatingPoint: false
+		});
 		oImg.set('id', bp.id)
-		//console.log('build image: '+ bp.id)
-		oImg.set('product_permalink', bp.product.slug)
-		oImg.set('current_x', bp.top_left_x)
-		oImg.set('current_y', bp.top_left_y)
+		oImg.set('product_permalink', bp.product.slug)		
 		canvas.add(oImg);
 		canvas.setActiveObject(oImg);
 		rotateObject(bp.rotation_offset);
@@ -146,9 +146,13 @@ function addProductToBoard(event, ui){
 	cloned = $(ui.helper).clone();
 	$(this).append(cloned.removeClass('board-lightbox-product').addClass('board-lightbox-product-cloned'));
 	
+	//calculate the origin based on the position and size
+	center_x = cloned.position().left + parseFloat(cloned.width())/2.0
+	center_y = cloned.position().top + parseFloat(cloned.height())/2.0
+	
 	//hide the image of the product in the search results to indicate that it is no longer available to others.
-	selector = '#board-product-select-' + cloned.data('productId')
-	$(selector).hide();
+	//selector = '#board-product-select-' + cloned.data('productId')
+	//$(selector).hide();
 	
 	//alert(cloned.position().left + ':' + cloned.position().top)
 	//saveProductToBoard($('#board-canvas').data('boardId'),cloned.data('productId'), cloned.position().left, cloned.position().top, 0, cloned.width(), cloned.height(), cloned.data('rotationOffset'));
@@ -159,60 +163,24 @@ function addProductToBoard(event, ui){
 		url: url, 
 		type: "POST",
 		dataType: "json", 
-		data: {board_product: {board_id: $('#canvas').data('boardId'), product_id: cloned.data('productId'), top_left_x: cloned.position().left, top_left_y: cloned.position().top, width: cloned.width(), height: cloned.height()}},
-	     beforeSend : function(xhr){
+		data: {board_product: {board_id: $('#canvas').data('boardId'), product_id: cloned.data('productId'), center_point_x: center_x, center_point_y: center_y, width: cloned.width(), height: cloned.height()}},
+			beforeSend : function(xhr){
 				xhr.setRequestHeader("Accept", "application/json")
-	     },
-	     success : function(board_product){
-				//console.log(board_product.product.slug)
-		
+			},
+			success : function(board_product){
+				//console.log(board_product.product.slug)		
 				buildImageLayer(canvas, board_product);
-				//alert(board_product.product.id)
-				
-				//var variant_count = $.map(board_product.product.variants, function(n, i) { return i; }).length;
-				//if (variant_count > 1){
-				//	//alert(variant_count);
-				//	$('#variant_options_modal').modal('show')
-				//	$('#board_options_preloader').removeClass('hidden')
-				//	$('#room_variant_options_container').addClass('hidden')
-				//	
-				//	var url = '/products/'+board_product.product.slug+'/product_with_variants'
-				//	
-				//	
-				//	
-				//	
-				//	$.ajax({
-				//		url: url, 
-				//		type: "GET",
-				//		//dataType: "text/javascript", 
-				//		data: {},
-				//	     beforeSend : function(xhr){
-				//				xhr.setRequestHeader("Accept", "text/javascript")
-				//	     },
-				//	     success : function(product){
-				//	     },
-				//	     error: function(objAJAXRequest, strError, errorThrown){ //alert("ERROR: " + strError);
- 				//				}
-				//	  }
-				//	);
-				//	
-				//	
-				//	
-				//	
-				//	
-				//}
 				
 				// remove the jquery drag/drop place holder that had been there.
 				// this is a bit of a hack - without the timer, then the graphic disappears for a second...this generally keeps it up until the fabricjs version is added
 				setTimeout(function() {
-				      cloned.hide();
+					cloned.hide();
 				}, 1000);
-				
-	     },
-	     error: function(objAJAXRequest, strError, errorThrown){
+			},
+			error: function(objAJAXRequest, strError, errorThrown){
 				alert("ERROR: " + strError);
-	     }
-	  }
+			}
+		}
 	);
 }
 
@@ -275,7 +243,7 @@ function getSavedProducts(board_id){
 				canvas.on({
 			    'object:modified': function(e) {
 					      activeObject = e.target
-								updateBoardProduct(activeObject.get('id'), {id: activeObject.get('id'), top_left_x: getCurrentLeft(activeObject), top_left_y: getCurrentTop(activeObject), width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)})
+								updateBoardProduct(activeObject.get('id'), {id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)})
 					    	console.log('modified!!!')
 							}
 			  });
@@ -295,20 +263,17 @@ function getSavedProducts(board_id){
 				}, false);
 				document.getElementById('bp-rotate-left').addEventListener('click', function() {
 					activeObject = canvas.getActiveObject()
-					x = activeObject.get('current_x')
-					y = activeObject.get('current_y')
 					rotateObject(90);	
+					updateBoardProduct(activeObject.get('id'), {id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)})
 					
-					updateBoardProduct(activeObject.get('id'), {id: activeObject.get('id'), top_left_x: x, top_left_y: y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)})
-					
-					console.log('getLeft: '+ activeObject.getLeft())
-					console.log('getTop: '+ activeObject.getTop())
-					console.log('getPointByOrigin: '+ activeObject.getPointByOrigin())
-					console.log('getOriginX: '+ activeObject.getOriginX())
-					console.log('getOriginY: '+ activeObject.getOriginY())
-					console.log('getCurrentLeft: '+ getCurrentLeft(activeObject))
-					console.log('getCurrentTop: '+ getCurrentTop(activeObject))
-					console.log('getAngle: '+ activeObject.getAngle())
+					//console.log('getLeft: '+ activeObject.getLeft())
+					//console.log('getTop: '+ activeObject.getTop())
+					//console.log('getPointByOrigin: '+ activeObject.getPointByOrigin())
+					//console.log('getOriginX: '+ activeObject.getOriginX())
+					//console.log('getOriginY: '+ activeObject.getOriginY())
+					//console.log('getCurrentLeft: '+ getCurrentLeft(activeObject))
+					//console.log('getCurrentTop: '+ getCurrentTop(activeObject))
+					//console.log('getAngle: '+ activeObject.getAngle())
 				}, false);
 				
 	     },

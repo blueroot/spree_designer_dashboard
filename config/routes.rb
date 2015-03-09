@@ -28,8 +28,9 @@ Spree::Core::Engine.routes.draw do
   #post "/designers/signup" => "designers#signup", :as => :create_designer_registration
   
   get "/mission" => "extra#mission" , :as => :mission
-  
+  get "/share-to-earn" => "extra#share_to_earn" , :as => :share_to_earn
   get "/home" => "boards#home", :as => :home
+  get "/home2" => "home#home2", :as => :home2
   post "/orders/add_to_cart" => "orders#add_to_cart", :as => :orders_add_to_cart
   
   # designer dashboard links
@@ -52,6 +53,10 @@ Spree::Core::Engine.routes.draw do
   
   get '/widget/room/:id' => "widget#room", :as => :room_widget
 
+  get '/inbox' => "mailbox#inbox", :as => :mailbox_inbox
+  get '/sentbox' => "mailbox#sentbox", :as => :mailbox_sentbox
+  get '/conversation/:id' => 'mailbox#conversation', :as => :mailbox_conversation
+
   #post '/registration_subscribers' => 'user_registrations#registration_subscribers', :as => :registration_subscribers
   devise_scope :spree_user do
     post '/registration_subscribers' => 'user_registrations#registration_subscribers', :as => :registration_subscribers
@@ -66,7 +71,8 @@ Spree::Core::Engine.routes.draw do
   
   #get "/boards/product_search" => "boards#product_search", :as => :board_product_search
    
- 
+
+  match "/boards/submit_for_publication/:id", to: "boards#submit_for_publication", :as => "submit_for_publication", via: :patch
   namespace :admin do
     
     
@@ -81,13 +87,15 @@ Spree::Core::Engine.routes.draw do
     match "/boards/approve", to: "boards#approve", via: :post
     match "/boards/request_revision", to: "boards#request_revision", via: :post
 
+    get "/boards/search" => "boards#search", :as => :board_search
+    
     
     get  "boards/list" => "boards#list", :as => :boards_list
     match  "boards/products(/:status)" => "boards#products", :as => :boards_products, :via =>[:get, :post]
     resources :boards
     resources :board_products
     resources :designer_registrations
-    
+    resources :slides
     
     get  "designers" => "users#designers", :as => :designers
     

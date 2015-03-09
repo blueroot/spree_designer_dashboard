@@ -1,0 +1,41 @@
+
+<div class="row">
+  <div class="col-md-3">
+    <%= render :partial => "/spree/boards/dashboard_menu", :locals => {:selected => "dashboard"}%>
+  </div>
+
+  <div class="col-md-9">
+    <div class="page-header clearfix">
+      <div class="row">
+        <div class="col-md-9">
+          <h1>Inbox > Message</h1>
+        </div>
+        <div class="col-md-3 header-actions">
+
+          
+        </div>
+      </div>
+    </div>
+	<h3><%= @conversation.subject %></h3>
+	<div class="mailbox-conversation-container">
+		<% @conversation.receipts.each do |receipt| %>
+			<div class="mailbox-conversation">
+				<div class="row">
+					<div class="col-md-3">
+						<div class="conversation-meta">
+							<strong><%= receipt.notification.sender.name %></strong><br />
+							<%= receipt.created_at.to_s(:long) %>
+						</div>
+					</div>
+					<div class="col-md-9">
+						<div class="conversation-content">
+							<%= receipt.message.body %>
+						</div>
+					</div>
+				</div>
+			</div>
+		<% end %>
+	</div>
+    
+  </div>
+</div>

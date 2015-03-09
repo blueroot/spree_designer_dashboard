@@ -68,268 +68,188 @@
 
 </style>
 <% end %>
-<div class="container">					
+<div class="container">		
+	<% if !@slides.blank?%>			
 	<div class="prime">
-		<% if true %>
-		<div class="tagline">
-			<h1 class="home-header">Browse room designs from the industry's top designers for a room you'll love.</h1>
-			
+		<div id="homeCarousel" class="carousel slide" data-ride="carousel" data-interval="5000">
+			<!-- Indicators -->
+			<ol class="carousel-indicators">
+				<% @slides.each_with_index do |slide, i| %>
+				<li data-target="#homeCarousel" data-slide-to="<%=i%>" class="<%= "active" if i == 0 %>"></li>
+				<% end %>
+			</ol>
+
+			<div class="carousel-inner">
+				<% @slides.current.each_with_index do |slide, i| %>
+				<div class="item <%= "active" if i == 0 %>">
+					<%= link_to image_tag(slide.slider_image.attachment(:banner)), slide.path %>
+				</div>
+				<% end %>
+			</div><!-- /.carousel -->
+			<a class="left carousel-control" href="#homeCarousel" role="button" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+			<a class="right carousel-control" href="#homeCarousel" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
 		</div>	
-		<% end %>
-		<div class="room-highlights">
-			<div class="row">
-				<div class="col-md-6">
-					<% if !@featured_designer.blank? %>  
-						<a href="/<%=@featured_designer.username%>">
-                          <% if @featured_designer.feature_image.present? %>
-                            <%= image_tag(@featured_designer.feature_image.attachment(:home))%>
-                          <%end%>
-                        </a>
-					<% else %>
-						<%= image_tag('frontend/home/designer.png')%>
-					<%end%>
-				</div>
-				
-				<div class="col-md-6">
-					<% if !@featured_designer.blank? %>
-						<h2 class="home-featured"><%= @featured_room.featured_headline %></h2>
-						<div style="margin-bottom: 15px;"><%= @featured_room.featured_copy %></div>
-						<div class="row">
-							<%#= @featured_room.products.limit(4).size %>
-							<% if !@featured_products.blank? %>
-							
-								<% @featured_products.each do |product|%>
-								<div class="col-md-3">
-									<div class="featured-product-listing">
-										
-								        	<%= link_to raw("<span class=\"featured-product-listing-helper\"></span>#{small_image(product, :itemprop => 'image')}"), product, :itemprop => 'url' %>
-									</div>
-								</div>
-								<% end %>
-							<% end %>
-						</div>
-						
-					<% else %>
-					
-					<% end %>
-				</div>
-			</div>
-			
-			
-			
-			<% if false %>
-			<div class="row">
-				<div class="col-md-4">
-					<div class="home-feature-section">
-						<div class="home-feature-image home-feature-designer">
-						<% if !@featured_designer.blank? %>  
-							<a href="/<%=@featured_designer.username%>">
-								<%= image_tag(@featured_designer.feature_image.attachment(:primary))%>
-							</a>
-						<% else %>
-							<%= image_tag('frontend/home/designer.png')%>
-						<%end%>
-						</div>
-						<h4>Exceptional Designers</h4>
-						<p></p>
-					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="home-feature-section">
-						<div class="home-feature-image home-feature-product">
-							<% unless @fetaured_product.blank? %>
-							<a href="/products/<%=@fetaured_product.slug%>" class="add-to-board-link" data-product-id="<%=@fetaured_product.slug %>">
-								<%= large_image(@fetaured_product, :itemprop => 'image') %>
-							</a>  
-							<%else%>
-							<%= image_tag('frontend/home/product.png')%>
-							<%end%>
-						</div>
-						<h4>Unique Products</h4>
-						<p></p>
-					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="home-feature-section">
-						<div class="home-feature-image home-feature-room">
-
-							<% unless @featured_room.blank? %>
-							<% unless board_image(@featured_room, :featured).blank? %>
-							<%= link_to board_image(@featured_room, :large), room_path(@featured_room)%>
-							<%end%>
-							<% else %>
-							<%= image_tag('frontend/home/board.png')%>
-							<%end%>
-
-						</div>
-						<h4>Beautiful Rooms</h4>
-						<p></p>
-					</div>
-				</div>
-			</div>
+	</div>
+	<% end %>
+	<div class="container">
+		<h2 class="home">Featured Living Rooms</h2>
+		<div class="boards-list-main">
+			<% unless @living_room_boards.blank? %>
+			<%= render :partial => "home_boards_list", :locals => {:boards => @living_room_boards}%>
+			<% else %>
+			<div class="empty-state">There aren't any featured living rooms at this time.</div>
 			<% end %>
 		</div>
-	</div>	
-</div>
-<div class="container">
-	<h2 class="home">Featured Living Rooms</h2>
-	<div class="boards-list-main">
-		<% unless @living_room_boards.blank? %>
-		<%= render :partial => "home_boards_list", :locals => {:boards => @living_room_boards}%>
-		<% else %>
-		<div class="empty-state">There aren't any featured living rooms at this time.</div>
-		<% end %>
 	</div>
-</div>
-<div class="container">
-	<h2 class="home">Featured Dining Rooms</h2>
-	<div class="boards-list-main">
-		<% unless @dining_room_boards.blank? %>
-		<%= render :partial => "home_boards_list", :locals => {:boards => @dining_room_boards}%>
-		<% else %>
-		<div class="empty-state">There aren't any featured dining rooms at this time.</div>
-		<% end %>
-	</div>
-</div>
-<div class="container">
-	<h2 class="home">Featured Bedrooms</h2>
-	<div class="boards-list-main">
-		<% unless @bedroom_room_boards.blank? %>
-		<%= render :partial => "home_boards_list", :locals => {:boards => @bedroom_room_boards}%>
-		<% else %>
-		<div class="empty-state">There aren't any featured dining rooms at this time.</div>
-		<% end %>
-	</div>
-</div>
-
-
-<div class="home-featured-designers">
 	<div class="container">
-		<h2>Meet some the industry's top designers</h2>
+		<h2 class="home">Featured Dining Rooms</h2>
+		<div class="boards-list-main">
+			<% unless @dining_room_boards.blank? %>
+			<%= render :partial => "home_boards_list", :locals => {:boards => @dining_room_boards}%>
+			<% else %>
+			<div class="empty-state">There aren't any featured dining rooms at this time.</div>
+			<% end %>
+		</div>
+	</div>
+	<div class="container">
+		<h2 class="home">Featured Bedrooms</h2>
+		<div class="boards-list-main">
+			<% unless @bedroom_room_boards.blank? %>
+			<%= render :partial => "home_boards_list", :locals => {:boards => @bedroom_room_boards}%>
+			<% else %>
+			<div class="empty-state">There aren't any featured dining rooms at this time.</div>
+			<% end %>
+		</div>
+	</div>
 
-		<div id="carousel">
-			<% if false %>
-			<div id="buttons">
-				<a href="#" id="prev"><</a>
-				<a href="#" id="next" style="margin-left:20px;">></a>
+
+	<div class="home-featured-designers">
+		<div class="container">
+			<h2>Meet some the industry's top designers</h2>
+
+			<div id="carousel">
+				<% if false %>
+				<div id="buttons">
+					<a href="#" id="prev"><</a>
+					<a href="#" id="next" style="margin-left:20px;">></a>
+					<div class="clear"></div>
+				</div>
+				<% end %>
+
+
+				<div class="clear"></div>
+				<div id="slides"> 
+					<ul class="ch-grid" >
+						<% @designers.each do |designer| %>
+						<% if designer.user_images.blank? %>
+						<li>
+							<div class="ch-item ch-img-default">
+								<a href="/<%=designer.username%>" >
+									<div class="ch-info">
+										<h3><%=designer.full_name %></h3>
+										<p><%= designer.full_name%></p>
+									</div>
+								</a>
+							</div>
+						</li>
+						<% else %>
+						<style>
+						.ch-img-<%=designer.id %> { 
+							background-image: url(<%=designer.user_images.first.attachment(:primary)%>);
+						}
+						</style>
+						<li>
+
+
+							<div class="ch-item ch-img-<%=designer.id %>">
+								<a href="/<%=designer.username%>" >
+									<div class="ch-info">
+										<h3><%= designer.full_name%></h3>
+										<p><%= designer.location%></p>
+									</div>
+								</a>
+							</div>
+						</a>
+					</li>
+					<% end %>
+
+
+
+
+					<% end %>
+				</ul>
 				<div class="clear"></div>
 			</div>
-			<% end %>
-
-
-			<div class="clear"></div>
-			<div id="slides"> 
-				<ul class="ch-grid" >
-					<% @designers.each do |designer| %>
-					<% if designer.user_images.blank? %>
-					<li>
-						<div class="ch-item ch-img-default">
-							<a href="/<%=designer.username%>" >
-								<div class="ch-info">
-									<h3><%=designer.full_name %></h3>
-									<p><%= designer.full_name%></p>
-								</div>
-							</a>
-						</div>
-					</li>
-					<% else %>
-					<style>
-					.ch-img-<%=designer.id %> { 
-						background-image: url(<%=designer.user_images.first.attachment(:primary)%>);
-					}
-					</style>
-					<li>
-
-
-						<div class="ch-item ch-img-<%=designer.id %>">
-							<a href="/<%=designer.username%>" >
-								<div class="ch-info">
-									<h3><%= designer.full_name%></h3>
-									<p><%= designer.location%></p>
-								</div>
-							</a>
-						</div>
-					</a>
-				</li>
-				<% end %>
-
-
-
-
-				<% end %>
-			</ul>
-			<div class="clear"></div>
 		</div>
-	</div>
 
-	<% if true %>
-	<script type="text/javascript">
+		<% if true %>
+		<script type="text/javascript">
 
-	$(document).ready(function() {
-		//rotation speed and timer
-		var speed = 5000;
-		//var run = setInterval('rotate()', speed);    
+		$(document).ready(function() {
+			//rotation speed and timer
+			var speed = 5000;
+			//var run = setInterval('rotate()', speed);    
 
-		//grab the width and calculate left value
-		var item_width = $('#slides li').outerWidth();
-		var left_value = item_width * (-1);
-		//move the last item before first item, just in case user click prev button
-		$('#slides li:first').before($('#slides li:last'));
+			//grab the width and calculate left value
+			var item_width = $('#slides li').outerWidth();
+			var left_value = item_width * (-1);
+			//move the last item before first item, just in case user click prev button
+			$('#slides li:first').before($('#slides li:last'));
 
-		//set the default item to the correct position
-		$('#slides ul').css({'left' : left_value});
-		//if user clicked on prev button
-		$('#prev').click(function() {
-			//get the right position
-			var left_indent = parseInt($('#slides ul').css('left')) + item_width;
-			//slide the item
-			$('#slides ul').animate({'left' : left_indent}, 200,function(){
-				//move the last item and put it as first item     
-				$('#slides li:first').before($('#slides li:last'));
-				//set the default item to correct position
-				$('#slides ul').css({'left' : left_value});
+			//set the default item to the correct position
+			$('#slides ul').css({'left' : left_value});
+			//if user clicked on prev button
+			$('#prev').click(function() {
+				//get the right position
+				var left_indent = parseInt($('#slides ul').css('left')) + item_width;
+				//slide the item
+				$('#slides ul').animate({'left' : left_indent}, 200,function(){
+					//move the last item and put it as first item     
+					$('#slides li:first').before($('#slides li:last'));
+					//set the default item to correct position
+					$('#slides ul').css({'left' : left_value});
+
+				});
+				//cancel the link behavior
+				return false;
+			});
+			//if user clicked on next button
+			$('#next').click(function() {
+
+				//get the right position
+				var left_indent = parseInt($('#slides ul').css('left')) - item_width;
+
+				//slide the item
+				$('#slides ul').animate({'left' : left_indent}, 200, function () {
+					//move the first item and put it as last item
+					$('#slides li:last').after($('#slides li:first'));     
+
+					//set the default item to correct position
+					$('#slides ul').css({'left' : left_value});
+
+				});
+
+				//cancel the link behavior
+				return false;
 
 			});
-			//cancel the link behavior
-			return false;
+
+			//if mouse hover, pause the auto rotation, otherwise rotate it
+			$('#slides').hover(
+
+				function() {
+					clearInterval(run);
+				},
+				function() {
+					run = setInterval('rotate()', speed);    
+				}
+			);
 		});
-		//if user clicked on next button
-		$('#next').click(function() {
+		//a simple function to click next link
+		//a timer will call this function, and the rotation will begin :)
+		function rotate() {
+			$('#next').click();
+		}
 
-			//get the right position
-			var left_indent = parseInt($('#slides ul').css('left')) - item_width;
-
-			//slide the item
-			$('#slides ul').animate({'left' : left_indent}, 200, function () {
-				//move the first item and put it as last item
-				$('#slides li:last').after($('#slides li:first'));     
-
-				//set the default item to correct position
-				$('#slides ul').css({'left' : left_value});
-
-			});
-
-			//cancel the link behavior
-			return false;
-
-		});
-
-		//if mouse hover, pause the auto rotation, otherwise rotate it
-		$('#slides').hover(
-
-			function() {
-				clearInterval(run);
-			},
-			function() {
-				run = setInterval('rotate()', speed);    
-			}
-		);
-	});
-	//a simple function to click next link
-	//a timer will call this function, and the rotation will begin :)
-	function rotate() {
-		$('#next').click();
-	}
-
-	</script>
-	<% end %>
+		</script>
+		<% end %>

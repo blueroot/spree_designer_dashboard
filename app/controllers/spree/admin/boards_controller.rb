@@ -1,6 +1,36 @@
 class Spree::Admin::BoardsController < Spree::Admin::ResourceController
-
-  def index
+  before_filter :get_room_manager
+  def load_resource
+    #@board = Spree::Board.friendly.find(params[:id])
+  end
+  
+  
+  def edit
+    @board = Spree::Board.friendly.find(params[:id])
+  end
+  
+  def destroy
+    @board = Spree::Board.friendly.find(params[:id])
+    if @board.destroy
+      redirect_to admin_boards_path
+    end
+      
+  end
+  
+  def search
+    if params[:ids]
+      @boards = Spree::Board.where(:id => params[:ids].split(','))
+    else
+      @boards = Spree::Board.ransack(params[:q]).result
+    end
+    respond_to do |format|
+      format.json {render :action => "search", :layout => false}
+    end
+    
+    
+  end
+  
+  def list
     #@boards = Spree::Board.includes({:board_products => {:product => [{:master => :stock_items}, :supplier]}}, :board_image, :designer).page(params[:page]).per(params[:per_page] || 10)
     @boards = Spree::Board.includes({:board_products => {:product => [{:master => [:stock_items, :images, :prices]}, :supplier, :variants => [:stock_items, :prices, :images]]}}, :board_image, :designer).page(params[:page] || 1).per(params[:per_page] || 3)
     
@@ -17,16 +47,21 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
     @designer_names = ["All designers"] + designers
   end
   
-  def list
-    @boards = Spree::Board.all().order("created_at desc").page(params[:page] || 1).per(params[:per_page] || 50)
+  def index
+    if params[:user_id]
+      @user = Spree::User.find(params[:user_id])
+      @boards = Spree::Board.by_designer(params[:user_id]).order("created_at desc").page(params[:page] || 1).per(params[:per_page] || 50)
+    else  
+      @boards = Spree::Board.all().order("created_at desc").page(params[:page] || 1).per(params[:per_page] || 50)
+    end
   end
 
   def products
-    @products_pending_approval_count = Spree::Product.pending_approval.count > 0 ? "(#{Spree::Product.pending_approval.count})" : ""
-    @products_marked_approval_count = Spree::Product.marked_approval.count > 0 ? "(#{Spree::Product.marked_approval.count})" : ""
-    @products_marked_removal_count = Spree::Product.marked_removal.count > 0 ? "(#{Spree::Product.marked_removal.count})" : ""
-    @products_published_count = Spree::Product.published.count > 0 ? "(#{Spree::Product.published.count})" : ""
-    @products_discontinued_count = Spree::Product.discontinued.count > 0 ? "(#{Spree::BoardProduct.discontinued.count})" : ""
+    @products_pending_approval_count  = Spree::Product.pending_approval.count > 0 ? "(#{Spree::Product.pending_approval.count})" : ""
+    @products_marked_for_approval_count   = Spree::Product.marked_for_approval.count > 0 ? "(#{Spree::Product.marked_for_approval.count})" : ""
+    @products_marked_for_removal_count    = Spree::Product.marked_for_removal.count > 0 ? "(#{Spree::Product.marked_for_removal.count})" : ""
+    @products_published_count         = Spree::Product.published.count > 0 ? "(#{Spree::Product.published.count})" : ""
+    @products_discontinued_count      = Spree::Product.discontinued.count > 0 ? "(#{Spree::Product.discontinued.count})" : ""
     
     if params[:product] and params[:product][:supplier_id]
       @supplier = Spree::Supplier.find(params[:product][:supplier_id])      
@@ -34,26 +69,26 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
       @supplier = nil
     end
     
-    @status = params[:status] || "pending_approval"
+    @state = params[:state] || "pending_approval"
     
-    case @status
+    case @state
       when "pending_approval"
         if @supplier
           @products = @supplier.products.pending_approval.page(params[:page] || 1).per(params[:per_page] || 50)
         else
           @products = Spree::Product.pending_approval.page(params[:page] || 1).per(params[:per_page] || 50)
         end
-      when "marked_approval"
+      when "marked_for_approval"
         if @supplier
-          @products = @supplier.products.marked_approval.page(params[:page] || 1).per(params[:per_page] || 50)
+          @products = @supplier.products.marked_for_approval.page(params[:page] || 1).per(params[:per_page] || 50)
         else
-          @products = Spree::Product.marked_approval.page(params[:page] || 1).per(params[:per_page] || 50)
+          @products = Spree::Product.marked_for_approval.page(params[:page] || 1).per(params[:per_page] || 50)
         end
-      when "marked_removal"
+      when "marked_for_removal"
         if @supplier
-          @products = @supplier.products.marked_removal.page(params[:page] || 1).per(params[:per_page] || 50)
+          @products = @supplier.products.marked_for_removal.page(params[:page] || 1).per(params[:per_page] || 50)
         else
-          @products = Spree::Product.marked_removal.page(params[:page] || 1).per(params[:per_page] || 50)
+          @products = Spree::Product.marked_for_removal.page(params[:page] || 1).per(params[:per_page] || 50)
         end
       when "discontinued"
         if @supplier
@@ -74,12 +109,16 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
           @products = Spree::Product.pending_approval.page(params[:page] || 1).per(params[:per_page] || 50)
         end
     end
-    
-    @suppliers_select = Spree::Supplier.select_options_by_status(@status, @supplier, false)
+    @suppliers_select = Spree::Supplier.select_options_by_status(@state, @supplier, false)
   end
+  
+  #def edit
+  #  @board = Spree::Board.friendly.find(params[:id])
+
+  #end
 
   def update
-    @board = Spree::Board.find_by id: params[:id]
+    @board = Spree::Board.friendly.find(params[:id])
     if params[:state] == "deleted"
       # self.send_deletion_email(@board, params[:email][:reason]) if params[:email][:should_send]
       @board.delete_permanently!
@@ -92,7 +131,7 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
     end
     
     respond_to do |format|
-      if @board.update_attributes(params[:board])
+      if @board.update_attributes(board_params)
         format.html {redirect_to edit_admin_board_path(@board, :notice => 'Your board was updated.')}
         format.json {render json: @board}
       else
@@ -102,18 +141,22 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
   end
   
   def approve
-    @board  = Spree::Board.find_by id: params[:board][:id]
+    @board  = Spree::Board.friendly.find_by id: params[:board][:id]
+    @board.set_state_transition_context(params[:board][:state_message], spree_current_user)
     @board.publish
+    @board.send_publication_email(params[:board][:state_message]) if params[:board][:send_message] == "on"
+    
     respond_to do |format|
       format.js {  }
     end
   end
   
   def request_revision
-    @board  = Spree::Board.find_by id: params[:board][:id]
+    #@board  = Spree::Board.find_by id: params[:board][:id]
+    @board.set_state_transition_context(params[:board][:state_message], spree_current_user)
     @board.request_designer_revision
-    if params[:revision_message]
-    end
+    @room_manager.send_message(@board.designer, "Your room needs revisions.", "Please revise your room.")
+
     respond_to do |format|
       format.js {  }
     end
@@ -139,6 +182,8 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
     @board.designer = spree_current_user
     @board.save!
   end
+  
+  
   
   def send_deletion_email(board, message)
    html_content = ''
@@ -192,31 +237,13 @@ class Spree::Admin::BoardsController < Spree::Admin::ResourceController
 
    logger.info sending   
  end
-
- def send_publication_email(board, message)
-  html_content = ''
-
-  m = Mandrill::API.new(MANDRILL_KEY)
-  message = {
-    :subject=> "Your room was published!",
-    :from_name=> "Jesse Bodine",
-    :text=>"#{message} \n\n The Scout & Nimble Team",
-    :to=>[
-     {
-       :email=> board.designer.email,
-       :name=> board.designer.full_name
-     }
-     ],
-     :from_email=>"designer@scoutandnimble.com",
-     :track_opens => true,
-     :track_clicks => true,
-     :url_strip_qs => false,
-     :signing_domain => "scoutandnimble.com"
-   }
-
-   sending = m.messages.send_template('board_publication', [{:name => 'main', :content => html_content}], message, true)
-
-   logger.info sending   
- end
-
+ 
+ 
+ private
+  def board_params
+    params.require(:board).permit(:name, :description, :style_id, :room_id, :status, :message, :featured, :featured_starts_at, :featured_expires_at, :board_commission, :featured_copy, :featured_headline, :promotion_rule_ids => [])
+    
+  end
+  
+ 
 end

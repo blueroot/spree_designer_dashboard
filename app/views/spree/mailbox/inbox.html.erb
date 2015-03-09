@@ -1,0 +1,47 @@
+
+<div class="row">
+  <div class="col-md-3">
+    <%= render :partial => "/spree/boards/dashboard_menu", :locals => {:selected => "dashboard"}%>
+  </div>
+
+  <div class="col-md-9">
+    <div class="page-header clearfix">
+      <div class="row">
+        <div class="col-md-9">
+          <h1>Inbox</h1>
+        </div>
+        <div class="col-md-3 header-actions">
+
+          
+        </div>
+      </div>
+    </div>
+
+
+    <% unless spree_current_user.mailbox.inbox.blank? %>
+        <table class="table">
+          <thead>
+          <tr>
+            <th class="status">&nbsp;</th>
+            <th>Sender</th>
+            <th class="">Subject</th>
+            <th class="align-right">Date</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% spree_current_user.mailbox.inbox.each do |conversation|%>
+              <tr class="mailbox-message-row <%=conversation.is_read?(spree_current_user) ? "mailbox-message-read" : "mailbox-message-unread" %>">
+                <td><%= conversation_read_label(conversation.is_read?(spree_current_user))%></td>
+				<td><%= conversation.receipts_for(spree_current_user).first.notification.sender.name %></td>
+				<td><%= link_to conversation.subject, mailbox_conversation_path(conversation.id) %></td>
+				<td class="align-right"><%= conversation.created_at.to_s(:db) %></td>
+              </tr>
+          <% end%>
+          </tbody>
+        </table>
+       
+    <% else %>
+        <div class="empty-state">Your inbox is empty.</div>
+    <% end %>
+  </div>
+</div>
