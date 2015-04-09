@@ -142,6 +142,23 @@ function build_variants_list(variants){
 }
 
 function addProductToBoard(event, ui){
+	
+	$('#board-canvas').block({ 
+		message: null,
+		overlayCSS:  { 
+		        backgroundColor: '#999', 
+		        opacity:         0.6, 
+		        cursor:          'wait' 
+		    } 
+		}); 
+	$('#product_lightbox').block(	{ 
+			message: null,
+			overlayCSS:  { 
+			        backgroundColor: '#999', 
+			        opacity:         0.6, 
+			        cursor:          'wait' 
+			    } 
+			}); 
 	// add the image to the board through jquery drag and drop in order to get its position
 	cloned = $(ui.helper).clone();
 	$(this).append(cloned.removeClass('board-lightbox-product').addClass('board-lightbox-product-cloned'));
@@ -170,6 +187,10 @@ function addProductToBoard(event, ui){
 			success : function(board_product){
 				//console.log(board_product.product.slug)		
 				buildImageLayer(canvas, board_product);
+				
+				
+				$('#board-canvas').unblock(); 
+				$('#product_lightbox').unblock(); 
 				
 				// remove the jquery drag/drop place holder that had been there.
 				// this is a bit of a hack - without the timer, then the graphic disappears for a second...this generally keeps it up until the fabricjs version is added

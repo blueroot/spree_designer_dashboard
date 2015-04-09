@@ -31,11 +31,16 @@ class Spree::BoardProductsController < Spree::StoreController
   end
   
   def create
-    if @board_product = Spree::BoardProduct.find_by_product_id_and_board_id(params[:board_product][:product_id], params[:board_product][:board_id])
+    
+    if params[:board_product][:id] and @board_product = Spree::BoardProduct.find(params[:board_product][:id])
+      
       @board_product.attributes = params[:board_product]
+    #elsif @board_product = Spree::BoardProduct.find_by_product_id_and_board_id(params[:board_product][:product_id], params[:board_product][:board_id])
+      #@board_product.attributes = params[:board_product]
     else
       @board_product = Spree::BoardProduct.new(board_product_params)
     end
+
     if @board_product.save
       @board_product.board.queue_image_generation
       respond_to do |format|

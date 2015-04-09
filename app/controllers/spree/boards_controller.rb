@@ -1,9 +1,9 @@
 class Spree::BoardsController < Spree::StoreController
   helper 'spree/taxons'
   helper 'spree/products'
-  before_filter :require_authentication, :only => [:new, :design, :preview, :dashboard, :my_profile, :store_credit]
-  before_filter :prep_search_collections, :only => [:index, :search, :edit, :new, :design]
-  before_filter :load_board, :only => [:preview, :design, :destroy, :update]
+  before_filter :require_authentication, :only => [:new, :design, :preview, :dashboard, :my_profile, :store_credit, :design2]
+  before_filter :prep_search_collections, :only => [:index, :search, :edit, :new, :design, :design2]
+  before_filter :load_board, :only => [:preview, :design, :destroy, :update, :design2]
   before_filter :require_board_designer, :only => [:dashboard]
   before_filter :get_room_manager, :only => [:submit_for_publication]
   
@@ -284,6 +284,32 @@ class Spree::BoardsController < Spree::StoreController
   end
   
   def design
+    
+    #@board.messages.new(:sender_id => spree_current_user.id, :recipient_id => 0, :subject => "Publication Submission")
+    @products = Spree::Product.all()
+    @bookmarked_products = spree_current_user.bookmarks.collect{|bookmark| bookmark.product}
+    @department_taxons = Spree::Taxonomy.where(:name => 'Department').first().root.children
+    #@department_taxons= Spree::Supplier.find_by(id: 16).taxons 
+      @searcher = build_searcher(params)
+     
+      @all_products = @searcher.retrieve_products.by_supplier('')
+      @ary = Array.new(Array.new) 
+     
+      @all_products.each do |prod|
+         @prod = Spree::Product.find_by_id(prod.id)
+   
+          @prod.taxons.each do |tax|
+             @ary.push([tax.name,tax.id])
+          end
+      end
+   
+    @suppliers = Spree::Supplier.where(:public => 1).order(:name)
+    #@wholesaler_taxons = Spree::Taxonomy.where(:name => 'Wholesaler').first().root.children
+
+    @color_collections = Spree::ColorCollection.all()
+  end
+  
+  def design2
     
     #@board.messages.new(:sender_id => spree_current_user.id, :recipient_id => 0, :subject => "Publication Submission")
     @products = Spree::Product.all()
