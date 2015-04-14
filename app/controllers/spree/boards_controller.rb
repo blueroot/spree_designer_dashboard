@@ -239,7 +239,7 @@ class Spree::BoardsController < Spree::StoreController
   
   def submit_for_publication
     
-    @board  = Spree::Board.find_by id: params[:id]
+    @board  = Spree::Board.find_by slug: params[:id]
     @board.set_state_transition_context(params[:board][:state_message], spree_current_user)
     @board.submit_for_publication
     html_content = "There is a new room for you to review."
