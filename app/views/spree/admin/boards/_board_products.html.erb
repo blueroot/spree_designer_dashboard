@@ -1,25 +1,25 @@
-
-
 <% if !board.board_products.reload.blank? %>
-<table class="table">
-	<% board.board_products.reload.each do |board_product| %>
-	<tr>
-		<td><%= glyph_for_state(board_product.state) %></td>
-		<td><%= link_to raw("<span class=\"helper\"></span>#{mini_image(board_product.product, :itemprop => 'image')}"), board_product.product, :itemprop => 'url' %></td>
-		<td><%= link_to truncate(board_product.product.name, :length => 50), edit_admin_product_path(board_product.product), :class => 'info', :itemprop => "name", :title => board_product.product.name, :target => "_new" %></td>
-		<td>
-			<%#=board_product.product.master.stock_items.first.count_on_hand%> in stock
-		</td>
-		<td style="width: 250px; text-align: right;">
-			<%= link_to "Reject", "javascript:void(0);", :class => "js-btn-reject btn btn-xs btn-danger", :"data-board-product-id" => board_product.id %>
-			<%= link_to "Approve", "javascript:void(0);", :class => "js-btn-approve btn btn-xs btn-success", :"data-board-product-id" => board_product.id %>
-		</td>
+    <table class="table">
+      <% board.board_products.reload.each do |board_product| %>
+          <tr>
+            <td><%= glyph_for_state(board_product.state) %></td>
+            <% if board_product.present? and board_product.product.present? %>
+                <td><%= link_to raw("<span class=\"helper\"></span>#{mini_image(board_product.product, :itemprop => 'image')}"), board_product.product, :itemprop => 'url' %></td>
+                <td><%= link_to truncate(board_product.product.name, :length => 50), edit_admin_product_path(board_product.product), :class => 'info', :itemprop => "name", :title => board_product.product.name, :target => "_new" %></td>
+            <% end %>
+            <td>
+              <%#=board_product.product.master.stock_items.first.count_on_hand%> in stock
+            </td>
+            <td style="width: 250px; text-align: right;">
+              <%= link_to "Reject", "javascript:void(0);", :class => "js-btn-reject btn btn-xs btn-danger", :"data-board-product-id" => board_product.id %>
+              <%= link_to "Approve", "javascript:void(0);", :class => "js-btn-approve btn btn-xs btn-success", :"data-board-product-id" => board_product.id %>
+            </td>
 
-	</tr>
-	<% end %>
-</table>	
+          </tr>
+      <% end %>
+    </table>
 <% else %>
-There are no products on this board.
+    There are no products on this board.
 <% end %>
 
 
@@ -27,35 +27,35 @@ There are no products on this board.
 
 
 <script>
-$('.js-btn-reject').click(function() {
-	var board_product_id = $(this).data('boardProductId')
-	$.ajax({
-      type: "POST",
-      url: "/admin/board_products/mark_rejected.js",
-      contentType: "application/json",
-      data: JSON.stringify({ 
-        id: board_product_id
-      })
-    }).done(function(data){
-      console.log(data);
+    $('.js-btn-reject').click(function () {
+        var board_product_id = $(this).data('boardProductId')
+        $.ajax({
+            type: "POST",
+            url: "/admin/board_products/mark_rejected.js",
+            contentType: "application/json",
+            data: JSON.stringify({
+                id: board_product_id
+            })
+        }).done(function (data) {
+            console.log(data);
+        });
+
     });
 
-});
+    $('.js-btn-approve').click(function () {
+        var board_product_id = $(this).data('boardProductId')
+        $.ajax({
+            type: "POST",
+            url: "/admin/board_products/mark_approved.js",
+            contentType: "application/json",
+            data: JSON.stringify({
+                id: board_product_id
+            })
+        }).done(function (data) {
+            console.log(data);
+        });
 
-$('.js-btn-approve').click(function() {
-	var board_product_id = $(this).data('boardProductId')
-	$.ajax({
-      type: "POST",
-      url: "/admin/board_products/mark_approved.js",
-      contentType: "application/json",
-      data: JSON.stringify({ 
-        id: board_product_id
-      })
-    }).done(function(data){
-      console.log(data);
     });
-
-});
 </script>
 
 
