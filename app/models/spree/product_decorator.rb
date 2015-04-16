@@ -6,7 +6,7 @@ Spree::Product.class_eval do
   before_save :update_product_publish_status
 
   def update_product_publish_status
-    if self.boards.any? { |board| board.status == "published" } or self.available_sans_board == true
+    if self.boards.any?{|board| board.status == "published"} or self.available_sans_board == true
       self.is_published = 1
     else
       self.is_published = 0
@@ -16,33 +16,33 @@ Spree::Product.class_eval do
   add_search_scope :in_all_taxons do |*taxons|
     taxons = get_taxons(taxons)
     id = arel_table[:id]
-    joins(:taxons).where(spree_taxons : {id : taxons}).group(id).having(id.count.eq(taxons.size))
+    joins(:taxons).where(spree_taxons: { id: taxons }).group(id).having(id.count.eq(taxons.size))
     #taxons.first ? prepare_taxon_conditions(taxons) : scoped
   end
 
   add_search_scope :available_through_boards do
-    includes(:boards).where('spree_boards.id' => Spree::Board.active.collect { |board| board.id }).includes(:master => [:images])
+    includes(:boards).where('spree_boards.id' => Spree::Board.active.collect{|board| board.id}).includes(:master => [:images])
   end
 
   #same as available_through_boards, but also adds those that have been handpicked
   add_search_scope :available_sans_boards do
-    where(available_sans_board : 1).includes(:master => [:images])
+    where(available_sans_board: 1).includes(:master => [:images])
   end
 
   add_search_scope :available_through_published_boards do
-    includes(:boards).where('spree_boards.id' => Spree::Board.published.collect { |board| board.id })
+    includes(:boards).where('spree_boards.id' => Spree::Board.published.collect{|board| board.id})
   end
 
   add_search_scope :by_supplier do |supplier_id|
-    where(supplier_id : supplier_id)
+    where(supplier_id: supplier_id)
   end
 
   add_search_scope :by_board do |board_id|
-    includes(:board_products).where(:spree_board_products => {:board_id => board_id})
+    includes(:board_products).where(:spree_board_products => { :board_id => board_id })
   end
 
   add_search_scope :not_on_a_board do
-    includes(:board_products).where(:spree_board_products => {:id => nil})
+    includes(:board_products).where(:spree_board_products => { :id => nil })
   end
 
   add_search_scope :available_for_public do
@@ -96,7 +96,7 @@ Spree::Product.class_eval do
   end
 
   def self.on_a_board
-    includes(:boards).where('spree_boards.id' => Spree::Board.all().collect { |board| board.id })
+    includes(:boards).where('spree_boards.id' => Spree::Board.all().collect{|board| board.id})
   end
 
   # making a product available on the site depends on a number of things
@@ -128,11 +128,10 @@ Spree::Product.class_eval do
 
   def image_for_board
 
-      #image = Magick::ImageList.new
-      #urlimage = self.images.first ? open(self.images.first.attachment.url(:product)) : open(self.variants.first.images.first.attachment.url(:product))
-      #image.from_blob(urlimage.read)
-      self.images.first ? Magick::ImageList.new(self.images.first.attachment.url(:product)) : Magick::ImageList.new(self.variants.first.images.first.attachment.url(:product))
-    
+    #image = Magick::ImageList.new  
+    #urlimage = self.images.first ? open(self.images.first.attachment.url(:product)) : open(self.variants.first.images.first.attachment.url(:product))
+    #image.from_blob(urlimage.read)
+    self.images.first ? Magick::ImageList.new(self.images.first.attachment.url(:product)) : Magick::ImageList.new(self.variants.first.images.first.attachment.url(:product))
   end
 
   def self.like_any(fields, values)
