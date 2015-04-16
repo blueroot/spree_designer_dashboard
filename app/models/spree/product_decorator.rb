@@ -133,6 +133,7 @@ Spree::Product.class_eval do
       #image.from_blob(urlimage.read)
       self.images.first ? Magick::ImageList.new(self.images.first.attachment.url(:product)) : Magick::ImageList.new(self.variants.first.images.first.attachment.url(:product))
     rescue Excpetion => e
+      puts e
     end
   end
 
