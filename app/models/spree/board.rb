@@ -109,12 +109,12 @@ class Spree::Board < ActiveRecord::Base
   end
 
   def delete_removed_board_products
-    self.board_products.marked_removal.each(&:destroy)
+    self.board_products.marked_for_removal.each(&:destroy)
   end
   
   def delete_deleted_board_products
-    self.board_products.marked_deletion.collect(&:product).compact.each(&:destroy)
-    self.board_products.marked_deletion.each(&:destroy)
+    self.board_products.marked_for_deletion.collect(&:product).compact.each(&:destroy)
+    self.board_products.marked_for_deletion.each(&:destroy)
   end
   
   def update_submitted_for_publication_status
