@@ -50,6 +50,7 @@ class Spree::Board < ActiveRecord::Base
     store_audit_trail :context_to_log => [:state_message, :transition_user_id]
     
     after_transition :on => [:publish, :request_designer_revision], :do => :remove_marked_products
+    after_transition :on => :publish, :do => :update_state_published
     
     event :submit_for_publication do
       transition all => :submitted_for_publication, :in_revision => :submitted_for_publication
@@ -79,14 +80,15 @@ class Spree::Board < ActiveRecord::Base
     
     state :published do
 
-      def update_state_published
-        self.update(status: 'published' )
-      end
 
       def published?
         true
       end
     end
+  end
+
+  def update_state_published
+    self.update(status: 'published' )
   end
   
   def set_state_transition_context(message, user)
