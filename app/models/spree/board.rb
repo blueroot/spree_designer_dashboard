@@ -77,7 +77,12 @@ class Spree::Board < ActiveRecord::Base
       end
     end
     
-    state :published do 
+    state :published do
+
+      def update_state_published
+        self.update(status: 'published' )
+      end
+
       def published?
         true
       end
