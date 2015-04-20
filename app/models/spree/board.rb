@@ -12,7 +12,7 @@ class Spree::Board < ActiveRecord::Base
   has_many :conversations, as:  :conversationable, class_name: "::Mailboxer::Conversation"
 
   has_and_belongs_to_many :promotion_rules,
-                          class_name : '::Spree::PromotionRule',
+                          class_name: '::Spree::PromotionRule',
       join_table: 'spree_boards_promotion_rules',
       foreign_key: 'board_id'
   has_many :promotions, :through => :promotion_rules
@@ -88,7 +88,7 @@ class Spree::Board < ActiveRecord::Base
   end
 
   def update_state_published
-    self.update(status : 'published')
+    self.update(status: 'published')
   end
 
   def set_state_transition_context(message, user)
@@ -125,11 +125,11 @@ class Spree::Board < ActiveRecord::Base
   end
 
   def update_submitted_for_publication_status
-    self.update_attributes!({status : "submitted_for_publication"}, without_protection : true)
+    self.update_attributes!({status: "submitted_for_publication"}, without_protection: true)
   end
 
   def process_revision_request
-    self.update_attributes!({current_state_label : "needs revision", status : "needs_revision"}, without_protection : true)
+    self.update_attributes!({current_state_label: "needs revision", status: "needs_revision"}, without_protection: true)
     delete_removed_board_products
     delete_marked_products
   end
@@ -169,7 +169,7 @@ class Spree::Board < ActiveRecord::Base
   end
 
   def self.promoted
-    includes(promotion_rules : [:promotion]).where("spree_promotions.starts_at <= ? and spree_promotions.expires_at >= ?", Date.today, Date.today)
+    includes(promotion_rules: [:promotion]).where("spree_promotions.starts_at <= ? and spree_promotions.expires_at >= ?", Date.today, Date.today)
   end
 
   def currently_promoted?
