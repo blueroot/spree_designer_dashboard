@@ -132,7 +132,13 @@ Spree::Product.class_eval do
     #urlimage = self.images.first ? open(self.images.first.attachment.url(:product)) : open(self.variants.first.images.first.attachment.url(:product))
     #image.from_blob(urlimage.read)
 
+    begin
       self.images.first ? Magick::ImageList.new(self.images.first.attachment.url(:product)) : Magick::ImageList.new(self.variants.first.images.first.attachment.url(:product))
+    rescue Exception => e
+      puts "================"
+      puts e.inspect
+      puts "================"
+      end
   end
 
   def self.like_any(fields, values)
