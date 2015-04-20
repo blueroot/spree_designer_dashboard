@@ -5,23 +5,23 @@ class Spree::Board < ActiveRecord::Base
   belongs_to :room, :foreign_key => "room_id", :class_name => "Spree::Taxon"
   belongs_to :style, :foreign_key => "style_id", :class_name => "Spree::Taxon"
 
-  has_many :board_products, :order => "z_index", dependent : :destroy
+  has_many :board_products, :order => "z_index", dependent:  :destroy
   has_many :products, :through => :board_products
   has_many :color_matches
   has_many :colors, :through => :color_matches
-  has_many :conversations, as : :conversationable, class_name : "::Mailboxer::Conversation"
+  has_many :conversations, as:  :conversationable, class_name: "::Mailboxer::Conversation"
 
   has_and_belongs_to_many :promotion_rules,
                           class_name : '::Spree::PromotionRule',
-      join_table : 'spree_boards_promotion_rules',
-      foreign_key : 'board_id'
+      join_table: 'spree_boards_promotion_rules',
+      foreign_key: 'board_id'
   has_many :promotions, :through => :promotion_rules
 
-  has_one :board_image, as : :viewable, order : :position, dependent : :destroy, class_name : "Spree::BoardImage"
+  has_one :board_image, as: :viewable, order: :position, dependent: :destroy, class_name: "Spree::BoardImage"
   has_one :conversation, :class_name => "Mailboxer::Conversation"
 
   extend FriendlyId
-  friendly_id :slug_candidates, use : :slugged
+  friendly_id :slug_candidates, use: :slugged
   #friendly_id [:name, :room_style, :room_type], use: :slugged
 
   def slug_candidates
