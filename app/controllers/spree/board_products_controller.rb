@@ -42,6 +42,9 @@ class Spree::BoardProductsController < Spree::StoreController
     end
 
     if @board_product.save
+      if @board_product.product.present?
+        @board_product.product.update(in_rooms: true)
+      end
       @board_product.board.queue_image_generation
       respond_to do |format|
         format.js   { render :action => "show" }
