@@ -12,12 +12,9 @@
         </div>
         <div class="col-md-3 header-actions">
 
-          <% if spree_current_user.boards.size < 5 %>
-              <%= link_to "Add a Room", new_room_path, :class => "btn btn-primary" %>
-          <% else %>
 
-              <a href="javascript:void(0);" id="new_room_button" class="btn btn-primary" data-toggle="popover" data-placement="left" data-content="Looks like you're getting the hang of this.  Awesome.  During the beta period, we are limiting the number of rooms you can create to 5 so that we can better manage the feedback.  Now that you've got your feet wet, maybe you would be interested in giving us some feedback at designer@scoutandnimble.com." title="" data-original-title="Whoa. You're killin' it.">Add a Room</a>
-          <% end %>
+              <%= link_to "Add a Room", new_room_path, :class => "btn btn-primary" %>
+         
         </div>
       </div>
     </div>
