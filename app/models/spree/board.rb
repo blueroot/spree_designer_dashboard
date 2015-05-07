@@ -356,7 +356,12 @@ class Spree::Board < ActiveRecord::Base
         bp.width == 5
         bp.height == 5 * bp.height
       end
+      if bp.product.present?
+
       product_image = bp.product.image_for_board
+      else
+        product_image =""
+      end
       if product_image.present?
 
         # set the rotation
