@@ -26,9 +26,9 @@
 							</div>
 							<div class="meta">
 								
-								<div title="Bookmark this Product" class="product-results-meta bookmark-product-container <%= "hidden" if is_bookmarked %>"><a href="javascript:void(0);" class="bookmark-product bookmark-link bookmark-link-<%= product.id %>" data-product-id="<%= product.id %>"><i class="fa fa-heart-o"></i> Add to Favouries</a></div>
+								<div title="Bookmark this Product" class="product-results-meta bookmark-product-container <%= "hidden" if is_bookmarked %>"><a href="javascript:void(0);" class="bookmark-product bookmark-link bookmark-link-<%= product.id %>" data-product-id="<%= product.id %>"><i class="fa fa-heart fa-white"></i> Add to Favourites</a></div>
 								
-								<div title="Remove Bookmark for this Product" class="product-results-meta unbookmark-product-container <%= "hidden" unless is_bookmarked %>"><a href="javascript:void(0);" class="remove-bookmark-product unbookmark-link unbookmark-link-<%= product.id %>" data-product-id="<%= product.id %>"><i class="fa fa-heart"></i> Favouires</a></div>
+								<div title="Remove Bookmark for this Product" class="product-results-meta unbookmark-product-container <%= "hidden" unless is_bookmarked %>"><a href="javascript:void(0);" class="remove-bookmark-product unbookmark-link unbookmark-link-<%= product.id %>" data-product-id="<%= product.id %>"><i class="fa fa-heart fa-red"></i> Favourites</a></div>
 								
 								<% if false %>
 								<div title="Available Inventory" class="product-results-meta available-inventory"><i class="fa fa-cubes"></i> Inventory: <%#= product.total_on_hand %></div>
