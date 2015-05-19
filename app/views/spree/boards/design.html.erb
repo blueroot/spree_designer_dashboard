@@ -46,7 +46,7 @@
 										<%= form_tag("/rooms/product_search", method: "get", :id => "product_search_form") do %>
 											<div class="row">
 												<div class="col-md-3">
-													<%= select_tag "supplier_id", options_from_collection_for_select(@suppliers, "id", "name"),:include_blank => false, :class => "form-control input-sm", :prompt => "Wholesaler" %>
+													<%= select_tag "supplier_id", options_from_collection_for_select(@suppliers, "id", "name"),:include_blank => false, :class => "form-control input-sm", :prompt => "Brands" %>
 												</div>
 												<div class="col-md-3">
 													<%= select_tag "department_taxon", options_from_collection_for_select(@department_taxons, "id", "name"), :include_blank => false, :class => "form-control input-sm", :prompt => "Department" %>
