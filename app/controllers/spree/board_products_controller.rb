@@ -19,7 +19,7 @@ class Spree::BoardProductsController < Spree::StoreController
   
   def update
     @board_product = Spree::BoardProduct.find(params[:id])
-    
+    @board = @board_product.board
     if @board_product.update_attributes(board_product_params)
       @board_product.board.queue_image_generation
       
@@ -42,6 +42,7 @@ class Spree::BoardProductsController < Spree::StoreController
     end
 
     if @board_product.save
+      @board = @board_product.board
       if @board_product.product.present?
         @board_product.product.update(in_rooms: true)
       end
