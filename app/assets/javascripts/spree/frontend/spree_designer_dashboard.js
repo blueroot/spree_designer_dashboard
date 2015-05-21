@@ -431,7 +431,7 @@ function removeProductBookmark(product_id){
 function getProductBookmarks(){
 	$('#bookmark-preloader').removeClass('hidden')
 	$('#bookmarks_container').html('')
-	var url = '/bookmarks/'
+	var url = '/favorites/'
 	var request = $.get( url );
 	  request.done(function( data ) {
 	});
