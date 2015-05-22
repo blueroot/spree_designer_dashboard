@@ -358,7 +358,7 @@ class Spree::Board < ActiveRecord::Base
       end
       if bp.present? and  bp.product.present?
 
-      product_image = bp.product.image_for_board
+      product_image = bp.product.image_for_board(bp)
       else
         product_image =""
       end

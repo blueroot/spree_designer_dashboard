@@ -126,7 +126,7 @@ Spree::Product.class_eval do
     self.bookmarks.find_by_user_id(user.id) ? true : false
   end
 
-  def image_for_board
+  def image_for_board(board_product)
 
     #image = Magick::ImageList.new
     #urlimage = self.images.first ? open(self.images.first.attachment.url(:product)) : open(self.variants.first.images.first.attachment.url(:product))
@@ -134,7 +134,7 @@ Spree::Product.class_eval do
 
     begin
 
-      image = Spree::Image.where(id: self.image_id).first
+      image = Spree::Image.where(id: board_product.image_id).first
       if image.present?
         image_url = image.attachment.url(:product)
       else
