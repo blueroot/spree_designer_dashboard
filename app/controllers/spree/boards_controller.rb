@@ -180,6 +180,8 @@ class Spree::BoardsController < Spree::StoreController
       taxon = Spree::Taxon.find(params[:department_taxon_id])
       taxons << taxon.id
     end
+    @my_taxon = Spree::Taxon.where(id: params[:department_taxon_id]).first
+    @taxon_filters = Spree::Product.generate_new_filters(@my_taxon)
 
     
     unless taxons.empty? 
