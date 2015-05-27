@@ -49,7 +49,7 @@
 													<%= select_tag "supplier_id", options_from_collection_for_select(@suppliers, "id", "name"),:include_blank => false, :class => "form-control input-sm", :prompt => "Brands" %>
 												</div>
 												<div class="col-md-3">
-													<%= select_tag "department_taxon", options_from_collection_for_select(@department_taxons, "id", "name"), :include_blank => false, :class => "form-control input-sm", :prompt => "Department" %>
+                                                  <%= select_tag "department_taxon", options_for_select(@list), :include_blank => false, :class => "form-control input-sm", :prompt => "Department" %>
 												</div>
 												<div class="col-md-3">
 
@@ -59,10 +59,11 @@
 													<%= submit_tag("Search", :class => "btn btn-primary btn-sm")%>
 												</div>
 											</div>
-										<% end %>
                                       <div class="js-render-filter-room">
 
                                       </div>
+										<% end %>
+
 									</div>
 									<div id="select-products-pagination" class="select-products-pagination"></div>
 									<div id="products-preloader" class="hidden" style="padding-top: 20px; text-align: center;"><%= image_tag("frontend/preloader64.gif")%></div>

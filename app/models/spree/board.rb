@@ -304,6 +304,18 @@ class Spree::Board < ActiveRecord::Base
     #joins(:products).merge(Spree::Product.master_price_lte(price))
   end
 
+
+
+  def self.render_taxon_select(taxon, list, padding)
+    taxon.children.each do |child_taxon|
+      list << [child_taxon.name, child_taxon.id, {class: "children_select_#{padding}"}]
+      if child_taxon.children.present?
+        render_taxon_select(child_taxon, list, padding+10)
+      end
+    end
+      return list
+    end
+
   def related_boards
 
     boards_scope = Spree::Board.active

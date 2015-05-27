@@ -1,42 +1,46 @@
-<% if @taxon_filters.present? %>
-    <% @taxon_filters.each do |key, value| %>
-        <% if key == 'color' %>
-            <div class="colors-filters clearfix">
-              <h4>Colors</h4>
-              <% value.each do |row| %>
+<div class="row">
+  <div class="col-md-12">
+    <% if taxon_filters.present? %>
+        <% taxon_filters.each do |key, value| %>
+            <% if key == 'color' %>
+                <div class="colors-filters clearfix filter-option-box col-md-4">
+                  <h4>Colors</h4>
+                  <% value.each do |row| %>
 
-                  <div class="box_color clearfix">
+                      <div class="box_color room-box clearfix">
 
-                    <% if params[:s].present? and params[:s][:color].present? and params[:s][:color].to_s == (row.class == {}.class ? row.map { |k, v| v }.first : row).to_s %>
-                        <strong class="<%= color_class_search((row.class == {}.class ? row.map { |k, v| k }.first : row)) %>"></strong>
+                        <% if params[:s].present? and params[:s][:color].present? and params[:s][:color].to_s == (row.class == {}.class ? row.map { |k, v| v }.first : row).to_s %>
+                            <strong class="<%= color_class_search((row.class == {}.class ? row.map { |k, v| k }.first : row)) %>"></strong>
 
-                        <%= link_to '<i class="fa fa-times"></i>'.html_safe, define_params_filter(params, :color, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, true), data: define_params_filter(params, :color, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, true) %>
-
-                    <% else %>
-                        <%= link_to '', define_params_filter(params, :color, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, false), data: define_params_filter(params, :color, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, false), class: color_class_search((row.class == {}.class ? row.map { |k, v| k }.first : row)) %>
-                        <% end %>
-                        </div>
-                    <% end %>
-
-                    </div>
-                    <% else %>
-                    <h4><%= key.capitalize %></h4>
-                    <ul>
-                      <% value.each do |row| %>
-                          <li>
-
-
-                            <% if params[:s].present? and params[:s][key.to_sym].present? and params[:s][key.to_sym].to_s == (row.class == {}.class ? row.map { |k, v| v }.first : row).to_s %>
-                                <strong class="gold_select"><%= (row.class == {}.class ? row.map { |k, v| k }.first : row) %></strong>
-                                <%= link_to '<i class="fa fa-times"></i>'.html_safe, define_params_filter(params, key.to_sym, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, true), data: define_params_filter(params, key.to_sym, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, true) %>
-                            <% else %>
-                                <%= link_to (row.class == {}.class ? row.map { |k, v| k }.first : row), define_params_filter(params, key.to_sym, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, false), data: define_params_filter(params, key.to_sym, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, false) %>
+                            <%= link_to '<i class="fa fa-times"></i>'.html_safe, define_params_filter(params, :color, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, true), data: define_params_filter(params, :color, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, true) %>
+                        <% else %>
+                            <%= link_to '', define_params_filter(params, :color, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, false), data: define_params_filter(params, :color, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, false), class: color_class_search((row.class == {}.class ? row.map { |k, v| k }.first : row)) %>
                             <% end %>
-                          </li>
-                      <% end %>
+                            </div>
+                        <% end %>
 
-                    </ul>
+                        </div>
+                        <% else %>
+                        <div class="filter-option-box col-md-4">
+                          <h4><%= key.capitalize %></h4>
+                          <ul>
+                            <% value.each do |row| %>
+                                <li>
+                                  <% if params[:s].present? and params[:s][key.to_sym].present? and params[:s][key.to_sym].to_s == (row.class == {}.class ? row.map { |k, v| v }.first : row).to_s %>
+                                      <strong class="gold_select"><%= (row.class == {}.class ? row.map { |k, v| k }.first : row) %></strong>
+                                      <%= link_to '<i class="fa fa-times"></i>'.html_safe, define_params_filter(params, key.to_sym, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, true), data: define_params_filter(params, key.to_sym, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, true) %>
 
-              <% end %>
+                                  <% else %>
+                                      <%= link_to (row.class == {}.class ? row.map { |k, v| k }.first : row), define_params_filter(params, key.to_sym, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, false), data: define_params_filter(params, key.to_sym, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, false) %>
+
+                                  <% end %>
+                                </li>
+                            <% end %>
+
+                          </ul>
+                        </div>
+                  <% end %>
+            <% end %>
         <% end %>
-    <% end %>
+        </div>
+        </div>

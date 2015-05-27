@@ -291,6 +291,13 @@ class Spree::BoardsController < Spree::StoreController
     @products = Spree::Product.all()
     @bookmarked_products = spree_current_user.bookmarks.collect{|bookmark| bookmark.product}
     @department_taxons = Spree::Taxonomy.where(:name => 'Department').first().root.children
+
+    @list = []
+    @department_taxons.each do |taxon|
+      @list << [taxon.name, taxon.id]
+      Spree::Board.render_taxon_select(taxon, @list, 15)
+    end
+
     #@department_taxons= Spree::Supplier.find_by(id: 16).taxons 
       @searcher = build_searcher(params)
      

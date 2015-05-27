@@ -1,5 +1,5 @@
 <div class="js-render-filter-room">
- <%= render partial: 'board_solr_filter' %>
+  <%= render partial: 'board_solr_filter', locals: {taxon_filters: @taxon_filters} %>
 </div>
 <% unless products.blank? %>
 	<div class="select-products-box-inner">
