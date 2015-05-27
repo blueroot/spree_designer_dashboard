@@ -231,6 +231,7 @@ class Spree::BoardsController < Spree::StoreController
     #respond_to do |format|
       if @board.update_attributes(board_params)
         @board.submit_for_publication! if params[:board][:status] == "submitted_for_publication"
+        @board.queue_image_generation
         redirect_to designer_dashboard_path(@board, :notice => 'Your board was updated.')
       else
         puts @board.errors.collect{|e| e.to_s}
