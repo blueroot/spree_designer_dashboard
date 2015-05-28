@@ -1,6 +1,8 @@
-<div class="js-render-filter-room">
-  <%= render partial: 'board_solr_filter', locals: {taxon_filters: @taxon_filters} %>
-</div>
+<% if @taxon_filters.present? %>
+    <div class="js-render-filter-room">
+      <%= render partial: 'board_solr_filter', locals: {taxon_filters: @taxon_filters} %>
+    </div>
+<% end %>
 <% unless products.blank? %>
 	<div class="select-products-box-inner">
 		<% products.in_groups_of(3, false) do |row_products| %>
