@@ -1,3 +1,4 @@
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-54fe66e3227e091d" async="async"></script>
 <% if products.any? %>
 	<% products.in_groups_of(4, false) do |row_products| %>
 	<div id="products" class="row">
@@ -14,6 +15,45 @@
 				        <%= link_to raw("#{listing_image(product, :itemprop => 'image')}"), product, :itemprop => 'url' %>
 				    </div>
 				</div>
+
+
+              <div class="sp-addthis-script">
+
+                <script>
+
+                    var addthis_config = {
+                        pubid: "ra-54fe66e3227e091d"
+                    }
+                </script>
+                <div class="scout-button">
+                  <div class="addthis_sharing_toolbox addthis_list_product  listing-sharing-tools" data-url="<%= product_url(product) %>" data-title="<%= product.name %>" data-description="<%= product.description %>" data-img="<%= meta_schema_image(product) %>">
+
+                  </div>
+                  <div class="favorits">
+                    <% if spree_current_user %>
+                        <% is_bookmarked = product.is_bookmarked_by?(spree_current_user) %>
+                        <div class="js-scout-bookmark" data-bookmarked="<%= is_bookmarked %>" data-product-id="<%= product.id %>">
+                          <div title="Bookmark this Product" class="product-results-meta bookmark-product-container <%= "hidden" if is_bookmarked %>">
+
+                            <%= link_to "javascript:void(0);", class: "bookmark-product bookmark-link bookmark-link-#{product.id}", data: {product_id: product.id} do %>
+                                <i class="fa fa-heart fa-white"></i>
+
+                            <% end %>
+                          </div>
+
+
+                          <div title="Remove Bookmark for this Product" class="product-results-meta unbookmark-product-container <%= "hidden" unless is_bookmarked %>">
+                            <%= link_to "javascript:void(0);", class: "remove-bookmark-product unbookmark-link unbookmark-link-#{product.id}", data: {product_id: product.id} do %>
+                                <i class="fa fa-heart fa-red"></i>
+
+                            <% end %>
+
+                          </div>
+                        </div>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
 				
 		      	<%= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => product.name %>
 				<div class="row">
@@ -59,3 +99,6 @@
 	</div>
 	<% end %>
 <% end %>
+<script>
+    observeBookmarkChanges();
+</script>
