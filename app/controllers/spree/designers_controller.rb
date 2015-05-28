@@ -40,7 +40,7 @@ class Spree::DesignersController < Spree::StoreController
   
   private 
     def designer_params
-      params.require(:user).permit(:first_name, :last_name, :description, :company_name, :website_url, :location, :blog_url, :email, :password, :password_confirmation, :is_discount_eligible, :is_beta_user, :can_add_boards, :designer_featured_starts_at, :designer_featured_ends_at, :designer_featured_position, :supplier_id, :marketing_images_attributes, user_images_attributes: [:attachment], :logo_image_attributes, :feature_image_attributes,  :bill_address_id, :ship_address_id, :social_facebook, :social_twitter, :social_instagram, :social_pinterest, :social_googleplus, :social_linkedin, :social_tumblr, :username, :designer_quote, :marketing_images, :profile_display_name, :designer_commission, :show_designer_profile, :feature_image)
+      params.require(:user).permit(:first_name, :last_name, :description, :company_name, :website_url, :location, :blog_url, :email, :password, :password_confirmation, :is_discount_eligible, :is_beta_user, :can_add_boards, :designer_featured_starts_at, :designer_featured_ends_at, :designer_featured_position, :supplier_id, :marketing_images_attributes, :user_images_attributes, :logo_image_attributes, :feature_image_attributes,  :bill_address_id, :ship_address_id, :social_facebook, :social_twitter, :social_instagram, :social_pinterest, :social_googleplus, :social_linkedin, :social_tumblr, :username, :designer_quote, :marketing_images, :profile_display_name, :designer_commission, :show_designer_profile, :feature_image)
     end
    
 end
