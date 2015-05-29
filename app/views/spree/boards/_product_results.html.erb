@@ -38,7 +38,7 @@
 								<% if false %>
 								<div title="Available Inventory" class="product-results-meta available-inventory"><i class="fa fa-cubes"></i> Inventory: <%#= product.total_on_hand %></div>
 								<% end %>
-                              <% if product.total_on_hand > 0 || product.any_backorderable? %>
+                              <% if product.quantity_on_hand == 0 %>
                                   <div title="scout-out-of-stock" class="product-results-meta scout-out-of-stock">Out of stock</div>
                               <% end %>
 								<% if false %>
