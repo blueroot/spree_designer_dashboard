@@ -17,20 +17,27 @@ class Spree::DesignersController < Spree::StoreController
   end
 
   def update
-    if params[:user].present? and params[:user][:user_images_attributes].present? and params[:user][:user_images_attributes]['0'].present?
-      data = StringIO.new(Base64.decode64((params[:user][:user_images_attributes]['0'][:attachment])))
-      data.class.class_eval { attr_accessor :original_filename, :content_type }
-      data.original_filename = "avatar.png"
-      data.content_type = "image/png"
-      params[:user][:user_images_attributes]['0'][:attachment] = data
+    @user = spree_current_user
+    @user.user_images.destroy_all
+    if params[:user].present? and params[:user][:user_images].present?
+      base64 = (params[:user][:user_images][:attachment])
+      data = Base64.decode64(base64['data:image/png;base64,'.length .. -1])
+      file_img = File.new("#{Rails.root}/public/somefilename.png", 'wb')
+      file_img.write data
+      @image =  @user.user_images.new(attachment: file_img)
+      if @image.save
+        File.delete(file_img)
+      end
+      params[:user] = params[:user].except!(:user_images, :logo_image_attributes)
+
+
     end
 
-    @user = spree_current_user
     respond_to do |format|
       if @user.update_attributes(params[:user].permit!)
-        format.html { redirect_to my_profile_path, :notice => 'Your profile was successfully updated.' }
+        format.html { redirect_to my_profile_path(format: 'html'), :notice => 'Your profile was successfully updated.', location: url_for( my_profile_path) }
       else
-        format.html { redirect_to my_profile_path, :notice => 'There was an error and your profile was not updated.' }
+        format.html { redirect_to my_profile_path(format: 'html'), :notice => 'There was an error and your profile was not updated.', location: url_for( my_profile_path) }
       end
     end
   end
