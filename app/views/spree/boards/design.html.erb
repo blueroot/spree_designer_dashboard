@@ -32,6 +32,13 @@
 				<div class="col-md-5">
 					
 					<div id="product_lightbox">
+
+                      <div class="solr-filter-products" data-url="<%= search_all_categories_rooms_path(format: 'html') %>" data-search-url="<%=  board_product_search_path %>">
+
+                          <%= render partial: 'show_categories_and_filters', locals: {suppliers: @suppliers, subcategory: @subcategory, sub_subcategory: @sub_subcategory, category: @category, parent: @parent, taxon_filters: @taxon_filters} %>
+
+                      </div>
+
 					<ul class="nav nav-tabs">
 					  <li class="active"><a href="#search_pane" data-toggle="tab">Find Products</a></li>
 					  <li><a href="#bookmarks" id="bookmarks_tab" data-toggle="tab">Favorites</a></li>
@@ -45,12 +52,7 @@
 									<div class="board-products-search-fields">
 										<%= form_tag("/rooms/product_search", method: "get", :id => "product_search_form") do %>
 											<div class="row">
-												<div class="col-md-3">
-													<%= select_tag "supplier_id", options_from_collection_for_select(@suppliers, "id", "name"),:include_blank => false, :class => "form-control input-sm", :prompt => "Brands" %>
-												</div>
-												<div class="col-md-3">
-                                                  <%= select_tag "department_taxon", options_for_select(@list), :include_blank => false, :class => "form-control input-sm", :prompt => "Department" %>
-												</div>
+
 												<div class="col-md-3">
 
 													<input type="text" id="product_keywords" name="product_keywords" class="form-control input-sm" placeholder="Keywords">

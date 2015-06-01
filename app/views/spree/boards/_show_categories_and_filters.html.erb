@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="col-md-3">
+    <%= select_tag "supplier_id", options_from_collection_for_select(suppliers, "id", "name"), :include_blank => false, :class => "form-control input-sm", :prompt => "Brands" %>
+  </div>
+  <% if parent.present? %>
+      <div class="col-md-3">
+        <%= link_to parent.name, '#', class: 'js-click-back-category my-btn-primary' , data: {taxon_id: parent.id} %>
+      </div>
+  <% end %>
+  <div class="col-md-3">
+    <%= select_tag "department_taxon", options_for_select(subcategory), :include_blank => false, :class => "form-control input-sm js-select-taxon-room", :prompt => "Category" %>
+  </div>
+  <% if sub_subcategory.present? %>
+      <div class="col-md-3">
+        <%= select_tag "department_taxon", options_for_select(sub_subcategory), :include_blank => false, :class => "form-control input-sm js-select-taxon-room", :prompt => "Sub-Category" %>
+      </div>
+  <% end %>
+  <div class="col-md-3">
+
+  </div>
+
+  <div class="filters-taxon-show">
+     <%= render partial: 'board_solr_filter', locals: {taxon_filters: taxon_filters} %>
+  </div>
+</div>

@@ -176,11 +176,11 @@ class Spree::BoardsController < Spree::StoreController
     #  taxons << taxon.id
     #end
     
-    if params[:department_taxon_id] and !params[:department_taxon_id].empty? and params[:department_taxon_id] != "Department"
-      taxon = Spree::Taxon.find(params[:department_taxon_id])
-      taxons << taxon.id
-    end
-    @my_taxon = Spree::Taxon.where(id: params[:department_taxon_id]).first
+    #if params[:id] and !params[:id].empty?
+    #  taxon = Spree::Taxon.find(params[:department_taxon_id])
+    #  taxons << taxon.id
+    #end
+    @my_taxon = Spree::Taxon.where(id: params[:id]).first
     @taxon_filters = Spree::Product.generate_new_filters(@my_taxon)
 
     
@@ -287,17 +287,19 @@ class Spree::BoardsController < Spree::StoreController
   end
   
   def design
-    
+    @subcategory = []
+    @sub_subcategory = []
+    @parent = ""
+    @my_taxon = Spree::Taxon.where(name: 'Department').first
+    @my_taxon.children.each do |taxon|
+      @subcategory << [taxon.name, taxon.id]
+      Spree::Board.render_taxon_select(taxon,  @sub_subcategory)
+    end
+
     #@board.messages.new(:sender_id => spree_current_user.id, :recipient_id => 0, :subject => "Publication Submission")
     @products = Spree::Product.all()
     @bookmarked_products = spree_current_user.bookmarks.collect{|bookmark| bookmark.product}
     @department_taxons = Spree::Taxonomy.where(:name => 'Department').first().root.children
-
-    @list = []
-    @department_taxons.each do |taxon|
-      @list << [taxon.name, taxon.id]
-      Spree::Board.render_taxon_select(taxon, @list, 15)
-    end
 
     #@department_taxons= Spree::Supplier.find_by(id: 16).taxons 
       @searcher = build_searcher(params)
@@ -317,6 +319,29 @@ class Spree::BoardsController < Spree::StoreController
     #@wholesaler_taxons = Spree::Taxonomy.where(:name => 'Wholesaler').first().root.children
 
     @color_collections = Spree::ColorCollection.all()
+  end
+
+  def search_all_categories
+    @subcategory = []
+    @sub_subcategory = []
+    @suppliers = Spree::Supplier.where(:public => 1).order(:name)
+    @category = Spree::Taxon.where(:id => params[:id]).first
+    Rails.logger.info "========================"
+    Rails.logger.info   @category.name
+    Rails.logger.info "========================"
+    @parent = @category.parent
+    @category.children.each do |taxon|
+      @subcategory << [taxon.name, taxon.id]
+      Spree::Board.render_taxon_select(taxon,  @sub_subcategory)
+    end
+
+    Rails.logger.info "========================"
+    Rails.logger.info   @subcategory.inspect
+    Rails.logger.info "========================"
+    @taxon_filters = Spree::Product.generate_new_filters(@category)
+    respond_to do |format|
+      format.html{render layout: false}
+    end
   end
   
   def design2

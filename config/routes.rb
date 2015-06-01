@@ -12,12 +12,17 @@ Spree::Core::Engine.routes.draw do
   resources :color_collections do 
     resources :colors
   end
-  resources :rooms, controller: 'boards'  do 
+  resources :rooms, controller: 'boards'  do
+
+    collection do
+      post :search_all_categories
+    end
     resources :board_products
     resources :color_matches
   end
   resources :designer_registrations
-  
+
+
   
   
   get "/tutorials" => "designers#tutorials", :as => :tutorials

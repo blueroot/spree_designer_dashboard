@@ -306,14 +306,14 @@ class Spree::Board < ActiveRecord::Base
 
 
 
-  def self.render_taxon_select(taxon, list, padding)
+  def self.render_taxon_select(taxon, subsubcategory)
     taxon.children.each do |child_taxon|
-      list << [child_taxon.name, child_taxon.id, {class: "children_select_#{padding}"}]
+      subsubcategory << [child_taxon.name, child_taxon.id]
       if child_taxon.children.present?
-        render_taxon_select(child_taxon, list, padding+10)
+        render_taxon_select(child_taxon, [])
       end
     end
-      return list
+      return subsubcategory
     end
 
   def related_boards
