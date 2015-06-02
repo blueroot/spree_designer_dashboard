@@ -1,17 +1,14 @@
-<% if false %>
+<% if true %>
 <style type="text/css">
 #carousel {
-	width:1200px;
-	height:290px;    
+
 	margin:0 auto;
 }
 #slides {
 	overflow:hidden;
 	/* fix ie overflow issue */
 	position:relative;
-	width:1200px;
-	height:290px;
-	// border:1px solid #ccc;
+
 }
 /* remove the list styles, width : item width * total items */    
 #slides ul {
@@ -21,12 +18,11 @@
 	list-style:none;
 	margin:0;
 	padding:0;    
-	width:1200px;            
+
 }
 /* width of the item, in this case I put 250x250x gif */
 #slides li {
-	//width:250px;
-	//height:250px;    
+
 	float:left;
 }
 #slides li img {
@@ -38,9 +34,9 @@
 	//  float:right;
 }
 #buttons a {
-	display:block;
+	display: none;
 	height: 52px;
-	margin-top: 60%;
+	margin-top: 10%;
 	outline: 0 none;
 	position: absolute;
 	text-indent: -9999px;
@@ -128,13 +124,13 @@
 			<h2>Meet some of the industry's top designers</h2>
 
 			<div id="carousel">
-				<% if false %>
+				<!--<#% if false %>-->
 				<div id="buttons">
 					<a href="#" id="prev"><</a>
 					<a href="#" id="next" style="margin-left:20px;">></a>
 					<div class="clear"></div>
 				</div>
-				<% end %>
+				<!--<#% end %>-->
 
 
 				<div class="clear"></div>
@@ -155,7 +151,10 @@
 						<% else %>
 						<style>
 						.ch-img-<%=designer.id %> { 
-							background-image: url(<%=designer.user_images.first.attachment(:primary)%>);
+							background-image: url(<%=designer.user_images.first.attachment(:original)%>);
+                            background-repeat: no-repeat;
+                            background-position: center;
+                            background-size: 220px 220px ;
 						}
 						</style>
 						<li>
