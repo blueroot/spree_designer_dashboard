@@ -32,10 +32,12 @@
 				<div class="col-md-5">
 					
 					<div id="product_lightbox">
+                      <div class="js-hidden-params hidden">
+                        <%= text_field_tag :params   %>
+                      </div>
+                      <div class="solr-filter-products" data-board-id="<%=@board.id %>" data-url="<%=  board_product_search_path(format: 'html') %>" data-search-url="<%= search_all_categories_rooms_path(format: 'html' , board_id: @board.id) %>">
 
-                      <div class="solr-filter-products" data-url="<%= search_all_categories_rooms_path(format: 'html') %>" data-search-url="<%=  board_product_search_path %>">
-
-                          <%= render partial: 'show_categories_and_filters', locals: {suppliers: @suppliers, subcategory: @subcategory, sub_subcategory: @sub_subcategory, category: @category, parent: @parent, taxon_filters: @taxon_filters} %>
+                          <%= render partial: 'show_categories_and_filters', locals: {suppliers: @suppliers, subcategory: @subcategory, sub_subcategory: @sub_subcategory , category: @category,  category_id: @category_id, subcategory_id: @subcategory_id , sub_subcategory_id: @sub_subcategory_id,  taxon_filters: @taxon_filters, board: @board} %>
 
                       </div>
 

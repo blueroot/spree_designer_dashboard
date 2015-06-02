@@ -1,48 +1,19 @@
 <div class="row">
   <div class="col-md-12 js-filter-search">
     <% if taxon_filters.present? %>
+        <% params[:board_id] = board.id %>
         <% taxon_filters.each do |key, value| %>
-            <% if key == 'Color' %>
-                <div class="colors-filters clearfix filter-option-box dropdown col-md-3">
-                  <%= link_to "color", '#', class: "my-btn-primary", id: "drop_color", data:{toggle: "dropdown"} %>
-                   <ul class="dropdown-menu" role="menu" aria-labelledby="drop_color">
-                  <% value.each do |row| %>
-                      <li class="box_color room-box clearfix">
-                      <div class="box_color room-box clearfix">
 
-                        <% if params[:s].present? and params[:s][:color].present? and params[:s][:color].to_s == (row.class == {}.class ? row.map { |k, v| v }.first : row).to_s %>
-                            <strong class="<%= color_class_search((row.class == {}.class ? row.map { |k, v| k }.first : row)) %>"></strong>
-
-                            <%= link_to '<i class="fa fa-times"></i>'.html_safe, define_params_filter(params, :color, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, true), data: define_params_filter(params, :color, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, true) %>
-                        <% else %>
-                            <%= link_to '', define_params_filter(params, :color, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, false), data: define_params_filter(params, :color, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, false), class: color_class_search((row.class == {}.class ? row.map { |k, v| k }.first : row)) %>
-                        <% end %>
-                      </div>
-                         </li>
-                  <% end %>
-                  </ul>
-                </div>
-            <% else %>
-                <div class="filter-option-box dropdown col-md-3">
-                  <%= link_to key.capitalize, '#', class: "my-btn-primary", id: "drop_#{key}", data:{toggle: "dropdown"} %>
-                  <ul class="dropdown-menu" role="menu" aria-labelledby=<%="drop_#{key}"%>>
-                    <% value.each do |row| %>
-                        <li>
-                          <% if params[:s].present? and params[:s][key.to_sym].present? and params[:s][key.to_sym].to_s == (row.class == {}.class ? row.map { |k, v| v }.first : row).to_s %>
-                              <strong class="gold_select"><%= (row.class == {}.class ? row.map { |k, v| k }.first : row) %></strong>
-                              <%= link_to '<i class="fa fa-times"></i>'.html_safe, define_params_filter(params, key.to_sym, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, true), data: define_params_filter(params, key.to_sym, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, true) %>
-
-                          <% else %>
-                              <%= link_to (row.class == {}.class ? row.map { |k, v| k }.first : row), define_params_filter(params, key.to_sym, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, false), data: define_params_filter(params, key.to_sym, (row.class == {}.class ? row.map { |k, v| v }.first : row), :s, false) %>
-
-                          <% end %>
-                        </li>
-                    <% end %>
-
-                  </ul>
-                </div>
+            <div class="filter-option-box col-md-3">
+              <%= select_tag key.to_sym, options_for_select(generate_filter_select(value, params, key)), class: 'form-control js-select-filter-value', data: {room_id: params[:id]} %>
+            </div>
+        <% end %>
+        <% if params[:s].present? %>
+            <% params[:s].each do |set| %>
+            <%= set  %>
             <% end %>
         <% end %>
     <% end %>
+
   </div>
 </div>

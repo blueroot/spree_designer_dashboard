@@ -1,10 +1,6 @@
-<% if @taxon_filters.present? %>
-    <div class="js-render-filter-room">
-      <%= render partial: 'board_solr_filter', locals: {taxon_filters: @taxon_filters} %>
-    </div>
-<% end %>
+
 <% unless products.blank? %>
-	<div class="select-products-box-inner">
+	<div class="select-products-box-inner" data-filter="<%= reload_filters_rooms_path(s: params[:s], format: 'html') %>">
 		<% products.in_groups_of(3, false) do |row_products| %>
 			<div class="row">
 			<% for product in row_products %>

@@ -16,6 +16,8 @@ Spree::Core::Engine.routes.draw do
 
     collection do
       post :search_all_categories
+      post :product_result
+      post :reload_filters
     end
     resources :board_products
     resources :color_matches

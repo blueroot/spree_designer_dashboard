@@ -2,24 +2,39 @@
   <div class="col-md-3">
     <%= select_tag "supplier_id", options_from_collection_for_select(suppliers, "id", "name"), :include_blank => false, :class => "form-control input-sm", :prompt => "Brands" %>
   </div>
-  <% if parent.present? %>
+  <% if category.present? %>
       <div class="col-md-3">
-        <%= link_to parent.name, '#', class: 'js-click-back-category my-btn-primary' , data: {taxon_id: parent.id} %>
+        <% if category_id.present? %>
+            <%= select_tag "department_taxon", options_for_select(category, category_id.id), data: {type: 'categories'}, :include_blank => false, :class => "form-control input-sm js-select-taxon-room" %>
+        <% else %>
+            <%= select_tag "department_taxon", options_for_select(category), data: {type: 'categories'}, :include_blank => false, :class => "form-control input-sm js-select-taxon-room", :prompt => "Category" %>
+        <% end %>
       </div>
   <% end %>
-  <div class="col-md-3">
-    <%= select_tag "department_taxon", options_for_select(subcategory), :include_blank => false, :class => "form-control input-sm js-select-taxon-room", :prompt => "Category" %>
-  </div>
+  <% if subcategory.present? %>
+      <div class="col-md-3">
+        <% if  subcategory_id.present? %>
+            <%= select_tag "department_taxon", options_for_select(subcategory, subcategory_id.id), data: {type: 'subcategories'}, :include_blank => false, :class => "form-control input-sm js-select-taxon-room", :prompt => "Sub-Category" %>
+        <% else %>
+            <%= select_tag "department_taxon", options_for_select(subcategory), data: {type: 'subcategories'}, :include_blank => false, :class => "form-control input-sm js-select-taxon-room", :prompt => "Sub-Category" %>
+        <% end %>
+      </div>
+  <% end %>
   <% if sub_subcategory.present? %>
       <div class="col-md-3">
-        <%= select_tag "department_taxon", options_for_select(sub_subcategory), :include_blank => false, :class => "form-control input-sm js-select-taxon-room", :prompt => "Sub-Category" %>
+        <% if sub_subcategory_id.present? %>
+            <%= select_tag "department_taxon", options_for_select(sub_subcategory, sub_subcategory_id.id), data: {type: 'sub_subcategories'}, :include_blank => false, :class => "form-control input-sm js-select-taxon-room", :prompt => "Sub-Category" %>
+        <% else %>
+            <%= select_tag "department_taxon", options_for_select(sub_subcategory), data: {type: 'sub_subcategories'}, :include_blank => false, :class => "form-control input-sm js-select-taxon-room", :prompt => "Sub-Category" %>
+        <% end %>
       </div>
   <% end %>
   <div class="col-md-3">
 
   </div>
 
-  <div class="filters-taxon-show">
-     <%= render partial: 'board_solr_filter', locals: {taxon_filters: taxon_filters} %>
-  </div>
+
+</div>
+<div class="filters-taxon-show">
+  <%= render partial: 'board_solr_filter', locals: {taxon_filters: taxon_filters, board: board} %>
 </div>
