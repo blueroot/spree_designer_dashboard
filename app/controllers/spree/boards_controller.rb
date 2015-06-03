@@ -177,6 +177,15 @@ class Spree::BoardsController < Spree::StoreController
   def product_result
 
     params.merge(:per_page => 100)
+    if params[:s].present?
+      w = params[:s].each do |key, val|
+        if val.class != [].class
+          val = YAML.load(val)
+          params[:s][key.to_sym] = val
+        end
+      end
+      params[:s] = w
+    end
 
     taxons = []
 
@@ -206,6 +215,15 @@ class Spree::BoardsController < Spree::StoreController
 
   def product_search
     params.merge(:per_page => 100)
+    if params[:s].present?
+      w = params[:s].each do |key, val|
+        if val.class != [].class
+          val = YAML.load(val)
+          params[:s][key.to_sym] = val
+        end
+      end
+      params[:s] = w
+    end
     #if params[:supplier_id]
     #  params.merge(:supplier_id => params[:supplier_id])
     #end
