@@ -5,7 +5,7 @@
         <% taxon_filters.each do |key, value| %>
 
             <div class="filter-option-box col-md-3">
-              <%= select_tag key.to_sym, options_for_select(generate_filter_select(value, params, key)), class: 'form-control js-select-filter-value' %>
+              <%= select_tag key.to_sym, options_for_select(generate_filter_select(value, params, key)),  prompt: key.to_s.capitalize , class: 'form-control js-select-filter-value' %>
             </div>
         <% end %>
         <div class="js-filter-selected col-md-12">
