@@ -35,7 +35,7 @@
                       <div class="js-hidden-params hidden">
                         <%= text_field_tag :params   %>
                       </div>
-                      <div class="solr-filter-products" data-board-id="<%=@board.id %>" data-url="<%=  board_product_search_path(format: 'html') %>" data-search-url="<%= search_all_categories_rooms_path(format: 'html' , board_id: @board.id) %>">
+                      <div class="solr-filter-products" data-taxon-id="" data-board-id="<%=@board.id %>" data-url="<%=  board_product_search_path(format: 'html') %>" data-search-url="<%= search_all_categories_rooms_path(format: 'html' , board_id: @board.id) %>">
 
                           <%= render partial: 'show_categories_and_filters', locals: {suppliers: @suppliers, subcategory: @subcategory, sub_subcategory: @sub_subcategory , category: @category,  category_id: @category_id, subcategory_id: @subcategory_id , sub_subcategory_id: @sub_subcategory_id,  taxon_filters: @taxon_filters, board: @board} %>
 
@@ -44,6 +44,25 @@
 					<ul class="nav nav-tabs">
 					  <li class="active"><a href="#search_pane" data-toggle="tab">Find Products</a></li>
 					  <li><a href="#bookmarks" id="bookmarks_tab" data-toggle="tab">Favorites</a></li>
+
+                      <div class="board-products-search-fields">
+                        <%= form_tag(board_product_search_path, method: "get", :id => "product_search_form") do %>
+                            <div class="row">
+
+                              <div class="col-md-3 scout-input-search">
+
+                                <input type="text" id="product_keywords" name="product_keywords" class="form-control input-sm" placeholder="Keywords">
+                              </div>
+                              <div class="col-md-3 scout-button-search">
+                                <%= submit_tag("Search", :class => "btn btn-primary btn-sm")%>
+                              </div>
+                            </div>
+                            <div class="js-render-filter-room">
+
+                            </div>
+                        <% end %>
+
+                      </div>
 					</ul>
 
 					<!-- Tab panes -->
@@ -51,24 +70,7 @@
 					  <div class="tab-pane active" id="search_pane">
 					  		<div id="design" class="tab-pane active board-manage-panel">
 								<div id="board_search_panel" class="">
-									<div class="board-products-search-fields">
-										<%= form_tag("/rooms/product_search", method: "get", :id => "product_search_form") do %>
-											<div class="row">
 
-												<div class="col-md-3">
-
-													<input type="text" id="product_keywords" name="product_keywords" class="form-control input-sm" placeholder="Keywords">
-												</div>
-												<div class="col-md-3">
-													<%= submit_tag("Search", :class => "btn btn-primary btn-sm")%>
-												</div>
-											</div>
-                                      <div class="js-render-filter-room">
-
-                                      </div>
-										<% end %>
-
-									</div>
 									<div id="select-products-pagination" class="select-products-pagination"></div>
 									<div id="products-preloader" class="hidden" style="padding-top: 20px; text-align: center;"><%= image_tag("frontend/preloader64.gif")%></div>
 									<div id="select-products-box" class="select-products-box">							

@@ -1,6 +1,6 @@
-
+<div class="js-render-product-room-builder" data-filter="<%= reload_filters_rooms_path(s: params[:s], format: 'html') %>">
 <% unless products.blank? %>
-	<div class="select-products-box-inner" data-filter="<%= reload_filters_rooms_path(s: params[:s], format: 'html') %>">
+	<div class="select-products-box-inner">
 		<% products.in_groups_of(3, false) do |row_products| %>
 			<div class="row">
 			<% for product in row_products %>
@@ -69,3 +69,4 @@
 <% else %>
 	<p class="empty-search-state">We couldn't find any products for that search.</p>
 <% end %>
+</div>
