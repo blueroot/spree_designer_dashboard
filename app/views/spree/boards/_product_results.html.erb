@@ -1,4 +1,4 @@
-<div class="js-render-product-room-builder" data-filter="<%= reload_filters_rooms_path(s: params[:s], format: 'html') %>">
+<div class="js-render-product-room-builder" data-filter="<%= reload_filters_rooms_path(s: params[:s], keywords: params[:keywords], format: 'html') %>">
 <% unless products.blank? %>
 	<div class="select-products-box-inner">
 		<% products.in_groups_of(3, false) do |row_products| %>

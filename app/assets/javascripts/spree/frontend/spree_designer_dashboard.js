@@ -20,6 +20,19 @@ function initializeProductSearchForm(){
 
 		/* Put the results in a div */
 		posting.done(function( data ) {
+            url = $('.solr-filter-products').data('search-url');
+            keywords = $('#product_keywords').val()
+            $.ajax({
+                dataType: 'html',
+                method: 'POST',
+                url: url,
+                data: {keywords: keywords},
+                success: function(response) {
+                    $('.solr-filter-products').html(response);
+                }
+            });
+
+
 			
 			//var content = $( data ).find( '#content' );
 			//$( "#result" ).empty().append( content );

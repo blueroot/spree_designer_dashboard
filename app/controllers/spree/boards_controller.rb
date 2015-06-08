@@ -386,15 +386,42 @@ class Spree::BoardsController < Spree::StoreController
     @category = []
     @board = Spree::Board.where(id: params[:board_id]).first
     @suppliers = Spree::Supplier.where(:public => 1).order(:name)
+
+    tab = []
+    if params[:keywords].present?
+      @searcher = build_searcher(params)
+      @searcher.retrieve_products
+      tab = @searcher.solr_search.facet(:brand_name).rows.map(&:value)
+      if params[:type].blank? and params[:id].blank?
+        params[:type] = 'categories'
+        params[:id] = Spree::Taxon.where(name: tab.first).first.id
+        @room_id = params[:id]
+      end
+    end
+
+
     @category_find = Spree::Taxonomy.where(:name => 'Department').first.root.children
     @category_find.map do |tax|
-      @category << [tax.name, tax.id]
+      if tab.present?
+        if tab.include?(tax.name)
+          @category << [tax.name, tax.id]
+        end
+      else
+        @category << [tax.name, tax.id]
+      end
     end
+
 
     if params[:type].to_s == "categories"
       @category_id = Spree::Taxon.where(id: params[:id]).first
       @category_id.children.each do |taxon|
-        @subcategory << [taxon.name, taxon.id]
+        if tab.present?
+          if tab.include?(taxon.name)
+            @subcategory << [taxon.name, taxon.id]
+          end
+        else
+          @subcategory << [taxon.name, taxon.id]
+        end
       end
       @taxon_filters = Spree::Product.generate_new_filters(@category_id)
     elsif params[:type].to_s == "subcategories"
@@ -402,11 +429,23 @@ class Spree::BoardsController < Spree::StoreController
       @category_id = Spree::Taxon.where(id: @subcategory_id.parent.id).first
 
       @category_id.children.each do |taxon|
-        @subcategory << [taxon.name, taxon.id]
+        if tab.present?
+          if tab.include?(taxon.name)
+            @subcategory << [taxon.name, taxon.id]
+          end
+        else
+          @subcategory << [taxon.name, taxon.id]
+        end
       end
 
       @subcategory_id.children.each do |taxon|
-        @sub_subcategory << [taxon.name, taxon.id]
+        if tab.present?
+          if tab.include?(taxon.name)
+            @sub_subcategory << [taxon.name, taxon.id]
+          end
+        else
+          @sub_subcategory << [taxon.name, taxon.id]
+        end
       end
       @taxon_filters = Spree::Product.generate_new_filters(@subcategory_id)
     elsif params[:type].to_s == "sub_subcategories"
@@ -414,10 +453,22 @@ class Spree::BoardsController < Spree::StoreController
       @subcategory_id = Spree::Taxon.where(id: @sub_subcategory_id.parent.id).first
       @category_id = Spree::Taxon.where(id: @subcategory_id.parent.id).first
       @category_id.children.each do |taxon|
-        @subcategory << [taxon.name, taxon.id]
+        if tab.present?
+          if tab.include?(taxon.name)
+            @subcategory << [taxon.name, taxon.id]
+          end
+        else
+          @subcategory << [taxon.name, taxon.id]
+        end
       end
       @subcategory_id.children.each do |taxon|
-        @sub_subcategory << [taxon.name, taxon.id]
+        if tab.present?
+          if tab.include?(taxon.name)
+            @sub_subcategory << [taxon.name, taxon.id]
+          end
+        else
+          @sub_subcategory << [taxon.name, taxon.id]
+        end
       end
       @taxon_filters = Spree::Product.generate_new_filters(@sub_subcategory_id)
     end
