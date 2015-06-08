@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row js-category-filter" data-product-url="<%=  product_result_rooms_path(s: {brand_name: params[:s][:brand_name]}, format: 'html') if params[:s].present? %>">
   <div class="col-md-3">
     <%= select_tag "supplier_id", options_from_collection_for_select(suppliers, "id", "name"), :include_blank => false, :class => "form-control input-sm", :prompt => "Brands" %>
   </div>
