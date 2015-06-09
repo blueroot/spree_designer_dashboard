@@ -350,6 +350,7 @@ class Spree::BoardsController < Spree::StoreController
     @category_id = ""
     @subcategory_id = ""
     @sub_subcategory_id = ""
+    @supplier = Spree::Supplier.new
     @my_taxon = Spree::Taxon.where(name: 'Department').first
     @my_taxon.children.each do |taxon|
       @category << [taxon.name, taxon.id]
@@ -386,7 +387,11 @@ class Spree::BoardsController < Spree::StoreController
     @category = []
     @board = Spree::Board.where(id: params[:board_id]).first
     @suppliers = Spree::Supplier.where(:public => 1).order(:name)
-
+    if params[:supplier_id].present?
+      @supplier = Spree::Supplier.where(id: params[:supplier_id]).first
+    else
+      @supplier = Spree::Supplier.new
+      end
     tab = []
 
     if params[:keywords].present?
