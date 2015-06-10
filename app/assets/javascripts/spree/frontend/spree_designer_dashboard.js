@@ -204,6 +204,7 @@ function addProductToBoard(event, ui){
 				
 				$('#board-canvas').unblock(); 
 				$('#product_lightbox').unblock();
+                $('.board-lightbox-product.ui-draggable.ui-draggable-dragging').hide();
                 cloned.hide();
 				
 				// remove the jquery drag/drop place holder that had been there.
