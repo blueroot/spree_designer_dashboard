@@ -4,7 +4,7 @@ function initializeProductSearchForm(){
 		/* stop form from submitting normally */
 		event.preventDefault();
 		
-		$('#products-preloader').hide()
+		$('#products-preloader').show()
 		$('#select-products-box').html('')
 		/* get some values from elements on the page: */
 		var $form = $( this ),
@@ -20,6 +20,7 @@ function initializeProductSearchForm(){
 
 		/* Put the results in a div */
 		posting.done(function( data ) {
+            $('#products-preloader').hide()
             url = $('.solr-filter-products').data('search-url');
             keywords = $('#product_keywords').val()
             $.ajax({
