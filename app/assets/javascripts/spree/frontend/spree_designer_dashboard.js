@@ -4,7 +4,7 @@ function initializeProductSearchForm(){
 		/* stop form from submitting normally */
 		event.preventDefault();
 		
-		$('#products-preloader').removeClass('hidden')
+		$('#products-preloader').hide()
 		$('#select-products-box').html('')
 		/* get some values from elements on the page: */
 		var $form = $( this ),
@@ -365,7 +365,8 @@ function getCurrentTop(obj){
 }
 
 function getProductDetails(product_id, board_id, board_product_id){
-	
+    $('.board-product-preview-details').hide()
+	$('.js_reload_info').show()
 	board_id = (typeof board_id === "undefined") ? "defaultValue" : board_id;
 	board_product_id = (typeof board_product_id === "undefined") ? "defaultValue" : board_product_id;
 	
@@ -384,6 +385,8 @@ function getProductDetails(product_id, board_id, board_product_id){
 
 	  /* Put the results in a div */
 	  request.done(function( data ) {
+          $('.js_reload_info').hide()
+          $('.board-product-preview-details').show()
 	    //var content = $( data ).find( '#content' );
 	    //$( "#result" ).empty().append( content );
 	  });	
