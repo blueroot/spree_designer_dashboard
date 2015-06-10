@@ -203,7 +203,8 @@ function addProductToBoard(event, ui){
 				
 				
 				$('#board-canvas').unblock(); 
-				$('#product_lightbox').unblock(); 
+				$('#product_lightbox').unblock();
+                cloned.hide();
 				
 				// remove the jquery drag/drop place holder that had been there.
 				// this is a bit of a hack - without the timer, then the graphic disappears for a second...this generally keeps it up until the fabricjs version is added
