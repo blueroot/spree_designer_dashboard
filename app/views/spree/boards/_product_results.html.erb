@@ -1,3 +1,11 @@
+<div class="paginate">
+  <% unless products.empty? %>
+      <% paginated_products = products %>
+      <% if paginated_products.respond_to?(:num_pages) %>
+          <%= paginate paginated_products, :remote=>true %>
+      <% end %>
+  <% end %>
+</div>
 <div class="js-render-product-room-builder" data-filter="<%= reload_filters_rooms_path(s: params[:s], keywords: params[:keywords], format: 'html') %>">
 <% unless products.blank? %>
 	<div class="select-products-box-inner">
@@ -27,9 +35,9 @@
 							</div>
 							<div class="meta">
 								
-								<div title="Bookmark this Product" class="product-results-meta bookmark-product-container <%= "hidden" if is_bookmarked %>"><a href="javascript:void(0);" class="bookmark-product bookmark-link bookmark-link-<%= product.id %>" data-product-id="<%= product.id %>"><i class="fa fa-heart fa-white"></i> Add to Favourites</a></div>
+								<div title="Bookmark this Product" class="product-results-meta bookmark-product-container <%= "hidden" if is_bookmarked %>"><a href="javascript:void(0);" class="bookmark-product bookmark-link bookmark-link-<%= product.id %>" data-product-id="<%= product.id %>"><i class="fa fa-heart fa-white"></i> Add to Favorites</a></div>
 								
-								<div title="Remove Bookmark for this Product" class="product-results-meta unbookmark-product-container <%= "hidden" unless is_bookmarked %>"><a href="javascript:void(0);" class="remove-bookmark-product unbookmark-link unbookmark-link-<%= product.id %>" data-product-id="<%= product.id %>"><i class="fa fa-heart fa-red"></i> Favourites</a></div>
+								<div title="Remove Bookmark for this Product" class="product-results-meta unbookmark-product-container <%= "hidden" unless is_bookmarked %>"><a href="javascript:void(0);" class="remove-bookmark-product unbookmark-link unbookmark-link-<%= product.id %>" data-product-id="<%= product.id %>"><i class="fa fa-heart fa-red"></i> Favorites</a></div>
 								
 								<% if false %>
 								<div title="Available Inventory" class="product-results-meta available-inventory"><i class="fa fa-cubes"></i> Inventory: <%#= product.total_on_hand %></div>
