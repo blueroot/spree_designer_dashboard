@@ -11,10 +11,12 @@
         <div class="js-filter-selected col-md-12">
         <% if params[:s].present? %>
             <% params[:s].each do |set| %>
+                  <%if set[0].to_s != "brand_name" %>
             <%= link_to product_result_rooms_path(define_params_filter(params, set[0], set_filter_value(set[1]), :s, true)), class: 'js-remove-filter-rooms my-btn-primary' do %>
 
                       <%=get_filter_value(set[1], params[:room_id])%>
                       <i class="fa fa-close"></i>
+                  <% end %>
                   <% end %>
             <% end %>
         <% end %>
