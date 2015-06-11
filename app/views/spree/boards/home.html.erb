@@ -149,17 +149,15 @@
                                   </a>
                                 </div>
                             <% else %>
-                                <div class="img-show">
-                                  <style>
-                                      .ch-img-<%=designer.id %> {
-                                          background-image: url(<%=designer.user_images.first.attachment(:primary)%>);
-                                          /*background-repeat: no-repeat;*/
-                                          /*background-position: center;*/
-                                          /*background-size: 220px 220px ;*/
-                                      }
-                                  </style>
+                                <div class="ch-item ch-img-default" style="background-image: url(<%=designer.user_images.first.attachment(:primary) %>)">
+                                  <a href="/<%=designer.username%>" >
+                                    <div class="ch-info">
+                                      <h3><%=designer.full_name %></h3>
+                                      <p><%= designer.full_name%></p>
+                                    </div>
+                                  </a>
+                                  </div>
 
-                                </div>
                             <% end %>
                           </li>
 
