@@ -196,10 +196,10 @@ class Spree::BoardsController < Spree::StoreController
     end
     if params[:supplier_id] and params[:supplier_id].to_i > 0
 
-      @all_products = @searcher.retrieve_products({where: "supplier_id = #{params[:supplier_id]}"})
+      @all_products = @searcher.retrieve_products({where: "supplier_id = #{params[:supplier_id]}"}, {order: "quantity_on_hand DESC, spree_variants.backorderable DESC"})
     else
 
-      @all_products = @searcher.retrieve_products()
+      @all_products = @searcher.retrieve_products( {order: "quantity_on_hand DESC, spree_variants.backorderable DESC"})
     end
     @products = @all_products
 
@@ -249,11 +249,11 @@ class Spree::BoardsController < Spree::StoreController
     if params[:supplier_id] and params[:supplier_id].to_i > 0
       # @all_products = @searcher.retrieve_products.by_supplier(params[:supplier_id]).not_on_a_board
       #@all_products =  @searcher.retrieve_products({where: "supplier_id = #{params[:supplier_id]}"}, {includes: :board_products}, {where: "spree_board_products.product_id is NULL"})
-      @all_products = @searcher.retrieve_products({where: "supplier_id = #{params[:supplier_id]}"})
+      @all_products = @searcher.retrieve_products({where: "supplier_id = #{params[:supplier_id]}"}, {order: "quantity_on_hand DESC, spree_variants.backorderable DESC"})
     else
       # @all_products = @searcher.retrieve_products.not_on_a_board
       #@all_products = @searcher.retrieve_products( {includes: :board_products}, {where: "spree_board_products.product_id is NULL"})
-      @all_products = @searcher.retrieve_products()
+      @all_products = @searcher.retrieve_products({order: "quantity_on_hand DESC, spree_variants.backorderable DESC"})
     end
     @products = @all_products
 
