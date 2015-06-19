@@ -1,6 +1,6 @@
 <div class="row">
 <div class="col-md-3">
-  <%= render :partial => "dashboard_menu", :locals => {:selected => "profile"}%>
+  <%= render :partial => "dashboard_menu", :locals => {:selected => "profile"} %>
 </div>
 
 
@@ -8,258 +8,247 @@
 
 <div class="page-header">
   <h1 class="with-action">Your Profile</h1>
+
   <div class="header-actions">
-    <%= link_to "Preview Your Profile", "/#{@user.username}", :class => "pull-right"%>
+    <%= link_to "Preview Your Profile", "/#{@user.username}", :class => "pull-right" %>
   </div>
 </div>
 
 <%= form_for [@user], :url => update_designer_path(format: 'html'), :html => {:multipart => true} do |f| %>
 
-<div class="row">
-  <div class="col-md-12">
-    <div class="form-group">
-      <%= f.label :profile_display_name, Spree.t(:profile_display_name) %>
-      <%= f.text_field :profile_display_name, :class => 'form-control' %>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <%= f.label :profile_display_name, Spree.t(:profile_display_name) %>
+          <%= f.text_field :profile_display_name, :class => 'form-control' %>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-<div class="row">
-  <div class="col-md-12">
-    <div class="form-group">
-      <%= f.label :username, Spree.t(:username) %>
-      <%= f.text_field :username, :class => 'form-control' %>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <%= f.label :username, Spree.t(:username) %>
+          <%= f.text_field :username, :class => 'form-control' %>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-<% if false %>
+    <% if false %>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <%= f.label :first_name, Spree.t(:first_name) %>
+              <%= f.text_field :first_name, :class => 'form-control' %>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <%= f.label :last_name, Spree.t(:last_name) %>
+              <%= f.text_field :last_name, :class => 'form-control' %>
+            </div>
+          </div>
+        </div>
+    <% end %>
+
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
-          <%= f.label :first_name, Spree.t(:first_name) %>
-          <%= f.text_field :first_name, :class => 'form-control' %>
+          <%= f.label :company_name, Spree.t(:company_or_blog_name) %>
+          <%= f.text_field :company_name, :class => 'form-control' %>
         </div>
       </div>
       <div class="col-md-6">
         <div class="form-group">
-          <%= f.label :last_name, Spree.t(:last_name) %>
-          <%= f.text_field :last_name, :class => 'form-control' %>
+          <%= f.label :website_url, Spree.t(:company_or_blog_url) %>
+          <%= f.text_field :website_url, :class => 'form-control' %>
         </div>
       </div>
     </div>
-<% end %>
-
-<div class="row">
-  <div class="col-md-6">
-    <div class="form-group">
-      <%= f.label :company_name, Spree.t(:company_or_blog_name) %>
-      <%= f.text_field :company_name, :class => 'form-control' %>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <%= f.label :location, Spree.t(:location) %>
+          <%= f.text_field :location, :class => 'form-control' %>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="col-md-6">
-    <div class="form-group">
-      <%= f.label :website_url, Spree.t(:company_or_blog_url) %>
-      <%= f.text_field :website_url, :class => 'form-control' %>
+
+    <hr/>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <%= f.label :description, Spree.t("Tell us a little about yourself") %>
+          <span class="help-block">Briefly tell customers about yourself. About 5 or 6 sentences is a good length.</span>
+          <%= f.text_area :description, :class => 'form-control', :rows => 4 %>
+
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-12">
-    <div class="form-group">
-      <%= f.label :location, Spree.t(:location) %>
-      <%= f.text_field :location, :class => 'form-control' %>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <%= f.label :designer_quote, Spree.t("Short Quote") %>
+          <span class="help-block">Got something special (yet succinct) to say? This is your chance.</span>
+          <%= f.text_area :designer_quote, :class => 'form-control', :rows => 4 %>
+
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+    <hr/>
+    <div class="row">
+      <div class="col-md-12">
+        <label>Your Profile Images</label>
 
-<hr />
-
-<div class="row">
-  <div class="col-md-12">
-    <div class="form-group">
-      <%= f.label :description, Spree.t("Tell us a little about yourself") %>
-      <span class="help-block">Briefly tell customers about yourself. About 5 or 6 sentences is a good length.</span>
-      <%= f.text_area :description, :class => 'form-control', :rows => 4 %>
-
-    </div>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-12">
-    <div class="form-group">
-      <%= f.label :designer_quote, Spree.t("Short Quote") %>
-      <span class="help-block">Got something special (yet succinct) to say? This is your chance.</span>
-      <%= f.text_area :designer_quote, :class => 'form-control', :rows => 4 %>
-
-    </div>
-  </div>
-</div>
-<hr />
-<div class="row">
-  <div class="col-md-12">
-    <label>Your Profile Images</label>
-
-    <div class="form-group">
-
-      <div id="actions">
-        <%= link_to "edit", "#", id: 'edit', class: 'btn btn-primary' %>
-            <%= link_to "crop", "#", id: 'crop', class: 'btn btn-primary' %>
-                </div>
-                <div class="render-image-edit"></div>
+        <div class="imageBox">
+          <div class="thumbBox"></div>
+          <div class="spinner" style="display: none">Loading...</div>
+        </div>
+        <div class="action clearfix">
+          <input type="file" id="file" style="float:left;">
+          <input type="button" id="btnCrop" value="Crop" style="float: left; margin-right: 3px; " class="btn-primary">
+          <input type="button" id="btnZoomIn" value="+" style="float: left; margin-right: 3px;" class="btn-primary">
+          <input type="button" id="btnZoomOut" value="-" style="float: left; margin-right: 3px;" class="btn-primary">
+        </div>
+        <div class="cropped">
+          <%= image_tag(@user.user_images.first.attachment(:primary)) %>
+        </div>
+      </div>
 
 
-                <table class="form-image-table">
-                  <tr>
-                    <% unless @user.user_images.first.new_record? %>
-                        <td style="padding-right: 10px;"><%= image_tag(@user.user_images.first.attachment(:small), :class => "img-circle") %></td>
-                    <% end %>
-                    <td>
-                      <% unless @user.user_images.first.new_record? %>
-                          <%= label_tag :attachment, "Change Headshot Image" %>
-                      <% else %>
-                          <%= label_tag :attachment, "Headshot Image" %>
-                      <% end%>
-                      <!--<div id="user_image_file" class="choose-file-button btn btn-primary">Choose a file</div>-->
-                      <%= file_field_tag :attachment , class: 'choose-file-button btn btn-primary', name:"user[user_images][attachment]", id: 'user_user_images_attachment' %>
+        <% if true %>
+            <div class="form-group">
+              <%= f.field_container :logo_image do %>
+                  <%= f.fields_for :logo_image do |logo_image| %>
+                      <table class="form-image-table">
+                        <tr>
+                          <% unless @user.logo_image.new_record? %>
+                              <td style="padding-right: 10px;"><%= image_tag(@user.logo_image.attachment(:small)) %></td>
+                          <% end %>
+                          <td>
+                            <% unless @user.logo_image.new_record? %>
+                                <%= logo_image.label :attachment, "Change Your Logo" %>
+                            <% else %>
+                                <%= logo_image.label :attachment, "Your Logo" %>
+                            <% end %>
+                            <div id="logo_file" class="choose-file-button">Choose a file</div>
+                            <%= logo_image.file_field :attachment %>
                           </td>
-                          </tr>
-                          </table>
+                        </tr>
+                      </table>
+                  <% end %>
+              <% end %>
+            </div>
+        <% end %>
+      </div>
+    </div>
+    <hr/>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <%= f.label :social_facebook, Spree.t(:facebook_link) %>
+          <%= f.text_field :social_facebook, :placeholder => 'https://www.facebook.com/john_smith', :class => 'form-control' %>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <%= f.label :social_twitter, Spree.t(:twitter_username) %>
+          <%= f.text_field :social_twitter, :placeholder => 'john_smith', :class => 'form-control' %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <%= f.label :social_linkedin, "LinkedIn Link" %>
+          <%= f.text_field :social_linkedin, :placeholder => 'https://www.linkedin.com/', :class => 'form-control' %>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <%= f.label :social_pinterest, Spree.t(:pinterest_username) %>
+          <%= f.text_field :social_pinterest, :placeholder => 'ohn_smith', :class => 'form-control' %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <%= f.label :social_googleplus, "Google+ Link" %>
+          <%= f.text_field :social_googleplus, :placeholder => 'https://plus.google.com/', :class => 'form-control' %>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <%= f.label :social_instagram, Spree.t(:instagram_username) %>
+          <%= f.text_field :social_instagram, :placeholder => 'john_smith', :class => 'form-control' %>
+        </div>
+      </div>
 
+    </div>
+    <hr/>
 
-                          </div>
-                          <% if true %>
-                              <div class="form-group">
-                                <%= f.field_container :logo_image do %>
-                                    <%= f.fields_for :logo_image do |logo_image|%>
-                                        <table class="form-image-table">
-                                          <tr>
-                                            <% unless @user.logo_image.new_record? %>
-                                                <td style="padding-right: 10px;"><%= image_tag(@user.logo_image.attachment(:small)) %></td>
-                                            <% end %>
-                                            <td>
-                                              <% unless @user.logo_image.new_record? %>
-                                                  <%= logo_image.label :attachment, "Change Your Logo" %>
-                                              <% else %>
-                                                  <%= logo_image.label :attachment, "Your Logo" %>
-                                              <% end %>
-                                              <div id="logo_file" class="choose-file-button">Choose a file</div>
-                                              <%= logo_image.file_field :attachment %>
-                                            </td>
-                                          </tr>
-                                        </table>
-                                    <% end %>
-                                <% end %>
-                              </div>
+    <% if false %>
+        <div class="row">
+          <div class="col-md-12">
+            <label>Add more marketing images</label>
+
+            <div class="form-group">
+              <%= f.field_container :marketing_image do %>
+                  <%= f.fields_for :marketing_images do |marketing_image| %>
+
+                      <table class="form-image-table">
+                        <tr>
+                          <% unless @user.marketing_images.first.new_record? %>
+                              <td style="padding-right: 10px;"><%= image_tag(@user.marketing_images.first.attachment(:small)) %></td>
                           <% end %>
-                          </div>
-                          </div>
-                          <hr />
-                          <div class="row">
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <%= f.label :social_facebook, Spree.t(:facebook_link) %>
-                                <%= f.text_field :social_facebook, :placeholder => 'https://www.facebook.com/john_smith', :class => 'form-control' %>
-                              </div>
-                            </div>
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <%= f.label :social_twitter, Spree.t(:twitter_username) %>
-                                <%= f.text_field :social_twitter, :placeholder => 'john_smith', :class => 'form-control' %>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <%= f.label :social_linkedin, "LinkedIn Link"%>
-                                <%= f.text_field :social_linkedin, :placeholder => 'https://www.linkedin.com/', :class => 'form-control' %>
-                              </div>
-                            </div>
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <%= f.label :social_pinterest, Spree.t(:pinterest_username) %>
-                                <%= f.text_field :social_pinterest, :placeholder => 'ohn_smith', :class => 'form-control' %>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <%= f.label :social_googleplus, "Google+ Link" %>
-                                <%= f.text_field :social_googleplus, :placeholder => 'https://plus.google.com/', :class => 'form-control' %>
-                              </div>
-                            </div>
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <%= f.label :social_instagram, Spree.t(:instagram_username) %>
-                                <%= f.text_field :social_instagram, :placeholder => 'john_smith', :class => 'form-control' %>
-                              </div>
-                            </div>
+                          <td>
+                            <% unless @user.marketing_images.first.new_record? %>
+                                <%= marketing_image.label :attachment, "Change Image" %>
+                            <% else %>
+                                <%= marketing_image.label :attachment, "Marketing  Image" %>
+                            <% end %>
+                            <div id="marketing_image_file" class="choose-file-button">Choose a file</div>
+                            <%= marketing_image.file_field :attachment %>
+                          </td>
+                        </tr>
+                      </table>
 
-                          </div>
-                          <hr />
+                  <% end %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+    <% end %>
 
-                          <% if false %>
-                              <div class="row">
-                                <div class="col-md-12">
-                                  <label>Add more marketing images</label>
+    <hr/>
+    <p><%= link_to("Save Changes", '#', :class => "btn btn-primary js-save-changes-user", data: {url: my_profile_path}) %></p>
 
-                                  <div class="form-group">
-                                    <%= f.field_container :marketing_image do %>
-                                        <%= f.fields_for :marketing_images do |marketing_image|%>
+<% end %>
+</div>
+</div>
+</div>
+</div>
 
-                                            <table class="form-image-table">
-                                              <tr>
-                                                <% unless @user.marketing_images.first.new_record? %>
-                                                    <td style="padding-right: 10px;"><%= image_tag(@user.marketing_images.first.attachment(:small)) %></td>
-                                                <% end %>
-                                                <td>
-                                                  <% unless @user.marketing_images.first.new_record? %>
-                                                      <%= marketing_image.label :attachment, "Change Image" %>
-                                                  <% else %>
-                                                      <%= marketing_image.label :attachment, "Marketing  Image" %>
-                                                  <% end%>
-                                                  <div id="marketing_image_file" class="choose-file-button">Choose a file</div>
-                                                  <%= marketing_image.file_field :attachment %>
-                                                </td>
-                                              </tr>
-                                            </table>
+<script>
+    var wrapper = $('<div/>').css({height: 0, width: 0, 'overflow': 'hidden'});
+    var userImageFileInput = $('#user_user_images_attributes_0_attachment').wrap(wrapper);
+    var logoFileInput = $('#user_logo_image_attributes_attachment').wrap(wrapper);
 
-                                        <% end %>
-                                    <% end %>
-                                  </div>
-                                </div>
-                              </div>
-                          <% end %>
-
-                          <hr />
-                          <p><%= link_to("Save Changes", '#', :class => "btn btn-primary js-save-changes-user", data: {url: my_profile_path})%></p>
-
-                      <% end %>
-                      </div>
-                      </div>
-                      </div>
-                      </div>
-
-                      <script>
-                          var wrapper = $('<div/>').css({height:0,width:0,'overflow':'hidden'});
-                          var userImageFileInput = $('#user_user_images_attributes_0_attachment').wrap(wrapper);
-                          var logoFileInput = $('#user_logo_image_attributes_attachment').wrap(wrapper);
-
-                          userImageFileInput.change(function(){
-                              $this = $(this);
-                              $('#user_image_file').text($this.val());
-                          })
-                          logoFileInput.change(function(){
-                              $this = $(this);
-                              $('#logo_file').text($this.val());
-                          })
+    userImageFileInput.change(function () {
+        $this = $(this);
+        $('#user_image_file').text($this.val());
+    })
+    logoFileInput.change(function () {
+        $this = $(this);
+        $('#logo_file').text($this.val());
+    })
 
 
-                          $('#user_image_file').click(function(){
-                              userImageFileInput.click();
-                          }).show();
-                          $('#logo_file').click(function(){
-                              logoFileInput.click();
-                          }).show();
-                      </script>
+    $('#user_image_file').click(function () {
+        userImageFileInput.click();
+    }).show();
+    $('#logo_file').click(function () {
+        logoFileInput.click();
+    }).show();
+</script>
