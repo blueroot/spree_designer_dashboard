@@ -8,7 +8,7 @@ module Spree
                       default_style: :primary,
                       url: '/spree/user_images/:id/:style/:basename.:extension',
                       path: 'user_images/:id/:style/:basename.:extension',
-                      convert_options: { all: '-strip -auto-orient -colorspace RGB' }
+                      convert_options: { all: '-strip -auto-orient' }
 
     validates_attachment_presence :attachment
     validate :no_attachment_errors
