@@ -1,5 +1,9 @@
 <div class="row">
   <div class="js-filter-search">
+    <div class="checkbox">
+    <%= check_box_tag :out_of_stock, 'out_of_stock', @board.show_out_of_stock, class: 'js-check-out-of-stock', data: {url: set_out_of_stock_in_room_rooms_path(slug: @board.slug, format: 'json')} %>
+      Out of stock
+      </div>
     <% if taxon_filters.present? %>
         <% params[:board_id] = board.id %>
         <% taxon_filters.each do |key, value| %>

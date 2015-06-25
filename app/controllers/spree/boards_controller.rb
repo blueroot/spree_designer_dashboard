@@ -133,6 +133,14 @@ class Spree::BoardsController < Spree::StoreController
     @boards = spree_current_user.boards
   end
 
+  def set_out_of_stock_in_room
+    @board = Spree::Board.where(slug: params[:slug]).first
+    @board.update(show_out_of_stock: params[:value])
+    respond_to do |format|
+      format.json{head :no_content}
+    end
+  end
+
   def show
     @board = Spree::Board.friendly.find(params[:id])
     impressionist(@board)
@@ -186,26 +194,24 @@ class Spree::BoardsController < Spree::StoreController
       end
       params[:s] = w
     end
-
+    @board = Spree::Board.find(params[:board_id])
+    if@board.present? and @board.show_out_of_stock == true
+      out_of_stock = {order: "quantity_on_hand DESC, spree_variants.backorderable DESC"}
+    else
+      out_of_stock = {where: "quantity_on_hand > 0 "}
+    end
     taxons = []
-
     unless taxons.empty?
       @searcher = build_searcher(params.merge(:taxon => taxons))
     else
       @searcher = build_searcher(params)
     end
     if params[:supplier_id] and params[:supplier_id].to_i > 0
-
-      @all_products = @searcher.retrieve_products({where: "supplier_id = #{params[:supplier_id]}"}, {order: "quantity_on_hand DESC, spree_variants.backorderable DESC"})
+      @all_products = @searcher.retrieve_products({where: "supplier_id = #{params[:supplier_id]}"}, out_of_stock)
     else
-
-      @all_products = @searcher.retrieve_products( {order: "quantity_on_hand DESC, spree_variants.backorderable DESC"})
+      @all_products = @searcher.retrieve_products(out_of_stock)
     end
     @products = @all_products
-
-
-    @board = Spree::Board.find(params[:board_id])
-
 
     respond_to do |format|
       format.html { render :layout => false }
@@ -391,7 +397,7 @@ class Spree::BoardsController < Spree::StoreController
       @supplier = Spree::Supplier.where(id: params[:supplier_id]).first
     else
       @supplier = Spree::Supplier.new
-      end
+    end
     tab = []
 
     if params[:keywords].present?
