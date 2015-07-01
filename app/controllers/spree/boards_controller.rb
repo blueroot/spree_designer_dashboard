@@ -137,7 +137,7 @@ class Spree::BoardsController < Spree::StoreController
     @board = Spree::Board.where(slug: params[:slug]).first
     @board.update(show_out_of_stock: params[:value])
     respond_to do |format|
-      format.json{head :no_content}
+      format.json { head :no_content }
     end
   end
 
@@ -183,8 +183,7 @@ class Spree::BoardsController < Spree::StoreController
   end
 
   def product_result
-
-    params.merge(:per_page => 100)
+    params.merge(:per_page => 60)
     if params[:s].present?
       w = params[:s].each do |key, val|
         if val.class != [].class
@@ -195,7 +194,7 @@ class Spree::BoardsController < Spree::StoreController
       params[:s] = w
     end
     @board = Spree::Board.find(params[:board_id])
-    if@board.present? and @board.show_out_of_stock == true
+    if @board.present? and @board.show_out_of_stock == true
       out_of_stock = {order: "quantity_on_hand DESC, spree_variants.backorderable DESC"}
     else
       out_of_stock = {where: "quantity_on_hand > 0 "}
@@ -207,15 +206,13 @@ class Spree::BoardsController < Spree::StoreController
       @searcher = build_searcher(params)
     end
     if params[:supplier_id] and params[:supplier_id].to_i > 0
-      @all_products = @searcher.retrieve_products({where: "supplier_id = #{params[:supplier_id]}"}, out_of_stock)
+      @all_products = @searcher.retrieve_products({where: "supplier_id = #{params[:supplier_id]}"}, out_of_stock,  {page: params[:page] || 1, per_page: params[:per_page] || 60})
     else
-      @all_products = @searcher.retrieve_products(out_of_stock)
+      @all_products = @searcher.retrieve_products(out_of_stock,  {page: params[:page] || 1, per_page: params[:per_page] || 60})
     end
     @products = @all_products
-
     respond_to do |format|
       format.html { render :layout => false }
-
     end
   end
 
