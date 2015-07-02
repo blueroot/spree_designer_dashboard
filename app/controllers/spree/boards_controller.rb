@@ -403,7 +403,7 @@ class Spree::BoardsController < Spree::StoreController
       tab = @searcher.solr_search.facet(:brand_name).rows.map(&:value)
       if params[:type].blank? and params[:id].blank?
         params[:type] = 'categories'
-        params[:id] = Spree::Taxon.where(name: tab.first).first.id
+        params[:id] = Spree::Taxon.where(permalink: tab.first).first.id
         @room_id = params[:id]
       end
     end
@@ -423,10 +423,10 @@ class Spree::BoardsController < Spree::StoreController
     if params[:type].to_s == "categories"
       @category_id = Spree::Taxon.where(id: params[:id]).first
       params[:s] = {} if params[:s].blank?
-      params[:s][:brand_name] = @category_id.name
+      params[:s][:brand_name] = @category_id.permalink
       @category_id.children.each do |taxon|
         if tab.present?
-          if tab.include?(taxon.name)
+          if tab.include?(taxon.permalink)
             @subcategory << [taxon.name, taxon.id]
           end
         else
@@ -437,7 +437,7 @@ class Spree::BoardsController < Spree::StoreController
     elsif params[:type].to_s == "subcategories"
       @subcategory_id = Spree::Taxon.where(id: params[:id]).first
       params[:s] = {} if params[:s].blank?
-      params[:s][:brand_name] = @subcategory_id.name
+      params[:s][:brand_name] = @subcategory_id.permalink
       @category_id = Spree::Taxon.where(id: @subcategory_id.parent.id).first
 
       @category_id.children.each do |taxon|
@@ -452,7 +452,7 @@ class Spree::BoardsController < Spree::StoreController
 
       @subcategory_id.children.each do |taxon|
         if tab.present?
-          if tab.include?(taxon.name)
+          if tab.include?(taxon.permalink)
             @sub_subcategory << [taxon.name, taxon.id]
           end
         else
@@ -463,12 +463,12 @@ class Spree::BoardsController < Spree::StoreController
     elsif params[:type].to_s == "sub_subcategories"
       @sub_subcategory_id = Spree::Taxon.where(id: params[:id]).first
       params[:s] = {} if params[:s].blank?
-      params[:s][:brand_name] = @sub_subcategory_id.name
+      params[:s][:brand_name] = @sub_subcategory_id.permalink
       @subcategory_id = Spree::Taxon.where(id: @sub_subcategory_id.parent.id).first
       @category_id = Spree::Taxon.where(id: @subcategory_id.parent.id).first
       @category_id.children.each do |taxon|
         if tab.present?
-          if tab.include?(taxon.name)
+          if tab.include?(taxon.permalink)
             @subcategory << [taxon.name, taxon.id]
           end
         else
