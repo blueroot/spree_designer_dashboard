@@ -31,8 +31,7 @@ class Spree::BoardsController < Spree::StoreController
   end
 
   def dashboard
-    @boards = spree_current_user.boards.where(removal: false)
-  end
+    @boards = spree_current_user.boards
 
   def profile
     @user = spree_current_user
