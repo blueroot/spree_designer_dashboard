@@ -32,6 +32,7 @@ class Spree::BoardsController < Spree::StoreController
 
   def dashboard
     @boards = spree_current_user.boards
+    end
 
   def profile
     @user = spree_current_user
