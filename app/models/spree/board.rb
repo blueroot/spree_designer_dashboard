@@ -5,16 +5,16 @@ class Spree::Board < ActiveRecord::Base
   belongs_to :room, :foreign_key => "room_id", :class_name => "Spree::Taxon"
   belongs_to :style, :foreign_key => "style_id", :class_name => "Spree::Taxon"
 
-  has_many :board_products, :order => "z_index", dependent:  :destroy
+  has_many :board_products, :order => "z_index", dependent: :destroy
   has_many :products, :through => :board_products
   has_many :color_matches
   has_many :colors, :through => :color_matches
-  has_many :conversations, as:  :conversationable, class_name: "::Mailboxer::Conversation"
+  has_many :conversations, as: :conversationable, class_name: "::Mailboxer::Conversation"
 
   has_and_belongs_to_many :promotion_rules,
                           class_name: '::Spree::PromotionRule',
-      join_table: 'spree_boards_promotion_rules',
-      foreign_key: 'board_id'
+                          join_table: 'spree_boards_promotion_rules',
+                          foreign_key: 'board_id'
   has_many :promotions, :through => :promotion_rules
 
   has_one :board_image, as: :viewable, order: :position, dependent: :destroy, class_name: "Spree::BoardImage"
@@ -305,7 +305,6 @@ class Spree::Board < ActiveRecord::Base
   end
 
 
-
   def self.render_taxon_select(taxon, subsubcategory)
     taxon.children.each do |child_taxon|
       subsubcategory << [child_taxon.name, child_taxon.id]
@@ -313,8 +312,8 @@ class Spree::Board < ActiveRecord::Base
         render_taxon_select(child_taxon, [])
       end
     end
-      return subsubcategory
-    end
+    return subsubcategory
+  end
 
   def related_boards
 
@@ -354,6 +353,23 @@ class Spree::Board < ActiveRecord::Base
     #   end
   end
 
+  def self.generate_brands(searcher = nil)
+    suppliers_tab = []
+    if searcher.present? and searcher.solr_search.present? and searcher.solr_search.facet(:brands).present? and searcher.solr_search.facet(:brands).rows.present?
+      searcher.solr_search.facet(:brands).rows.each do |supp|
+        supplier = Spree::Supplier.where(name: supp.value).first
+        if supplier.present?
+          suppliers_tab << [supplier.name, supplier.id]
+        end
+      end
+    end
+    Rails.logger.info "======================="
+    Rails.logger.info  "   model    "
+    Rails.logger.info    suppliers_tab.inspect
+    Rails.logger.info "============================"
+    return suppliers_tab
+  end
+
   def generate_image
     white_canvas = Magick::Image.new(630, 360) { self.background_color = "white" }
     self.board_products(:order => "z_index asc").includes(:product => {:master => [:images]}).reload.collect
@@ -368,9 +384,9 @@ class Spree::Board < ActiveRecord::Base
         bp.width == 5
         bp.height == 5 * bp.height
       end
-      if bp.present? and  bp.product.present?
+      if bp.present? and bp.product.present?
 
-      product_image = bp.product.image_for_board(bp)
+        product_image = bp.product.image_for_board(bp)
       else
         product_image =""
       end

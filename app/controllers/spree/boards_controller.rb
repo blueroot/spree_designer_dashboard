@@ -378,7 +378,6 @@ class Spree::BoardsController < Spree::StoreController
       end
     end
 
-    @suppliers = Spree::Supplier.where(:public => 1).order(:name)
     #@wholesaler_taxons = Spree::Taxonomy.where(:name => 'Wholesaler').first().root.children
 
     @color_collections = Spree::ColorCollection.all()
@@ -388,8 +387,8 @@ class Spree::BoardsController < Spree::StoreController
     @subcategory = []
     @sub_subcategory = []
     @category = []
+    @suppliers = []
     @board = Spree::Board.where(id: params[:board_id]).first
-    @suppliers = Spree::Supplier.where(:public => 1).order(:name)
     if params[:supplier_id].present?
       @supplier = Spree::Supplier.where(id: params[:supplier_id]).first
     else
@@ -424,6 +423,9 @@ class Spree::BoardsController < Spree::StoreController
       @category_id = Spree::Taxon.where(id: params[:id]).first
       params[:s] = {} if params[:s].blank?
       params[:s][:brand_name] = @category_id.permalink
+      searcher = build_searcher(params)
+      searcher.retrieve_products
+      @suppliers = Spree::Board.generate_brands(searcher)
       @category_id.children.each do |taxon|
         if tab.present?
           if tab.include?(taxon.permalink)
@@ -438,6 +440,9 @@ class Spree::BoardsController < Spree::StoreController
       @subcategory_id = Spree::Taxon.where(id: params[:id]).first
       params[:s] = {} if params[:s].blank?
       params[:s][:brand_name] = @subcategory_id.permalink
+      searcher = build_searcher(params)
+      searcher.retrieve_products
+      @suppliers = Spree::Board.generate_brands(searcher)
       @category_id = Spree::Taxon.where(id: @subcategory_id.parent.id).first
 
       @category_id.children.each do |taxon|
@@ -464,6 +469,9 @@ class Spree::BoardsController < Spree::StoreController
       @sub_subcategory_id = Spree::Taxon.where(id: params[:id]).first
       params[:s] = {} if params[:s].blank?
       params[:s][:brand_name] = @sub_subcategory_id.permalink
+      searcher = build_searcher(params)
+      searcher.retrieve_products
+      @suppliers = Spree::Board.generate_brands(searcher)
       @subcategory_id = Spree::Taxon.where(id: @sub_subcategory_id.parent.id).first
       @category_id = Spree::Taxon.where(id: @subcategory_id.parent.id).first
       @category_id.children.each do |taxon|
@@ -486,7 +494,6 @@ class Spree::BoardsController < Spree::StoreController
       end
       @taxon_filters = Spree::Product.generate_new_filters(@sub_subcategory_id)
     end
-
 
     respond_to do |format|
       format.html { render layout: false }

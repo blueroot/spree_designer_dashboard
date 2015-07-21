@@ -74,6 +74,14 @@
 		
 	
 	</div>
+      <div class="paginate">
+        <% unless products.empty? %>
+            <% paginated_products = products %>
+            <% if paginated_products.respond_to?(:num_pages) %>
+                <%= paginate paginated_products, :remote=>true %>
+            <% end %>
+        <% end %>
+      </div>
 <% else %>
 	<p class="empty-search-state">We couldn't find any products for that search.</p>
 <% end %>
