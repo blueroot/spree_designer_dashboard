@@ -28,6 +28,7 @@ class Spree::DesignerRegistrationsController < Spree::StoreController
     @designer_registration = current_spree_user.designer_registrations.new(designer_registration_params)
 
     if @designer_registration.save
+      @designer_registration.add_subscriber_to_mailchimp('designers')
       redirect_to designer_registration_thanks_path
     else
       render action: 'new'
