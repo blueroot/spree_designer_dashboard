@@ -32,6 +32,7 @@ class Spree::DesignerRegistration < ActiveRecord::Base
       when "accepted-designer"
         user.update_attributes({:is_discount_eligible => 1, :can_add_boards => 1})
         self.send_room_designer_approval
+        user.add_designer_to_mailchimp
       when "accepted-affiliate"
         user.update_attributes({:is_discount_eligible => 1, :can_add_boards => 0})
         self.send_trade_designer_approval
