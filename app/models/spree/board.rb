@@ -363,10 +363,7 @@ class Spree::Board < ActiveRecord::Base
         end
       end
     end
-    Rails.logger.info "======================="
-    Rails.logger.info  "   model    "
-    Rails.logger.info    suppliers_tab.inspect
-    Rails.logger.info "============================"
+
     return suppliers_tab
   end
 
@@ -473,6 +470,31 @@ class Spree::Board < ActiveRecord::Base
     sending = m.messages.send_template('simple-template', [{:name => 'main', :content => html_content}, {:name => 'extra-message', :content => message_content}], message, true)
 
     logger.info sending
+  end
+
+
+  def create_or_update_board_product(params)
+
+    if params[:products_board].present?
+
+      board_products = JSON.parse(params[:products_board])
+      board_products.each do |_, product_hash|
+        if product_hash['action_board'] == 'update'
+          board_product = self.board_products.where(id: product_hash['product_id']).first
+          if board_product.present?
+            attr = product_hash.except!('action_board', 'board_id', 'product_id')
+            board_product.update(attr)
+          end
+        elsif product_hash['action_board'] == 'create'
+          product = Spree::Product.where(id: product_hash['product_id']).first
+          if product.present?
+            attr = product_hash.except!('action_board', 'product_id')
+            board_product = product.board_products.new(attr)
+            board_product.save
+          end
+        end
+      end
+    end
   end
 
   def send_revision_request_email(message_content="")

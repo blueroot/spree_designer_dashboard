@@ -16,7 +16,8 @@
 									<button type="button" class="btn btn-default" id="bp-move-front"><span class="fa fa-angle-double-up" style="font-size: 12px;"></span> Front</button>
 									<button type="button" class="btn btn-default" id="bp-move-back"><span class="fa fa-angle-double-down" style="font-size: 12px;"></span> Back</button>
 								</div>
-							</div>	
+							</div>
+
 													
 							<div id="board-canvas" style="margin-bottom: 20px; position:relative;">
 								<canvas id="canvas" data-board-id="<%= @board.id %>" width="630" height="360" style="border: 1px solid #eee;"></canvas>
@@ -124,6 +125,9 @@
 			</div>
 			<%= form_for(@board, {:url => room_path(@board),:html => {:id => "edit_board_form", :"parsley-validate" => ""}}) do |f| %>
 			<%= render :partial => 'form', :locals => { :f => f } %>
+              <div class="js-input-board-products">
+                <%= text_field_tag :products_board,'', class: 'js-input-hash-product' %>
+              </div>
 			
 			<% end %>
 		</div>

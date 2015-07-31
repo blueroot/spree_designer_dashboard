@@ -289,6 +289,7 @@ class Spree::BoardsController < Spree::StoreController
   def update
     @board.slug = nil
     #respond_to do |format|
+    @board.create_or_update_board_product(params)
     if @board.update_attributes(board_params)
       @board.submit_for_publication! if params[:board][:status] == "submitted_for_publication"
       @board.queue_image_generation
