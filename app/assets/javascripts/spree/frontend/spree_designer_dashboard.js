@@ -1,7 +1,6 @@
 function initializeProductSearchForm() {
     /* attach a submit handler to the form */
     $("#product_search_form").submit(function (event) {
-        console.log('initializeProduct')
         /* stop form from submitting normally */
         event.preventDefault();
 
@@ -42,7 +41,6 @@ function initializeProductSearchForm() {
 }
 
 function rotateObject(angleOffset) {
-    console.log('rotateObject')
     var obj = canvas.getActiveObject(),
         resetOrigin = false;
 
@@ -56,12 +54,32 @@ function rotateObject(angleOffset) {
     }
 
     angle = angle > 360 ? 90 : angle < 0 ? 270 : angle;
-
     obj.setAngle(angle).setCoords();
-    console.log(obj)
     if (resetOrigin) {
         obj.setCenterToOrigin && obj.setCenterToOrigin();
     }
+
+
+    value = $('.js-input-hash-product').val();
+//
+    if (value.length > 0) {
+        hash = JSON.parse(value)
+    } else {
+        hash = {}
+    }
+
+    ha_id = ""
+    action = ""
+    if (obj.get('action') == 'create') {
+        ha_id = obj.get('hash_id');
+        action = "create";
+    } else {
+        ha_id = obj.get('id')
+        action = "update";
+
+    }
+    hash[ha_id] = {action_board: action, board_id: $('#canvas').data('boardId'), product_id: obj.get('id'), center_point_x: obj.getCenterPoint().x, center_point_y: obj.getCenterPoint().y, width: obj.getWidth(), height: obj.getHeight(), rotation_offset: obj.getAngle(0)}
+    $('.js-input-hash-product').val(JSON.stringify(hash));
 
     canvas.renderAll();
 }
@@ -72,7 +90,7 @@ function showProductAddedState() {
 }
 
 function updateBoardProduct(id, product_options) {
-    console.log("updateBoardProduct")
+
     var url = '/board_products/' + id + '.json'
 
     $.ajax({
@@ -94,33 +112,33 @@ function updateBoardProduct(id, product_options) {
 }
 
 
-//fabric.Object.prototype.setOriginToCenter = function () {
-//    this._originalOriginX = this.originX;
-//    this._originalOriginY = this.originY;
-//
-//    var center = this.getCenterPoint();
-//
-//    this.set({
-//        originX: 'center',
-//        originY: 'center',
-//        left: center.x,
-//        top: center.y
-//    });
-//};
-//
-//fabric.Object.prototype.setCenterToOrigin = function () {
-//    var originPoint = this.translateToOriginPoint(
-//    this.getCenterPoint(),
-//    this._originalOriginX,
-//    this._originalOriginY);
-//
-//    this.set({
-//        originX: this._originalOriginX,
-//        originY: this._originalOriginY,
-//        left: originPoint.x,
-//        top: originPoint.y
-//    });
-//};
+fabric.Object.prototype.setOriginToCenter = function () {
+    this._originalOriginX = this.originX;
+    this._originalOriginY = this.originY;
+
+    var center = this.getCenterPoint();
+
+    this.set({
+        originX: 'center',
+        originY: 'center',
+        left: center.x,
+        top: center.y
+    });
+};
+
+fabric.Object.prototype.setCenterToOrigin = function () {
+    var originPoint = this.translateToOriginPoint(
+        this.getCenterPoint(),
+        this._originalOriginX,
+        this._originalOriginY);
+
+    this.set({
+        originX: this._originalOriginX,
+        originY: this._originalOriginY,
+        left: originPoint.x,
+        top: originPoint.y
+    });
+};
 
 
 function buildImageLayer(canvas, bp, url, slug, id, active, hash_id) {
@@ -142,8 +160,11 @@ function buildImageLayer(canvas, bp, url, slug, id, active, hash_id) {
         oImg.set('hash_id', hash_id);
         canvas.add(oImg);
         canvas.setActiveObject(oImg);
-//        rotateObject(bp.rotation_offset);
-//        canvas.discardActiveObject();
+        if (bp.rotation_offset >= 0) {
+            rotateObject(bp.rotation_offset);
+            canvas.discardActiveObject();
+            canvas.renderAll();
+        }
     });
 
     value = $('.js-input-hash-product').val()
@@ -169,9 +190,6 @@ function build_variants_list(variants) {
 
 function addProductToBoard(event, ui) {
 
-    console.log('addProductToBoard')
-
-
     // add the image to the board through jquery drag and drop in order to get its position
     cloned = $(ui.helper).clone();
     $(this).append(cloned.removeClass('board-lightbox-product').addClass('board-lightbox-product-cloned'));
@@ -190,8 +208,8 @@ function addProductToBoard(event, ui) {
     url = ui.helper.data('img-url');
     slug = ui.helper.data('product-slug');
     canvas_id = ui.helper.data('canvas-id');
-    board_product =  {board_id: $('#canvas').data('boardId'), product_id: cloned.data('productId'), center_point_x: center_x, center_point_y: center_y, width: cloned.width(), height: cloned.height()}
-    buildImageLayer(canvas, board_product, url, slug, cloned.data('productId'), 'create', cloned.data('productId')+'-'+ random);
+    board_product = {board_id: $('#canvas').data('boardId'), product_id: cloned.data('productId'), center_point_x: center_x, center_point_y: center_y, width: cloned.width(), height: cloned.height()}
+    buildImageLayer(canvas, board_product, url, slug, cloned.data('productId'), 'create', cloned.data('productId') + '-' + random);
     canvas.renderAll();
     cloned.hide();
     // persist it to the board
@@ -244,7 +262,7 @@ function moveLayer(layer, direction) {
     }
     //it's possible all z indices have changed.  update them all
     canvas.forEachObject(function (obj) {
-        console.log(obj)
+
 //        updateBoardProduct(obj.get('id'), {id: obj.get('id'), z_index: canvas.getObjects().indexOf(obj)})
 
         //console.log(canvas.getObjects().indexOf(obj))
@@ -266,15 +284,13 @@ function getSavedProducts(board_id) {
 
                 // add the products to the board
                 $.each(data, function (index, board_product) {
-                    console.log(board_product)
                     buildImageLayer(canvas, board_product, board_product.product.image_url, board_product.product.slug, board_product.id, 'update', board_product.id);
-                });
 
+                });
                 // detect which product has focus
                 canvas.on('mouse:down', function (options) {
                     if (options.target) {
                         selectedImage = options.target;
-
                         // pass the product id and board_id (optional) and BoardProduct id (optional)
                         getProductDetails(selectedImage.get('product_permalink'), board_id, selectedImage.get('id'))
                         //console.log(selectedImage.get('product_permalink'))
@@ -289,30 +305,27 @@ function getSavedProducts(board_id) {
                     'object:modified': function (e) {
                         activeObject = e.target
                         value = $('.js-input-hash-product').val();
-//
                         if (value.length > 0) {
                             hash = JSON.parse(value)
                         } else {
                             hash = {}
                         }
 
-                        ha_id =""
+                        ha_id = ""
                         action = ""
-                        if (activeObject.get('action') == 'create'){
+                        if (activeObject.get('action') == 'create') {
                             ha_id = activeObject.get('hash_id');
                             action = "create";
-                        }else{
+                        } else {
                             ha_id = activeObject.get('id')
                             action = "update";
 
                         }
                         hash[ha_id] = {action_board: action, board_id: board_id, product_id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)}
-                        console.log(JSON.stringify(hash));
                         $('.js-input-hash-product').val(JSON.stringify(hash));
 
 
 //								updateBoardProduct(activeObject.get('id'), {id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)})
-                        console.log('modified!!!')
                     }
                 });
 
