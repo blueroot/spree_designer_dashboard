@@ -478,9 +478,6 @@ class Spree::Board < ActiveRecord::Base
     if params[:products_board].present?
 
       board_products = JSON.parse(params[:products_board])
-      Rails.logger.info "===================="
-      Rails.logger.info   board_products.inspect
-      Rails.logger.info "===================="
 
       board_products.each do |_, product_hash|
         if product_hash['action_board'] == 'update'

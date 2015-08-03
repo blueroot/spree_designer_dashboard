@@ -79,6 +79,9 @@ function rotateObject(angleOffset) {
 
     }
     hash[ha_id] = {action_board: action, board_id: $('#canvas').data('boardId'), product_id: obj.get('id'), center_point_x: obj.getCenterPoint().x, center_point_y: obj.getCenterPoint().y, width: obj.getWidth(), height: obj.getHeight(), rotation_offset: obj.getAngle(0)}
+    if ( obj.z_index >= 0){
+        hash[ha_id]['z_index'] =  obj.z_index;
+    }
     $('.js-input-hash-product').val(JSON.stringify(hash));
 
     canvas.renderAll();
@@ -174,6 +177,11 @@ function buildImageLayer(canvas, bp, url, slug, id, active, hash_id) {
         hash = {}
     }
     hash[hash_id] = { action_board: active, board_id: bp.board_id, product_id: id, center_point_x: bp.center_point_x, center_point_y: bp.center_point_y, width: bp.width, height: bp.height}
+
+    if (bp.z_index >= 0){
+        hash[hash_id]['z_index'] = bp.z_index;
+
+    }
     $('.js-input-hash-product').val(JSON.stringify(hash));
 }
 
@@ -262,6 +270,33 @@ function moveLayer(layer, direction) {
     }
     //it's possible all z indices have changed.  update them all
     canvas.forEachObject(function (obj) {
+        console.log(canvas.getObjects().indexOf(obj));
+
+        value = $('.js-input-hash-product').val();
+//
+        if (value.length > 0) {
+            hash = JSON.parse(value)
+        } else {
+            hash = {}
+        }
+
+        ha_id = ""
+        action = ""
+        if (obj.get('action') == 'create') {
+            ha_id = obj.get('hash_id');
+            action = "create";
+        } else {
+            ha_id = obj.get('id')
+            action = "update";
+
+        }
+        obj.set('z_index', canvas.getObjects().indexOf(obj));
+        hash[ha_id] = {action_board: action, board_id: $('#canvas').data('boardId'), product_id: obj.get('id'), center_point_x: obj.getCenterPoint().x, center_point_y: obj.getCenterPoint().y, width: obj.getWidth(), height: obj.getHeight(), rotation_offset: obj.getAngle(0), z_index: obj.get('z_index')}
+        $('.js-input-hash-product').val(JSON.stringify(hash));
+        console.log(JSON.stringify(hash));
+
+
+
 
 //        updateBoardProduct(obj.get('id'), {id: obj.get('id'), z_index: canvas.getObjects().indexOf(obj)})
 
@@ -322,8 +357,13 @@ function getSavedProducts(board_id) {
 
                         }
                         hash[ha_id] = {action_board: action, board_id: board_id, product_id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)}
-                        $('.js-input-hash-product').val(JSON.stringify(hash));
 
+                        if (activeObject.get('z_index') >= 0){
+                         hash[ha_id]['z_index'] =  activeObject.get('z_index')
+
+                        }
+                        $('.js-input-hash-product').val(JSON.stringify(hash));
+                        console.log(activeObject);
 
 //								updateBoardProduct(activeObject.get('id'), {id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)})
                     }
