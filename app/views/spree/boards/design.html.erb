@@ -125,7 +125,7 @@
 			</div>
 			<%= form_for(@board, {:url => room_path(@board),:html => {:id => "edit_board_form", :"parsley-validate" => ""}}) do |f| %>
 			<%= render :partial => 'form', :locals => { :f => f } %>
-              <div class="js-input-board-products">
+              <div class="js-input-board-products hidden">
                 <%= text_field_tag :products_board,'', class: 'js-input-hash-product' %>
               </div>
 			

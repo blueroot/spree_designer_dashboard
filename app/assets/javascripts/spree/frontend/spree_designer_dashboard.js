@@ -123,10 +123,8 @@ function updateBoardProduct(id, product_options) {
 //};
 
 
-function buildImageLayer(canvas, bp, url, slug, id, active) {
-    console.log(url);
+function buildImageLayer(canvas, bp, url, slug, id, active, hash_id) {
     fabric.Image.fromURL(url, function (oImg) {
-        console.log(bp);
         oImg.scale(1).set({
             left: bp.center_point_x,
             top: bp.center_point_y,
@@ -138,10 +136,10 @@ function buildImageLayer(canvas, bp, url, slug, id, active) {
             minScaleLimit: 0.25,
             hasRotatingPoint: false
         });
-        oImg.set('id', id)
-        oImg.set('product_permalink', slug)
-
-        console.log("dupa" + oImg.getAngle());
+        oImg.set('id', id);
+        oImg.set('action', active);
+        oImg.set('product_permalink', slug);
+        oImg.set('hash_id', hash_id);
         canvas.add(oImg);
         canvas.setActiveObject(oImg);
 //        rotateObject(bp.rotation_offset);
@@ -154,8 +152,7 @@ function buildImageLayer(canvas, bp, url, slug, id, active) {
     } else {
         hash = {}
     }
-    hash[id] = { action_board: active, board_id: bp.board_id, product_id: id, center_point_x: bp.center_point_x, center_point_y: bp.center_point_y, width: bp.width, height: bp.height}
-    console.log(JSON.stringify(hash));
+    hash[hash_id] = { action_board: active, board_id: bp.board_id, product_id: id, center_point_x: bp.center_point_x, center_point_y: bp.center_point_y, width: bp.width, height: bp.height}
     $('.js-input-hash-product').val(JSON.stringify(hash));
 }
 
@@ -189,10 +186,12 @@ function addProductToBoard(event, ui) {
 
     //alert(cloned.position().left + ':' + cloned.position().top)
     //saveProductToBoard($('#board-canvas').data('boardId'),cloned.data('productId'), cloned.position().left, cloned.position().top, 0, cloned.width(), cloned.height(), cloned.data('rotationOffset'));
+    random = Math.floor((Math.random() * 10) + 1);
     url = ui.helper.data('img-url');
     slug = ui.helper.data('product-slug');
+    canvas_id = ui.helper.data('canvas-id');
     board_product =  {board_id: $('#canvas').data('boardId'), product_id: cloned.data('productId'), center_point_x: center_x, center_point_y: center_y, width: cloned.width(), height: cloned.height()}
-    buildImageLayer(canvas, board_product, url, slug, cloned.data('productId'), 'create');
+    buildImageLayer(canvas, board_product, url, slug, cloned.data('productId'), 'create', cloned.data('productId')+'-'+ random);
     canvas.renderAll();
     cloned.hide();
     // persist it to the board
@@ -268,7 +267,7 @@ function getSavedProducts(board_id) {
                 // add the products to the board
                 $.each(data, function (index, board_product) {
                     console.log(board_product)
-                    buildImageLayer(canvas, board_product, board_product.product.image_url, board_product.product.slug, board_product.id, 'update');
+                    buildImageLayer(canvas, board_product, board_product.product.image_url, board_product.product.slug, board_product.id, 'update', board_product.id);
                 });
 
                 // detect which product has focus
@@ -296,7 +295,18 @@ function getSavedProducts(board_id) {
                         } else {
                             hash = {}
                         }
-                        hash[activeObject.get('id')] = {action_board: "update", board_id: board_id, product_id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)}
+
+                        ha_id =""
+                        action = ""
+                        if (activeObject.get('action') == 'create'){
+                            ha_id = activeObject.get('hash_id');
+                            action = "create";
+                        }else{
+                            ha_id = activeObject.get('id')
+                            action = "update";
+
+                        }
+                        hash[ha_id] = {action_board: action, board_id: board_id, product_id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)}
                         console.log(JSON.stringify(hash));
                         $('.js-input-hash-product').val(JSON.stringify(hash));
 
