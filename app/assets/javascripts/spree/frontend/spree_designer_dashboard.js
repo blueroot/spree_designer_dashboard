@@ -546,6 +546,23 @@ function getProductBookmarks() {
 function initializeBoardManagement() {
     $("#submit_board_button").click(function () {
 
+        $('#board-canvas').block({
+            message: null,
+            overlayCSS:  {
+                backgroundColor: '#999',
+                opacity:         0.6,
+                cursor:          'wait'
+            }
+        });
+        $('#product_lightbox').block(	{
+            message: null,
+            overlayCSS:  {
+                backgroundColor: '#999',
+                opacity:         0.6,
+                cursor:          'wait'
+            }
+        });
+
         if ($('#edit_board_form').parsley('isValid')) {
             $(this).html('Saving...')
             $("#edit_board_form").submit();
