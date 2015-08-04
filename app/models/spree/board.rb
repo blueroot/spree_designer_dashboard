@@ -491,7 +491,9 @@ class Spree::Board < ActiveRecord::Base
           if product.present?
             attr = product_hash.except!('action_board', 'product_id')
             board_product = product.board_products.new(attr)
-            board_product.save
+            if board_product.save
+              board_product.update(z_index: product_hash['z_index'])
+            end
           end
         end
       end

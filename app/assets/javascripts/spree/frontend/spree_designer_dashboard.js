@@ -182,6 +182,8 @@ function buildImageLayer(canvas, bp, url, slug, id, active, hash_id) {
         hash[hash_id]['z_index'] = bp.z_index;
 
     }
+    console.log(id);
+    console.log(hash);
     $('.js-input-hash-product').val(JSON.stringify(hash));
 }
 
@@ -282,6 +284,7 @@ function moveLayer(layer, direction) {
 
         ha_id = ""
         action = ""
+        console.log(obj);
         if (obj.get('action') == 'create') {
             ha_id = obj.get('hash_id');
             action = "create";
@@ -320,6 +323,7 @@ function getSavedProducts(board_id) {
                 // add the products to the board
                 $.each(data, function (index, board_product) {
                     buildImageLayer(canvas, board_product, board_product.product.image_url, board_product.product.slug, board_product.id, 'update', board_product.id);
+                    canvas.renderAll();
 
                 });
                 // detect which product has focus
