@@ -182,6 +182,7 @@ function buildImageLayer(canvas, bp, url, slug, id, active, hash_id) {
             canvas.discardActiveObject();
             canvas.renderAll();
         }
+
         canvas.setActiveObject(oImg);
     });
     value = $('.js-input-hash-product').val();
@@ -197,6 +198,7 @@ function buildImageLayer(canvas, bp, url, slug, id, active, hash_id) {
 
     }
     $('.js-input-hash-product').val(JSON.stringify(hash));
+
 }
 
 
@@ -335,13 +337,48 @@ function getSavedProducts(board_id) {
                 xhr.setRequestHeader("Accept", "application/json")
             },
             success: function (data) {
-
                 // add the products to the board
                 $.each(data, function (index, board_product) {
                     buildImageLayer(canvas, board_product, board_product.product.image_url, board_product.product.slug, board_product.id, 'update', board_product.id);
                     canvas.renderAll();
                     getImageBase(board_product.product.image_url)
                 });
+//                setTimeout((function() {
+//
+//               $.each(canvas.getObjects(), function(index, val){
+//                   console.log(val.getElement().src);
+//                   activeObject = val;
+//                   activeObject.getElement().load = function () {
+//                       var theImage = new fabric.Image(activeObject.getElement(), {top: activeObject.get('top'), left: activeObject.get('left')});
+//                       theImage.scaleX = activeObject.get('scaleX');
+//                       theImage.scaleY = activeObject.get('scaleY');
+//                       theImage.originX = 'center',
+//                           theImage.originY = 'center',
+//                           theImage.lockUniScaling = true,
+//                           theImage.minScaleLimit = 0.25,
+//                           theImage.hasRotatingPoint = false,
+//                           theImage.set('width', activeObject.get('width'));
+//                       theImage.set('height', activeObject.get('height'));
+//                       theImage.set('id', activeObject.get('id'));
+//                       theImage.set('action', activeObject.get('active'));
+//                       theImage.set('product_permalink', activeObject.get('product_permalink'));
+//                       theImage.set('hash_id', activeObject.get('hash_id'));
+//                       canvas.add(theImage);
+//                       canvas.remove(activeObject);
+//                       canvas.renderAll();
+//                       var filter = new fabric.Image.filters.Convolute({
+//                           matrix: [ 1 / 9, 1 / 9, 1 / 9,
+//                               1 / 9, 1 / 9, 1 / 9,
+//                               1 / 9, 1 / 9, 1 / 9 ]
+//                       });
+//                       theImage.filters.push(filter);
+//                       theImage.applyFilters(canvas.renderAll.bind(canvas));
+//
+//                   };
+//                   activeObject.getElement().load();
+//
+//               });
+//                }), 2000);
                 // detect which product has focus
                 canvas.on('mouse:down', function (options) {
                     if (options.target) {
