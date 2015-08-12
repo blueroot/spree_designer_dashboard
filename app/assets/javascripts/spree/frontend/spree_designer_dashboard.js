@@ -34,17 +34,15 @@ function initializeProductSearchForm() {
             });
 
 
-            //var content = $( data ).find( '#content' );
-            //$( "#result" ).empty().append( content );
         });
     });
 }
 
 $(document).on({
-    click: function(e) {
+    click: function (e) {
         var obj, value;
         e.preventDefault();
-         obj = canvas.getActiveObject();
+        obj = canvas.getActiveObject();
         hash_id = obj.get('hash_id');
         canvas.remove(obj);
         value = $('.js-input-hash-product').val();
@@ -95,8 +93,8 @@ function rotateObject(angleOffset) {
 
     }
     hash[ha_id] = {action_board: action, board_id: $('#canvas').data('boardId'), product_id: obj.get('id'), center_point_x: obj.getCenterPoint().x, center_point_y: obj.getCenterPoint().y, width: obj.getWidth(), height: obj.getHeight(), rotation_offset: obj.getAngle(0)}
-    if ( obj.z_index >= 0){
-        hash[ha_id]['z_index'] =  obj.z_index;
+    if (obj.z_index >= 0) {
+        hash[ha_id]['z_index'] = obj.z_index;
     }
     $('.js-input-hash-product').val(JSON.stringify(hash));
 
@@ -184,8 +182,8 @@ function buildImageLayer(canvas, bp, url, slug, id, active, hash_id) {
             canvas.discardActiveObject();
             canvas.renderAll();
         }
+        canvas.setActiveObject(oImg);
     });
-
     value = $('.js-input-hash-product').val();
     if (value.length > 0) {
         hash = JSON.parse(value)
@@ -194,14 +192,48 @@ function buildImageLayer(canvas, bp, url, slug, id, active, hash_id) {
     }
     hash[hash_id] = { action_board: active, board_id: bp.board_id, product_id: id, center_point_x: bp.center_point_x, center_point_y: bp.center_point_y, width: bp.width, height: bp.height}
 
-    if (bp.z_index >= 0){
+    if (bp.z_index >= 0) {
         hash[hash_id]['z_index'] = bp.z_index;
 
     }
-    console.log(id);
-    console.log(hash);
     $('.js-input-hash-product').val(JSON.stringify(hash));
 }
+
+
+function getImageBase(url) {
+    base_url = $('#board-container').data('url');
+    $.ajax({
+        dataType: 'html',
+        method: 'POST',
+        url: base_url,
+        data: {image: url},
+        success: function (resp) {
+            activeObject = canvas.getActiveObject()
+            element = activeObject.getElement();
+            element.src = resp;
+
+        }
+    })
+
+}
+
+function getImageBaseRender(url, obj) {
+    base_url = $('#board-container').data('url');
+    $.ajax({
+        dataType: 'html',
+        method: 'POST',
+        url: base_url,
+        data: {image: url},
+        success: function (resp) {
+            activeObject = obj;
+            element = activeObject.getElement();
+            element.src = resp;
+
+        }
+    })
+
+}
+
 
 function build_variants_list(variants) {
     var list = document.createElement('ul');
@@ -231,44 +263,19 @@ function addProductToBoard(event, ui) {
     //alert(cloned.position().left + ':' + cloned.position().top)
     //saveProductToBoard($('#board-canvas').data('boardId'),cloned.data('productId'), cloned.position().left, cloned.position().top, 0, cloned.width(), cloned.height(), cloned.data('rotationOffset'));
     random = Math.floor((Math.random() * 10) + 1);
+//    base_url = $('#board-container').data('url');
     url = ui.helper.data('img-url');
+    canvas_url = ui.helper.data('canvas-img-base');
     slug = ui.helper.data('product-slug');
     canvas_id = ui.helper.data('canvas-id');
+    console.log(canvas_url)
+
     board_product = {board_id: $('#canvas').data('boardId'), product_id: cloned.data('productId'), center_point_x: center_x, center_point_y: center_y, width: cloned.width(), height: cloned.height()}
     buildImageLayer(canvas, board_product, url, slug, cloned.data('productId'), 'create', cloned.data('productId') + '-' + random);
     canvas.renderAll();
     cloned.hide();
-    // persist it to the board
-//    var url = '/board_products.json'
-//    $.ajax({
-//            url: url,
-//            type: "POST",
-//            dataType: "json",
-//            data: {board_product: {board_id: $('#canvas').data('boardId'), product_id: cloned.data('productId'), center_point_x: center_x, center_point_y: center_y, width: cloned.width(), height: cloned.height()}},
-//            beforeSend: function (xhr) {
-//                xhr.setRequestHeader("Accept", "application/json")
-//            },
-//            success: function (board_product) {
-//                //console.log(board_product.product.slug)
-//                buildImageLayer(canvas, board_product);
-//
-//
-//                $('#board-canvas').unblock();
-//                $('#product_lightbox').unblock();
-//                $('.board-lightbox-product.ui-draggable.ui-draggable-dragging').hide();
-//                cloned.hide();
-//
-//                // remove the jquery drag/drop place holder that had been there.
-//                // this is a bit of a hack - without the timer, then the graphic disappears for a second...this generally keeps it up until the fabricjs version is added
-//                setTimeout(function () {
-//                    cloned.hide();
-//                }, 1000);
-//            },
-//            error: function (objAJAXRequest, strError, errorThrown) {
-//                alert("ERROR: " + strError);
-//            }
-//        }
-//    );
+    getImageBase(canvas_url)
+
 }
 
 function moveLayer(layer, direction) {
@@ -312,14 +319,7 @@ function moveLayer(layer, direction) {
         obj.set('z_index', canvas.getObjects().indexOf(obj));
         hash[ha_id] = {action_board: action, board_id: $('#canvas').data('boardId'), product_id: obj.get('id'), center_point_x: obj.getCenterPoint().x, center_point_y: obj.getCenterPoint().y, width: obj.getWidth(), height: obj.getHeight(), rotation_offset: obj.getAngle(0), z_index: obj.get('z_index')}
         $('.js-input-hash-product').val(JSON.stringify(hash));
-        console.log(JSON.stringify(hash));
 
-
-
-
-//        updateBoardProduct(obj.get('id'), {id: obj.get('id'), z_index: canvas.getObjects().indexOf(obj)})
-
-        //console.log(canvas.getObjects().indexOf(obj))
     });
 
 }
@@ -340,7 +340,7 @@ function getSavedProducts(board_id) {
                 $.each(data, function (index, board_product) {
                     buildImageLayer(canvas, board_product, board_product.product.image_url, board_product.product.slug, board_product.id, 'update', board_product.id);
                     canvas.renderAll();
-
+                    getImageBase(board_product.product.image_url)
                 });
                 // detect which product has focus
                 canvas.on('mouse:down', function (options) {
@@ -358,7 +358,9 @@ function getSavedProducts(board_id) {
 
                 canvas.on({
                     'object:modified': function (e) {
+
                         activeObject = e.target
+
                         value = $('.js-input-hash-product').val();
                         if (value.length > 0) {
                             hash = JSON.parse(value)
@@ -378,12 +380,41 @@ function getSavedProducts(board_id) {
                         }
                         hash[ha_id] = {action_board: action, board_id: board_id, product_id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)}
 
-                        if (activeObject.get('z_index') >= 0){
-                         hash[ha_id]['z_index'] =  activeObject.get('z_index')
+                        if (activeObject.get('z_index') >= 0) {
+                            hash[ha_id]['z_index'] = activeObject.get('z_index')
 
                         }
                         $('.js-input-hash-product').val(JSON.stringify(hash));
-                        console.log(activeObject);
+
+                        activeObject.getElement().load = function () {
+                            var theImage = new fabric.Image(activeObject.getElement(), {top: activeObject.get('top'), left: activeObject.get('left')});
+                            theImage.scaleX = activeObject.get('scaleX');
+                            theImage.scaleY = activeObject.get('scaleY');
+                            theImage.originX = 'center',
+                                theImage.originY = 'center',
+                                theImage.lockUniScaling = true,
+                                theImage.minScaleLimit = 0.25,
+                                theImage.hasRotatingPoint = false,
+                                theImage.set('width', activeObject.get('width'));
+                            theImage.set('height', activeObject.get('height'));
+                            theImage.set('id', activeObject.get('id'));
+                            theImage.set('action', activeObject.get('active'));
+                            theImage.set('product_permalink', activeObject.get('product_permalink'));
+                            theImage.set('hash_id', activeObject.get('hash_id'));
+                            canvas.add(theImage);
+                            canvas.remove(activeObject);
+                            canvas.renderAll();
+                            var filter = new fabric.Image.filters.Convolute({
+                                matrix: [ 1 / 9, 1 / 9, 1 / 9,
+                                    1 / 9, 1 / 9, 1 / 9,
+                                    1 / 9, 1 / 9, 1 / 9 ]
+                            });
+                            theImage.filters.push(filter);
+                            theImage.applyFilters(canvas.renderAll.bind(canvas));
+                            canvas.setActiveObject(theImage);
+
+                        };
+                        activeObject.getElement().load();
 
 //								updateBoardProduct(activeObject.get('id'), {id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)})
                     }
@@ -406,14 +437,7 @@ function getSavedProducts(board_id) {
                     rotateObject(90);
 //					updateBoardProduct(activeObject.get('id'), {id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)})
 
-                    //console.log('getLeft: '+ activeObject.getLeft())
-                    //console.log('getTop: '+ activeObject.getTop())
-                    //console.log('getPointByOrigin: '+ activeObject.getPointByOrigin())
-                    //console.log('getOriginX: '+ activeObject.getOriginX())
-                    //console.log('getOriginY: '+ activeObject.getOriginY())
-                    //console.log('getCurrentLeft: '+ getCurrentLeft(activeObject))
-                    //console.log('getCurrentTop: '+ getCurrentTop(activeObject))
-                    //console.log('getAngle: '+ activeObject.getAngle())
+
                 }, false);
 
             },
@@ -563,18 +587,18 @@ function initializeBoardManagement() {
 
         $('#board-canvas').block({
             message: null,
-            overlayCSS:  {
+            overlayCSS: {
                 backgroundColor: '#999',
-                opacity:         0.6,
-                cursor:          'wait'
+                opacity: 0.6,
+                cursor: 'wait'
             }
         });
-        $('#product_lightbox').block(	{
+        $('#product_lightbox').block({
             message: null,
-            overlayCSS:  {
+            overlayCSS: {
                 backgroundColor: '#999',
-                opacity:         0.6,
-                cursor:          'wait'
+                opacity: 0.6,
+                cursor: 'wait'
             }
         });
 
@@ -698,7 +722,7 @@ function downScaleCanvas(cv, scale) {
     var sBuffer = cv.getContext('2d').
         getImageData(0, 0, sw, sh).data; // source buffer 8 bit rgba
     var tBuffer = new Float32Array(3 * tw * th); // target buffer Float32 rgb
-    var sR = 0, sG = 0,  sB = 0; // source's current point r,g,b
+    var sR = 0, sG = 0, sB = 0; // source's current point r,g,b
 
     for (sy = 0; sy < sh; sy++) {
         ty = sy * scale; // y src position within target
@@ -711,7 +735,7 @@ function downScaleCanvas(cv, scale) {
         }
         for (sx = 0; sx < sw; sx++, sIndex += 4) {
             tx = sx * scale; // x src position within target
-            tX = 0 |  tx;    // rounded : target pixel's x
+            tX = 0 | tx;    // rounded : target pixel's x
             tIndex = yIndex + tX * 3; // target pixel index within target array
             crossX = (tX !== (0 | (tx + scale)));
             if (crossX) { // if pixel is crossing target pixel's right
@@ -795,18 +819,18 @@ function downScaleCanvas(cv, scale) {
 
 function polyFillPerfNow() {
     window.performance = window.performance ? window.performance : {};
-    window.performance.now =  window.performance.now ||  window.performance.webkitNow ||  window.performance.msNow ||
-        window.performance.mozNow || Date.now ;
+    window.performance.now = window.performance.now || window.performance.webkitNow || window.performance.msNow ||
+        window.performance.mozNow || Date.now;
 };
 
 function log2(v) {
     // taken from http://graphics.stanford.edu/~seander/bithacks.html
-    var b =  [ 0x2, 0xC, 0xF0, 0xFF00, 0xFFFF0000 ];
-    var S =  [1, 2, 4, 8, 16];
-    var i=0, r=0;
+    var b = [ 0x2, 0xC, 0xF0, 0xFF00, 0xFFFF0000 ];
+    var S = [1, 2, 4, 8, 16];
+    var i = 0, r = 0;
 
     for (i = 4; i >= 0; i--) {
-        if (v & b[i])  {
+        if (v & b[i]) {
             v >>= S[i];
             r |= S[i];
         }
@@ -815,12 +839,16 @@ function log2(v) {
 }
 // normalize a scale <1 to avoid some rounding issue with js numbers
 function normaliseScale(s) {
-    if (s>1) throw('s must be <1');
-    s = 0 | (1/s);
+    if (s > 1) throw('s must be <1');
+    s = 0 | (1 / s);
     var l = log2(s);
     var mask = 1 << l;
     var accuracy = 4;
-    while(accuracy && l) { l--; mask |= 1<<l; accuracy--; }
+    while (accuracy && l) {
+        l--;
+        mask |= 1 << l;
+        accuracy--;
+    }
     return 1 / ( s & mask );
 }
 

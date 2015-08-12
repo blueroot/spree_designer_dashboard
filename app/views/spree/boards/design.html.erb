@@ -7,7 +7,7 @@
 			<div class="row">
 				<div class="col-md-7">
 					<div class="board-content-body">
-						<div id="board-container">
+						<div id="board-container" data-url="<%= get_image_roombuilder_base_products_path(format: 'json')  %>">
 							<div id="board-toolbar" class="board-toolbar">
 								<div class="btn-group btn-group-sm">
 									<button type="button" class="btn btn-default" id="bp-rotate-left"><span class="fa fa-repeat" style="font-size: 12px;"></span> Rotate</button>
@@ -18,7 +18,6 @@
 								</div>
 							</div>
 
-													
 							<div id="board-canvas" style="margin-bottom: 20px; position:relative;">
 								<canvas id="canvas" data-board-id="<%= @board.id %>" width="630" height="360" style="border: 1px solid #eee;"></canvas>
 							</div>
@@ -274,6 +273,7 @@ $(function () {
         accept: function(element) {
 		  var cn = element.className;
 		  return cn == 'board-lightbox-product' || 'board-lightbox-product-cloned'
+
 		},
         drop: addProductToBoard
     });
