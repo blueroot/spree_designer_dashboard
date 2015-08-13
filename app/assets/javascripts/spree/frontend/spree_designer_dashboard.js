@@ -380,7 +380,7 @@ function getSavedProducts(board_id) {
                         activeObject.getElement().load();
 
                     });
-                }), 1500);
+                }), 2500);
                 canvas.discardActiveObject();
 
                 // detect which product has focus
