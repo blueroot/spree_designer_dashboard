@@ -5,9 +5,6 @@ class Spree::BoardProductsController < Spree::StoreController
   def index
     if params[:room_id] and @board = Spree::Board.find(params[:room_id])      
       @board_products = @board.board_products(:include => [:master_images, :product])
-      Rails.logger.info "======================="
-      Rails.logger.info   @board_products.first.product.inspect
-      Rails.logger.info "======================="
       respond_to do |format|
         format.js   {render :layout => false}
         format.json   {render :layout => false}
