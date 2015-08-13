@@ -395,7 +395,7 @@ function getSavedProducts(board_id) {
 
                             };
                             activeObject.getElement().load();
-
+                            activeObject = canvas.getActiveObject();
                             value = $('.js-input-hash-product').val();
                             if (value.length > 0) {
                                 hash = JSON.parse(value)
