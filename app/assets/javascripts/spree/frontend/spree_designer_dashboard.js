@@ -181,7 +181,7 @@ function buildImageLayer(canvas, bp, url, slug, id, active, hash_id) {
             rotateObject(bp.rotation_offset);
             canvas.renderAll();
         }
-        canvas.discardActiveObject()
+
 
     });
     value = $('.js-input-hash-product').val();
@@ -212,6 +212,7 @@ function getImageBase(url) {
             activeObject = canvas.getActiveObject()
             element = activeObject.getElement();
             element.src = resp;
+            canvas.discardActiveObject();
 
         }
     })
@@ -275,7 +276,8 @@ function addProductToBoard(event, ui) {
     buildImageLayer(canvas, board_product, url, slug, cloned.data('productId'), 'create', cloned.data('productId') + '-' + random);
     canvas.renderAll();
     cloned.hide();
-    getImageBase(canvas_url)
+    getImageBase(canvas_url);
+
 
 }
 
