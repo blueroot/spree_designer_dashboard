@@ -179,11 +179,10 @@ function buildImageLayer(canvas, bp, url, slug, id, active, hash_id) {
         canvas.setActiveObject(oImg);
         if (bp.rotation_offset >= 0) {
             rotateObject(bp.rotation_offset);
-            canvas.discardActiveObject();
             canvas.renderAll();
         }
+        canvas.discardActiveObject()
 
-        canvas.setActiveObject(oImg);
     });
     value = $('.js-input-hash-product').val();
     if (value.length > 0) {
@@ -341,44 +340,10 @@ function getSavedProducts(board_id) {
                 $.each(data, function (index, board_product) {
                     buildImageLayer(canvas, board_product, board_product.product.image_url, board_product.product.slug, board_product.id, 'update', board_product.id);
                     canvas.renderAll();
-                    getImageBase(board_product.product.image_url)
+
                 });
-//                setTimeout((function() {
-//
-//               $.each(canvas.getObjects(), function(index, val){
-//                   console.log(val.getElement().src);
-//                   activeObject = val;
-//                   activeObject.getElement().load = function () {
-//                       var theImage = new fabric.Image(activeObject.getElement(), {top: activeObject.get('top'), left: activeObject.get('left')});
-//                       theImage.scaleX = activeObject.get('scaleX');
-//                       theImage.scaleY = activeObject.get('scaleY');
-//                       theImage.originX = 'center',
-//                           theImage.originY = 'center',
-//                           theImage.lockUniScaling = true,
-//                           theImage.minScaleLimit = 0.25,
-//                           theImage.hasRotatingPoint = false,
-//                           theImage.set('width', activeObject.get('width'));
-//                       theImage.set('height', activeObject.get('height'));
-//                       theImage.set('id', activeObject.get('id'));
-//                       theImage.set('action', activeObject.get('active'));
-//                       theImage.set('product_permalink', activeObject.get('product_permalink'));
-//                       theImage.set('hash_id', activeObject.get('hash_id'));
-//                       canvas.add(theImage);
-//                       canvas.remove(activeObject);
-//                       canvas.renderAll();
-//                       var filter = new fabric.Image.filters.Convolute({
-//                           matrix: [ 1 / 9, 1 / 9, 1 / 9,
-//                               1 / 9, 1 / 9, 1 / 9,
-//                               1 / 9, 1 / 9, 1 / 9 ]
-//                       });
-//                       theImage.filters.push(filter);
-//                       theImage.applyFilters(canvas.renderAll.bind(canvas));
-//
-//                   };
-//                   activeObject.getElement().load();
-//
-//               });
-//                }), 2000);
+                canvas.discardActiveObject();
+
                 // detect which product has focus
                 canvas.on('mouse:down', function (options) {
                     if (options.target) {
@@ -395,64 +360,63 @@ function getSavedProducts(board_id) {
 
                 canvas.on({
                     'object:modified': function (e) {
+                        if (canvas.getActiveGroup() === null) {
+                            activeObject = e.target
+                            value = $('.js-input-hash-product').val();
+                            if (value.length > 0) {
+                                hash = JSON.parse(value)
+                            } else {
+                                hash = {}
+                            }
 
-                        activeObject = e.target
+                            ha_id = ""
+                            action = ""
+                            if (activeObject.get('action') == 'create') {
+                                ha_id = activeObject.get('hash_id');
+                                action = "create";
+                            } else {
+                                ha_id = activeObject.get('id')
+                                action = "update";
 
-                        value = $('.js-input-hash-product').val();
-                        if (value.length > 0) {
-                            hash = JSON.parse(value)
-                        } else {
-                            hash = {}
+                            }
+                            hash[ha_id] = {action_board: action, board_id: board_id, product_id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)}
+
+                            if (activeObject.get('z_index') >= 0) {
+                                hash[ha_id]['z_index'] = activeObject.get('z_index')
+
+                            }
+                            $('.js-input-hash-product').val(JSON.stringify(hash));
+
+                            activeObject.getElement().load = function () {
+                                var theImage = new fabric.Image(activeObject.getElement(), {top: activeObject.get('top'), left: activeObject.get('left')});
+                                theImage.scaleX = activeObject.get('scaleX');
+                                theImage.scaleY = activeObject.get('scaleY');
+                                theImage.originX = 'center',
+                                    theImage.originY = 'center',
+                                    theImage.lockUniScaling = true,
+                                    theImage.minScaleLimit = 0.25,
+                                    theImage.hasRotatingPoint = false,
+                                    theImage.set('width', activeObject.get('width'));
+                                theImage.set('height', activeObject.get('height'));
+                                theImage.set('id', activeObject.get('id'));
+                                theImage.set('action', activeObject.get('active'));
+                                theImage.set('product_permalink', activeObject.get('product_permalink'));
+                                theImage.set('hash_id', activeObject.get('hash_id'));
+                                canvas.add(theImage);
+                                canvas.remove(activeObject);
+                                canvas.renderAll();
+                                var filter = new fabric.Image.filters.Convolute({
+                                    matrix: [ 1 / 9, 1 / 9, 1 / 9,
+                                        1 / 9, 1 / 9, 1 / 9,
+                                        1 / 9, 1 / 9, 1 / 9 ]
+                                });
+                                theImage.filters.push(filter);
+                                theImage.applyFilters(canvas.renderAll.bind(canvas));
+                                canvas.setActiveObject(theImage);
+
+                            };
+                            activeObject.getElement().load();
                         }
-
-                        ha_id = ""
-                        action = ""
-                        if (activeObject.get('action') == 'create') {
-                            ha_id = activeObject.get('hash_id');
-                            action = "create";
-                        } else {
-                            ha_id = activeObject.get('id')
-                            action = "update";
-
-                        }
-                        hash[ha_id] = {action_board: action, board_id: board_id, product_id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)}
-
-                        if (activeObject.get('z_index') >= 0) {
-                            hash[ha_id]['z_index'] = activeObject.get('z_index')
-
-                        }
-                        $('.js-input-hash-product').val(JSON.stringify(hash));
-
-                        activeObject.getElement().load = function () {
-                            var theImage = new fabric.Image(activeObject.getElement(), {top: activeObject.get('top'), left: activeObject.get('left')});
-                            theImage.scaleX = activeObject.get('scaleX');
-                            theImage.scaleY = activeObject.get('scaleY');
-                            theImage.originX = 'center',
-                                theImage.originY = 'center',
-                                theImage.lockUniScaling = true,
-                                theImage.minScaleLimit = 0.25,
-                                theImage.hasRotatingPoint = false,
-                                theImage.set('width', activeObject.get('width'));
-                            theImage.set('height', activeObject.get('height'));
-                            theImage.set('id', activeObject.get('id'));
-                            theImage.set('action', activeObject.get('active'));
-                            theImage.set('product_permalink', activeObject.get('product_permalink'));
-                            theImage.set('hash_id', activeObject.get('hash_id'));
-                            canvas.add(theImage);
-                            canvas.remove(activeObject);
-                            canvas.renderAll();
-                            var filter = new fabric.Image.filters.Convolute({
-                                matrix: [ 1 / 9, 1 / 9, 1 / 9,
-                                    1 / 9, 1 / 9, 1 / 9,
-                                    1 / 9, 1 / 9, 1 / 9 ]
-                            });
-                            theImage.filters.push(filter);
-                            theImage.applyFilters(canvas.renderAll.bind(canvas));
-                            canvas.setActiveObject(theImage);
-
-                        };
-                        activeObject.getElement().load();
-
 //								updateBoardProduct(activeObject.get('id'), {id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)})
                     }
                 });
