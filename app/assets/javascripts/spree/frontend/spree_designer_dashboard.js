@@ -365,30 +365,6 @@ function getSavedProducts(board_id) {
                     'object:modified': function (e) {
                         if (canvas.getActiveGroup() === null) {
                             activeObject = e.target
-                            value = $('.js-input-hash-product').val();
-                            if (value.length > 0) {
-                                hash = JSON.parse(value)
-                            } else {
-                                hash = {}
-                            }
-
-                            ha_id = ""
-                            action = ""
-                            if (activeObject.get('action') == 'create') {
-                                ha_id = activeObject.get('hash_id');
-                                action = "create";
-                            } else {
-                                ha_id = activeObject.get('id')
-                                action = "update";
-
-                            }
-                            hash[ha_id] = {action_board: action, board_id: board_id, product_id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)}
-
-                            if (activeObject.get('z_index') >= 0) {
-                                hash[ha_id]['z_index'] = activeObject.get('z_index')
-
-                            }
-                            $('.js-input-hash-product').val(JSON.stringify(hash));
 
                             activeObject.getElement().load = function () {
                                 var theImage = new fabric.Image(activeObject.getElement(), {top: activeObject.get('top'), left: activeObject.get('left')});
@@ -419,6 +395,31 @@ function getSavedProducts(board_id) {
 
                             };
                             activeObject.getElement().load();
+
+                            value = $('.js-input-hash-product').val();
+                            if (value.length > 0) {
+                                hash = JSON.parse(value)
+                            } else {
+                                hash = {}
+                            }
+
+                            ha_id = ""
+                            action = ""
+                            if (activeObject.get('action') == 'create') {
+                                ha_id = activeObject.get('hash_id');
+                                action = "create";
+                            } else {
+                                ha_id = activeObject.get('id')
+                                action = "update";
+
+                            }
+                            hash[ha_id] = {action_board: action, board_id: board_id, product_id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)}
+
+                            if (activeObject.get('z_index') >= 0) {
+                                hash[ha_id]['z_index'] = activeObject.get('z_index')
+
+                            }
+                            $('.js-input-hash-product').val(JSON.stringify(hash));
                         }
 //								updateBoardProduct(activeObject.get('id'), {id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)})
                     }
