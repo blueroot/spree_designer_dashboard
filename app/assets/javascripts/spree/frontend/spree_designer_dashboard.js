@@ -363,7 +363,8 @@ function getSavedProducts(board_id) {
 
                 canvas.on({
                     'object:modified': function (e) {
-                        if (canvas.getActiveGroup() === null) {
+                        console.log(canvas.getActiveGroup());
+                        if (canvas.getActiveGroup() === null || canvas.getActiveGroup() === undefined) {
                             activeObject = e.target
 
                             activeObject.getElement().load = function () {
@@ -395,7 +396,6 @@ function getSavedProducts(board_id) {
 
                             };
                             activeObject.getElement().load();
-                            activeObject = canvas.getActiveObject();
                             value = $('.js-input-hash-product').val();
                             if (value.length > 0) {
                                 hash = JSON.parse(value)
@@ -419,7 +419,9 @@ function getSavedProducts(board_id) {
                                 hash[ha_id]['z_index'] = activeObject.get('z_index')
 
                             }
+                            console.log(JSON.stringify(hash))
                             $('.js-input-hash-product').val(JSON.stringify(hash));
+
                         }
 //								updateBoardProduct(activeObject.get('id'), {id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)})
                     }
