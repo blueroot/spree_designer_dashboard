@@ -353,6 +353,7 @@ function getSavedProducts(board_id) {
                             theImage.scaleX = activeObject.get('scaleX');
                             theImage.scaleY = activeObject.get('scaleY');
                             theImage.originX = 'center',
+                            theImage.angle = activeObject.get('angle');
                                 theImage.originY = 'center',
                                 theImage.lockUniScaling = true,
                                 theImage.minScaleLimit = 0.25,
@@ -406,6 +407,7 @@ function getSavedProducts(board_id) {
                                 var theImage = new fabric.Image(activeObject.getElement(), {top: activeObject.get('top'), left: activeObject.get('left')});
                                 theImage.scaleX = activeObject.get('scaleX');
                                 theImage.scaleY = activeObject.get('scaleY');
+                                theImage.angle = activeObject.get('angle');
                                 theImage.originX = 'center',
                                     theImage.originY = 'center',
                                     theImage.lockUniScaling = true,
