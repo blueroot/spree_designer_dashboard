@@ -342,6 +342,7 @@ function getSavedProducts(board_id) {
                 $.each(data, function (index, board_product) {
                     buildImageLayer(canvas, board_product, board_product.product.image_url, board_product.product.slug, board_product.id, 'update', board_product.id);
                     canvas.renderAll();
+                    canvas.discardActiveObject()
 
                 });
                 canvas.discardActiveObject();
