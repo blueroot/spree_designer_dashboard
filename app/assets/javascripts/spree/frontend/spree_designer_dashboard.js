@@ -385,6 +385,7 @@ function getSavedProducts(board_id) {
                 // detect which product has focus
                 canvas.on('mouse:down', function (options) {
                     if (options.target) {
+                        console.log(options);
                         selectedImage = options.target;
                         // pass the product id and board_id (optional) and BoardProduct id (optional)
                         getProductDetails(selectedImage.get('product_permalink'), board_id, selectedImage.get('id'))
@@ -532,6 +533,7 @@ function createObjectImage(activeObject) {
 
 
         };
+        activeObject.getElement().load();
 
 
     }
