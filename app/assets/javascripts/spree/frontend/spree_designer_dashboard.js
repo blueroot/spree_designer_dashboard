@@ -267,6 +267,20 @@ function addProductToBoard(event, ui) {
             buildImageLayer(canvas, board_product, url, slug, cloned.data('productId'), 'create', cloned.data('productId') + '-' + random);
             setTimeout((function () {
                 createObjectImage(canvas.getActiveObject())
+
+                value = $('.js-input-hash-product').val();
+                if (value.length > 0) {
+                    hash = JSON.parse(value)
+                } else {
+                    hash = {}
+                }
+                hash[hash_id] = { action_board: 'create', board_id: board_product.board_id, product_id: cloned.data('productId'), center_point_x: board_product.center_point_x, center_point_y: board_product.center_point_y, width: board_product.width, height: board_product.height}
+
+                if (bp.z_index >= 0) {
+                    hash[hash_id]['z_index'] = bp.z_index;
+
+                }
+                $('.js-input-hash-product').val(JSON.stringify(hash));
             }), 1000)
 
         }
