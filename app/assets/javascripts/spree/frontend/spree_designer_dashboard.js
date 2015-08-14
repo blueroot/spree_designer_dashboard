@@ -364,7 +364,7 @@ function getSavedProducts(board_id) {
                         // pass the product id and board_id (optional) and BoardProduct id (optional)
                         if ($.cookie("active_image") === undefined || $.cookie("active_image").toString() !== selectedImage.get('hash_id').toString()){
                             $.cookie("active_image", selectedImage.get('hash_id'))
-                            getProductDetails(selectedImage.get('product_permalink'), board_id, selectedImage.get('id'))
+                            getProductDetails(selectedImage.get('product_permalink'), board_id, selectedImage.get('id'), canvas.getActiveObject().get('variant_image'))
                         }
                         //console.log(selectedImage.get('product_permalink'))
                     }
@@ -442,6 +442,7 @@ function createObjectImage(activeObject) {
             theImage.set('product_permalink', activeObject.get('product_permalink'));
             theImage.set('hash_id', activeObject.get('hash_id'));
             theImage.set('save_url', activeObject.get('save_url'));
+            theImage.set('variant_image', activeObject.get('variant_image'));
             canvas.add(theImage);
             canvas.remove(activeObject);
             canvas.renderAll();
@@ -470,6 +471,7 @@ function createObjectImage(activeObject) {
             theImage.set('product_permalink', activeObject.get('product_permalink'));
             theImage.set('hash_id', activeObject.get('hash_id'));
             theImage.set('save_url', activeObject.get('save_url'));
+            theImage.set('variant_image', activeObject.get('variant_image'));
             canvas.add(theImage);
             canvas.remove(activeObject);
             canvas.renderAll();
@@ -560,19 +562,23 @@ function getCurrentTop(obj) {
     }
 }
 
-function getProductDetails(product_id, board_id, board_product_id) {
+function getProductDetails(product_id, board_id, board_product_id, variant_url ) {
+    variant_url = variant_url || 0 ;
     $('.board-product-preview-details').hide()
     $('.js_reload_info').show()
     board_id = (typeof board_id === "undefined") ? "defaultValue" : board_id;
     board_product_id = (typeof board_product_id === "undefined") ? "defaultValue" : board_product_id;
 
+    if (variant_url === 0 || variant_url === undefined){
+        variant_url= ""
+    }
 
     var qstring = "?q"
     if (board_id != null) {
-        qstring = qstring + '&board_id=' + board_id
+        qstring = qstring + '&board_id=' + board_id + '&variant_url='+ variant_url
     }
     if (board_product_id != null) {
-        qstring = qstring + '&board_product_id=' + board_product_id
+        qstring = qstring + '&board_product_id=' + board_product_id + '&variant_url='+ variant_url
     }
 
 
