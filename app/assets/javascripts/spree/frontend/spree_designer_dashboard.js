@@ -385,15 +385,19 @@ function getSavedProducts(board_id) {
                 // detect which product has focus
                 canvas.on('mouse:down', function (options) {
                     if (options.target) {
-                        console.log(options);
+
                         selectedImage = options.target;
                         // pass the product id and board_id (optional) and BoardProduct id (optional)
-                        getProductDetails(selectedImage.get('product_permalink'), board_id, selectedImage.get('id'))
+                        if ($.cookie("active_image").toString() !== selectedImage.get('hash_id').toString()){
+                            $.cookie("active_image", selectedImage.get('hash_id'))
+                            getProductDetails(selectedImage.get('product_permalink'), board_id, selectedImage.get('id'))
+                        }
                         //console.log(selectedImage.get('product_permalink'))
                     }
                     else {
                         selectedImage = null;
                         $('#board-product-preview').html('')
+                        $.cookie("active_image", "");
                     }
                 });
 
