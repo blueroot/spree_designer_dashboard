@@ -388,7 +388,7 @@ function getSavedProducts(board_id) {
 
                         selectedImage = options.target;
                         // pass the product id and board_id (optional) and BoardProduct id (optional)
-                        if ($.cookie("active_image").toString() !== selectedImage.get('hash_id').toString()){
+                        if ($.cookie("active_image") === undefined || $.cookie("active_image").toString() !== selectedImage.get('hash_id').toString()){
                             $.cookie("active_image", selectedImage.get('hash_id'))
                             getProductDetails(selectedImage.get('product_permalink'), board_id, selectedImage.get('id'))
                         }
