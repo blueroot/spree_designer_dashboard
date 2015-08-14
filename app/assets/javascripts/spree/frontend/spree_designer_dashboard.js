@@ -268,19 +268,6 @@ function addProductToBoard(event, ui) {
             setTimeout((function () {
                 createObjectImage(canvas.getActiveObject())
 
-                value = $('.js-input-hash-product').val();
-                if (value.length > 0) {
-                    hash = JSON.parse(value)
-                } else {
-                    hash = {}
-                }
-                hash[hash_id] = { action_board: 'create', board_id: board_product.board_id, product_id: cloned.data('productId'), center_point_x: board_product.center_point_x, center_point_y: board_product.center_point_y, width: board_product.width, height: board_product.height}
-
-                if (bp.z_index >= 0) {
-                    hash[hash_id]['z_index'] = bp.z_index;
-
-                }
-                $('.js-input-hash-product').val(JSON.stringify(hash));
             }), 1000)
 
         }
@@ -422,36 +409,8 @@ function getSavedProducts(board_id) {
                         if (canvas.getActiveGroup() === null || canvas.getActiveGroup() === undefined) {
                             activeObject = e.target
                             createObjectImage(activeObject);
-                            value = $('.js-input-hash-product').val();
-                            if (value.length > 0) {
-                                hash = JSON.parse(value)
-                            } else {
-                                hash = {}
-                            }
-
-                            ha_id = ""
-                            action = ""
-                            if (activeObject.get('action') == 'create') {
-                                ha_id = activeObject.get('hash_id');
-                                action = "create";
-                            } else {
-                                ha_id = activeObject.get('id')
-                                action = "update";
-
-                            }
-                            hash[ha_id] = {action_board: action, board_id: board_id, product_id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)}
-
-                            if (activeObject.get('z_index') >= 0) {
-                                hash[ha_id]['z_index'] = activeObject.get('z_index')
-
-                            }
-                            console.log(JSON.stringify(hash))
-                            $('.js-input-hash-product').val(JSON.stringify(hash));
-
-
 
                         }
-//								updateBoardProduct(activeObject.get('id'), {id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)})
                     }
                 });
                 // listen for toolbar functions
@@ -487,6 +446,7 @@ function getSavedProducts(board_id) {
 function createObjectImage(activeObject) {
     new_image = activeObject.get('save_url');
     activeObject.getElement().src = new_image;
+    board_id = $('#canvas').data('boardId');
 
 
     if (activeObject.scaleX > 2) {
@@ -555,6 +515,33 @@ function createObjectImage(activeObject) {
 
 
     }
+    activeObject = canvas.getActiveObject();
+
+    value = $('.js-input-hash-product').val();
+    if (value.length > 0) {
+        hash = JSON.parse(value)
+    } else {
+        hash = {}
+    }
+
+    ha_id = ""
+    action = ""
+    if (activeObject.get('action') == 'create') {
+        ha_id = activeObject.get('hash_id');
+        action = "create";
+    } else {
+        ha_id = activeObject.get('id')
+        action = "update";
+
+    }
+    hash[ha_id] = {action_board: action, board_id: board_id, product_id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)}
+
+    if (activeObject.get('z_index') >= 0) {
+        hash[ha_id]['z_index'] = activeObject.get('z_index')
+
+    }
+    console.log(JSON.stringify(hash))
+    $('.js-input-hash-product').val(JSON.stringify(hash));
 }
 
 function getCurrentLeft(obj) {
