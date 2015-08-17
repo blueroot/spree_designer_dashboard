@@ -251,7 +251,6 @@ function addProductToBoard(event, ui) {
     random = Math.floor((Math.random() * 10) + 1);
 //    base_url = $('#board-container').data('url');
     image_url = ui.helper.data('canvas-img-base');
-    console.log(image_url);
     base_url = $('#board-container').data('url');
     $.ajax({
         dataType: 'html',
@@ -300,7 +299,6 @@ function moveLayer(layer, direction) {
     }
     //it's possible all z indices have changed.  update them all
     canvas.forEachObject(function (obj) {
-        console.log(canvas.getObjects().indexOf(obj));
 
         value = $('.js-input-hash-product').val();
 //
@@ -312,7 +310,7 @@ function moveLayer(layer, direction) {
 
         ha_id = ""
         action = ""
-        console.log(obj);
+
         if (obj.get('action') == 'create') {
             ha_id = obj.get('hash_id');
             action = "create";
@@ -348,10 +346,9 @@ function getSavedProducts(board_id) {
 
                 });
                 setTimeout((function () {
-                    console.log(canvas.getObjects());
                     $.each(canvas.getObjects(), function (index, value) {
-                        activeObject = value;
-                        createObjectImage(activeObject);
+                        createObjectImage(value);
+
                     });
                 }), 1500);
                 canvas.discardActiveObject();
@@ -426,8 +423,8 @@ function createObjectImage(activeObject) {
 
         activeObject.getElement().load = function () {
 
-            var theImage = new fabric.Image(activeObject.getElement(), {top: activeObject.get('top'), left: activeObject.get('left')});
-            theImage.scaleX = activeObject.get('scaleX');
+            var theImage = new fabric.Image(activeObject.getElement(), {top: Number(activeObject.get('top').toFixed(0)), left: Number(activeObject.get('left').toFixed(0))});
+            theImage.scaleX = activeObject.get('scaleX') ;
             theImage.scaleY = activeObject.get('scaleY');
             theImage.angle = activeObject.get('angle');
             theImage.originX = 'center',
@@ -455,9 +452,9 @@ function createObjectImage(activeObject) {
     } else {
         activeObject.getElement().load = function () {
 
-            var theImage = new fabric.Image(activeObject.getElement(), {top: activeObject.get('top'), left: activeObject.get('left')});
-            theImage.scaleX = activeObject.get('scaleX');
-            theImage.scaleY = activeObject.get('scaleY');
+            var theImage = new fabric.Image(activeObject.getElement(), {top: Number(activeObject.get('top').toFixed(0)), left: Number(activeObject.get('left').toFixed(0))});
+            theImage.scaleX = activeObject.get('scaleX') ;
+            theImage.scaleY = activeObject.get('scaleY') ;
             theImage.angle = activeObject.get('angle');
             theImage.originX = 'center',
                 theImage.originY = 'center',
@@ -515,7 +512,6 @@ function createObjectImage(activeObject) {
         hash[ha_id]['z_index'] = activeObject.get('z_index')
 
     }
-    console.log(JSON.stringify(hash))
     $('.js-input-hash-product').val(JSON.stringify(hash));
 }
 
