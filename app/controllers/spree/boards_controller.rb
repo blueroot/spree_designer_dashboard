@@ -195,7 +195,7 @@ class Spree::BoardsController < Spree::StoreController
       end
       params[:s] = w
     end
-    @board = Spree::Board.find(params[:board_id])
+    @board = Spree::Board.where(params[:board_id]).first
     if @board.present? and @board.show_out_of_stock == true
       out_of_stock = {order: "quantity_on_hand DESC, spree_variants.backorderable DESC"}
     else
