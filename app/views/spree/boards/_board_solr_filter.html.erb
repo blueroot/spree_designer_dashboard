@@ -1,31 +1,47 @@
 <div class="row">
   <div class="js-filter-search">
     <div class="checkbox">
-    <%= check_box_tag :out_of_stock, 'out_of_stock', @board.show_out_of_stock, class: 'js-check-out-of-stock', data: {url: set_out_of_stock_in_room_rooms_path(slug: @board.slug, format: 'json')} %>
+      <%= check_box_tag :out_of_stock, 'out_of_stock', @board.show_out_of_stock, class: 'js-check-out-of-stock', data: {url: set_out_of_stock_in_room_rooms_path(slug: @board.slug, format: 'json')} %>
       Out of stock
-      </div>
-    <% if taxon_filters.present? %>
-        <% params[:board_id] = board.id %>
-        <% taxon_filters.each do |key, value| %>
+    </div>
 
-            <div class="filter-option-box col-md-3">
-              <%= select_tag key.to_sym, options_for_select(generate_filter_select(value, params, key)),  prompt: key.to_s.capitalize , class: 'form-control js-select-filter-value' %>
-            </div>
-        <% end %>
-        <div class="js-filter-selected col-md-12">
-        <% if params[:s].present? %>
-            <% params[:s].each do |set| %>
-                  <%if set[0].to_s != "brand_name" %>
-            <%= link_to product_result_rooms_path(define_params_filter(params, set[0], set_filter_value(set[1]), :s, true)), class: 'js-remove-filter-rooms my-btn-primary' do %>
+    <% Spree::Product::FILTERS.each do |filter| %>
+        <%- if searcher.solr_search.present? and searcher.solr_search.facet(filter.to_sym).present? %>
 
-                      <%=get_filter_value(set[1], params[:room_id])%>
-                      <i class="fa fa-close"></i>
-                  <% end %>
-                  <% end %>
+            <% if generate_filter_select(searcher.solr_search.facet(filter.to_sym).rows.sort_by { |value| set_sort_filter(filter, value.value) }, params, filter.to_sym).present? %>
+                <div class="filter-option-box col-md-3">
+                  <%= select_tag filter.to_sym, options_for_select(generate_filter_select(searcher.solr_search.facet(filter.to_sym).rows.sort_by { |value| set_sort_filter(filter, value.value) }, params, filter.to_sym)), prompt: filter.to_s.gsub('_', ' ').capitalize, class: 'form-control js-select-filter-value' %>
+                </div>
             <% end %>
         <% end %>
-        </div>
     <% end %>
+    <div class="js-filter-selected col-md-12">
+      <% if params[:s].present? %>
+          <% params[:s].each do |key, val| %>
 
+              <% if key.to_s != "brand_name" %>
+                  <% if val.class == [].class %>
+                      <% val.each do |v| %>
+                          <%= link_to product_result_rooms_path(define_params_filter(params, key, v, :s, true)), class: 'js-remove-filter-rooms my-btn-primary' do %>
+                              <%= v %>
+                              <i class="fa fa-close"></i>
+                          <% end %>
+                      <% end %>
+                  <% else %>
+                      <%= link_to product_result_rooms_path(define_params_filter(params, key, val, :s, true)), class: 'js-remove-filter-rooms my-btn-primary' do %>
+                          <%= val %>
+                          <i class="fa fa-close"></i>
+                      <% end %>
+
+                  <% end %>
+                 
+              <% end %>
+
+
+          <% end %>
+
+      <% end %>
+
+    </div>
   </div>
 </div>
