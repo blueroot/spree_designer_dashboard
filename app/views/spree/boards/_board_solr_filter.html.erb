@@ -22,13 +22,13 @@
               <% if key.to_s != "brand_name" %>
                   <% if val.class == [].class %>
                       <% val.each do |v| %>
-                          <%= link_to product_result_rooms_path(define_params_filter(params, key, v, :s, true)), class: 'js-remove-filter-rooms my-btn-primary' do %>
+                          <%= link_to product_result_rooms_path(define_params_filter(params, key, v, :s, true).merge(format: 'html')), class: 'js-remove-filter-rooms my-btn-primary' do %>
                               <%= v %>
                               <i class="fa fa-close"></i>
                           <% end %>
                       <% end %>
                   <% else %>
-                      <%= link_to product_result_rooms_path(define_params_filter(params, key, val, :s, true)), class: 'js-remove-filter-rooms my-btn-primary' do %>
+                      <%= link_to product_result_rooms_path(define_params_filter(params, key, val, :s, true).merge(format: 'html')), class: 'js-remove-filter-rooms my-btn-primary' do %>
                           <%= val %>
                           <i class="fa fa-close"></i>
                       <% end %>
