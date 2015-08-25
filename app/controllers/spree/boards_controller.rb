@@ -195,7 +195,9 @@ class Spree::BoardsController < Spree::StoreController
       end
       params[:s] = w
     end
-    @board = Spree::Board.where(params[:board_id]).first
+
+    @board = Spree::Board.where(id: params[:board_id]).first
+
     if @board.present? and @board.show_out_of_stock == true
       out_of_stock = {order: "quantity_on_hand DESC, spree_variants.backorderable DESC"}
     else
@@ -213,6 +215,7 @@ class Spree::BoardsController < Spree::StoreController
       @all_products = @searcher.retrieve_products(out_of_stock,  {page: params[:page] || 1, per_page: params[:per_page] || 60})
     end
     @products = @all_products
+  
     respond_to do |format|
       format.html { render :layout => false }
     end

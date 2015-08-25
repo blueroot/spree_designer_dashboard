@@ -8,10 +8,12 @@
     <% Spree::Product::FILTERS.each do |filter| %>
         <%- if searcher.solr_search.present? and searcher.solr_search.facet(filter.to_sym).present? %>
 
+            <% if params[:s].present? and params[:s][:brand_name].present? %>
             <% if generate_filter_select(searcher.solr_search.facet(filter.to_sym).rows.sort_by { |value| set_sort_filter(filter, value.value) }, params, filter.to_sym).present? %>
                 <div class="filter-option-box col-md-3">
                   <%= select_tag filter.to_sym, options_for_select(generate_filter_select(searcher.solr_search.facet(filter.to_sym).rows.sort_by { |value| set_sort_filter(filter, value.value) }, params, filter.to_sym)), prompt: filter.gsub('filter_', '').capitalize, class: 'form-control js-select-filter-value' %>
                 </div>
+            <% end %>
             <% end %>
         <% end %>
     <% end %>
