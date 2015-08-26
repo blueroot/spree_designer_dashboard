@@ -215,7 +215,7 @@ class Spree::BoardsController < Spree::StoreController
       @all_products = @searcher.retrieve_products(out_of_stock,  {page: params[:page] || 1, per_page: params[:per_page] || 60})
     end
     @products = @all_products
-  
+
     respond_to do |format|
       format.html { render :layout => false }
     end

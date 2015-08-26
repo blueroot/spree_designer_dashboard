@@ -1,9 +1,5 @@
 <div class="row">
   <div class="js-filter-search">
-    <div class="checkbox">
-      <%= check_box_tag :out_of_stock, 'out_of_stock', @board.show_out_of_stock, class: 'js-check-out-of-stock', data: {url: set_out_of_stock_in_room_rooms_path(slug: @board.slug, format: 'json')} %>
-      Out of stock
-    </div>
 
     <% Spree::Product::FILTERS.each do |filter| %>
         <%- if searcher.solr_search.present? and searcher.solr_search.facet(filter.to_sym).present? %>
@@ -20,10 +16,9 @@
     <div class="js-filter-selected col-md-12">
       <% if params[:s].present? %>
           <% params[:s].each do |key, val| %>
-
               <% if key.to_s != "brand_name" %>
                   <% if val.class == [].class %>
-                      <% val.each do |v| %>
+                      <% val.uniq.each do |v| %>
                           <%= link_to product_result_rooms_path(define_params_filter(params, key, v, :s, true).merge(format: 'html')), class: 'js-remove-filter-rooms my-btn-primary' do %>
                               <%= v %>
                               <i class="fa fa-close"></i>
