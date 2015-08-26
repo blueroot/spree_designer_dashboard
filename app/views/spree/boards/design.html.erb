@@ -1,6 +1,16 @@
 
 	<div class="manage-container">
 		<div class="board-design-section board-design-section-canvas">
+          <div class="manage-board-footer">
+            <%= link_to "Cancel", designer_dashboard_path, :class => "btn btn-default" %>
+            <%= link_to "Save Changes", "javascript:void(0);", :class => "btn btn-primary", :id => "submit_board_button" %>
+
+
+            <% if false %>
+                <a href="javascript:void(0);" id="publish_room_button" class="btn btn-primary" data-toggle="popover" data-placement="left" title="" data-content="You've got your room looking preeettty nice and now you're ready to show the world.  You have come to the right place.  However, during this beta period we have turned publishing off.  However, you can preview what your room will look like by saving it and clicking the Preview button." data-original-title="Ready to Publish?">Save and Publish</a>
+            <% end%>
+
+          </div>
 			<div class="board-design-section-title">
 				<span class="board-design-step">1</span> Design Your Room
 			</div>
@@ -42,26 +52,25 @@
 
                       </div>
 
+                      <div class="checkbox my-checkbox">
+                        <%= check_box_tag :out_of_stock, 'out_of_stock', @board.show_out_of_stock, class: 'js-check-out-of-stock', data: {url: set_out_of_stock_in_room_rooms_path(slug: @board.slug, format: 'json')} %>
+                        include out of stock
+                      </div>
 					<ul class="nav nav-tabs">
 					  <li class="active"><a href="#search_pane" data-toggle="tab">Find Products</a></li>
 					  <li><a href="#bookmarks" id="bookmarks_tab" data-toggle="tab">Favorites</a></li>
-                      <div class="checkbox my-checkbox">
-                        <%= check_box_tag :out_of_stock, 'out_of_stock', @board.show_out_of_stock, class: 'js-check-out-of-stock', data: {url: set_out_of_stock_in_room_rooms_path(slug: @board.slug, format: 'json')} %>
-                        Stock
-                      </div>
 
                       <div class="board-products-search-fields">
                         <%= form_tag(board_product_search_path, method: "get", :id => "product_search_form") do %>
-                            <div class="row">
 
-                              <div class="col-md-3 scout-input-search">
+                              <div class="col-md-3 col-md-offset-2 scout-input-search">
 
                                 <input type="text" id="product_keywords" name="product_keywords" class="form-control input-sm" placeholder="Keywords">
                               </div>
                               <div class="col-md-1 scout-button-search">
                                 <%= submit_tag("Go", :class => "btn btn-primary btn-sm")%>
                               </div>
-                            </div>
+
                             <div class="js-render-filter-room">
 
                             </div>
