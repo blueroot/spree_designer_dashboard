@@ -176,7 +176,7 @@ class Spree::BoardsController < Spree::StoreController
     @board = Spree::Board.where(id: params[:board_id]).first
     @my_taxon = Spree::Taxon.where(id: params[:room_id]).first
     @searcher = build_searcher(params)
-    @taxon_filters = Spree::Product.generate_new_filters(@my_taxon)
+    #@taxon_filters = Spree::Product.generate_new_filters(@my_taxon)
     @searcher.retrieve_products({where: "supplier_id = #{@my_taxon.id}"})
     respond_to do |format|
       format.html { render :layout => false }
@@ -246,7 +246,7 @@ class Spree::BoardsController < Spree::StoreController
     #  taxons << taxon.id
     #end
     @my_taxon = Spree::Taxon.where(id: params[:id]).first
-    @taxon_filters = Spree::Product.generate_new_filters(@my_taxon)
+    #@taxon_filters = Spree::Product.generate_new_filters(@my_taxon)
 
 
     unless taxons.empty?
@@ -441,7 +441,7 @@ class Spree::BoardsController < Spree::StoreController
           @subcategory << [taxon.name, taxon.id]
         end
       end
-      @taxon_filters = Spree::Product.generate_new_filters(@category_id)
+      #@taxon_filters = Spree::Product.generate_new_filters(@category_id)
     elsif params[:type].to_s == "subcategories"
       @subcategory_id = Spree::Taxon.where(id: params[:id]).first
       params[:s] = {} if params[:s].blank?
@@ -470,7 +470,7 @@ class Spree::BoardsController < Spree::StoreController
           @sub_subcategory << [taxon.name, taxon.id]
         end
       end
-      @taxon_filters = Spree::Product.generate_new_filters(@subcategory_id)
+      #@taxon_filters = Spree::Product.generate_new_filters(@subcategory_id)
     elsif params[:type].to_s == "sub_subcategories"
       @sub_subcategory_id = Spree::Taxon.where(id: params[:id]).first
       params[:s] = {} if params[:s].blank?
@@ -498,7 +498,7 @@ class Spree::BoardsController < Spree::StoreController
           @sub_subcategory << [taxon.name, taxon.id]
         end
       end
-      @taxon_filters = Spree::Product.generate_new_filters(@sub_subcategory_id)
+      #@taxon_filters = Spree::Product.generate_new_filters(@sub_subcategory_id)
     end
 
     respond_to do |format|
