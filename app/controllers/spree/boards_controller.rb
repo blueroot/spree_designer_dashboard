@@ -186,16 +186,7 @@ class Spree::BoardsController < Spree::StoreController
 
   def product_result
     params.merge(:per_page => 60)
-    if params[:s].present?
-      w = params[:s].each do |key, val|
-        if val.class != [].class
-          val = YAML.load(val)
-          params[:s][key.to_sym] = val
-        end
-      end
-      params[:s] = w
-    end
-
+   
     @board = Spree::Board.where(id: params[:board_id]).first
 
     if @board.present? and @board.show_out_of_stock == true
