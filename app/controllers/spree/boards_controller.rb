@@ -186,7 +186,7 @@ class Spree::BoardsController < Spree::StoreController
 
   def product_result
     params.merge(:per_page => 60)
-   
+
     @board = Spree::Board.where(id: params[:board_id]).first
 
     if @board.present? and @board.show_out_of_stock == true

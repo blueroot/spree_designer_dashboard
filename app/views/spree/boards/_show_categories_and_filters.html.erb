@@ -27,10 +27,6 @@
         <% end %>
       </div>
   <% end %>
-  <div class="col-md-3">
-    <% if suppliers.present? %>
-        <%= select_tag "supplier_id", options_for_select(suppliers), :include_blank => false, :class => "form-control input-sm js-select-supplier-id", :prompt => "Brands" %>
-    <% end %>
   </div>
   <div class="col-md-3">
 
