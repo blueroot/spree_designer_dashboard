@@ -432,8 +432,8 @@ function createObjectImage(activeObject) {
                 theImage.lockUniScaling = true,
                 theImage.minScaleLimit = 0.5,
                 theImage.hasRotatingPoint = false,
-                theImage.set('width', activeObject.get('width').toFixed(0));
-            theImage.set('height', activeObject.get('height').toFixed(0));
+                theImage.set('width', activeObject.get('width'));
+            theImage.set('height', activeObject.get('height'));
             theImage.set('id', activeObject.get('id'));
             theImage.set('action', activeObject.get('action'));
             theImage.set('product_permalink', activeObject.get('product_permalink'));
@@ -461,8 +461,8 @@ function createObjectImage(activeObject) {
                 theImage.lockUniScaling = true,
                 theImage.minScaleLimit = 0.5,
                 theImage.hasRotatingPoint = false,
-                theImage.set('width', activeObject.get('width').toFixed(0));
-            theImage.set('height', activeObject.get('height').toFixed(0));
+                theImage.set('width', activeObject.get('width'));
+            theImage.set('height', activeObject.get('height'));
             theImage.set('id', activeObject.get('id'));
             theImage.set('action', activeObject.get('action'));
             theImage.set('product_permalink', activeObject.get('product_permalink'));
