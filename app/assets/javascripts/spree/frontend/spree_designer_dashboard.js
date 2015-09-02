@@ -440,7 +440,7 @@ function createObjectImage(activeObject) {
             theImage.set('hash_id', activeObject.get('hash_id'));
             theImage.set('save_url', activeObject.get('save_url'));
             theImage.set('variant_image', activeObject.get('variant_image'));
-            theImage.set('fill', 'white');
+            theImage.set('stroke', 'white');
 
             canvas.add(theImage);
             canvas.remove(activeObject);
@@ -471,7 +471,7 @@ function createObjectImage(activeObject) {
             theImage.set('hash_id', activeObject.get('hash_id'));
             theImage.set('save_url', activeObject.get('save_url'));
             theImage.set('variant_image', activeObject.get('variant_image'));
-            theImage.set('fill', 'white');
+            theImage.set('stroke', 'white');
 
             canvas.add(theImage);
             canvas.remove(activeObject);
