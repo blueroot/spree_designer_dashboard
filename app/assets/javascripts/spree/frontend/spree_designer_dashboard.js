@@ -265,7 +265,7 @@ function addProductToBoard(event, ui) {
             board_product = {board_id: $('#canvas').data('boardId'), product_id: cloned.data('productId'), center_point_x: center_x, center_point_y: center_y, width: cloned.width(), height: cloned.height()}
             buildImageLayer(canvas, board_product, url, slug, cloned.data('productId'), 'create', cloned.data('productId') + '-' + random);
             setTimeout((function () {
-                if ($.cookie("active_image") === undefined || $.cookie("active_image").toString() !== canvas.getActiveObject().get('hash_id').toString()){
+                if ($.cookie("active_image") === undefined || $.cookie("active_image").toString() !== canvas.getActiveObject().get('hash_id').toString()) {
                     $.cookie("active_image", canvas.getActiveObject().get('hash_id'));
                     getProductDetails(slug, $('#canvas').data('boardId'), cloned.data('productId'))
                 }
@@ -359,7 +359,7 @@ function getSavedProducts(board_id) {
 
                         selectedImage = options.target;
                         // pass the product id and board_id (optional) and BoardProduct id (optional)
-                        if ($.cookie("active_image") === undefined || $.cookie("active_image").toString() !== selectedImage.get('hash_id').toString()){
+                        if ($.cookie("active_image") === undefined || $.cookie("active_image").toString() !== selectedImage.get('hash_id').toString()) {
                             $.cookie("active_image", selectedImage.get('hash_id'))
                             getProductDetails(selectedImage.get('product_permalink'), board_id, selectedImage.get('id'), canvas.getActiveObject().get('variant_image'))
                         }
@@ -424,22 +424,24 @@ function createObjectImage(activeObject) {
         activeObject.getElement().load = function () {
 
             var theImage = new fabric.Image(activeObject.getElement(), {top: Number(activeObject.get('top').toFixed(0)), left: Number(activeObject.get('left').toFixed(0))});
-            theImage.scaleX = activeObject.get('scaleX') ;
-            theImage.scaleY = activeObject.get('scaleY');
+            theImage.scaleX = Number(activeObject.get('scaleX').toFixed(1));
+            theImage.scaleY = Number(activeObject.get('scaleY').toFixed(1));
             theImage.angle = activeObject.get('angle');
-            theImage.originX = 'center',
-                theImage.originY = 'center',
-                theImage.lockUniScaling = true,
-                theImage.minScaleLimit = 0.5,
-                theImage.hasRotatingPoint = false,
-                theImage.set('width', activeObject.get('width'));
-            theImage.set('height', activeObject.get('height'));
+            theImage.originX = 'center';
+            theImage.originY = 'center';
+            theImage.lockUniScaling = true;
+            theImage.minScaleLimit = 0.5;
+            theImage.hasRotatingPoint = false;
+            theImage.set('width', Number(activeObject.get('width').toFixed(0)));
+            theImage.set('height', Number(activeObject.get('height').toFixed(0)));
             theImage.set('id', activeObject.get('id'));
             theImage.set('action', activeObject.get('action'));
             theImage.set('product_permalink', activeObject.get('product_permalink'));
             theImage.set('hash_id', activeObject.get('hash_id'));
             theImage.set('save_url', activeObject.get('save_url'));
             theImage.set('variant_image', activeObject.get('variant_image'));
+            theImage.set('fill', 'white');
+
             canvas.add(theImage);
             canvas.remove(activeObject);
             canvas.renderAll();
@@ -453,22 +455,24 @@ function createObjectImage(activeObject) {
         activeObject.getElement().load = function () {
 
             var theImage = new fabric.Image(activeObject.getElement(), {top: Number(activeObject.get('top').toFixed(0)), left: Number(activeObject.get('left').toFixed(0))});
-            theImage.scaleX = activeObject.get('scaleX') ;
-            theImage.scaleY = activeObject.get('scaleY') ;
+            theImage.scaleX =  Number(activeObject.get('scaleX').toFixed(1));
+            theImage.scaleY = Number(activeObject.get('scaleY').toFixed(1));
             theImage.angle = activeObject.get('angle');
-            theImage.originX = 'center',
-                theImage.originY = 'center',
-                theImage.lockUniScaling = true,
-                theImage.minScaleLimit = 0.5,
-                theImage.hasRotatingPoint = false,
-                theImage.set('width', activeObject.get('width'));
-            theImage.set('height', activeObject.get('height'));
+            theImage.originX = 'center';
+            theImage.originY = 'center';
+            theImage.lockUniScaling = true;
+            theImage.minScaleLimit = 0.5;
+            theImage.hasRotatingPoint = false;
+            theImage.set('width', Number(activeObject.get('width').toFixed(0)));
+            theImage.set('height', Number(activeObject.get('height').toFixed(0)));
             theImage.set('id', activeObject.get('id'));
             theImage.set('action', activeObject.get('action'));
             theImage.set('product_permalink', activeObject.get('product_permalink'));
             theImage.set('hash_id', activeObject.get('hash_id'));
             theImage.set('save_url', activeObject.get('save_url'));
             theImage.set('variant_image', activeObject.get('variant_image'));
+            theImage.set('fill', 'white');
+
             canvas.add(theImage);
             canvas.remove(activeObject);
             canvas.renderAll();
@@ -478,6 +482,7 @@ function createObjectImage(activeObject) {
                     1 / 9, 1 / 9, 1 / 9 ]
             });
             theImage.filters.push(filter);
+
             theImage.applyFilters(canvas.renderAll.bind(canvas));
             canvas.setActiveObject(theImage);
 
@@ -558,23 +563,23 @@ function getCurrentTop(obj) {
     }
 }
 
-function getProductDetails(product_id, board_id, board_product_id, variant_url ) {
-    variant_url = variant_url || 0 ;
+function getProductDetails(product_id, board_id, board_product_id, variant_url) {
+    variant_url = variant_url || 0;
     $('.board-product-preview-details').hide()
     $('.js_reload_info').show()
     board_id = (typeof board_id === "undefined") ? "defaultValue" : board_id;
     board_product_id = (typeof board_product_id === "undefined") ? "defaultValue" : board_product_id;
 
-    if (variant_url === 0 || variant_url === undefined){
-        variant_url= ""
+    if (variant_url === 0 || variant_url === undefined) {
+        variant_url = ""
     }
 
     var qstring = "?q"
     if (board_id != null) {
-        qstring = qstring + '&board_id=' + board_id + '&variant_url='+ variant_url
+        qstring = qstring + '&board_id=' + board_id + '&variant_url=' + variant_url
     }
     if (board_product_id != null) {
-        qstring = qstring + '&board_product_id=' + board_product_id + '&variant_url='+ variant_url
+        qstring = qstring + '&board_product_id=' + board_product_id + '&variant_url=' + variant_url
     }
 
 
