@@ -5,6 +5,8 @@
 <%= Spree.t(:home_page_slides) %>
 <% end %>
 
+<%= render :partial => 'spree/admin/shared/slider_sub_menu' %>
+
 
 <h4>Current Slides</h4>
 <%= render :partial => "list", :locals => {:slides => @current_slides}%>
