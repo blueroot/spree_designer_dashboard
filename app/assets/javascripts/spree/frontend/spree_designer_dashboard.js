@@ -38,6 +38,14 @@ function initializeProductSearchForm() {
     });
 }
 
+$(window).load(function(){
+    $(".products_flexi_box").flexisel({
+        autoPlay: true,
+        autoPlaySpeed: 3000,
+        pauseOnHover: true
+    });
+})
+
 $(document).on({
     click: function (e) {
         var obj, value;

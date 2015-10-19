@@ -1,0 +1,17 @@
+<% photos.in_groups_of(3, false) do |row_photos| %>
+    <div class="row">
+
+      <% for photo in row_photos %>
+          <div class="col-md-4">
+            <div class="photo-listing">
+              <div class="board-image">
+                <%= link_to(image_tag(photo.attachment(:small)), "#")%>
+              </div>
+
+            </div>
+          </div>
+
+      <% end %>
+    </div>
+<% end %>
+

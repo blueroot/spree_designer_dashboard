@@ -1,0 +1,52 @@
+.photo-listing .board-image{
+    text-align: center;
+}
+
+.products_flexi_box img{
+    width: auto !important;
+}
+
+.pages-list-main{
+
+    padding: 20px 0;
+}
+
+.slide-products{
+
+    padding: 20px 0;
+}
+
+.shop-rooms{
+
+    padding: 20px 0;
+}
+
+.slide-products .info{
+
+    height: 20px !important;
+    display: block;
+    margin-top: 5px;
+    font-size: 14px;
+    color: #404040 !important;
+    text-transform: none;
+    border-bottom: 0px solid #d9d9db;
+    overflow: hidden;
+    font-weight: bold;
+}
+
+.slide-products .price{
+    font-size: 14px;
+    padding-top: 0px;
+    font-weight: bold;
+    color: #F39C12
+}
+
+.slide-products .msrp{
+
+    color: #999;
+    font-size: 14px;
+    margin: 0 5px 0 0;
+    font-family: georgia, times, serif;
+    text-decoration: line-through;
+    display: inline-block
+}

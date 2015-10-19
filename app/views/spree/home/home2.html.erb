@@ -1,36 +1,145 @@
+<div class="container">
+  <h2 class="home">Some text Lorem ipsum</h2>
 
-<div class="container">		
-	<% if !@slides.blank?%>			
-	<div class="prime">
-		<div id="homeCarousel" class="carousel slide" data-ride="carousel" data-interval="5000">
-			<!-- Indicators -->
-			<ol class="carousel-indicators">
-				<% @slides.each_with_index do |slide, i| %>
-				<li data-target="#homeCarousel" data-slide-to="<%=i%>" class="<%= "active" if i == 0 %>"></li>
-				<% end %>
-			</ol>
+  <div class="pages-list-main">
+    <% unless @page_photos.blank? %>
+        <%= render :partial => "promoted_images", :locals => {:photos => @page_photos} %>
+    <% else %>
+        <div class="empty-state">There aren't any available pages at this time.</div>
+    <% end %>
+  </div>
+</div>
 
-			<div class="carousel-inner">
-				<% @slides.current.each_with_index do |slide, i| %>
-				<div class="item <%= "active" if i == 0 %>">
-					<%= link_to image_tag(slide.slider_image.attachment(:banner)), slide.path %>
-				</div>
-				<% end %>
-			</div><!-- /.carousel -->
-			<a class="left carousel-control" href="#homeCarousel" role="button" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
-			<a class="right carousel-control" href="#homeCarousel" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
-		</div>	
-	</div>
-	<% end %>
-	<div class="container">
-		<h2 class="home">Shop Rooms</h2>
-		<div class="boards-list-main">
-			<% unless @promoted_rooms.blank? %>
-			<%= render :partial => "promoted_rooms", :locals => {:boards => @promoted_rooms}%>
-			<% else %>
-			<div class="empty-state">There aren't any available rooms at this time.</div>
-			<% end %>
-		</div>
-	</div>
-	
+<div class="container">
+  <% if !@slides.blank? %>
+      <div class="prime">
+        <div id="homeCarousel" class="carousel slide" data-ride="carousel" data-interval="5000">
+          <!-- Indicators -->
+          <ol class="carousel-indicators">
+            <% @slides.each_with_index do |slide, i| %>
+                <li data-target="#homeCarousel" data-slide-to="<%= i %>" class="<%= "active" if i == 0 %>"></li>
+            <% end %>
+          </ol>
+
+          <div class="carousel-inner">
+            <% @slides.current.each_with_index do |slide, i| %>
+                <div class="item <%= "active" if i == 0 %>">
+                  <%= link_to image_tag(slide.slider_image.attachment(:banner)), slide.path %>
+                </div>
+            <% end %>
+          </div>
+          <!-- /.carousel -->
+          <a class="left carousel-control" href="#homeCarousel" role="button" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+          <a class="right carousel-control" href="#homeCarousel" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+        </div>
+      </div>
+  <% end %>
+</div>
+<div class="container slide-products">
+  <hr/>
+  <h2 class="home">New Arrivals</h2>
+  <% if @arrive_product.present? %>
+
+      <ul class="products_flexi_box nbs-flexisel-ul">
+        <% @arrive_product.each do |product| %>
+            <li>
+              <div class="img-container">
+              <% if product.images.present? %>
+                  <%= link_to(image_tag(product.images.first.attachment(:small)), products_path(id: product.id)) %>
+              <% end %>
+              <div class="title">
+                <%= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => product.name %>
+              </div>
+                <div>
+
+							<span class="price" itemprop="price">
+                              <% if product.price_range.present? %>
+                              <%= product.price_range.html_safe %>
+                                  <% end %>
+                            </span>
+
+                  <% if product.has_variants? %>
+                      <%= check_msrp_price_value(product) %>
+                  <% else %>
+                      <% if !product.master.msrp_price.nil? %>
+                          <span class="msrp"><%= display_msrp(product.master) %></span>
+								<span class="price-percentage-off">
+									 <%= "#{product.percentage_off}% off" %>
+								</span>
+                      <% end %>
+                  <% end %>
+                </div>
+
+                  </div>
+            </li>
+        <% end %>
+      </ul>
+
+  <% end %>
+</div>
+
+<div class="container shop-rooms">
+  <hr>
+  <h2 class="home">Designer Rooms</h2>
+
+  <div class="boards-list-main">
+    <% unless @promoted_rooms.blank? %>
+        <%= render :partial => "promoted_rooms", :locals => {:boards => @promoted_rooms} %>
+    <% else %>
+        <div class="empty-state">There aren't any available rooms at this time.</div>
+    <% end %>
+  </div>
+</div>
+
+
+
+<div class="home-featured-designers">
+  <div class="container">
+    <h2>Meet some of the industry's top designers</h2>
+
+    <div id="carousel">
+      <!--<#% if false %>-->
+
+      <!--<#% end %>-->
+
+
+      <div class="clear"></div>
+      <div id="slides" class="designer-flexi-box-content">
+        <ul class="ch-grid flexi-box-designer nbs-flexisel-ul">
+          <% @designers.each do |designer| %>
+
+              <li>
+                <% if designer.user_images.blank? %>
+                    <div class="ch-item ch-img-default">
+                      <a href="/<%= designer.username %>">
+                        <div class="ch-info">
+                          <h3><%= designer.full_name %></h3>
+
+                          <p><%= designer.full_name %></p>
+                        </div>
+                      </a>
+                    </div>
+                <% else %>
+                    <div class="ch-item ch-img-default" style="background-image: url(<%=designer.user_images.first.attachment(:primary) %>)">
+                      <a href="/<%= designer.username %>">
+                        <div class="ch-info">
+                          <h3><%= designer.full_name %></h3>
+
+                          <p><%= designer.full_name %></p>
+                        </div>
+                      </a>
+                    </div>
+
+                <% end %>
+              </li>
+
+
+          <% end %>
+        </ul>
+        <div class="clear"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 	
