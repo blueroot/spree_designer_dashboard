@@ -45,7 +45,7 @@
             <li>
               <div class="img-container">
               <% if product.images.present? %>
-                  <%= link_to(image_tag(product.images.first.attachment(:primary)), products_path(id: product.id)) %>
+                  <%= link_to(image_tag(product.images.first.attachment(:small)), products_path(id: product.id)) %>
               <% end %>
               <div class="title">
                 <%= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => product.name %>
