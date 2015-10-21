@@ -1,6 +1,9 @@
 <div class="container">
-  <h2 class="home">Some text Lorem ipsum</h2>
-
+  <% if @home_text.present? %>
+  <h2 class="home"><%= @home_text.title %></h2>
+      <% else %>
+      <h2 class="home">Scount and Nimble</h2>
+  <% end %>
   <div class="pages-list-main">
     <% unless @page_photos.blank? %>
         <%= render :partial => "promoted_images", :locals => {:photos => @page_photos} %>
