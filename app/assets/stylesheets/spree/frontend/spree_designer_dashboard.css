@@ -21,6 +21,12 @@
     padding: 30px 0;
 }
 
+.shop-rooms .nbs-flexisel-ul{
+
+    overflow: hidden;
+    height: 250px;
+}
+
 .slide-products .info{
 
     height: 20px !important;
