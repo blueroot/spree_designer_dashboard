@@ -1,6 +1,6 @@
 module Spree
   HomeController.class_eval do
-    before_filter :require_authentication
+    # before_filter :require_authentication
     
     def home2
       @slides = Spree::Slide.current.order("created_at desc") || Spree::Slide.defaults
