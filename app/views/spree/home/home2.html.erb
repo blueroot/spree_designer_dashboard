@@ -40,7 +40,7 @@
 </div>
 <div class="container slide-products">
   <hr/>
-  <h2 class="home">New Arrivals</h2>
+  <h2 class="home"><%= link_to "New Arrivals", nested_taxons_path('department/new_arrivals') %></h2>
   <% if @arrive_product.present? %>
 
       <ul class="products_flexi_box nbs-flexisel-ul">

@@ -31,6 +31,14 @@
     overflow: hidden;
 }
 
+h2.home a{
+    color: #333;
+
+}
+h2.home a:hover{
+    color: #333;
+}
+
 .slide-products .info{
 
     height: 20px !important;
