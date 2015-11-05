@@ -23,14 +23,18 @@
 
 .slide-products .nbs-flexisel-inner{
 
-    height: 240px;
+    height: 242px;
+}
+
+.img-container {
+    height: 200px;
+    overflow: hidden;
 }
 
 .slide-products .info{
 
     height: 20px !important;
     display: block;
-    margin-top: 5px;
     font-size: 14px;
     color: #404040 !important;
     text-transform: none;

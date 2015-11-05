@@ -1,7 +1,7 @@
 <div class="container">
   <% if @home_text.present? %>
-  <div class="home"><%= @home_text.title.html_safe %></div>
-      <% else %>
+      <div class="home"><%= @home_text.title.html_safe %></div>
+  <% else %>
       <h2 class="home">Scout and Nimble</h2>
   <% end %>
   <div class="pages-list-main">
@@ -46,13 +46,15 @@
       <ul class="products_flexi_box nbs-flexisel-ul">
         <% @arrive_product.each do |product| %>
             <li>
-              <div class="img-container">
-              <% if product.images.present? %>
-                  <%= link_to(image_tag(product.images.first.attachment(:small)), product) %>
-              <% end %>
-              <div class="title">
-                <%= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => product.name %>
-              </div>
+              <div class="product-container">
+                <div class="img-container">
+                  <% if product.images.present? %>
+                      <%= link_to(image_tag(product.images.first.attachment(:small)), product) %>
+                  <% end %>
+                </div>
+                <div class="title">
+                  <%= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => product.name %>
+                </div>
                 <div>
 
 							<span class="price" itemprop="price">
@@ -73,7 +75,7 @@
                   <% end %>
                 </div>
 
-                  </div>
+              </div>
             </li>
         <% end %>
       </ul>
