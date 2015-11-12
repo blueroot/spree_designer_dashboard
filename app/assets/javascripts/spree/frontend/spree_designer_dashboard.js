@@ -44,7 +44,7 @@ $(window).load(function(){
         autoPlaySpeed: 3000,
         pauseOnHover: true
     });
-})
+});
 
 $(document).on({
     click: function (e) {
@@ -61,6 +61,18 @@ $(document).on({
         }
     }
 }, '#js-remove-new-product-from-room');
+
+$(document).on({
+    click: function(e) {
+        var obj;
+        e.preventDefault();
+        console.log('click');
+        obj = canvas.getActiveObject();
+        if(!isBlank(obj)){
+            renderMirror(obj);
+        }
+    }
+}, "#bp-mirror");
 
 function rotateObject(angleOffset) {
     var obj = canvas.getActiveObject(),
@@ -106,6 +118,31 @@ function rotateObject(angleOffset) {
     }
     $('.js-input-hash-product').val(JSON.stringify(hash));
 
+    canvas.renderAll();
+}
+
+function isBlank( object ) {
+    if ( typeof object !== "undefined" && object !== null ){
+        if ( typeof object === "object" ){
+          if ( Object.keys(object).length > 0 ) {
+              return false;
+          }  else {
+              return true;
+          }
+        } else if  ( typeof object !== "object" &&  object.length > 0 ) {
+            return false;
+        } else if ( typeof object === "boolean" || typeof object === "number" ) {
+            return false ;
+        } else {
+            return true;
+        }
+    } else {
+      return true;
+    }
+}
+
+function renderMirror( object ) {
+    object.set('flipX', !object.flipX);
     canvas.renderAll();
 }
 
@@ -177,7 +214,7 @@ function buildImageLayer(canvas, bp, url, slug, id, active, hash_id) {
             height: bp.height,
             lockUniScaling: true,
             minScaleLimit: 0.5,
-            hasRotatingPoint: false
+            hasRotatingPoint: true
         });
         oImg.set('id', id);
         oImg.set('action', active);
@@ -439,7 +476,7 @@ function createObjectImage(activeObject) {
             theImage.originY = 'center';
             theImage.lockUniScaling = true;
             theImage.minScaleLimit = 0.5;
-            theImage.hasRotatingPoint = false;
+            theImage.hasRotatingPoint = true;
             theImage.set('width', Number(activeObject.get('width').toFixed(0)));
             theImage.set('height', Number(activeObject.get('height').toFixed(0)));
             theImage.set('id', activeObject.get('id'));
@@ -470,7 +507,7 @@ function createObjectImage(activeObject) {
             theImage.originY = 'center';
             theImage.lockUniScaling = true;
             theImage.minScaleLimit = 0.5;
-            theImage.hasRotatingPoint = false;
+            theImage.hasRotatingPoint = true;
             theImage.set('width', Number(activeObject.get('width').toFixed(0)));
             theImage.set('height', Number(activeObject.get('height').toFixed(0)));
             theImage.set('id', activeObject.get('id'));
