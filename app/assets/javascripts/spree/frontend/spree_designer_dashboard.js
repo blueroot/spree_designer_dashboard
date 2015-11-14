@@ -4,15 +4,15 @@ function initializeProductSearchForm() {
         /* stop form from submitting normally */
         event.preventDefault();
 
-        $('#products-preloader').show()
-        $('#select-products-box').html('')
+        $('#products-preloader').show();
+        $('#select-products-box').html('');
         /* get some values from elements on the page: */
         var $form = $(this),
             term = $form.find('input[name="product_keywords"]').val(),
             supplier_id = $form.find('select[name="supplier_id"]').val(),
             department_taxon = $form.find('select[name="department_taxon"]').val(),
             url = $form.attr('action');
-        bid = $('#canvas').data('boardId')
+        bid = $('#canvas').data('boardId');
 
         //alert(taxon);
         /* Send the data using post */
@@ -20,9 +20,9 @@ function initializeProductSearchForm() {
 
         /* Put the results in a div */
         posting.done(function (data) {
-            $('#products-preloader').hide()
+            $('#products-preloader').hide();
             url = $('.solr-filter-products').data('search-url');
-            keywords = $('#product_keywords').val()
+            keywords = $('#product_keywords').val();
             $.ajax({
                 dataType: 'html',
                 method: 'POST',
@@ -66,10 +66,11 @@ $(document).on({
     click: function(e) {
         var obj;
         e.preventDefault();
-        console.log('click');
         obj = canvas.getActiveObject();
         if(!isBlank(obj)){
             renderMirror(obj);
+            hash = generateHash(obj);
+            $('.js-input-hash-product').val(JSON.stringify(hash));
         }
     }
 }, "#bp-mirror");
@@ -93,29 +94,7 @@ function rotateObject(angleOffset) {
         obj.setCenterToOrigin && obj.setCenterToOrigin();
     }
 
-
-    value = $('.js-input-hash-product').val();
-//
-    if (value.length > 0) {
-        hash = JSON.parse(value)
-    } else {
-        hash = {}
-    }
-
-    ha_id = ""
-    action = ""
-    if (obj.get('action') == 'create') {
-        ha_id = obj.get('hash_id');
-        action = "create";
-    } else {
-        ha_id = obj.get('id')
-        action = "update";
-
-    }
-    hash[ha_id] = {action_board: action, board_id: $('#canvas').data('boardId'), product_id: obj.get('id'), center_point_x: obj.getCenterPoint().x, center_point_y: obj.getCenterPoint().y, width: obj.getWidth(), height: obj.getHeight(), rotation_offset: obj.getAngle(0)}
-    if (obj.z_index >= 0) {
-        hash[ha_id]['z_index'] = obj.z_index;
-    }
+    hash = generateHash(obj);
     $('.js-input-hash-product').val(JSON.stringify(hash));
 
     canvas.renderAll();
@@ -146,34 +125,6 @@ function renderMirror( object ) {
     canvas.renderAll();
 }
 
-function showProductAddedState() {
-    $('#product-preview-details').addClass('hidden');
-    $('#product-preview-added').removeClass('hidden');
-}
-
-function updateBoardProduct(id, product_options) {
-
-    var url = '/board_products/' + id + '.json'
-
-    $.ajax({
-            url: url,
-            type: "POST",
-            dataType: "json",
-            data: {_method: 'PATCH', board_product: product_options},
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Accept", "application/json")
-            },
-            success: function (data) {
-
-            },
-            error: function (objAJAXRequest, strError, errorThrown) {
-                alert("ERROR: " + strError);
-            }
-        }
-    );
-}
-
-
 fabric.Object.prototype.setOriginToCenter = function () {
     this._originalOriginX = this.originX;
     this._originalOriginY = this.originY;
@@ -202,14 +153,14 @@ fabric.Object.prototype.setCenterToOrigin = function () {
     });
 };
 
-
 function buildImageLayer(canvas, bp, url, slug, id, active, hash_id) {
-    obj = fabric.Image.fromURL(url, function (oImg) {
+     fabric.Image.fromURL(url, function (oImg) {
         oImg.scale(1).set({
             left: bp.center_point_x,
             top: bp.center_point_y,
             originX: 'center',
             originY: 'center',
+            flipX: bp.flip_x,
             width: bp.width,
             height: bp.height,
             lockUniScaling: true,
@@ -227,25 +178,13 @@ function buildImageLayer(canvas, bp, url, slug, id, active, hash_id) {
             rotateObject(bp.rotation_offset);
             canvas.renderAll();
         }
-
-
     });
-    value = $('.js-input-hash-product').val();
-    if (value.length > 0) {
-        hash = JSON.parse(value)
-    } else {
-        hash = {}
+    obj = find_object(id);
+    if (!isBlank(obj)) {
+        hash = generateHash(bp);
+        $('.js-input-hash-product').val(JSON.stringify(hash));
     }
-    hash[hash_id] = { action_board: active, board_id: bp.board_id, product_id: id, center_point_x: bp.center_point_x, center_point_y: bp.center_point_y, width: bp.width, height: bp.height}
-
-    if (bp.z_index >= 0) {
-        hash[hash_id]['z_index'] = bp.z_index;
-
-    }
-    $('.js-input-hash-product').val(JSON.stringify(hash));
-    return obj
 }
-
 
 function getImageBase(url) {
     base_url = $('#board-container').data('url');
@@ -262,19 +201,6 @@ function getImageBase(url) {
 
         }
     })
-
-}
-
-
-function build_variants_list(variants) {
-    var list = document.createElement('ul');
-    var json = { items: ['item 1', 'item 2', 'item 3'] };
-    $(variants).each(function (index, item) {
-        list.append(
-            $(document.createElement('li')).text(item)
-        );
-    });
-    return list
 }
 
 function addProductToBoard(event, ui) {
@@ -287,14 +213,7 @@ function addProductToBoard(event, ui) {
     center_x = cloned.position().left + parseFloat(cloned.width()) / 2.0
     center_y = cloned.position().top + parseFloat(cloned.height()) / 2.0
 
-    //hide the image of the product in the search results to indicate that it is no longer available to others.
-    //selector = '#board-product-select-' + cloned.data('productId')
-    //$(selector).hide();
-
-    //alert(cloned.position().left + ':' + cloned.position().top)
-    //saveProductToBoard($('#board-canvas').data('boardId'),cloned.data('productId'), cloned.position().left, cloned.position().top, 0, cloned.width(), cloned.height(), cloned.data('rotationOffset'));
     random = Math.floor((Math.random() * 10) + 1);
-//    base_url = $('#board-container').data('url');
     image_url = ui.helper.data('canvas-img-base');
     base_url = $('#board-container').data('url');
     $.ajax({
@@ -307,7 +226,15 @@ function addProductToBoard(event, ui) {
             canvas_url = ui.helper.data('canvas-img-base');
             slug = ui.helper.data('product-slug');
             canvas_id = ui.helper.data('canvas-id');
-            board_product = {board_id: $('#canvas').data('boardId'), product_id: cloned.data('productId'), center_point_x: center_x, center_point_y: center_y, width: cloned.width(), height: cloned.height()}
+            board_product = {
+                board_id: $('#canvas').data('boardId'),
+                product_id: cloned.data('productId'),
+                center_point_x: center_x,
+                center_point_y: center_y,
+                width: cloned.width(),
+                height: cloned.height()
+
+            };
             buildImageLayer(canvas, board_product, url, slug, cloned.data('productId'), 'create', cloned.data('productId') + '-' + random);
             setTimeout((function () {
                 if ($.cookie("active_image") === undefined || $.cookie("active_image").toString() !== canvas.getActiveObject().get('hash_id').toString()) {
@@ -322,60 +249,34 @@ function addProductToBoard(event, ui) {
     canvas.discardActiveObject();
     canvas.renderAll();
     cloned.hide();
-//    getImageBase(canvas_url);
-
-
 }
 
 function moveLayer(layer, direction) {
     switch (direction) {
         case "top":
-            canvas.bringToFront(layer)
+            canvas.bringToFront(layer);
             break;
         case "forward":
-            canvas.bringForward(layer)
+            canvas.bringForward(layer);
             break;
         case "bottom":
-            canvas.sendToBack(layer)
+            canvas.sendToBack(layer);
             break;
         case "backward":
-            canvas.sendBackwards(layer)
+            canvas.sendBackwards(layer);
             break;
     }
     //it's possible all z indices have changed.  update them all
     canvas.forEachObject(function (obj) {
-
-        value = $('.js-input-hash-product').val();
-//
-        if (value.length > 0) {
-            hash = JSON.parse(value)
-        } else {
-            hash = {}
-        }
-
-        ha_id = ""
-        action = ""
-
-        if (obj.get('action') == 'create') {
-            ha_id = obj.get('hash_id');
-            action = "create";
-        } else {
-            ha_id = obj.get('id')
-            action = "update";
-
-        }
         obj.set('z_index', canvas.getObjects().indexOf(obj));
-        hash[ha_id] = {action_board: action, board_id: $('#canvas').data('boardId'), product_id: obj.get('id'), center_point_x: obj.getCenterPoint().x, center_point_y: obj.getCenterPoint().y, width: obj.getWidth(), height: obj.getHeight(), rotation_offset: obj.getAngle(0), z_index: obj.get('z_index')}
+        hash = generateHash(obj);
         $('.js-input-hash-product').val(JSON.stringify(hash));
-
     });
 
 }
 
-
 function getSavedProducts(board_id) {
     var url = '/rooms/' + board_id + '/board_products.json'
-    //var request = $.getJSON( url );
 
     $.ajax({
             url: url, dataType: "json",
@@ -387,13 +288,11 @@ function getSavedProducts(board_id) {
                 $.each(data, function (index, board_product) {
                     buildImageLayer(canvas, board_product, board_product.product.image_url, board_product.product.slug, board_product.id, 'update', board_product.id);
                     canvas.renderAll();
-                    canvas.discardActiveObject()
-
+                    canvas.discardActiveObject();
                 });
                 setTimeout((function () {
                     $.each(canvas.getObjects(), function (index, value) {
                         createObjectImage(value);
-
                     });
                 }), 1500);
                 canvas.discardActiveObject();
@@ -408,7 +307,6 @@ function getSavedProducts(board_id) {
                             $.cookie("active_image", selectedImage.get('hash_id'))
                             getProductDetails(selectedImage.get('product_permalink'), board_id, selectedImage.get('id'), canvas.getActiveObject().get('variant_image'))
                         }
-                        //console.log(selectedImage.get('product_permalink'))
                     }
                     else {
                         selectedImage = null;
@@ -420,11 +318,9 @@ function getSavedProducts(board_id) {
                 canvas.on({
                     'object:modified': function (e) {
 
-
                         if (canvas.getActiveGroup() === null || canvas.getActiveGroup() === undefined) {
                             activeObject = e.target
                             createObjectImage(activeObject);
-
                         }
                     }
                 });
@@ -444,8 +340,6 @@ function getSavedProducts(board_id) {
                 document.getElementById('bp-rotate-left').addEventListener('click', function () {
                     activeObject = canvas.getActiveObject()
                     rotateObject(90);
-//					updateBoardProduct(activeObject.get('id'), {id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)})
-
 
                 }, false);
 
@@ -455,90 +349,71 @@ function getSavedProducts(board_id) {
             }
         }
     );
-
 }
 
 function createObjectImage(activeObject) {
     new_image = activeObject.get('save_url');
     activeObject.getElement().src = new_image;
-    board_id = $('#canvas').data('boardId');
 
+    activeObject.getElement().load = function () {
+        var theImage = new fabric.Image(activeObject.getElement(), {top: Number(activeObject.get('top').toFixed(0)), left: Number(activeObject.get('left').toFixed(0))});
+        theImage.scaleX = Number(activeObject.get('scaleX').toFixed(1));
+        theImage.scaleY = Number(activeObject.get('scaleY').toFixed(1));
+        theImage.angle = activeObject.get('angle');
+        theImage.originX = 'center';
+        theImage.originY = 'center';
+        theImage.lockUniScaling = true;
+        theImage.minScaleLimit = 0.5;
+        theImage.hasRotatingPoint = true;
+        theImage.set('width', Number(activeObject.get('width').toFixed(0)));
+        theImage.set('height', Number(activeObject.get('height').toFixed(0)));
+        theImage.set('id', activeObject.get('id'));
+        theImage.set('action', activeObject.get('action'));
+        theImage.set('product_permalink', activeObject.get('product_permalink'));
+        theImage.set('hash_id', activeObject.get('hash_id'));
+        theImage.set('flipX', activeObject.get('flipX'));
+        theImage.set('save_url', activeObject.get('save_url'));
+        theImage.set('variant_image', activeObject.get('variant_image'));
+        theImage.set('stroke', '#fff');
 
-    if (activeObject.scaleX > 2) {
+        canvas.add(theImage);
 
-        activeObject.getElement().load = function () {
-
-            var theImage = new fabric.Image(activeObject.getElement(), {top: Number(activeObject.get('top').toFixed(0)), left: Number(activeObject.get('left').toFixed(0))});
-            theImage.scaleX = Number(activeObject.get('scaleX').toFixed(1));
-            theImage.scaleY = Number(activeObject.get('scaleY').toFixed(1));
-            theImage.angle = activeObject.get('angle');
-            theImage.originX = 'center';
-            theImage.originY = 'center';
-            theImage.lockUniScaling = true;
-            theImage.minScaleLimit = 0.5;
-            theImage.hasRotatingPoint = true;
-            theImage.set('width', Number(activeObject.get('width').toFixed(0)));
-            theImage.set('height', Number(activeObject.get('height').toFixed(0)));
-            theImage.set('id', activeObject.get('id'));
-            theImage.set('action', activeObject.get('action'));
-            theImage.set('product_permalink', activeObject.get('product_permalink'));
-            theImage.set('hash_id', activeObject.get('hash_id'));
-            theImage.set('save_url', activeObject.get('save_url'));
-            theImage.set('variant_image', activeObject.get('variant_image'));
-            theImage.set('stroke', '#fff');
-
-            canvas.add(theImage);
-            canvas.remove(activeObject);
-            canvas.renderAll();
-            canvas.setActiveObject(theImage);
-
-
-        };
-        activeObject.getElement().load();
-
-    } else {
-        activeObject.getElement().load = function () {
-
-            var theImage = new fabric.Image(activeObject.getElement(), {top: Number(activeObject.get('top').toFixed(0)), left: Number(activeObject.get('left').toFixed(0))});
-            theImage.scaleX =  Number(activeObject.get('scaleX').toFixed(1));
-            theImage.scaleY = Number(activeObject.get('scaleY').toFixed(1));
-            theImage.angle = activeObject.get('angle');
-            theImage.originX = 'center';
-            theImage.originY = 'center';
-            theImage.lockUniScaling = true;
-            theImage.minScaleLimit = 0.5;
-            theImage.hasRotatingPoint = true;
-            theImage.set('width', Number(activeObject.get('width').toFixed(0)));
-            theImage.set('height', Number(activeObject.get('height').toFixed(0)));
-            theImage.set('id', activeObject.get('id'));
-            theImage.set('action', activeObject.get('action'));
-            theImage.set('product_permalink', activeObject.get('product_permalink'));
-            theImage.set('hash_id', activeObject.get('hash_id'));
-            theImage.set('save_url', activeObject.get('save_url'));
-            theImage.set('variant_image', activeObject.get('variant_image'));
-            theImage.set('stroke', '#fff');
-
-            canvas.add(theImage);
-            canvas.remove(activeObject);
-            canvas.renderAll();
-            var filter = new fabric.Image.filters.Convolute({
-                matrix: [ 1 / 9, 1 / 9, 1 / 9,
-                    1 / 9, 1 / 9, 1 / 9,
-                    1 / 9, 1 / 9, 1 / 9 ]
-            });
-            theImage.filters.push(filter);
-
+        if (activeObject.scaleX < 2.3) {
+            theImage.filters.push(generateFilter());
             theImage.applyFilters(canvas.renderAll.bind(canvas));
-            canvas.setActiveObject(theImage);
-
-
-        };
-        activeObject.getElement().load();
-
-
+        }
+        canvas.remove(activeObject);
+        canvas.renderAll();
+        canvas.setActiveObject(theImage);
+    };
+    activeObject.getElement().load();
+    obj = canvas.getActiveObject();
+    if (!isBlank(obj)) {
+        hash = generateHash(obj);
     }
-    activeObject = canvas.getActiveObject();
+    $('.js-input-hash-product').val(JSON.stringify(hash));
+}
 
+function generateFilter(){
+var filter = new fabric.Image.filters.Convolute({
+    matrix: [ 1 / 9, 1 / 9, 1 / 9,
+            1 / 9, 1 / 9, 1 / 9,
+            1 / 9, 1 / 9, 1 / 9 ]
+    });
+    return filter
+}
+
+function find_object(id){
+    $.each(canvas.getObjects(), function(index, obj){
+        if (obj.get('id') === id ){
+          return value;
+        }
+    });
+}
+
+function generateHash(object) {
+    console.log(object);
+    board_id = $('#canvas').data('boardId');
     value = $('.js-input-hash-product').val();
     if (value.length > 0) {
         hash = JSON.parse(value)
@@ -548,64 +423,30 @@ function createObjectImage(activeObject) {
 
     ha_id = "";
     action = "";
-    if (activeObject.get('action') == 'create') {
-        ha_id = activeObject.get('hash_id');
+    if (object.get('action') === 'create') {
+        ha_id = object.get('hash_id');
         action = "create";
     } else {
-        ha_id = activeObject.get('id')
+        ha_id = object.get('id');
         action = "update";
 
     }
-    hash[ha_id] = {action_board: action, board_id: board_id, product_id: activeObject.get('id'), center_point_x: activeObject.getCenterPoint().x, center_point_y: activeObject.getCenterPoint().y, width: activeObject.getWidth(), height: activeObject.getHeight(), rotation_offset: activeObject.getAngle(0)}
+    hash[ha_id] = {
+        action_board: action,
+        board_id: board_id,
+        product_id: object.get('id'),
+        center_point_x: object.getCenterPoint().x,
+        center_point_y: object.getCenterPoint().y,
+        width: object.getWidth(),
+        height: object.getHeight(),
+        rotation_offset: object.getAngle(0),
+        flip_x: object.get('flipX')
+    };
 
-    if (activeObject.get('z_index') >= 0) {
-        hash[ha_id]['z_index'] = activeObject.get('z_index')
-
+    if (object.get('z_index') >= 0) {
+        hash[ha_id]['z_index'] = object.get('z_index');
     }
-    $('.js-input-hash-product').val(JSON.stringify(hash));
-}
-
-function getCurrentLeft(obj) {
-
-    // if the angle is 0 or 360, then the left should be as is.
-    // if the angle is 270 then the original left is in the bottom left and should be left as is
-    if (obj.getAngle() == 0 || obj.getAngle() == 270 || obj.getAngle() == 360) {
-        return Math.round(obj.getLeft());
-    }
-
-    // if the angle is 90, then the original left is in the top right.
-    // currentLeft = origLeftPos - height
-    else if (obj.getAngle() == 90) {
-        return Math.round(obj.getLeft() - obj.getHeight());
-    }
-
-    //if the angle is 180 the the original left is in the bottom right.
-    // currentLeft = origLeftPos - width
-    else if (obj.getAngle() == 180) {
-        return Math.round(obj.getLeft() - obj.getWidth());
-    }
-
-
-}
-function getCurrentTop(obj) {
-
-    // if the angle is 0 or 360 then the top should be as is
-    // if the angle is 90, then the original corner is in the top right and should be left as is
-    if (obj.getAngle() == 0 || obj.getAngle() == 90 || obj.getAngle() == 360) {
-        return Math.round(obj.getTop());
-    }
-
-    // if the angle is 180 then the object is flipped vertically and original corner is in the bottom right
-    // currentTop = origTop - height
-    else if (obj.getAngle() == 180) {
-        return Math.round(obj.getTop() - obj.getHeight());
-    }
-
-    // if the angle is 270 then the object is rotated and flipped horizontally and original corner is on bottom left
-    // currentTop = origTop - width
-    else if (obj.getAngle() == 270) {
-        return Math.round(obj.getTop() - obj.getWidth());
-    }
+    return hash
 }
 
 function getProductDetails(product_id, board_id, board_product_id, variant_url) {
@@ -639,7 +480,6 @@ function getProductDetails(product_id, board_id, board_product_id, variant_url) 
         //$( "#result" ).empty().append( content );
     });
 }
-
 
 function addProductBookmark(product_id) {
     var url = '/bookmarks.json?product_id=' + product_id
@@ -684,12 +524,9 @@ function removeProductBookmark(product_id) {
         $(this).parent().addClass('hidden')
         $(this).parent().parent().children('.bookmark-product-container').removeClass('hidden')
     });
-    var url = '/bookmarks/remove?product_id=' + product_id
+    var url = '/bookmarks/remove?product_id=' + product_id;
     $.post(url, null, "script");
 
-
-    //$('.unbookmark-link-'+product_id).parent().addClass('hidden')
-    //$('.unbookmark-link-'+product_id).parent().parent().children('.bookmark-product-container').removeClass('hidden')
 }
 
 function getProductBookmarks() {
@@ -700,7 +537,6 @@ function getProductBookmarks() {
     request.done(function (data) {
     });
 }
-
 
 function initializeBoardManagement() {
     $("#submit_board_button").click(function () {
@@ -744,7 +580,6 @@ function initializeBoardManagement() {
 
 }
 
-
 function handleRemoveFromCanvas(el) {
     el.find('a.button-remove-product').click(function () {
         el.hide();
@@ -767,208 +602,6 @@ function handleProductPopover(el) {
             return $('#' + $(this).data('popoverContainer')).html();
         }
     });
-
-    //$('a.button-product-info').popover({
-    //    html : true,
-    //    content: function() {
-    //			$('.button-product-info').popover('hide');
-    //      return $('#'+$(this).data('popoverContainer')).html();
-    //    }
-    //});
-
-
 }
 
-
-function getImageWidth(url) {
-    var img = new Image();
-    img.onload = function () {
-        //return "w"
-    }
-    img.src = url
-    return img.width
-}
-
-function getImageHeight(url) {
-    var img = new Image();
-    img.onload = function () {
-        //return "h"
-    }
-    img.src = url
-    return img.height
-}
-
-//function showProductDetails(item){
-//	$('#product-details-pane').html('Loading product details...')
-//	getProductDetails(item.data('productPermalink'), $('#canvas').data('boardId'))
-//}
-
-
-function setHeight() {
-    var modalHeight = $('#product-modal').height();
-    $('.select-products-box').height(modalHeight - 200);
-    $('.product-preview-box').height(modalHeight - 200);
-
-}
-
-
-function downScaleImage(img, scale) {
-    var imgCV = document.createElement('canvas');
-    imgCV.width = img.width;
-    imgCV.height = img.height;
-    var imgCtx = imgCV.getContext('2d');
-    imgCtx.drawImage(img, 0, 0);
-    return downScaleCanvas(imgCV, scale);
-}
-
-// scales the canvas by (float) scale < 1
-// returns a new canvas containing the scaled image.
-function downScaleCanvas(cv, scale) {
-    if (!(scale < 1) || !(scale > 0)) throw ('scale must be a positive number <1 ');
-    scale = normaliseScale(scale);
-    var sqScale = scale * scale; // square scale =  area of a source pixel within target
-    var sw = cv.width; // source image width
-    var sh = cv.height; // source image height
-    var tw = Math.floor(sw * scale); // target image width
-    var th = Math.floor(sh * scale); // target image height
-    var sx = 0, sy = 0, sIndex = 0; // source x,y, index within source array
-    var tx = 0, ty = 0, yIndex = 0, tIndex = 0; // target x,y, x,y index within target array
-    var tX = 0, tY = 0; // rounded tx, ty
-    var w = 0, nw = 0, wx = 0, nwx = 0, wy = 0, nwy = 0; // weight / next weight x / y
-    // weight is weight of current source point within target.
-    // next weight is weight of current source point within next target's point.
-    var crossX = false; // does scaled px cross its current px right border ?
-    var crossY = false; // does scaled px cross its current px bottom border ?
-    var sBuffer = cv.getContext('2d').
-        getImageData(0, 0, sw, sh).data; // source buffer 8 bit rgba
-    var tBuffer = new Float32Array(3 * tw * th); // target buffer Float32 rgb
-    var sR = 0, sG = 0, sB = 0; // source's current point r,g,b
-
-    for (sy = 0; sy < sh; sy++) {
-        ty = sy * scale; // y src position within target
-        tY = 0 | ty;     // rounded : target pixel's y
-        yIndex = 3 * tY * tw;  // line index within target array
-        crossY = (tY !== (0 | ( ty + scale )));
-        if (crossY) { // if pixel is crossing botton target pixel
-            wy = (tY + 1 - ty); // weight of point within target pixel
-            nwy = (ty + scale - tY - 1); // ... within y+1 target pixel
-        }
-        for (sx = 0; sx < sw; sx++, sIndex += 4) {
-            tx = sx * scale; // x src position within target
-            tX = 0 | tx;    // rounded : target pixel's x
-            tIndex = yIndex + tX * 3; // target pixel index within target array
-            crossX = (tX !== (0 | (tx + scale)));
-            if (crossX) { // if pixel is crossing target pixel's right
-                wx = (tX + 1 - tx); // weight of point within target pixel
-                nwx = (tx + scale - tX - 1); // ... within x+1 target pixel
-            }
-            sR = sBuffer[sIndex    ];   // retrieving r,g,b for curr src px.
-            sG = sBuffer[sIndex + 1];
-            sB = sBuffer[sIndex + 2];
-            if (!crossX && !crossY) { // pixel does not cross
-                // just add components weighted by squared scale.
-                tBuffer[tIndex    ] += sR * sqScale;
-                tBuffer[tIndex + 1] += sG * sqScale;
-                tBuffer[tIndex + 2] += sB * sqScale;
-            } else if (crossX && !crossY) { // cross on X only
-                w = wx * scale;
-                // add weighted component for current px
-                tBuffer[tIndex    ] += sR * w;
-                tBuffer[tIndex + 1] += sG * w;
-                tBuffer[tIndex + 2] += sB * w;
-                // add weighted component for next (tX+1) px
-                nw = nwx * scale
-                tBuffer[tIndex + 3] += sR * nw;
-                tBuffer[tIndex + 4] += sG * nw;
-                tBuffer[tIndex + 5] += sB * nw;
-            } else if (!crossX && crossY) { // cross on Y only
-                w = wy * scale;
-                // add weighted component for current px
-                tBuffer[tIndex    ] += sR * w;
-                tBuffer[tIndex + 1] += sG * w;
-                tBuffer[tIndex + 2] += sB * w;
-                // add weighted component for next (tY+1) px
-                nw = nwy * scale
-                tBuffer[tIndex + 3 * tw    ] += sR * nw;
-                tBuffer[tIndex + 3 * tw + 1] += sG * nw;
-                tBuffer[tIndex + 3 * tw + 2] += sB * nw;
-            } else { // crosses both x and y : four target points involved
-                // add weighted component for current px
-                w = wx * wy;
-                tBuffer[tIndex    ] += sR * w;
-                tBuffer[tIndex + 1] += sG * w;
-                tBuffer[tIndex + 2] += sB * w;
-                // for tX + 1; tY px
-                nw = nwx * wy;
-                tBuffer[tIndex + 3] += sR * nw;
-                tBuffer[tIndex + 4] += sG * nw;
-                tBuffer[tIndex + 5] += sB * nw;
-                // for tX ; tY + 1 px
-                nw = wx * nwy;
-                tBuffer[tIndex + 3 * tw    ] += sR * nw;
-                tBuffer[tIndex + 3 * tw + 1] += sG * nw;
-                tBuffer[tIndex + 3 * tw + 2] += sB * nw;
-                // for tX + 1 ; tY +1 px
-                nw = nwx * nwy;
-                tBuffer[tIndex + 3 * tw + 3] += sR * nw;
-                tBuffer[tIndex + 3 * tw + 4] += sG * nw;
-                tBuffer[tIndex + 3 * tw + 5] += sB * nw;
-            }
-        } // end for sx
-    } // end for sy
-
-    // create result canvas
-    var resCV = document.createElement('canvas');
-    resCV.width = tw;
-    resCV.height = th;
-    var resCtx = resCV.getContext('2d');
-    var imgRes = resCtx.getImageData(0, 0, tw, th);
-    var tByteBuffer = imgRes.data;
-    // convert float32 array into a UInt8Clamped Array
-    var pxIndex = 0; //
-    for (sIndex = 0, tIndex = 0; pxIndex < tw * th; sIndex += 3, tIndex += 4, pxIndex++) {
-        tByteBuffer[tIndex] = 0 | ( tBuffer[sIndex]);
-        tByteBuffer[tIndex + 1] = 0 | (tBuffer[sIndex + 1]);
-        tByteBuffer[tIndex + 2] = 0 | (tBuffer[sIndex + 2]);
-        tByteBuffer[tIndex + 3] = 255;
-    }
-    // writing result to canvas.
-    resCtx.putImageData(imgRes, 0, 0);
-    return resCV;
-}
-
-function polyFillPerfNow() {
-    window.performance = window.performance ? window.performance : {};
-    window.performance.now = window.performance.now || window.performance.webkitNow || window.performance.msNow ||
-        window.performance.mozNow || Date.now;
-};
-
-function log2(v) {
-    // taken from http://graphics.stanford.edu/~seander/bithacks.html
-    var b = [ 0x2, 0xC, 0xF0, 0xFF00, 0xFFFF0000 ];
-    var S = [1, 2, 4, 8, 16];
-    var i = 0, r = 0;
-
-    for (i = 4; i >= 0; i--) {
-        if (v & b[i]) {
-            v >>= S[i];
-            r |= S[i];
-        }
-    }
-    return r;
-}
-// normalize a scale <1 to avoid some rounding issue with js numbers
-function normaliseScale(s) {
-    if (s > 1) throw('s must be <1');
-    s = 0 | (1 / s);
-    var l = log2(s);
-    var mask = 1 << l;
-    var accuracy = 4;
-    while (accuracy && l) {
-        l--;
-        mask |= 1 << l;
-        accuracy--;
-    }
-    return 1 / ( s & mask );
-}
 
