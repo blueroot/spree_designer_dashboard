@@ -110,12 +110,7 @@ function generateModalCrop(dataImg){
 
 
     $('#btnCropRoom').on('click', function() {
-        var img;
-        img = cropper.getDataURL();
-        window.canvas_tab = img;
-        image_element = dataImg.getElement();
-        dataImg.set('save_url', img);
-        createObjectImage(dataImg);
+        cropImage(cropper, dataImg, createObjectImage);
         canvas.renderAll();
         return img
     });
@@ -151,6 +146,14 @@ function rotateObject(angleOffset) {
     $('.js-input-hash-product').val(JSON.stringify(hash));
 
     canvas.renderAll();
+}
+
+function cropImage(cropper, dataImg, callback){
+    img = cropper.getDataURL();
+    window.canvas_tab = img;
+    image_element = dataImg.getElement();
+    dataImg.set('save_url', img);
+    callback(dataImg);
 }
 
 function isBlank( object ) {
@@ -206,9 +209,11 @@ fabric.Object.prototype.setCenterToOrigin = function () {
     });
 };
 
-function buildImageLayer(canvas, bp, url, slug, id, active, hash_id) {
+function buildImageLayer(canvas, bp, url, slug, id, active, hash_id, callback ) {
+    callback = callback || null;
      fabric.Image.fromURL(url, function (oImg) {
         oImg.scale(1).set({
+            save_url: url,
             left: bp.center_point_x,
             top: bp.center_point_y,
             originX: 'center',
@@ -222,7 +227,6 @@ function buildImageLayer(canvas, bp, url, slug, id, active, hash_id) {
         });
         oImg.set('id', id);
         oImg.set('action', active);
-        oImg.set('save_url', url);
         oImg.set('product_permalink', slug);
         oImg.set('hash_id', hash_id);
         canvas.add(oImg);
@@ -231,6 +235,7 @@ function buildImageLayer(canvas, bp, url, slug, id, active, hash_id) {
             rotateObject(bp.rotation_offset);
             canvas.renderAll();
         }
+     callback(oImg);
     });
     obj = find_object(id);
     if (!isBlank(obj)) {
@@ -247,7 +252,7 @@ function getImageBase(url) {
         url: base_url,
         data: {image: url},
         success: function (resp) {
-            activeObject = canvas.getActiveObject()
+            activeObject = canvas.getActiveObject();
             element = activeObject.getElement();
             element.src = resp;
             canvas.discardActiveObject();
@@ -287,13 +292,12 @@ function addProductToBoard(event, ui) {
                 width: cloned.width(),
                 height: cloned.height()
             };
-            buildImageLayer(canvas, board_product, url, slug, cloned.data('productId'), 'create', cloned.data('productId') + '-' + random);
+            buildImageLayer(canvas, board_product, url, slug, cloned.data('productId'), 'create', cloned.data('productId') + '-' + random, createObjectImage);
             setTimeout((function () {
                 if ($.cookie("active_image") === undefined || $.cookie("active_image").toString() !== canvas.getActiveObject().get('hash_id').toString()) {
                     $.cookie("active_image", canvas.getActiveObject().get('hash_id'));
                     getProductDetails(slug, $('#canvas').data('boardId'), cloned.data('productId'))
                 }
-                createObjectImage(canvas.getActiveObject())
             }), 1000)
 
         }
@@ -338,15 +342,10 @@ function getSavedProducts(board_id) {
             success: function (data) {
                 // add the products to the board
                 $.each(data, function (index, board_product) {
-                    buildImageLayer(canvas, board_product, board_product.product.image_url, board_product.product.slug, board_product.id, 'update', board_product.id);
+                    buildImageLayer(canvas, board_product, board_product.product.image_url, board_product.product.slug, board_product.id, 'update', board_product.id,  createObjectImage);
                     canvas.renderAll();
                     canvas.discardActiveObject();
                 });
-                setTimeout((function () {
-                    $.each(canvas.getObjects(), function (index, value) {
-                        createObjectImage(value);
-                    });
-                }), 1500);
                 canvas.discardActiveObject();
 
                 // detect which product has focus
@@ -404,6 +403,7 @@ function getSavedProducts(board_id) {
 }
 
 function createObjectImage(activeObject) {
+    console.log('createOjbcetImgae');
     new_image = activeObject.get('save_url');
     activeObject.getElement().src = new_image;
 
@@ -429,8 +429,8 @@ function createObjectImage(activeObject) {
         theImage.set('stroke', '#fff');
 
         canvas.add(theImage);
-
-        if (activeObject.scaleX < 2.3) {
+        if (activeObject.scaleX < 2.3 || isBlank(activeObject.scaleX) ) {
+            console.log('in');
             theImage.filters.push(generateFilter());
             theImage.applyFilters(canvas.renderAll.bind(canvas));
         }
@@ -464,7 +464,6 @@ function find_object(id){
 }
 
 function generateHash(object) {
-    console.log(object);
     board_id = $('#canvas').data('boardId');
     value = $('.js-input-hash-product').val();
     if (value.length > 0) {
@@ -628,7 +627,6 @@ function initializeBoardManagement() {
         }
 
     });
-
 
 }
 
