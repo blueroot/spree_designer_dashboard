@@ -1,3 +1,4 @@
+window.canvas_crop = null;
 function initializeProductSearchForm() {
     /* attach a submit handler to the form */
     $("#product_search_form").submit(function (event) {
@@ -47,6 +48,27 @@ $(window).load(function(){
 });
 
 $(document).on({
+    click: function(e){
+        e.preventDefault();
+        obj = canvas.getActiveObject();
+
+        if(!isBlank(obj)) {
+            $('#crop-modal').lightbox_me({
+                centered: true,
+                closeClick: true,
+                closeEsc: false,
+                onLoad: function () {
+                    generateModalCrop(obj);
+                },
+                onClose: function () {
+
+                }
+            });
+        }
+    }
+}, "#bp-crop");
+
+$(document).on({
     click: function (e) {
         var obj, value;
         e.preventDefault();
@@ -74,6 +96,37 @@ $(document).on({
         }
     }
 }, "#bp-mirror");
+
+function generateModalCrop(dataImg){
+    img = dataImg.toDataURL();
+    var cropper, options;
+    options = {
+        thumbBox: '.thumbBoxRoom',
+        spinner: '.spinnerRoom',
+        imgSrc: img
+    };
+    cropper = $('.imageBoxRoom').cropbox(options);
+    $('.imageBoxRoom').show();
+
+
+    $('#btnCropRoom').on('click', function() {
+        var img;
+        img = cropper.getDataURL();
+        window.canvas_tab = img;
+        image_element = dataImg.getElement();
+        dataImg.set('save_url', img);
+        createObjectImage(dataImg);
+        canvas.renderAll();
+        return img
+    });
+    $('#btnZoomInRoom').on('click', function() {
+        return cropper.zoomIn();
+    });
+    return $('#btnZoomOutRoom').on('click', function() {
+        return cropper.zoomOut();
+    });
+
+}
 
 function rotateObject(angleOffset) {
     var obj = canvas.getActiveObject(),
@@ -233,7 +286,6 @@ function addProductToBoard(event, ui) {
                 center_point_y: center_y,
                 width: cloned.width(),
                 height: cloned.height()
-
             };
             buildImageLayer(canvas, board_product, url, slug, cloned.data('productId'), 'create', cloned.data('productId') + '-' + random);
             setTimeout((function () {

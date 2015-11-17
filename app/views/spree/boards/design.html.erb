@@ -20,6 +20,7 @@
 						<div id="board-container" data-url="<%= get_image_roombuilder_base_products_path(format: 'json')  %>">
 							<div id="board-toolbar" class="board-toolbar">
 								<div class="btn-group btn-group-sm">
+                                    <button type="button" class="btn btn-default" id="bp-crop"><span class="fa fa-cut" style="font-size: 12px;"></span> Crop</button>
                                     <button type="button" class="btn btn-default" id="bp-mirror"><span class="fa fa-exchange" style="font-size: 12px;"></span> Mirror</button>
 									<button type="button" class="btn btn-default" id="bp-rotate-left"><span class="fa fa-repeat" style="font-size: 12px;"></span> Rotate</button>
 									<button type="button" class="btn btn-default" id="bp-move-forward"><span class="fa fa-angle-up" style="font-size: 12px;"></span> Forward</button>
@@ -297,5 +298,24 @@ $(function () {
 	
 });
 </script>
+<div id="crop-modal" tabindex="-1" role="dialog">
+  <div class="crop-header">
+  </div>
+  <div class="crop-body">
+    <div class="imageBoxRoom">
+      <div class="thumbBoxRoom"></div>
+      <div class="spinnerRoom" style="display: none">Loading...</div>
+    </div>
+    <div class="croppedRoom">
 
+    </div>
+  </div>
+  <div class="crop-footer">
+    <div class="actionRoom clearfix">
+      <input type="button" id="btnCropRoom" value="Crop" style="float: left; margin-right: 3px; " class="btn-primary">
+      <input type="button" id="btnZoomInRoom" value="+" style="float: left; margin-right: 3px;" class="btn-primary">
+      <input type="button" id="btnZoomOutRoom" value="-" style="float: left; margin-right: 3px;" class="btn-primary">
+    </div>
+  </div>
+</div>
 
