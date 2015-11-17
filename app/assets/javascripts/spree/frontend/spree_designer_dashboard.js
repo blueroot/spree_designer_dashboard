@@ -403,7 +403,6 @@ function getSavedProducts(board_id) {
 }
 
 function createObjectImage(activeObject) {
-    console.log('createOjbcetImgae');
     new_image = activeObject.get('save_url');
     activeObject.getElement().src = new_image;
 
@@ -430,7 +429,6 @@ function createObjectImage(activeObject) {
 
         canvas.add(theImage);
         if (activeObject.scaleX < 2.3 || isBlank(activeObject.scaleX) ) {
-            console.log('in');
             theImage.filters.push(generateFilter());
             theImage.applyFilters(canvas.renderAll.bind(canvas));
         }
