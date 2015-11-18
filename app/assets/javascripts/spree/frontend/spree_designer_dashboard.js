@@ -112,6 +112,7 @@ function generateModalCrop(dataImg){
     $('#btnCropRoom').on('click', function() {
         cropImage(cropper, dataImg, createObjectImage);
         canvas.renderAll();
+        $('#crop-modal').trigger('close');
         return img
     });
     $('#btnZoomInRoom').on('click', function() {
