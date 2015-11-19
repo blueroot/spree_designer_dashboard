@@ -86,6 +86,16 @@ $(document).on({
 
 $(document).on({
     click: function(e) {
+        e.preventDefault();
+        init = initCrop();
+        cropImage(init[1], init[0], createObjectImage);
+        canvas.renderAll();
+        $('#crop-modal').trigger('close');
+    }
+}, '#btnCropRoom');
+
+$(document).on({
+    click: function(e) {
         var obj;
         e.preventDefault();
         obj = canvas.getActiveObject();
@@ -96,6 +106,17 @@ $(document).on({
         }
     }
 }, "#bp-mirror");
+
+function initCrop(){
+    dataImg = canvas.getActiveObject();
+    options = {
+        thumbBox: '.thumbBoxRoom',
+        spinner: '.spinnerRoom',
+        imgSrc: dataImg.toDataURL()
+    };
+    cropper = $('.imageBoxRoom').cropbox(options);
+    return [dataImg, cropper]
+}
 
 function generateModalCrop(dataImg){
     img = dataImg.toDataURL();
@@ -108,20 +129,12 @@ function generateModalCrop(dataImg){
     cropper = $('.imageBoxRoom').cropbox(options);
     $('.imageBoxRoom').show();
 
-
-    $('#btnCropRoom').on('click', function() {
-        cropImage(cropper, dataImg, createObjectImage);
-        canvas.renderAll();
-        $('#crop-modal').trigger('close');
-        return img
-    });
     $('#btnZoomInRoom').on('click', function() {
         return cropper.zoomIn();
     });
     return $('#btnZoomOutRoom').on('click', function() {
         return cropper.zoomOut();
     });
-
 }
 
 function rotateObject(angleOffset) {
@@ -154,6 +167,7 @@ function cropImage(cropper, dataImg, callback){
     window.canvas_tab = img;
     image_element = dataImg.getElement();
     dataImg.set('save_url', img);
+    console.log(dataImg);
     callback(dataImg);
 }
 
